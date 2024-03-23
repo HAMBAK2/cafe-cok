@@ -1,0 +1,32 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${CLOUD_ACCESS_KEY}
+      secret-key: ${CLOUD_SECRET_KEY}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    s3:
+      endpoint: ${S3_ENDPOINT}
+      bucket: ${S3_BUCKET}
+
+server:
+  port: 80
+
