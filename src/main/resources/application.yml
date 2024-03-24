@@ -1,3 +1,4 @@
 spring:
-  profiles:
-    active: dev
+  config:
+    import:
+      - security/application.yml
