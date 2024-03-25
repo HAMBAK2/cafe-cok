@@ -1,5 +1,6 @@
 package com.sideproject.hororok.keword.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.category.entity.Category;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
@@ -21,10 +22,12 @@ public class Keyword {
 
     private String name;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "keywords")
     private List<Review> reviews = new ArrayList<>();
 }

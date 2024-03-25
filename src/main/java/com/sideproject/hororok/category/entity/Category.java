@@ -1,5 +1,6 @@
 package com.sideproject.hororok.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.keword.entity.Keyword;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Category {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Keyword> keywords;
 }

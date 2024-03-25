@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.Menu.entity.Menu;
 import com.sideproject.hororok.image.entity.Image;
 import com.sideproject.hororok.review.Entity.Review;
@@ -34,17 +35,22 @@ public class Cafe {
 
     private String closedDay;
 
+    private String imageUrl1;
+    private String imageUrl2;
+    private String imageUrl3;
+
     @Column(precision = 2, scale = 1)
     private BigDecimal starRating;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<Menu> menus = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<Review> reviews = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<Image> images = new ArrayList<>();
-
-
 }

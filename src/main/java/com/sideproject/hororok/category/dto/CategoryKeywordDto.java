@@ -1,7 +1,5 @@
-package com.sideproject.hororok.category.dto.response;
+package com.sideproject.hororok.category.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +8,6 @@ import java.util.Map;
 
 @Getter
 @RequiredArgsConstructor
-public class CategoryKeywordResponse {
+public class CategoryKeywordDto {
     private final Map<String, List<String>> keywordsByCategory;
 }

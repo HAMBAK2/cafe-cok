@@ -1,7 +1,7 @@
 package com.sideproject.hororok.category.controller;
 
 
-import com.sideproject.hororok.category.dto.response.CategoryKeywordResponse;
+import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/home")
-    public ResponseEntity<CategoryKeywordResponse> home() {
+    public ResponseEntity<CategoryKeywordDto> home() {
 
         return ResponseEntity.ok(categoryService.findAllCategoryAndKeyword());
     }

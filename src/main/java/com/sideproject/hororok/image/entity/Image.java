@@ -1,5 +1,6 @@
 package com.sideproject.hororok.image.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
@@ -19,10 +20,12 @@ public class Image {
     @Column(length = 1000)
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "REVIEW_ID")
     private Review review;

@@ -21,10 +21,10 @@ public class Review {
     private Long id;
 
     @Lob
-    private String reviewContent;
+    private String content;
 
     @Column(length = 1000)
-    private String specialNotes;
+    private String specialNote;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CAFE_ID")
