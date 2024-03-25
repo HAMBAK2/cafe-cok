@@ -1,8 +1,11 @@
 package com.sideproject.hororok.keword.entity;
 
 import com.sideproject.hororok.category.entity.Category;
+import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -21,5 +24,6 @@ public class Keyword {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-
+    @OneToMany(mappedBy = "keyword")
+    private List<Review> reviews;
 }
