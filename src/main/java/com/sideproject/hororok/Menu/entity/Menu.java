@@ -1,5 +1,6 @@
 package com.sideproject.hororok.Menu.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,8 +20,11 @@ public class Menu {
 
     private String name;
 
-    private BigDecimal price;
+    private Integer price;
 
+    private String imageUrl;
+
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;

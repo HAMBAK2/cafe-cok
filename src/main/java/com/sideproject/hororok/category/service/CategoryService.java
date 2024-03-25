@@ -1,6 +1,6 @@
 package com.sideproject.hororok.category.service;
 
-import com.sideproject.hororok.category.dto.response.CategoryKeywordResponse;
+import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.entity.Category;
 import com.sideproject.hororok.category.repository.CategoryRepository;
 import com.sideproject.hororok.keword.entity.Keyword;
@@ -21,7 +21,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public CategoryKeywordResponse findAllCategoryAndKeyword() {
+    public CategoryKeywordDto findAllCategoryAndKeyword() {
 
         Map<String, List<String>> keywordsByCategory = new HashMap<>();
 
@@ -34,6 +34,6 @@ public class CategoryService {
             keywordsByCategory.put(category.getName(), keywords);
         }
 
-        return new CategoryKeywordResponse(keywordsByCategory);
+        return new CategoryKeywordDto(keywordsByCategory);
     }
 }
