@@ -5,6 +5,7 @@ import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
@@ -24,6 +25,6 @@ public class Keyword {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    @OneToMany(mappedBy = "keyword")
-    private List<Review> reviews;
+    @ManyToMany(mappedBy = "keywords")
+    private List<Review> reviews = new ArrayList<>();
 }
