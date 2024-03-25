@@ -27,9 +27,9 @@ public class Cafe {
 
     private String roadAddress;
 
-    private String longitude; //경도
+    private BigDecimal longitude; //경도
 
-    private String latitude; //위도
+    private BigDecimal latitude; //위도
 
     private String BusinessHours;
 

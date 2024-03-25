@@ -1,10 +1,10 @@
 package com.sideproject.hororok.cafe.service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.sideproject.hororok.Menu.dto.MenuDto;
-import com.sideproject.hororok.Menu.repository.MenuRepository;
 import com.sideproject.hororok.Menu.service.MenuService;
+import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.dto.CafeDetailDto;
+import com.sideproject.hororok.cafe.dto.CafeReSearchDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
 import com.sideproject.hororok.image.dto.ImageDto;
@@ -12,10 +12,13 @@ import com.sideproject.hororok.image.service.ImageService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.utils.calculator.GeometricUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,8 @@ public class CafeService {
     private final ReviewService reviewService;
     private final CafeRepository cafeRepository;
     private final MenuService menuService;
+
+    private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
     @Transactional
     public CafeDetailDto findCafeDetail(Long cafeId){
@@ -45,10 +50,33 @@ public class CafeService {
     }
 
 
-    private Cafe findCafeById(Long cafeId) {
+    public Cafe findCafeById(Long cafeId) {
         return cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new NotFoundException("cafe not found : " + cafeId));
+                .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
+
+    public CafeReSearchDto findWithinRadius(CafeSearchCond searchCond) {
+        List<Cafe> cafes = findAll();
+        List<Cafe> withinRadiusCafes = new ArrayList<>();
+        boolean isExist = false;
+        for (Cafe cafe : cafes) {
+            boolean withinRadius = GeometricUtils.isWithinRadius(searchCond.getLatitude(), searchCond.getLongitude(),
+                    cafe.getLatitude(), cafe.getLongitude(), MAX_RADIUS);
+
+            if(withinRadius) {
+                withinRadiusCafes.add(cafe);
+                isExist = true;
+            }
+        }
+
+        return CafeReSearchDto.of(isExist, withinRadiusCafes);
+    }
+
+
+    public List<Cafe> findAll() {
+        return cafeRepository.findAll();
+    }
+
 
     private List<String> makeCafeImageUrls(Cafe cafe, List<ImageDto> images) {
 
