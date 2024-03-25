@@ -8,6 +8,7 @@ import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class CafeDetailDto {
     private final Long id;
     private final String cafeName;
     private final String roadAddress;
-    private final String longitude;
-    private final String latitude;
+    private final BigDecimal longitude;
+    private final BigDecimal latitude;
     private final List<String> BusinessHours;
     private final List<String> closedDay;
     private final List<String> cafeImageUrls;
