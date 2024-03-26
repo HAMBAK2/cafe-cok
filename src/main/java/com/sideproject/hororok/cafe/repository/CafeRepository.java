@@ -13,5 +13,7 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     Optional<Cafe> findById(Long id);
     List<Cafe> findAll();
 
+    boolean existsByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
 
+    Optional<Cafe> findByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
 }

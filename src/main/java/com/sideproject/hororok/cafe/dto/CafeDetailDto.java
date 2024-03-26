@@ -2,6 +2,7 @@ package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.Menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
@@ -17,6 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CafeDetailDto {
 
+    private final boolean isExist;
+
+    //존재하지 않을 경우
+    private final List<Cafe> cafes;
+    private final CategoryKeywordDto keywordsByCategory;
+
+    //존재할 경우
     private final Long id;
     private final String cafeName;
     private final String roadAddress;
@@ -39,6 +47,7 @@ public class CafeDetailDto {
 
 
         return CafeDetailDto.builder()
+                .isExist(true)
                 .id(cafe.getId())
                 .cafeName(cafe.getName())
                 .roadAddress(cafe.getRoadAddress())
@@ -53,6 +62,15 @@ public class CafeDetailDto {
                 .reviews(reviews)
                 .images(images)
                 .cafeKeywords(cafeKeywords)
+                .build();
+    }
+
+    public static CafeDetailDto from(CafeReSearchDto cafeReSearchDto) {
+
+        return CafeDetailDto.builder()
+                .isExist(false)
+                .cafes(cafeReSearchDto.getCafes())
+                .keywordsByCategory(cafeReSearchDto.getKeywordsByCategory())
                 .build();
     }
 
