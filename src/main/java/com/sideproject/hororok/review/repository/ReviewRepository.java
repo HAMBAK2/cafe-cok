@@ -1,5 +1,6 @@
 package com.sideproject.hororok.review.repository;
 
+import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
@@ -21,5 +22,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "HAVING COUNT(k) >= :keywordCount " +
             "ORDER BY COUNT(k) DESC")
     List<Keyword> findKeywordInReviewByCafeIdWithKeywordCount(@Param("cafeId") Long cafeId, @Param("keywordCount") Integer keywordCount);
+
+    @Query("select distinct r.cafe from Review r " +
+            "join r.keywords k " +
+            "WHERE k.name in(:purpose, :menu, :theme, :facility, :mood)")
+    List<Cafe> findCafeWithKeywordsInReview(String purpose, String menu, String theme, String facility, String mood);
 
 }
