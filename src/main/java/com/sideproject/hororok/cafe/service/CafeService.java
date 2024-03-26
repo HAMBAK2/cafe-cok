@@ -4,18 +4,18 @@ import com.sideproject.hororok.Menu.dto.MenuDto;
 import com.sideproject.hororok.Menu.service.MenuService;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
-import com.sideproject.hororok.cafe.dto.CafeBarSearchDto;
-import com.sideproject.hororok.cafe.dto.CafeCategorySearchDto;
-import com.sideproject.hororok.cafe.dto.CafeDetailDto;
-import com.sideproject.hororok.cafe.dto.CafeReSearchDto;
+import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
+import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
+import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.image.service.ImageService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,7 +80,7 @@ public class CafeService {
             }
         }
 
-        categoryService.findAllCategoryAndKeyword();
+
 
         return CafeReSearchDto.of(isExist, withinRadiusCafes, categoryService.findAllCategoryAndKeyword());
     }
@@ -119,8 +117,51 @@ public class CafeService {
                 .keywordsByCategory(withinRadius.getKeywordsByCategory())
                 .cafes(sameCafes)
                 .build();
+    }
+
+    public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
+
+        boolean isExist = false;
+        CategoryKeywordDto allCategoryAndKeyword = categoryService.findAllCategoryAndKeyword();
+
+        //키워드 필터링
+        List<Cafe> keywordFilteredCafes = reviewService.findCafeWithKeywordsInReview(searchCond);
+        if(keywordFilteredCafes.isEmpty()) {
+            isExist = false;
+            return CreatePlanDto.of(isExist, allCategoryAndKeyword);
+        }
+
+        //요일 시간 필터링
+        List<Cafe> businessHourFilteredCafes = new ArrayList<>();
+        for (Cafe keywordFilteredCafe : keywordFilteredCafes) {
+            if(BusinessHoursUtils.isBusinessHours(searchCond, keywordFilteredCafe)){
+                businessHourFilteredCafes.add(keywordFilteredCafe);
+            }
+        }
+        if(businessHourFilteredCafes.isEmpty()) {
+            isExist = false;
+            return CreatePlanDto.of(isExist, allCategoryAndKeyword);
+        }
+
+        //거리 필터링
+        List<Cafe> distanceFilteredCafes = new ArrayList<>();
+        for (Cafe businessHourFilteredCafe : businessHourFilteredCafes) {
+
+            double walkTime = GeometricUtils.calculateWalkingTime(businessHourFilteredCafe.getLatitude(), businessHourFilteredCafe.getLongitude(),
+                    searchCond.getLatitude(), searchCond.getLongitude());
+
+            if(walkTime <= searchCond.getMinutes()) {
+                distanceFilteredCafes.add(businessHourFilteredCafe);
+            }
+        }
+        if(distanceFilteredCafes.isEmpty()) {
+            isExist = false;
+            return CreatePlanDto.of(isExist, allCategoryAndKeyword);
+        }
 
 
+        //카테고리, 키워드 정보
+        return CreatePlanDto.of(isExist, distanceFilteredCafes, allCategoryAndKeyword);
     }
 
     public List<Cafe> findAll() {

@@ -1,5 +1,9 @@
 package com.sideproject.hororok.utils.calculator;
 
+import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
+import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.utils.converter.FormatConverter;
+
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,6 +38,28 @@ public class BusinessHoursUtils {
         return CLOSE;
     }
 
+    public static boolean isBusinessHours(CreatePlanSearchCond searchCond, Cafe cafe) {
+
+        Map<String, LocalTime[]> businessHourMap = split(cafe.getBusinessHours());
+
+        for (String day : businessHourMap.keySet()) {
+            if(day.equals(searchCond.getDay()) &&
+                    isWithinTimeRange(businessHourMap.get(day), searchCond.getStartHour(), searchCond.getEndHour())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isWithinTimeRange(LocalTime[] timeRange, Integer startHour, Integer endHour) {
+
+        if(startHour >= timeRange[0].getHour() && startHour <= timeRange[1].getHour()) return true;
+        if(endHour >= timeRange[0].getHour() && endHour <= timeRange[1].getHour()) return true;
+
+        return false;
+    }
+
     public static List<String> closedDaysConvert(String closedDays) {
 
         List<String> convertList = new ArrayList<>();
@@ -50,8 +76,9 @@ public class BusinessHoursUtils {
         }
 
         return convertList;
-
     }
+
+
 
     private static Map<String, LocalTime[]> split(String businessHours) {
 
