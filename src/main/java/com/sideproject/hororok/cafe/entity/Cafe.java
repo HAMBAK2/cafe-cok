@@ -6,6 +6,7 @@ import com.sideproject.hororok.image.entity.Image;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
+import software.amazon.ion.Decimal;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,8 +28,10 @@ public class Cafe {
 
     private String roadAddress;
 
+    @Column(precision = 17, scale = 14)
     private BigDecimal longitude; //경도
 
+    @Column(precision = 17, scale = 14)
     private BigDecimal latitude; //위도
 
     private String BusinessHours;

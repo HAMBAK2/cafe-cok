@@ -3,10 +3,12 @@ package com.sideproject.hororok.cafe.service;
 import com.sideproject.hororok.Menu.dto.MenuDto;
 import com.sideproject.hororok.Menu.service.MenuService;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
+import com.sideproject.hororok.cafe.dto.CafeBarSearchDto;
 import com.sideproject.hororok.cafe.dto.CafeDetailDto;
 import com.sideproject.hororok.cafe.dto.CafeReSearchDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
+import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.image.service.ImageService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
@@ -31,6 +33,7 @@ public class CafeService {
     private final ReviewService reviewService;
     private final CafeRepository cafeRepository;
     private final MenuService menuService;
+    private final CategoryService categoryService;
 
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
@@ -55,6 +58,11 @@ public class CafeService {
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
+    public Cafe findByLongitudeAndLatitude(CafeSearchCond cafeSearchCond) {
+        return cafeRepository.findByLongitudeAndLatitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
+                .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
+    }
+
     public CafeReSearchDto findWithinRadius(CafeSearchCond searchCond) {
         List<Cafe> cafes = findAll();
         List<Cafe> withinRadiusCafes = new ArrayList<>();
@@ -69,9 +77,23 @@ public class CafeService {
             }
         }
 
-        return CafeReSearchDto.of(isExist, withinRadiusCafes);
+        categoryService.findAllCategoryAndKeyword();
+
+        return CafeReSearchDto.of(isExist, withinRadiusCafes, categoryService.findAllCategoryAndKeyword());
     }
 
+
+    public CafeBarSearchDto barSearch(CafeSearchCond searchCond) {
+
+        if (!cafeRepository.existsByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude())) {
+            CafeReSearchDto withinRadius = findWithinRadius(searchCond);
+            return CafeBarSearchDto.from(withinRadius);
+        }
+
+        return CafeBarSearchDto
+                .from(findCafeDetail(cafeRepository
+                        .findByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude()).get().getId()));
+    }
 
     public List<Cafe> findAll() {
         return cafeRepository.findAll();
