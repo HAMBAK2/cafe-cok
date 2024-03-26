@@ -2,8 +2,10 @@ package com.sideproject.hororok.cafe.service;
 
 import com.sideproject.hororok.Menu.dto.MenuDto;
 import com.sideproject.hororok.Menu.service.MenuService;
+import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.dto.CafeBarSearchDto;
+import com.sideproject.hororok.cafe.dto.CafeCategorySearchDto;
 import com.sideproject.hororok.cafe.dto.CafeDetailDto;
 import com.sideproject.hororok.cafe.dto.CafeReSearchDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
@@ -22,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +98,29 @@ public class CafeService {
         return CafeBarSearchDto
                 .from(findCafeDetail(cafeRepository
                         .findByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude()).get().getId()));
+    }
+
+    public CafeCategorySearchDto categorySearch(CafeCategorySearchCond searchCond) {
+        CafeReSearchDto withinRadius = findWithinRadius(CafeSearchCond.from(searchCond));
+
+        List<Cafe> cafeWithKeywordsInReview = reviewService.findCafeWithKeywordsInReview(searchCond);
+        List<Cafe> cafes = withinRadius.getCafes();
+
+        List<Cafe> sameCafes = cafeWithKeywordsInReview.stream()
+                .map(Cafe::getId)
+                .collect(Collectors.toSet())
+                .stream()
+                .flatMap(cafeId ->
+                        cafes.stream()
+                                .filter(cafe -> cafe.getId().equals(cafeId)))
+                .collect(Collectors.toList());
+
+        return CafeCategorySearchDto.builder()
+                .keywordsByCategory(withinRadius.getKeywordsByCategory())
+                .cafes(sameCafes)
+                .build();
+
+
     }
 
     public List<Cafe> findAll() {

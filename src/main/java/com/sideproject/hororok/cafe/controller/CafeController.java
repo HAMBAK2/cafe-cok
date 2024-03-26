@@ -1,7 +1,9 @@
 package com.sideproject.hororok.cafe.controller;
 
+import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.dto.CafeBarSearchDto;
+import com.sideproject.hororok.cafe.dto.CafeCategorySearchDto;
 import com.sideproject.hororok.cafe.dto.CafeDetailDto;
 import com.sideproject.hororok.cafe.dto.CafeReSearchDto;
 import com.sideproject.hororok.cafe.service.CafeService;
@@ -44,5 +46,13 @@ public class CafeController {
     public ResponseEntity<CafeBarSearchDto> searchBar(@RequestBody CafeSearchCond cafeSearchCond) {
 
         return ResponseEntity.ok(cafeService.barSearch(cafeSearchCond));
+    }
+
+    @GetMapping("/search/category")
+    @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
+    @Parameter(description = "현재 위치의 경도 위도 값, 선태한 키워드")
+    public ResponseEntity<CafeCategorySearchDto> searchCategory(@RequestBody CafeCategorySearchCond cafeCategorySearchCond) {
+
+        return ResponseEntity.ok(cafeService.categorySearch(cafeCategorySearchCond));
     }
 }

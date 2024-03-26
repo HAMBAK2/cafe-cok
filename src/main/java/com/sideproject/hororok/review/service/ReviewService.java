@@ -1,5 +1,7 @@
 package com.sideproject.hororok.review.service;
 
+import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
+import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.review.Entity.Review;
@@ -37,5 +39,10 @@ public class ReviewService {
         }
 
         return keywordDtoList;
+    }
+
+    public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
+        return reviewRepository.findCafeWithKeywordsInReview
+                (searchCond.getPurpose(), searchCond.getMenu(), searchCond.getTheme(), searchCond.getFacility(), searchCond.getMood());
     }
 }
