@@ -4,8 +4,9 @@ import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.operationHours.dto.BusinessScheduleDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
+import com.sideproject.hororok.utils.enums.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -28,21 +29,19 @@ public class CafeDetailDto {
     private final String roadAddress;
     private final BigDecimal longitude;
     private final BigDecimal latitude;
-    private final String BusinessHours;
-    private final String closedDay;
     private final List<String> cafeImageUrls;
-    private final String openStatus;
     private final String phoneNumber;
     private final Long reviewCount;
+    private final BusinessScheduleDto businessSchedules;
 
     private final List<MenuDto> menus;
     private final List<ReviewDto> reviews;
     private final List<String> reviewImageUrls;
     private final List<KeywordDto> cafeKeywords;
 
-    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus,
-                                   List<String> reviewImageUrls, List<ReviewDto> reviews,
-                                   List<KeywordDto> cafeKeywords, List<String> cafeImageUrls) {
+    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus, List<String> reviewImageUrls
+            , List<ReviewDto> reviews, List<KeywordDto> cafeKeywords, List<String> cafeImageUrls,
+                                   BusinessScheduleDto businessSchedule) {
 
 
         /**
@@ -62,6 +61,7 @@ public class CafeDetailDto {
                 .reviews(reviews)
                 .reviewImageUrls(reviewImageUrls)
                 .cafeKeywords(cafeKeywords)
+                .businessSchedules(businessSchedule)
                 .build();
     }
 

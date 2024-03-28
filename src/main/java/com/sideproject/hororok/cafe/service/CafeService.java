@@ -10,6 +10,8 @@ import com.sideproject.hororok.cafe.repository.CafeRepository;
 import com.sideproject.hororok.cafeImage.service.CafeImageService;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.operationHours.dto.BusinessScheduleDto;
+import com.sideproject.hororok.operationHours.service.OperationHourService;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.reviewImage.service.ReviewImageService;
@@ -35,6 +37,7 @@ public class CafeService {
     private final CafeRepository cafeRepository;
     private final MenuService menuService;
     private final CategoryService categoryService;
+    private final OperationHourService operationHourService;
 
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
@@ -51,8 +54,12 @@ public class CafeService {
         List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
         addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
 
+        //운영과 휴무시간
+        BusinessScheduleDto businessSchedule = operationHourService.getWorkTimeInfo(cafeId);
 
-        return CafeDetailDto.of(cafe, menus, reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
+
+        return CafeDetailDto.of(cafe, menus, reviewImageUrls, reviews,
+                cafeKeywords, cafeImageUrls,businessSchedule);
     }
 
 

@@ -21,6 +21,6 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
                 "AND oh.closingTime >= :startTime")
     List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, java.time.LocalTime endTime);
 
-
+    List<OperationHour> findOperationHourByCafeId(Long cafeId);
 
 }

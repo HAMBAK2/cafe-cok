@@ -22,11 +22,9 @@ public class FormatConverter {
 //        return searchCond.getDay() + " " + startTimeString + " - " + endTimeString;
 //    }
 
-    public static DayOfWeek convertKoreanDayOfWeekToEnglish(String day) {
+    public static DayOfWeek convertKoreanDayOfWeekToEnglish(String date) {
 
-        System.out.println("데이 출력 " + day);
-
-        switch (day) {
+        switch (date) {
             case "월":
                 return DayOfWeek.MONDAY;
             case "화":
@@ -42,7 +40,30 @@ public class FormatConverter {
             case "일":
                 return DayOfWeek.SUNDAY;
             default:
-                throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
+                throw new IllegalArgumentException("유효하지 않은 요일입니다: " + date);
+        }
+    }
+
+    public static String convertDayOfWeekEnglishToKoreanString(DayOfWeek date) {
+
+        switch (date) {
+            case MONDAY:
+                return "월";
+            case TUESDAY:
+                return "화";
+            case WEDNESDAY:
+                return "수";
+            case THURSDAY:
+                return "목";
+            case FRIDAY:
+                return "금";
+            case SATURDAY:
+                return "토";
+            case SUNDAY:
+                return "일";
+            default:
+                throw new IllegalArgumentException("유효하지 않은 요일입니다: " + date);
+
         }
     }
 }
