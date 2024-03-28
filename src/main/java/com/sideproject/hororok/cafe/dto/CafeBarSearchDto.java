@@ -1,20 +1,16 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.Menu.dto.MenuDto;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
-import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Builder
 @Getter
@@ -32,15 +28,16 @@ public class CafeBarSearchDto {
     private final String roadAddress;
     private final BigDecimal longitude;
     private final BigDecimal latitude;
-    private final List<String> BusinessHours;
-    private final List<String> closedDay;
+    private final String BusinessHours;
+    private final String closedDay;
     private final List<String> cafeImageUrls;
     private final String openStatus;
     private final String phoneNumber;
+    private final Long reviewCount;
 
     private final List<MenuDto> menus;
     private final List<ReviewDto> reviews;
-    private final List<ImageDto> images;
+    private final List<String> reviewImageUrls;
     private final List<KeywordDto> cafeKeywords;
 
     public static CafeBarSearchDto of(boolean isExist, List<Cafe> cafe, CategoryKeywordDto keywordsByCategory) {
@@ -88,8 +85,9 @@ public class CafeBarSearchDto {
                 .phoneNumber(cafeDetailDto.getPhoneNumber())
                 .menus(cafeDetailDto.getMenus())
                 .reviews(cafeDetailDto.getReviews())
-                .images(cafeDetailDto.getImages())
+                .reviewImageUrls(cafeDetailDto.getReviewImageUrls())
                 .cafeKeywords(cafeDetailDto.getCafeKeywords())
+                .reviewCount(cafeDetailDto.getReviewCount())
                 .build();
     }
 

@@ -1,7 +1,6 @@
-package com.sideproject.hororok.Menu.repository;
+package com.sideproject.hororok.menu.repository;
 
-import com.sideproject.hororok.Menu.dto.MenuDto;
-import com.sideproject.hororok.Menu.entity.Menu;
+import com.sideproject.hororok.menu.entity.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

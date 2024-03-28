@@ -19,13 +19,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "JOIN r.keywords k " +
             "WHERE r.cafe.id = :cafeId " +
             "GROUP BY k.id " +
-            "HAVING COUNT(k) >= :keywordCount " +
-            "ORDER BY COUNT(k) DESC")
-    List<Keyword> findKeywordInReviewByCafeIdWithKeywordCount(@Param("cafeId") Long cafeId, @Param("keywordCount") Integer keywordCount);
+            "ORDER BY COUNT(k) DESC ")
+    List<Keyword> findKeywordInReviewByCafeIdOrderByDesc(@Param("cafeId") Long cafeId);
 
-    @Query("select distinct r.cafe from Review r " +
-            "join r.keywords k " +
-            "WHERE k.name in(:purpose, :menu, :theme, :facility, :mood)")
-    List<Cafe> findCafeWithKeywordsInReview(String purpose, String menu, String theme, String facility, String mood);
+    @Query("SELECT r.cafe FROM Review r JOIN r.keywords k " +
+            "WHERE k.name IN :keywords " +
+            "GROUP BY r.cafe " +
+            "HAVING COUNT(DISTINCT k.name) = COUNT(:keywords)")
+    List<Cafe> findCafeWithKeywordsInReview(List<String> keywords);
 
 }

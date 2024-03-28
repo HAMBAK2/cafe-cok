@@ -31,24 +31,28 @@ public class ReviewService {
         return reviewDtos;
     }
 
-    public List<KeywordDto> findKeywordInReviewByCafeIdWithKeywordCount(Long cafeId, Integer keywordCount) {
+    public List<KeywordDto> findKeywordInReviewByCafeIdOrderByDesc(Long cafeId) {
 
-        List<Keyword> keywords = reviewRepository.findKeywordInReviewByCafeIdWithKeywordCount(cafeId, keywordCount);
+        List<Keyword> keywords = reviewRepository.findKeywordInReviewByCafeIdOrderByDesc(cafeId);
         List<KeywordDto> keywordDtoList = new ArrayList<>();
+        int idx = 0;
         for (Keyword keyword : keywords) {
+            if(idx == 3) break;
             keywordDtoList.add(KeywordDto.from(keyword));
+            idx++;
         }
 
         return keywordDtoList;
     }
 
     public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
-        return reviewRepository.findCafeWithKeywordsInReview
-                (searchCond.getPurpose(), searchCond.getMenu(), searchCond.getTheme(), searchCond.getFacility(), searchCond.getMood());
+
+
+
+        return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }
 
     public List<Cafe> findCafeWithKeywordsInReview(CreatePlanSearchCond searchCond) {
-        return reviewRepository.findCafeWithKeywordsInReview
-                (searchCond.getPurpose(), searchCond.getMenu(), searchCond.getTheme(), searchCond.getFacility(), searchCond.getMood());
+        return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }
 }
