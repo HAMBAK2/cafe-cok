@@ -24,11 +24,12 @@ public class GeometricUtils {
     }
 
     public static double calculateWalkingTime(BigDecimal lat1, BigDecimal lon1, BigDecimal lat2, BigDecimal lon2) {
-        return (calculateDistance(lat1, lon1, lat2, lon2) * 1000 / WALK_SPEED) / 60;
+        return (calculateDistance(lat1, lon1, lat2, lon2) * 1000  / WALK_SPEED) / 60;
     }
 
 
     public static double calculateDistance(BigDecimal lat1, BigDecimal lon1, BigDecimal lat2, BigDecimal lon2) {
+
         final double EARTH_RADIUS = 6371.0;
 
         double radLat1 = Math.toRadians(lat1.doubleValue());

@@ -4,6 +4,9 @@ package com.sideproject.hororok.cafe.cond;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 public class CreatePlanSearchCond {
@@ -11,12 +14,8 @@ public class CreatePlanSearchCond {
     private BigDecimal longitude;
     private BigDecimal latitude;
     private Integer minutes;
-    private String day;
-    private Integer startHour;
-    private Integer endHour;
-    private String purpose;
-    private String menu;
-    private String theme;
-    private String facility;
-    private String mood;
+    private String date;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private List<String> keywords;
 }

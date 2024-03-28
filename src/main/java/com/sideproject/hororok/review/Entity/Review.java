@@ -1,8 +1,9 @@
 package com.sideproject.hororok.review.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.image.entity.Image;
 import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -26,13 +27,16 @@ public class Review {
     @Column(length = 1000)
     private String specialNote;
 
+    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "review")
-    private List<Image> images = new ArrayList<>();
+    private List<ReviewImage> images = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "REVIEW_KEYWORD",

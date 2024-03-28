@@ -1,12 +1,12 @@
 package com.sideproject.hororok.cafe.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sideproject.hororok.Menu.entity.Menu;
-import com.sideproject.hororok.image.entity.Image;
+import com.sideproject.hororok.menu.entity.Menu;
+import com.sideproject.hororok.cafeImage.entity.CafeImage;
+import com.sideproject.hororok.operationHours.entity.OperationHour;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
-import software.amazon.ion.Decimal;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,16 +34,11 @@ public class Cafe {
     @Column(precision = 17, scale = 14)
     private BigDecimal latitude; //위도
 
-    private String BusinessHours;
-
-    private String closedDay;
-
-    private String imageUrl1;
-    private String imageUrl2;
-    private String imageUrl3;
 
     @Column(precision = 2, scale = 1)
     private BigDecimal starRating;
+
+    private Long reviewCount;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cafe")
@@ -55,5 +50,9 @@ public class Cafe {
 
     @JsonIgnore
     @OneToMany(mappedBy = "cafe")
-    private List<Image> images = new ArrayList<>();
+    private List<CafeImage> images = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cafe")
+    private List<OperationHour> operationHours = new ArrayList<>();
 }

@@ -7,57 +7,70 @@ import com.sideproject.hororok.utils.converter.FormatConverter;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 public class BusinessHoursUtils {
 
     private static final String OPEN = "영업중";
     private static final String CLOSE = "영업종료";
+    private static final String EVERYDAY = "매일";
+
+
 
     public static String getBusinessStatus(String businessHours) {
 
-        Map<String, LocalTime[]> businessHourMap = split(businessHours);
         LocalDateTime now = LocalDateTime.now();
-        String today = getKoreaDay(now.getDayOfWeek());
+        if(!isBusinessHours(businessHours)) return CLOSE;
 
-        for (String day : businessHourMap.keySet()) {
-            if(day.equals(today)) {
-                LocalTime[] localTimes = businessHourMap.get(day);
-
-                if(now.toLocalTime().isAfter(localTimes[0]) && now.toLocalTime().isBefore(localTimes[1])) {
+        LocalTime[] splitTime = splitToTime(businessHours);
+        if(now.toLocalTime().isAfter(splitTime[0]) && now.toLocalTime().isBefore(splitTime[1])) {
                     return OPEN;
-                } else {
-                    return CLOSE;
-                }
-            }
-        }
-
-        return CLOSE;
+        } else return CLOSE;
     }
 
-    public static boolean isBusinessHours(CreatePlanSearchCond searchCond, Cafe cafe) {
+    public static boolean isBusinessHours(String businessHours) {
 
-        Map<String, LocalTime[]> businessHourMap = split(cafe.getBusinessHours());
+        if(!businessHours.substring(0, 2).equals("매일")) {
+            List<DayOfWeek> dayOfWeeks = splitToDay(businessHours);
+            LocalDateTime now = LocalDateTime.now();
+            DayOfWeek today = now.getDayOfWeek();
 
-        for (String day : businessHourMap.keySet()) {
-            if(day.equals(searchCond.getDay()) &&
-                    isWithinTimeRange(businessHourMap.get(day), searchCond.getStartHour(), searchCond.getEndHour())) {
-                return true;
-            }
+            int startDayCompareResult = dayOfWeeks.get(0).compareTo(today);
+            int endDayCompareResult = dayOfWeeks.get(1).compareTo(today);
+
+
+            if(startDayCompareResult > 0) return false;
+            if(endDayCompareResult < 0) return false;
+
+            return true;
         }
 
-        return false;
+        return true;
     }
+//
+//    public static boolean isBusinessHours(CreatePlanSearchCond searchCond, Cafe cafe) {
+//
+//        //휴무일과 받은 날짜가 일치하는 경우
+//        if(cafe.getClosedDay() != null && cafe.getClosedDay().contains(searchCond.getDay())) {
+//            return false;
+//        }
+//
+//        LocalTime[] splitTimes = splitToTime(cafe.getBusinessHours());
+//
+//        if(isWithinTimeRange(splitTimes,
+//                searchCond.getStartHour().getHour(), searchCond.getEndHour().getHour())) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     private static boolean isWithinTimeRange(LocalTime[] timeRange, Integer startHour, Integer endHour) {
 
-        if(startHour >= timeRange[0].getHour() && startHour <= timeRange[1].getHour()) return true;
-        if(endHour >= timeRange[0].getHour() && endHour <= timeRange[1].getHour()) return true;
+        if(startHour < timeRange[0].getHour() || startHour > timeRange[1].getHour()) return false;
+        if(endHour < timeRange[0].getHour() || endHour > timeRange[1].getHour()) return false;
 
-        return false;
+        return true;
     }
 
     public static List<String> closedDaysConvert(String closedDays) {
@@ -79,41 +92,31 @@ public class BusinessHoursUtils {
     }
 
 
+    private static List<DayOfWeek> splitToDay(String businessHours) {
 
-    private static Map<String, LocalTime[]> split(String businessHours) {
+        String substring = businessHours.substring(0, 3);
+        String[] split = substring.split("~");
 
-        String[] splitBusinessHours = businessHours.split(", ");
-        Map<String, LocalTime[]> businessHourMap = new HashMap<>();
+        DayOfWeek startDay = FormatConverter.convertKoreanDayOfWeekToEnglish(split[0]);
+        DayOfWeek endDay = FormatConverter.convertKoreanDayOfWeekToEnglish(split[1]);
 
-        for (String splitBusinessHour : splitBusinessHours) {
-            String[] split = splitBusinessHour.split(" ");
-            String day = split[0];
-            LocalTime startTime = LocalTime.parse(split[1]);
-            LocalTime endTime = LocalTime.parse(split[3]);
-            businessHourMap.put(day, new LocalTime[]{startTime, endTime});
-        }
+        List<DayOfWeek> dayOfWeeks = new ArrayList<>();
+        dayOfWeeks.add(startDay);
+        dayOfWeeks.add(endDay);
 
-        return businessHourMap;
+        return dayOfWeeks;
     }
 
-    private static String getKoreaDay(DayOfWeek dayOfWeek) {
-        switch (dayOfWeek) {
-            case MONDAY:
-                return "월요일";
-            case TUESDAY:
-                return "화요일";
-            case WEDNESDAY:
-                return "수요일";
-            case THURSDAY:
-                return "목요일";
-            case FRIDAY:
-                return "금요일";
-            case SATURDAY:
-                return "토요일";
-            case SUNDAY:
-                return "일요일";
-            default:
-                throw new IllegalArgumentException("Invalid dayOfWeek: " + dayOfWeek);
-        }
+    private static LocalTime[] splitToTime(String businessHours) {
+
+        String substring = businessHours.substring(3, businessHours.length());
+        String[] split = substring.split("~");
+
+        if(split[1].trim().equals("24:00")) split[1] = "23:59";
+
+        return new LocalTime[]{LocalTime.parse(split[0].trim()), LocalTime.parse(split[1].trim())};
     }
+
+
+
 }
