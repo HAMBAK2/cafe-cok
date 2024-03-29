@@ -10,15 +10,15 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.*;
-import static jakarta.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.FetchType.LAZY;
+
 
 @Entity
 @Getter
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob
