@@ -1,7 +1,6 @@
 package com.sideproject.hororok.auth.config;
 
 
-import com.sideproject.hororok.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
