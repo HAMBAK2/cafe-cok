@@ -1,12 +1,9 @@
 package com.sideproject.hororok.auth.config;
 
 
-import com.sideproject.hororok.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
@@ -32,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests( authorizeRequest ->
                         authorizeRequest
                                 .requestMatchers("/auth/**", "/api/**", "/health-check").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/v3/**", "/swagger-resources/**").permitAll()
                                 .anyRequest().authenticated())
 
                 .logout((logoutConfig) ->

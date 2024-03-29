@@ -1,5 +1,7 @@
 package com.sideproject.hororok.cafe.controller;
 
+import com.sideproject.hororok.auth.annotation.LoginUser;
+import com.sideproject.hororok.auth.dto.SessionUser;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;

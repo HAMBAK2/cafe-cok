@@ -14,14 +14,9 @@ import lombok.ToString;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class KakaoInfo {
     private KakaoAccount kakaoAccount;
-    private String accessToken;
 
     public static KakaoInfo fail() {
         return null;
-    }
-
-    public void setAccessToken(String accessToken){
-        this.accessToken =  accessToken;
     }
 
 }

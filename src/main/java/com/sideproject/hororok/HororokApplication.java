@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
-//@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@SpringBootApplication
+@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+//@SpringBootApplication
 public class HororokApplication {
 
 	public static void main(String[] args) {

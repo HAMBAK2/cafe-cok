@@ -31,18 +31,10 @@ public class KakaoService {
     @Value("${kakao.redirect-url}")
     private String redirectUrl;
 
-    @Value("${kakao.logout-url}")
-    private String logoutUrl;
-
-    public KakaoInfo getInfo(final String code) {
-        final KakaoToken token = getToken(code);
+    public KakaoInfo getInfo(final KakaoToken token) {
         log.debug("token = {}", token);
         try {
-
-            KakaoInfo kakaoInfo = client.getInfo(new URI(kakaoUserApiUrl), token.getTokenType() + " " + token.getAccessToken());
-            kakaoInfo.setAccessToken(token.getAccessToken());
-
-            return kakaoInfo;
+            return client.getInfo(new URI(kakaoUserApiUrl), token.getTokenType() + " " + token.getAccessToken());
         } catch (Exception e) {
             log.error("something error..", e);
             return KakaoInfo.fail();
