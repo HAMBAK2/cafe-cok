@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.utils.enums.PlanMatchType;
 import lombok.Builder;
@@ -19,12 +20,12 @@ public class CreatePlanDto {
     private final List<Cafe> recommendCafes;
     private final List<Cafe> matchCafes;
     private final List<Cafe> similarCafes;
-    private final CategoryKeywordDto keywordsByCategory;
+    private final List<CategoryAndKeyword> keywordsByCategory;
 
 
     //맞춘 경우
     public static CreatePlanDto of(PlanMatchType matchType, List<Cafe> matchCafes,
-                                   List<Cafe> similarCafes, CategoryKeywordDto keywordsByCategory) {
+                                   List<Cafe> similarCafes, List<CategoryAndKeyword> keywordsByCategory) {
 
         return CreatePlanDto.builder()
                 .matchType(matchType)
@@ -36,7 +37,7 @@ public class CreatePlanDto {
 
 
     //못맞춘경우 , 유사한경우
-    public static CreatePlanDto of(PlanMatchType matchType, List<Cafe> similarOrRecommendCafes, CategoryKeywordDto keywordsByCategory) {
+    public static CreatePlanDto of(PlanMatchType matchType, List<Cafe> similarOrRecommendCafes, List<CategoryAndKeyword> keywordsByCategory) {
 
         if(matchType.equals(PlanMatchType.SIMILAR)) {
             return CreatePlanDto.builder()

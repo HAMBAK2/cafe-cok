@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OperationHourRepository extends JpaRepository<OperationHour, Long> {
 
@@ -22,5 +23,25 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
     List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, java.time.LocalTime endTime);
 
 
+    @Query(
+            "SELECT oh FROM OperationHour oh " +
+                    "WHERE oh.cafe.id = :cafeId " +
+                    "AND oh.date = :date"
+    )
+    Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date);
+
+    @Query(
+            "SELECT oh FROM OperationHour oh " +
+                    "WHERE oh.cafe.id = :cafeId " +
+                    "AND oh.isClosed = true"
+    )
+    List<OperationHour> findClosedDayByCafeId(Long cafeId);
+
+    @Query(
+            "SELECT oh FROM OperationHour oh " +
+                    "WHERE oh.cafe.id = :cafeId " +
+                    "AND oh.isClosed = false"
+    )
+    List<OperationHour> findBusinessHoursByCafeId(Long cafeId);
 
 }

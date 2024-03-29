@@ -10,18 +10,27 @@ import com.sideproject.hororok.cafe.repository.CafeRepository;
 import com.sideproject.hororok.cafeImage.service.CafeImageService;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.operationHours.entity.OperationHour;
+import com.sideproject.hororok.operationHours.service.OperationHourService;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.reviewImage.service.ReviewImageService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
+import com.sideproject.hororok.utils.converter.FormatConverter;
+import com.sideproject.hororok.utils.enums.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +44,7 @@ public class CafeService {
     private final CafeRepository cafeRepository;
     private final MenuService menuService;
     private final CategoryService categoryService;
+    private final OperationHourService operationHourService;
 
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
@@ -51,9 +61,66 @@ public class CafeService {
         List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
         addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
 
+        OpenStatus openStatus = getOpenStatus(cafeId);
+        List<String> closedDay = getClosedDay(cafeId);
+        List<String> businessHours = getBusinessHours(cafeId);
 
-        return CafeDetailDto.of(cafe, menus, reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
+        return CafeDetailDto.of(cafe, menus, openStatus, businessHours, closedDay, reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
     }
+
+
+    private List<String> getBusinessHours(Long cafeId) {
+
+        List<OperationHour> businessHours = operationHourService.findBusinessHoursByCafeId(cafeId);
+        List<String> convertedBusinessHours = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (OperationHour businessHour : businessHours) {
+            String input;
+            String date = FormatConverter.getKoreanDayOfWeek(businessHour.getDate());
+            String openingTime = businessHour.getOpeningTime().format(formatter);
+            String closingTime = businessHour.getClosingTime().format(formatter);
+
+            input = date + " " + openingTime + "~" + closingTime;
+            convertedBusinessHours.add(input);
+        }
+
+        return convertedBusinessHours;
+    }
+
+    private OpenStatus getOpenStatus(Long cafeId){
+
+        LocalTime time = LocalTime.now();
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+
+        OperationHour operationHour = operationHourService.findByCafeIdAndDate(cafeId, today).get();
+
+        if(operationHour.isClosed()) return OpenStatus.HOLY_DAY;
+
+        if(time.isAfter(operationHour.getOpeningTime()) && time.isBefore(operationHour.getClosingTime())) {
+            return OpenStatus.OPEN;
+        }
+
+        return OpenStatus.OPEN;
+    }
+
+    private List<String> getClosedDay(Long cafeId) {
+
+
+        List<OperationHour> findDays = operationHourService.findClosedDayByCafeId(cafeId);
+
+        if(findDays.isEmpty()) Optional.empty();
+
+        List<String> closeDays = new ArrayList<>();
+        for (OperationHour findDay : findDays) {
+            DayOfWeek date = findDay.getDate();
+            closeDays.add(FormatConverter.getKoreanDayOfWeek(date));
+        }
+
+        return closeDays;
+    }
+
 
 
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){

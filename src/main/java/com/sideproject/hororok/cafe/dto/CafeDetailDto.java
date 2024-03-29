@@ -1,11 +1,13 @@
 package com.sideproject.hororok.cafe.dto;
 
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
+import com.sideproject.hororok.utils.enums.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -20,7 +22,7 @@ public class CafeDetailDto {
 
     //존재하지 않을 경우
     private final List<Cafe> cafes;
-    private final CategoryKeywordDto keywordsByCategory;
+    private final List<CategoryAndKeyword> keywordsByCategory;
 
     //존재할 경우
     private final Long id;
@@ -28,8 +30,8 @@ public class CafeDetailDto {
     private final String roadAddress;
     private final BigDecimal longitude;
     private final BigDecimal latitude;
-    private final String BusinessHours;
-    private final String closedDay;
+    private final List<String> businessHours;
+    private final List<String> closedDay;
     private final List<String> cafeImageUrls;
     private final String openStatus;
     private final String phoneNumber;
@@ -40,7 +42,7 @@ public class CafeDetailDto {
     private final List<String> reviewImageUrls;
     private final List<KeywordDto> cafeKeywords;
 
-    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus,
+    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus, OpenStatus openStatus,List<String> businessHours, List<String> closedDay,
                                    List<String> reviewImageUrls, List<ReviewDto> reviews,
                                    List<KeywordDto> cafeKeywords, List<String> cafeImageUrls) {
 
@@ -56,9 +58,12 @@ public class CafeDetailDto {
                 .longitude(cafe.getLongitude())
                 .latitude(cafe.getLatitude())
                 .cafeImageUrls(cafeImageUrls)
+                .businessHours(businessHours)
                 .phoneNumber(cafe.getPhoneNumber())
                 .reviewCount(cafe.getReviewCount())
                 .menus(menus)
+                .closedDay(closedDay)
+                .openStatus(openStatus.getDescription())
                 .reviews(reviews)
                 .reviewImageUrls(reviewImageUrls)
                 .cafeKeywords(cafeKeywords)

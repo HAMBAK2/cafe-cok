@@ -1,5 +1,6 @@
 package com.sideproject.hororok.category.service;
 
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.entity.Category;
 import com.sideproject.hororok.category.repository.CategoryRepository;
@@ -21,9 +22,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public CategoryKeywordDto findAllCategoryAndKeyword() {
+    public List<CategoryAndKeyword> findAllCategoryAndKeyword() {
 
-        Map<String, List<String>> keywordsByCategory = new HashMap<>();
+        List<CategoryAndKeyword> categoryAndKeywords = new ArrayList<>();
 
         List<Category> categories = categoryRepository.findAll();
         for (Category category : categories) {
@@ -31,9 +32,9 @@ public class CategoryService {
             for (Keyword keyword : category.getKeywords()) {
                 keywords.add(keyword.getName());
             }
-            keywordsByCategory.put(category.getName(), keywords);
+            categoryAndKeywords.add(new CategoryAndKeyword(category.getName(), keywords));
         }
 
-        return new CategoryKeywordDto(keywordsByCategory);
+        return categoryAndKeywords;
     }
 }

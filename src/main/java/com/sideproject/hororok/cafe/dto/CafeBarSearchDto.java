@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.dto;
 
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
@@ -19,7 +20,7 @@ public class CafeBarSearchDto {
 
     private final boolean isExist;
     private final List<Cafe> cafe;
-    private final CategoryKeywordDto keywordsByCategory;
+    private final List<CategoryAndKeyword> keywordsByCategory;
     private final CafeDetailDto cafeDetail;
 
     //존재할 경우
@@ -28,8 +29,8 @@ public class CafeBarSearchDto {
     private final String roadAddress;
     private final BigDecimal longitude;
     private final BigDecimal latitude;
-    private final String BusinessHours;
-    private final String closedDay;
+    private final List<String> businessHours;
+    private final List<String> closedDay;
     private final List<String> cafeImageUrls;
     private final String openStatus;
     private final String phoneNumber;
@@ -40,7 +41,7 @@ public class CafeBarSearchDto {
     private final List<String> reviewImageUrls;
     private final List<KeywordDto> cafeKeywords;
 
-    public static CafeBarSearchDto of(boolean isExist, List<Cafe> cafe, CategoryKeywordDto keywordsByCategory) {
+    public static CafeBarSearchDto of(boolean isExist, List<Cafe> cafe, List<CategoryAndKeyword> keywordsByCategory) {
 
 
         return CafeBarSearchDto.builder()
@@ -78,7 +79,7 @@ public class CafeBarSearchDto {
                 .roadAddress(cafeDetailDto.getRoadAddress())
                 .longitude(cafeDetailDto.getLongitude())
                 .latitude(cafeDetailDto.getLatitude())
-                .BusinessHours(cafeDetailDto.getBusinessHours())
+                .businessHours(cafeDetailDto.getBusinessHours())
                 .closedDay(cafeDetailDto.getClosedDay())
                 .cafeImageUrls(cafeDetailDto.getCafeImageUrls())
                 .openStatus(cafeDetailDto.getOpenStatus())

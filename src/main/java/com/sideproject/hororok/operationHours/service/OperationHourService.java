@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,5 +20,18 @@ public class OperationHourService {
     public List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, LocalTime endTime){
 
         return operationHourRepository.findOpenHoursByDateAndTimeRange(date, startTime, endTime);
+    }
+
+    public Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date){
+
+        return operationHourRepository.findByCafeIdAndDate(cafeId, date);
+    }
+
+    public List<OperationHour> findClosedDayByCafeId(Long cafeId) {
+        return operationHourRepository.findClosedDayByCafeId(cafeId);
+    }
+
+    public List<OperationHour> findBusinessHoursByCafeId(Long cafeId) {
+        return operationHourRepository.findBusinessHoursByCafeId(cafeId);
     }
 }

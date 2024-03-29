@@ -4,6 +4,7 @@ import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.entity.Keyword;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -34,7 +36,7 @@ public class CafePlanService {
     public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
         
         PlanMatchType matchType = PlanMatchType.MATCH;
-        CategoryKeywordDto allCategoryAndKeyword = categoryService.findAllCategoryAndKeyword();
+        List<CategoryAndKeyword> allCategoryAndKeyword = categoryService.findAllCategoryAndKeyword();
         List<Cafe> recommendCafes = cafeService.findAllByOrderByStarRatingDescNameAsc();
 
 
@@ -129,9 +131,11 @@ public class CafePlanService {
     }
 
     private List<OperationHour> dayAndTimeFiltering(CreatePlanSearchCond searchCond) {
-        DayOfWeek date = FormatConverter.convertKoreanDayOfWeekToEnglish(searchCond.getDate());
+        DayOfWeek parseDate = LocalDate.parse(searchCond.getDate()).getDayOfWeek();
+
+//        DayOfWeek date = FormatConverter.convertKoreanDayOfWeekToEnglish(searchCond.getDate());
         return operationHourRepository
-                .findOpenHoursByDateAndTimeRange(date, searchCond.getStartTime(), searchCond.getEndTime());
+                .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
 
     }
 

@@ -14,7 +14,6 @@ public class BusinessHoursUtils {
 
     private static final String OPEN = "영업중";
     private static final String CLOSE = "영업종료";
-    private static final String EVERYDAY = "매일";
 
 
 
@@ -48,22 +47,7 @@ public class BusinessHoursUtils {
 
         return true;
     }
-//
-//    public static boolean isBusinessHours(CreatePlanSearchCond searchCond, Cafe cafe) {
-//
-//        //휴무일과 받은 날짜가 일치하는 경우
-//        if(cafe.getClosedDay() != null && cafe.getClosedDay().contains(searchCond.getDay())) {
-//            return false;
-//        }
-//
-//        LocalTime[] splitTimes = splitToTime(cafe.getBusinessHours());
-//
-//        if(isWithinTimeRange(splitTimes,
-//                searchCond.getStartHour().getHour(), searchCond.getEndHour().getHour())) {
-//            return true;
-//        }
-//        return false;
-//    }
+
 
     private static boolean isWithinTimeRange(LocalTime[] timeRange, Integer startHour, Integer endHour) {
 
