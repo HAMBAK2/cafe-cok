@@ -3,8 +3,10 @@ package com.sideproject.hororok.auth.kakao.service;
 import java.net.URI;
 
 import com.sideproject.hororok.auth.kakao.client.KakaoClient;
+import com.sideproject.hororok.auth.kakao.dto.KakaoAccount;
 import com.sideproject.hororok.auth.kakao.dto.KakaoInfo;
 import com.sideproject.hororok.auth.kakao.dto.KakaoToken;
+import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -34,15 +36,11 @@ public class KakaoService {
     @Value("${kakao.logout-url}")
     private String logoutUrl;
 
-    public KakaoInfo getInfo(final String code) {
-        final KakaoToken token = getToken(code);
+    public KakaoInfo getInfo(final KakaoToken token) {
         log.debug("token = {}", token);
         try {
 
-            KakaoInfo kakaoInfo = client.getInfo(new URI(kakaoUserApiUrl), token.getTokenType() + " " + token.getAccessToken());
-            kakaoInfo.setAccessToken(token.getAccessToken());
-
-            return kakaoInfo;
+            return client.getInfo(new URI(kakaoUserApiUrl), token.getTokenType() + " " + token.getAccessToken());
         } catch (Exception e) {
             log.error("something error..", e);
             return KakaoInfo.fail();
