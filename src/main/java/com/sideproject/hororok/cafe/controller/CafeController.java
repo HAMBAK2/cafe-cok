@@ -45,6 +45,8 @@ public class CafeController {
     @ApiResponse(description = "선택한 카페의 상세 정보를 전달, 카페가 존재하지 않는 경우 cafes, keywordsByCategory 정보 존재 나머지 X, \n카페가 존재하는 경우 반대 (exist 값은 항상 존재)")
     public ResponseEntity<CafeBarSearchDto> searchBar(@RequestBody CafeSearchCond searchCond) {
 
+
+
         return ResponseEntity.ok(cafeService.barSearch(searchCond));
     }
 

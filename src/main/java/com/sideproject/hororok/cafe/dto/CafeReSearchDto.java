@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +17,9 @@ public class CafeReSearchDto {
 
     private final boolean isExist;
     private final List<Cafe> cafes;
-    private final CategoryKeywordDto keywordsByCategory;
+    private final List<CategoryAndKeyword> keywordsByCategory;
 
-    public static CafeReSearchDto of(boolean isExist, List<Cafe> cafes, CategoryKeywordDto keywordsByCategory) {
+    public static CafeReSearchDto of(boolean isExist, List<Cafe> cafes, List<CategoryAndKeyword> keywordsByCategory) {
         return CafeReSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafes)

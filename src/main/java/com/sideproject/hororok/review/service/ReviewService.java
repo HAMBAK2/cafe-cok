@@ -47,8 +47,6 @@ public class ReviewService {
 
     public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
 
-
-
         return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }
 
