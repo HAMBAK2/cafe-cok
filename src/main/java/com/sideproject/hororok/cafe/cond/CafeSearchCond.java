@@ -22,5 +22,12 @@ public class CafeSearchCond {
                 .build();
     }
 
+    public static CafeSearchCond of(BigDecimal latitude, BigDecimal longitude) {
+        return CafeSearchCond.builder()
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
+    }
+
 
 }
