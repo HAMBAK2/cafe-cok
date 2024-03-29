@@ -6,6 +6,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public class KakaoAccount {
-    private Profile profile;
+    private String nickname;
     private String email;
 }
