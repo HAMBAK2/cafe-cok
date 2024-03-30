@@ -1,16 +1,20 @@
 package com.sideproject.hororok.user.entity;
 
+import com.sideproject.hororok.entity.BaseEntity;
+import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.user.Role;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +29,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews = new ArrayList<>();
+
+
 
     @Builder
     public User(String nickname, String email, Role role) {

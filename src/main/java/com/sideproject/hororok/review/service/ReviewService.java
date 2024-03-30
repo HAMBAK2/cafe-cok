@@ -8,6 +8,7 @@ import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.repository.ReviewRepository;
+import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
         List<ReviewDto> reviewDtos = new ArrayList<>();
         for (Review review : reviews) {
-            reviewDtos.add(ReviewDto.from(review));
+            reviewDtos.add(ReviewDto.of(review, review.getUser().getNickname()));
         }
 
         return reviewDtos;
@@ -50,6 +51,10 @@ public class ReviewService {
         return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }
 
+
+    public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
+        return reviewRepository.findReviewImagesByCafeId(cafeId);
+    }
     public List<Cafe> findCafeWithKeywordsInReview(CreatePlanSearchCond searchCond) {
         return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }

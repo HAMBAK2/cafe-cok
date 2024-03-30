@@ -9,10 +9,5 @@ import java.util.List;
 public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
 
 
-    @Query(
-            "select rv.imageUrl from ReviewImage rv " +
-            "join rv.review r " +
-            "join r.cafe c " +
-            "where c.id = :cafeId ")
-    List<String> findReviewImageUrlsByCafeId(Long cafeId);
+
 }

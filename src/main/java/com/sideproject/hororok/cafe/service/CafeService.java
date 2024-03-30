@@ -14,6 +14,7 @@ import com.sideproject.hororok.operationHours.entity.OperationHour;
 import com.sideproject.hororok.operationHours.service.OperationHourService;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import com.sideproject.hororok.reviewImage.service.ReviewImageService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.utils.converter.FormatConverter;
@@ -56,9 +57,14 @@ public class CafeService {
 
         Cafe cafe =  findCafeById(cafeId);
         List<MenuDto> menus = menuService.findByCafeId(cafeId);
-        List<String> reviewImageUrls = reviewImageService.findReviewImageUrlsByCafeId(cafeId);
+        List<ReviewImage> reviewImages = reviewService.findReviewImagesByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
         List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
+
+        List<String> reviewImageUrls = new ArrayList<>();
+        for (ReviewImage reviewImage : reviewImages) {
+            reviewImageUrls.add(reviewImage.getImageUrl());
+        }
 
         //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
         List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
