@@ -12,7 +12,4 @@ public class ReviewImageService {
 
     private final ReviewImageRepository reviewImageRepository;
 
-    public List<String> findReviewImageUrlsByCafeId(Long cafeId) {
-        return reviewImageRepository.findReviewImageUrlsByCafeId(cafeId);
-    }
 }

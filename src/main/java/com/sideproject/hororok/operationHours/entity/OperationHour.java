@@ -2,6 +2,7 @@ package com.sideproject.hororok.operationHours.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-public class OperationHour {
+public class OperationHour extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

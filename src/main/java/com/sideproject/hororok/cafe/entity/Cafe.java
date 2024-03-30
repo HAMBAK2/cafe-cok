@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sideproject.hororok.entity.BaseEntity;
 import com.sideproject.hororok.menu.entity.Menu;
 import com.sideproject.hororok.cafeImage.entity.CafeImage;
 import com.sideproject.hororok.operationHours.entity.OperationHour;
@@ -17,7 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
-public class Cafe {
+public class Cafe extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

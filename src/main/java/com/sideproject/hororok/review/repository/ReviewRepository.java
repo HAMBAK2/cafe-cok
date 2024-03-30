@@ -4,6 +4,7 @@ import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
+import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +28,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "GROUP BY r.cafe " +
             "HAVING COUNT(DISTINCT k.name) = COUNT(:keywords)")
     List<Cafe> findCafeWithKeywordsInReview(List<String> keywords);
+
+
+    @Query("SELECT ri FROM Review r JOIN r.cafe c JOIN r.images ri " +
+            "WHERE c.id = :cafeId "
+    )
+    List<ReviewImage> findReviewImagesByCafeId(Long cafeId);
 
 }
