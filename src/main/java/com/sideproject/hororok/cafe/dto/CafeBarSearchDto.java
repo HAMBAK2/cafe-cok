@@ -19,7 +19,7 @@ import java.util.List;
 public class CafeBarSearchDto {
 
     private final boolean isExist;
-    private final List<Cafe> cafe;
+    private final List<WithinRadiusCafeDto> cafes;
     private final List<CategoryAndKeyword> keywordsByCategory;
     private final CafeDetailDto cafeDetail;
 
@@ -41,12 +41,12 @@ public class CafeBarSearchDto {
     private final List<String> reviewImageUrls;
     private final List<KeywordDto> cafeKeywords;
 
-    public static CafeBarSearchDto of(boolean isExist, List<Cafe> cafe, List<CategoryAndKeyword> keywordsByCategory) {
+    public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, List<CategoryAndKeyword> keywordsByCategory) {
 
 
         return CafeBarSearchDto.builder()
                 .isExist(isExist)
-                .cafe(cafe)
+                .cafes(cafe)
                 .keywordsByCategory(keywordsByCategory)
                 .build();
     }
@@ -65,7 +65,7 @@ public class CafeBarSearchDto {
 
         return CafeBarSearchDto.builder()
                 .isExist(false)
-                .cafe(cafeReSearchDto.getCafes())
+                .cafes(cafeReSearchDto.getCafes())
                 .keywordsByCategory(cafeReSearchDto.getKeywordsByCategory())
                 .build();
     }

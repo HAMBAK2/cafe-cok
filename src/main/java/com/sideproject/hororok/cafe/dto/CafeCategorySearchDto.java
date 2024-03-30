@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CafeCategorySearchDto {
 
-    private final List<Cafe> cafes;
+    private final List<WithinRadiusCafeDto> cafes;
     private final List<CategoryAndKeyword> keywordsByCategory;
 
-    public static CafeReSearchDto of(List<Cafe> cafes, List<CategoryAndKeyword> keywordsByCategory) {
+    public static CafeReSearchDto of(List<WithinRadiusCafeDto> cafes, List<CategoryAndKeyword> keywordsByCategory) {
         return CafeReSearchDto.builder()
                 .cafes(cafes)
                 .keywordsByCategory(keywordsByCategory)

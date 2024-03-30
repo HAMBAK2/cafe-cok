@@ -16,10 +16,10 @@ import java.util.Optional;
 public class CafeReSearchDto {
 
     private final boolean isExist;
-    private final List<Cafe> cafes;
+    private final List<WithinRadiusCafeDto> cafes;
     private final List<CategoryAndKeyword> keywordsByCategory;
 
-    public static CafeReSearchDto of(boolean isExist, List<Cafe> cafes, List<CategoryAndKeyword> keywordsByCategory) {
+    public static CafeReSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafes, List<CategoryAndKeyword> keywordsByCategory) {
         return CafeReSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafes)

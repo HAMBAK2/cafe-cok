@@ -22,6 +22,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.sideproject.hororok.cafe.dto.CafeReSearchDto.of;
 
 @Service
 @RequiredArgsConstructor
@@ -144,21 +147,22 @@ public class CafeService {
 
     public CafeReSearchDto findWithinRadius(CafeSearchCond searchCond) {
         List<Cafe> cafes = findAll();
-        List<Cafe> withinRadiusCafes = new ArrayList<>();
+        List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
         boolean isExist = false;
         for (Cafe cafe : cafes) {
             boolean withinRadius = GeometricUtils.isWithinRadius(searchCond.getLatitude(), searchCond.getLongitude(),
                     cafe.getLatitude(), cafe.getLongitude(), MAX_RADIUS);
 
             if(withinRadius) {
-                withinRadiusCafes.add(cafe);
+                Optional<String> imageUrlOptional = cafeImageService.findOneImageUrlByCafeId(cafe.getId());
+                String imageUrl = imageUrlOptional.orElseThrow(() -> new NotFoundException("이미지를 찾을 수 없습니다."));
+                withinRadiusCafes.add(WithinRadiusCafeDto.from(cafe, imageUrl));
                 isExist = true;
             }
         }
 
 
-
-        return CafeReSearchDto.of(isExist, withinRadiusCafes, categoryService.findAllCategoryAndKeyword());
+        return of(isExist, withinRadiusCafes, categoryService.findAllCategoryAndKeyword());
     }
 
 
@@ -178,9 +182,9 @@ public class CafeService {
         CafeReSearchDto withinRadius = findWithinRadius(CafeSearchCond.from(searchCond));
 
         List<Cafe> cafeWithKeywordsInReview = reviewService.findCafeWithKeywordsInReview(searchCond);
-        List<Cafe> cafes = withinRadius.getCafes();
+        List<WithinRadiusCafeDto> cafes = withinRadius.getCafes();
 
-        List<Cafe> sameCafes = cafeWithKeywordsInReview.stream()
+        List<WithinRadiusCafeDto> sameCafes = cafeWithKeywordsInReview.stream()
                 .map(Cafe::getId)
                 .collect(Collectors.toSet())
                 .stream()

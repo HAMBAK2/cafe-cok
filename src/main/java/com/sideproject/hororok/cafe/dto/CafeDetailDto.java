@@ -21,7 +21,7 @@ public class CafeDetailDto {
     private final boolean isExist;
 
     //존재하지 않을 경우
-    private final List<Cafe> cafes;
+    private final List<WithinRadiusCafeDto> cafes;
     private final List<CategoryAndKeyword> keywordsByCategory;
 
     //존재할 경우
