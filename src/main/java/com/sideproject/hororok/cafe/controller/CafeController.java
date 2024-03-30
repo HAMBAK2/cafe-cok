@@ -65,16 +65,12 @@ public class CafeController {
         return ResponseEntity.ok(cafeService.categorySearch(CafeCategorySearchCond.of(latitude, longitude, keywords)));
     }
 
-    @GetMapping("/plans")
+    @PostMapping("/plans")
     @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
     @Parameter(description = "방문위치(좌표), 몇분거리, 방문일자(요일 하나, 시간은 범위), 키워드 5개")
-    public ResponseEntity<CreatePlanDto> createPlan(
-            @RequestParam BigDecimal latitude, @RequestParam BigDecimal longitude,
-            @RequestParam Integer minutes, @RequestParam String date,
-            @RequestParam LocalTime startTime, @RequestParam LocalTime endTime, @RequestParam List<String> keywords
+    public ResponseEntity<CreatePlanDto> createPlan( @RequestBody CreatePlanSearchCond searchCond
             ) {
 
-        return ResponseEntity.ok(cafePlanService.createPlans(CreatePlanSearchCond.of(latitude, longitude, minutes,
-                date, startTime, endTime, keywords)));
+        return ResponseEntity.ok(cafePlanService.createPlans(searchCond));
     }
 }
