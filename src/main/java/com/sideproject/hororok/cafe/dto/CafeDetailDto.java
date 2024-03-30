@@ -36,6 +36,7 @@ public class CafeDetailDto {
     private final String openStatus;
     private final String phoneNumber;
     private final Long reviewCount;
+    private final double starRating;
 
     private final List<MenuDto> menus;
     private final List<ReviewDto> reviews;
@@ -47,9 +48,6 @@ public class CafeDetailDto {
                                    List<KeywordDto> cafeKeywords, List<String> cafeImageUrls) {
 
 
-        /**
-         * 여기 날짜 정보 변경된 걸로 받을 수 있게 해야 함
-         */
         return CafeDetailDto.builder()
                 .isExist(true)
                 .id(cafe.getId())
@@ -62,6 +60,7 @@ public class CafeDetailDto {
                 .phoneNumber(cafe.getPhoneNumber())
                 .reviewCount(cafe.getReviewCount())
                 .menus(menus)
+                .starRating(cafe.getStarRating().doubleValue())
                 .closedDay(closedDay)
                 .openStatus(openStatus.getDescription())
                 .reviews(reviews)
