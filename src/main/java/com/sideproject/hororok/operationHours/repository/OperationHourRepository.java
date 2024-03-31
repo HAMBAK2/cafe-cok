@@ -18,9 +18,9 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
             "WHERE 1=1 " +
             "AND oh.date = :date " +
                 "AND oh.isClosed = false " +
-                "AND oh.openingTime <= :endTime " +
-                "AND oh.closingTime >= :startTime")
-    List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, java.time.LocalTime endTime);
+                "AND oh.openingTime <= :visitTime " +
+                "AND oh.closingTime >= :visitTime")
+    List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime visitTime);
 
 
     @Query(

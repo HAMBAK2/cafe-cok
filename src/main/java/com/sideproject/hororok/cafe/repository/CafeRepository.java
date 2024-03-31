@@ -44,9 +44,11 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
             "AND k.name IN :keywords")
     Optional<Cafe> findDistinctByKeywordsAndCafeId(List<String> keywords, Long cafeId);
 
-
-
-    @Query("SELECT k.name FROM Cafe c JOIN c.reviews r JOIN r.keywords k WHERE c.id = :cafeId")
+    @Query("SELECT DISTINCT k.name " +
+            "FROM Cafe c " +
+                "JOIN c.reviews r " +
+                "JOIN r.keywords k " +
+            "WHERE c.id = :cafeId")
     List<String> findKeywordsByReviewsCafeId(Long cafeId);
 
 }
