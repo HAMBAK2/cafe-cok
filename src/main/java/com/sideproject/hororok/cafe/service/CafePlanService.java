@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
@@ -131,11 +133,21 @@ public class CafePlanService {
     }
 
     private List<OperationHour> dayAndTimeFiltering(CreatePlanSearchCond searchCond) {
-        DayOfWeek parseDate = LocalDate.parse(searchCond.getDate()).getDayOfWeek();
 
-//        DayOfWeek date = FormatConverter.convertKoreanDayOfWeekToEnglish(searchCond.getDate());
-        return operationHourRepository
-                .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
+        String dateString = searchCond.getDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+            LocalDate date = LocalDate.parse(dateString, formatter);
+            DayOfWeek parseDate = date.getDayOfWeek();
+
+            return operationHourRepository
+                    .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
+        } catch (DateTimeParseException e) {
+            // 날짜 형식이 잘못되었을 때 처리할 내용
+            e.printStackTrace();
+            return Collections.emptyList(); // 예시로 비어있는 리스트 반환
+        }
 
     }
 
