@@ -19,20 +19,21 @@ public class CreatePlanSearchCond {
     private final BigDecimal latitude;
     private final Integer minutes;
     private final String date;
-    private final LocalTime visitTime;
+    private final LocalTime startTime;
     private final LocalTime endTime;
     private final List<String> keywords;
 
 
     public static CreatePlanSearchCond of(BigDecimal longitude, BigDecimal latitude, Integer minutes, String date,
-                                          LocalTime visitTime, List<String> keywords) {
+                                          LocalTime startTime, LocalTime endTime, List<String> keywords) {
 
         return CreatePlanSearchCond.builder()
                 .longitude(longitude)
                 .latitude(latitude)
                 .minutes(minutes)
                 .date(date)
-                .visitTime(visitTime)
+                .startTime(startTime)
+                .endTime(endTime)
                 .keywords(keywords)
                 .build();
     }
