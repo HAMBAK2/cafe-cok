@@ -18,7 +18,7 @@ public class CreatePlanDto {
     private final PlanMatchType matchType;
     private final String locationName;
     private final Integer minutes;
-    private final List<CategoryAndKeyword> keywords;
+    private final List<CategoryAndKeyword> categoryKeywords;
     private final List<Cafe> cafe;
     private final List<Cafe> recommendCafes;
     private final List<Cafe> matchCafes;
@@ -33,7 +33,7 @@ public class CreatePlanDto {
                 .matchType(matchType)
                 .locationName(searchCond.getLocationName())
                 .minutes(searchCond.getMinutes())
-                .keywords(searchCond.getKeywords())
+                .categoryKeywords(searchCond.getCategoryKeywords())
                 .similarCafes(similarCafes)
                 .matchCafes(matchCafes)
                 .build();
@@ -48,7 +48,7 @@ public class CreatePlanDto {
                     .matchType(matchType)
                     .locationName(searchCond.getLocationName())
                     .minutes(searchCond.getMinutes())
-                    .keywords(searchCond.getKeywords())
+                    .categoryKeywords(searchCond.getCategoryKeywords())
                     .similarCafes(cafes)
                     .build();
         }
@@ -57,10 +57,9 @@ public class CreatePlanDto {
                 .matchType(matchType)
                 .locationName(searchCond.getLocationName())
                 .minutes(searchCond.getMinutes())
-                .keywords(searchCond.getKeywords())
+                .categoryKeywords(searchCond.getCategoryKeywords())
                 .recommendCafes(cafes)
                 .build();
     }
 
-//
 }
