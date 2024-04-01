@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./
 
     steps:
       - name: Checkout repository
@@ -25,10 +25,10 @@ jobs:
           submodules: true
           token: ${{ secrets.ACTION_TOKEN }}
 
-      - name: JDK 11 설정
+      - name: JDK 17 설정
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Gradle Caching
@@ -56,10 +56,10 @@ jobs:
       - name: Docker Image 빌드 후 DockerHub에 Push
         uses: docker/build-push-action@v4
         with:
-          context: ./backend
-          file: ./backend/Dockerfile-dev
+          context: ./
+          file: ./Dockerfile-dev
           push: true
-          platforms: linux/arm64
+          platforms: linux/amd64
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
 
   # backend-docker-pull-and-run:
