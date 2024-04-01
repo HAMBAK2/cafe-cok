@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.service;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.service.MenuService;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
@@ -18,7 +19,7 @@ import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import com.sideproject.hororok.reviewImage.service.ReviewImageService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.utils.converter.FormatConverter;
-import com.sideproject.hororok.utils.enums.OpenStatus;
+import com.sideproject.hororok.cafe.enums.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,7 @@ public class CafeService {
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
     @Transactional
+    @LogTrace
     public CafeDetailDto findCafeDetail(Long cafeId){
 
         Cafe cafe =  findCafeById(cafeId);
@@ -78,6 +80,7 @@ public class CafeService {
     }
 
 
+    @LogTrace
     private List<String> getBusinessHours(Long cafeId) {
 
         List<OperationHour> businessHours = operationHourService.findBusinessHoursByCafeId(cafeId);
@@ -98,6 +101,7 @@ public class CafeService {
         return convertedBusinessHours;
     }
 
+    @LogTrace
     private OpenStatus getOpenStatus(Long cafeId){
 
         LocalTime time = LocalTime.now();
@@ -114,6 +118,7 @@ public class CafeService {
         return OpenStatus.OPEN;
     }
 
+    @LogTrace
     private List<String> getClosedDay(Long cafeId) {
 
 
@@ -130,8 +135,7 @@ public class CafeService {
         return closeDays;
     }
 
-
-
+    @LogTrace
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
 
         int idx = 0;
@@ -141,16 +145,19 @@ public class CafeService {
         }
     }
 
+    @LogTrace
     public Cafe findCafeById(Long cafeId) {
         return cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
+    @LogTrace
     public Cafe findByLongitudeAndLatitude(CafeSearchCond cafeSearchCond) {
         return cafeRepository.findByLongitudeAndLatitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
+    @LogTrace
     public CafeReSearchDto findWithinRadius(CafeSearchCond searchCond) {
         List<Cafe> cafes = findAll();
         List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
@@ -171,7 +178,7 @@ public class CafeService {
         return of(isExist, withinRadiusCafes, categoryService.findAllCategoryAndKeyword());
     }
 
-
+    @LogTrace
     public CafeBarSearchDto barSearch(CafeSearchCond searchCond) {
 
         if (!cafeRepository.existsByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude())) {
@@ -184,6 +191,7 @@ public class CafeService {
                         .findByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude()).get().getId()));
     }
 
+    @LogTrace
     public CafeCategorySearchDto categorySearch(CafeCategorySearchCond searchCond) {
         CafeReSearchDto withinRadius = findWithinRadius(CafeSearchCond.from(searchCond));
 
@@ -206,11 +214,12 @@ public class CafeService {
     }
 
 
-
+    @LogTrace
     public List<Cafe> findAll() {
         return cafeRepository.findAll();
     }
 
+    @LogTrace
     public List<Cafe> findAllByOrderByStarRatingDescNameAsc() {
         return cafeRepository.findAllByOrderByStarRatingDescNameAsc();
     }

@@ -1,5 +1,6 @@
 package com.sideproject.hororok.operationHours.repository;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.operationHours.entity.OperationHour;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,7 @@ import java.util.Optional;
 public interface OperationHourRepository extends JpaRepository<OperationHour, Long> {
 
 
+    @LogTrace
     @Query("SELECT oh FROM OperationHour oh " +
             "WHERE 1=1 " +
             "AND oh.date = :date " +
@@ -22,7 +24,7 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
                 "AND oh.closingTime >= :endTime")
     List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, LocalTime endTime);
 
-
+    @LogTrace
     @Query(
             "SELECT oh FROM OperationHour oh " +
                     "WHERE oh.cafe.id = :cafeId " +
@@ -30,6 +32,7 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
     )
     Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date);
 
+    @LogTrace
     @Query(
             "SELECT oh FROM OperationHour oh " +
                     "WHERE oh.cafe.id = :cafeId " +
@@ -37,6 +40,7 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
     )
     List<OperationHour> findClosedDayByCafeId(Long cafeId);
 
+    @LogTrace
     @Query(
             "SELECT oh FROM OperationHour oh " +
                     "WHERE oh.cafe.id = :cafeId " +

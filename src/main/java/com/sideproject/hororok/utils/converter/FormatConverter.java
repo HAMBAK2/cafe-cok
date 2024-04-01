@@ -13,15 +13,6 @@ public class FormatConverter {
         return formattedPrice;
     }
 
-
-//    public static String convertToBusiness(CreatePlanSearchCond searchCond) {
-//
-//        String startTimeString = String.format("%02d:00", searchCond.getStartHour());
-//        String endTimeString = String.format("%02d:00", searchCond.getEndHour());
-//
-//        return searchCond.getDay() + " " + startTimeString + " - " + endTimeString;
-//    }
-
     public static DayOfWeek convertKoreanDayOfWeekToEnglish(String day) {
 
         System.out.println("데이 출력 " + day);

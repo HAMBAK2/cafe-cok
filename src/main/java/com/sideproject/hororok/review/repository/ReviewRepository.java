@@ -1,5 +1,6 @@
 package com.sideproject.hororok.review.repository;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.review.Entity.Review;
@@ -14,8 +15,10 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
+    @LogTrace
     List<Review> findByCafeId(Long cafeId);
 
+    @LogTrace
     @Query("SELECT DISTINCT k FROM Review r " +
             "JOIN r.keywords k " +
             "WHERE r.cafe.id = :cafeId " +
@@ -23,6 +26,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "ORDER BY COUNT(k) DESC ")
     List<Keyword> findKeywordInReviewByCafeIdOrderByDesc(@Param("cafeId") Long cafeId);
 
+    @LogTrace
     @Query("SELECT r.cafe FROM Review r JOIN r.keywords k " +
             "WHERE k.name IN :keywords " +
             "GROUP BY r.cafe " +
@@ -30,6 +34,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Cafe> findCafeWithKeywordsInReview(List<String> keywords);
 
 
+    @LogTrace
     @Query("SELECT ri FROM Review r JOIN r.cafe c JOIN r.images ri " +
             "WHERE c.id = :cafeId "
     )

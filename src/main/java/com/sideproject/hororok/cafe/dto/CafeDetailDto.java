@@ -3,11 +3,9 @@ package com.sideproject.hororok.cafe.dto;
 import com.sideproject.hororok.category.dto.CategoryAndKeyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.utils.calculator.BusinessHoursUtils;
-import com.sideproject.hororok.utils.enums.OpenStatus;
+import com.sideproject.hororok.cafe.enums.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
