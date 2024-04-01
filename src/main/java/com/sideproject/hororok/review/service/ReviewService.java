@@ -55,7 +55,5 @@ public class ReviewService {
     public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
         return reviewRepository.findReviewImagesByCafeId(cafeId);
     }
-    public List<Cafe> findCafeWithKeywordsInReview(CreatePlanSearchCond searchCond) {
-        return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
-    }
+
 }
