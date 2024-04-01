@@ -23,11 +23,11 @@ public class CreatePlanSearchCond {
     private final String date;
     private final LocalTime startTime;
     private final LocalTime endTime;
-    private final List<CategoryAndKeyword> keywords;
+    private final List<CategoryAndKeyword> categoryKeywords;
 
 
     public static CreatePlanSearchCond of(String locationName, BigDecimal longitude, BigDecimal latitude, Integer minutes,
-                                          String date, LocalTime startTime, LocalTime endTime, List<CategoryAndKeyword> keywords) {
+                                          String date, LocalTime startTime, LocalTime endTime, List<CategoryAndKeyword> categoryKeywords) {
 
         return CreatePlanSearchCond.builder()
                 .locationName(locationName)
@@ -37,7 +37,7 @@ public class CreatePlanSearchCond {
                 .date(date)
                 .startTime(startTime)
                 .endTime(endTime)
-                .keywords(keywords)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 

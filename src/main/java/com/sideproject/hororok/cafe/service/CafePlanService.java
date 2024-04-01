@@ -82,7 +82,7 @@ public class CafePlanService {
         int idx = 0;
         List<Cafe> allMatchAtKeywordCafes = new ArrayList<>();
         List<String> keywords = new ArrayList<>();
-        for (CategoryAndKeyword keyword : searchCond.getKeywords()) {
+        for (CategoryAndKeyword keyword : searchCond.getCategoryKeywords()) {
 
             List<String> keywordByCategory = keyword.getKeywords();
             for (String s : keywordByCategory) { keywords.add(s);}
@@ -107,7 +107,7 @@ public class CafePlanService {
 
         List<Cafe> keywordFilteredCafes = new ArrayList<>();
         List<String> keywords = new ArrayList<>();
-        for (CategoryAndKeyword keyword : searchCond.getKeywords()) {
+        for (CategoryAndKeyword keyword : searchCond.getCategoryKeywords()) {
 
             List<String> keywordByCategory = keyword.getKeywords();
             for (String s : keywordByCategory) { keywords.add(s);}
