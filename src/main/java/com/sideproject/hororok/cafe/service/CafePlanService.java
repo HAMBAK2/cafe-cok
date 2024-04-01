@@ -38,7 +38,6 @@ public class CafePlanService {
     public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
         
         PlanMatchType matchType = PlanMatchType.MATCH;
-        List<CategoryAndKeyword> allCategoryAndKeyword = categoryService.findAllCategoryAndKeyword();
         List<Cafe> recommendCafes = cafeService.findAllByOrderByStarRatingDescNameAsc();
 
 
@@ -46,21 +45,21 @@ public class CafePlanService {
         List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(searchCond);
         if(inOperationHoursCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, recommendCafes, allCategoryAndKeyword);
+            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
         }
 
         //반경 범위 필터링(근처 카페 추천)
         List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, searchCond);
         if(distanceFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, recommendCafes, allCategoryAndKeyword);
+            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
         }
 
         //3. 카테고리 모두 불일치하는지에 대한 확인
         List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(searchCond, distanceFilteredCafes);
         if(keywordFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, recommendCafes, allCategoryAndKeyword);
+            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
         }
 
 
@@ -70,11 +69,11 @@ public class CafePlanService {
             orderByDistanceAndStarRating(allMatchAtKeywordCafes, searchCond.getLatitude(), searchCond.getLongitude());
             keywordFilteredCafes.removeAll(allMatchAtKeywordCafes);
             matchType = PlanMatchType.MATCH;
-            return CreatePlanDto.of(matchType, allMatchAtKeywordCafes, keywordFilteredCafes, allCategoryAndKeyword);
+            return CreatePlanDto.of(matchType, searchCond, allMatchAtKeywordCafes, keywordFilteredCafes);
         }
 
         matchType = PlanMatchType.SIMILAR;
-        return CreatePlanDto.of(matchType, keywordFilteredCafes, allCategoryAndKeyword);
+        return CreatePlanDto.of(matchType, searchCond, keywordFilteredCafes);
     }
 
     //카드가 모두 일치하는 경우를 찾는다.
@@ -82,7 +81,13 @@ public class CafePlanService {
 
         int idx = 0;
         List<Cafe> allMatchAtKeywordCafes = new ArrayList<>();
-        List<String> keywords = searchCond.getKeywords();
+        List<String> keywords = new ArrayList<>();
+        for (CategoryAndKeyword keyword : searchCond.getKeywords()) {
+
+            List<String> keywordByCategory = keyword.getKeywords();
+            for (String s : keywordByCategory) { keywords.add(s);}
+        }
+
         for (Cafe keywordFilteredCafe : keywordFilteredCafes) {
             List<String> findKeywords = cafeRepository.findKeywordsByReviewsCafeId(keywordFilteredCafe.getId());
 
@@ -100,10 +105,16 @@ public class CafePlanService {
     private List<Cafe> getKeywordFilteredCafes(CreatePlanSearchCond searchCond, List<Cafe> distanceFilteredCafes) {
 
         List<Cafe> keywordFilteredCafes = new ArrayList<>();
+        List<String> keywords = new ArrayList<>();
+        for (CategoryAndKeyword keyword : searchCond.getKeywords()) {
+
+            List<String> keywordByCategory = keyword.getKeywords();
+            for (String s : keywordByCategory) { keywords.add(s);}
+        }
 
         for (Cafe distanceFilteredCafe : distanceFilteredCafes) {
             Long cafeId = distanceFilteredCafe.getId();
-            Optional<Cafe> distinctByKeywordsAndCafeId = cafeRepository.findDistinctByKeywordsAndCafeId(searchCond.getKeywords(), cafeId);
+            Optional<Cafe> distinctByKeywordsAndCafeId = cafeRepository.findDistinctByKeywordsAndCafeId(keywords, cafeId);
             if(distinctByKeywordsAndCafeId.isEmpty()) continue;
             keywordFilteredCafes.add(distanceFilteredCafe);
         }
