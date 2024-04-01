@@ -142,7 +142,7 @@ public class CafePlanService {
             DayOfWeek parseDate = date.getDayOfWeek();
 
             return operationHourRepository
-                    .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getVisitTime());
+                    .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
         } catch (DateTimeParseException e) {
             // 날짜 형식이 잘못되었을 때 처리할 내용
             e.printStackTrace();

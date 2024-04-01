@@ -17,9 +17,9 @@ public class OperationHourService {
 
     private final OperationHourRepository operationHourRepository;
 
-    public List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime visitTime){
+    public List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, LocalTime endTime){
 
-        return operationHourRepository.findOpenHoursByDateAndTimeRange(date, visitTime);
+        return operationHourRepository.findOpenHoursByDateAndTimeRange(date, startTime, endTime);
     }
 
     public Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date){
