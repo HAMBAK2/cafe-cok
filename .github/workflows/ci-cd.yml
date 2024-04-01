@@ -1,13 +1,13 @@
 name: DEV CD
 
 env:
-  DOCKER_HUB_REPOSITORY: hambak/hororok-dev
+  DOCKER_HUB_REPOSITORY: hambak/hororok
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - dev
+      - main
     paths:
       - "**"
 
@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./
-          file: ./Dockerfile-dev
+          file: ./Dockerfile
           push: true
           platforms: linux/amd64
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
