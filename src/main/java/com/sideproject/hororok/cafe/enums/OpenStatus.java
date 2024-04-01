@@ -1,4 +1,4 @@
-package com.sideproject.hororok.utils.enums;
+package com.sideproject.hororok.cafe.enums;
 
 public enum OpenStatus {
 

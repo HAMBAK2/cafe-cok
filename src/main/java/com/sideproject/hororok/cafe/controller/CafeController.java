@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.controller;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
@@ -29,6 +30,7 @@ public class CafeController {
     @GetMapping("/detail/{cafeId}")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     @Parameter(description = "카페의 ID")
+    @LogTrace
     public ResponseEntity<CafeDetailDto> detail(@PathVariable Long cafeId){
 
         return ResponseEntity.ok(cafeService.findCafeDetail(cafeId));
@@ -38,6 +40,7 @@ public class CafeController {
     @GetMapping("/search/re")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     @Parameter(description = "현재 위치의 경도 위도 값")
+    @LogTrace
     public ResponseEntity<CafeReSearchDto> searchRe(
             @RequestParam BigDecimal latitude,
             @RequestParam BigDecimal longitude) {
@@ -48,6 +51,7 @@ public class CafeController {
     @Operation(summary = "검색창에 검색을 했을 때 동작하는 기능")
     @Parameter(description = "현재 위치의 경도 위도 값")
     @ApiResponse(description = "선택한 카페의 상세 정보를 전달, 카페가 존재하지 않는 경우 cafes, keywordsByCategory 정보 존재 나머지 X, \n카페가 존재하는 경우 반대 (exist 값은 항상 존재)")
+    @LogTrace
     public ResponseEntity<CafeBarSearchDto> searchBar(
             @RequestParam BigDecimal latitude,
             @RequestParam BigDecimal longitude) {
@@ -57,6 +61,7 @@ public class CafeController {
     @GetMapping("/search/category")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
     @Parameter(description = "현재 위치의 경도 위도 값, 선태한 키워드")
+    @LogTrace
     public ResponseEntity<CafeCategorySearchDto> searchCategory(
             @RequestParam BigDecimal latitude,
             @RequestParam BigDecimal longitude,
@@ -68,6 +73,7 @@ public class CafeController {
     @PostMapping("/plans")
     @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
     @Parameter(description = "방문위치(좌표), 몇분거리, 방문일자(요일 하나, 시간은 범위), 키워드 5개")
+    @LogTrace
     public ResponseEntity<CreatePlanDto> createPlan( @RequestBody CreatePlanSearchCond searchCond
             ) {
 

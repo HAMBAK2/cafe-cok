@@ -1,8 +1,8 @@
 package com.sideproject.hororok.category.controller;
 
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.category.dto.CategoryAndKeyword;
-import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,7 @@ public class CategoryController {
 
     @GetMapping("/home")
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
+    @LogTrace
     public ResponseEntity<List<CategoryAndKeyword>> home() {
 
         return ResponseEntity.ok(categoryService.findAllCategoryAndKeyword());

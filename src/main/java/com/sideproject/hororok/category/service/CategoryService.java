@@ -1,7 +1,7 @@
 package com.sideproject.hororok.category.service;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.category.dto.CategoryAndKeyword;
-import com.sideproject.hororok.category.dto.CategoryKeywordDto;
 import com.sideproject.hororok.category.entity.Category;
 import com.sideproject.hororok.category.repository.CategoryRepository;
 import com.sideproject.hororok.keword.entity.Keyword;
@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +20,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
+    @LogTrace
     public List<CategoryAndKeyword> findAllCategoryAndKeyword() {
 
         List<CategoryAndKeyword> categoryAndKeywords = new ArrayList<>();

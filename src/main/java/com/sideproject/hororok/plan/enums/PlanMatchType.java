@@ -1,4 +1,4 @@
-package com.sideproject.hororok.utils.enums;
+package com.sideproject.hororok.plan.enums;
 
 public enum PlanMatchType {
     MATCH("일치"),

@@ -1,6 +1,7 @@
 package com.sideproject.hororok.menu.service;
 
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.entity.Menu;
 import com.sideproject.hororok.menu.repository.MenuRepository;
@@ -16,6 +17,7 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
 
+    @LogTrace
     public List<MenuDto> findByCafeId(Long cafeId) {
 
         List<Menu> menuList = menuRepository.findByCafeId(cafeId);

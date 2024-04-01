@@ -1,5 +1,6 @@
 package com.sideproject.hororok.review.service;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.entity.Cafe;
@@ -21,6 +22,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
+    @LogTrace
     public List<ReviewDto> findReviewByCafeId(Long cafeId){
 
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
@@ -32,6 +34,7 @@ public class ReviewService {
         return reviewDtos;
     }
 
+    @LogTrace
     public List<KeywordDto> findKeywordInReviewByCafeIdOrderByDesc(Long cafeId) {
 
         List<Keyword> keywords = reviewRepository.findKeywordInReviewByCafeIdOrderByDesc(cafeId);
@@ -46,12 +49,14 @@ public class ReviewService {
         return keywordDtoList;
     }
 
+    @LogTrace
     public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
 
         return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
     }
 
 
+    @LogTrace
     public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
         return reviewRepository.findReviewImagesByCafeId(cafeId);
     }
