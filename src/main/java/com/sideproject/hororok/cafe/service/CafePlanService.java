@@ -5,7 +5,7 @@ import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
-import com.sideproject.hororok.category.dto.CategoryAndKeyword;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.operationHours.entity.OperationHour;
 import com.sideproject.hororok.operationHours.repository.OperationHourRepository;
@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
@@ -82,10 +81,28 @@ public class CafePlanService {
         int idx = 0;
         List<Cafe> allMatchAtKeywordCafes = new ArrayList<>();
         List<String> keywords = new ArrayList<>();
-        for (CategoryAndKeyword keyword : searchCond.getCategoryKeywords()) {
 
-            List<String> keywordByCategory = keyword.getKeywords();
-            for (String s : keywordByCategory) { keywords.add(s);}
+        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
+        List<String> atmosphere = categoryKeywords.getAtmosphere();
+        List<String> facility = categoryKeywords.getFacility();
+        List<String> purpose = categoryKeywords.getPurpose();
+        List<String> theme = categoryKeywords.getTheme();
+        List<String> menu = categoryKeywords.getMenu();
+
+        if (atmosphere != null) {
+            keywords.addAll(atmosphere);
+        }
+        if (facility != null) {
+            keywords.addAll(facility);
+        }
+        if (purpose != null) {
+            keywords.addAll(purpose);
+        }
+        if (theme != null) {
+            keywords.addAll(theme);
+        }
+        if (menu != null) {
+            keywords.addAll(menu);
         }
 
         for (Cafe keywordFilteredCafe : keywordFilteredCafes) {
@@ -107,11 +124,30 @@ public class CafePlanService {
 
         List<Cafe> keywordFilteredCafes = new ArrayList<>();
         List<String> keywords = new ArrayList<>();
-        for (CategoryAndKeyword keyword : searchCond.getCategoryKeywords()) {
 
-            List<String> keywordByCategory = keyword.getKeywords();
-            for (String s : keywordByCategory) { keywords.add(s);}
+        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
+        List<String> atmosphere = categoryKeywords.getAtmosphere();
+        List<String> facility = categoryKeywords.getFacility();
+        List<String> purpose = categoryKeywords.getPurpose();
+        List<String> theme = categoryKeywords.getTheme();
+        List<String> menu = categoryKeywords.getMenu();
+
+        if (atmosphere != null) {
+            keywords.addAll(atmosphere);
         }
+        if (facility != null) {
+            keywords.addAll(facility);
+        }
+        if (purpose != null) {
+            keywords.addAll(purpose);
+        }
+        if (theme != null) {
+            keywords.addAll(theme);
+        }
+        if (menu != null) {
+            keywords.addAll(menu);
+        }
+
 
         for (Cafe distanceFilteredCafe : distanceFilteredCafes) {
             Long cafeId = distanceFilteredCafe.getId();
@@ -151,17 +187,11 @@ public class CafePlanService {
         String dateString = searchCond.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        try {
-            LocalDate date = LocalDate.parse(dateString, formatter);
-            DayOfWeek parseDate = date.getDayOfWeek();
+        LocalDate date = LocalDate.parse(dateString, formatter);
+        DayOfWeek parseDate = date.getDayOfWeek();
 
-            return operationHourRepository
-                    .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
-        } catch (DateTimeParseException e) {
-            // 날짜 형식이 잘못되었을 때 처리할 내용
-            e.printStackTrace();
-            return Collections.emptyList(); // 예시로 비어있는 리스트 반환
-        }
+        return operationHourRepository
+                .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
 
     }
 

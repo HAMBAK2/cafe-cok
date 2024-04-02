@@ -2,7 +2,7 @@ package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.category.dto.CategoryAndKeyword;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class CreatePlanDto {
     private final PlanMatchType matchType;
     private final String locationName;
     private final Integer minutes;
-    private final List<CategoryAndKeyword> categoryKeywords;
+    private final CategoryKeywords categoryKeywords;
     private final List<Cafe> cafe;
     private final List<Cafe> recommendCafes;
     private final List<Cafe> matchCafes;

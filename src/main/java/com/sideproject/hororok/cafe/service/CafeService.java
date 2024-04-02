@@ -208,7 +208,7 @@ public class CafeService {
                 .collect(Collectors.toList());
 
         return CafeCategorySearchDto.builder()
-                .keywordsByCategory(withinRadius.getKeywordsByCategory())
+                .categoryKeywords(withinRadius.getCategoryKeywords())
                 .cafes(sameCafes)
                 .build();
     }
