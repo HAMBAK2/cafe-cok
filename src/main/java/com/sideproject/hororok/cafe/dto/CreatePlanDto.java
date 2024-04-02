@@ -18,8 +18,8 @@ public class CreatePlanDto {
     private final PlanMatchType matchType;
     private final String locationName;
     private final Integer minutes;
+    private final String visitDateTime;
     private final CategoryKeywords categoryKeywords;
-    private final List<Cafe> cafe;
     private final List<Cafe> recommendCafes;
     private final List<Cafe> matchCafes;
     private final List<Cafe> similarCafes;
@@ -27,12 +27,13 @@ public class CreatePlanDto {
 
     //맞춘 경우
     public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
-                                   List<Cafe> matchCafes, List<Cafe> similarCafes) {
+                                   String visitDateTime, List<Cafe> matchCafes, List<Cafe> similarCafes) {
 
         return CreatePlanDto.builder()
                 .matchType(matchType)
                 .locationName(searchCond.getLocationName())
                 .minutes(searchCond.getMinutes())
+                .visitDateTime(visitDateTime)
                 .categoryKeywords(searchCond.getCategoryKeywords())
                 .similarCafes(similarCafes)
                 .matchCafes(matchCafes)

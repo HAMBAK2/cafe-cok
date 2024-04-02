@@ -4,6 +4,8 @@ import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class FormatConverter {
 
@@ -56,6 +58,17 @@ public class FormatConverter {
             default:
                 throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
         }
+    }
+
+
+    public static String convertVisitDateTime(CreatePlanSearchCond searchCond) {
+
+        LocalDate date = LocalDate.parse(searchCond.getDate());
+        LocalTime startTime = searchCond.getStartTime();
+
+        return date.getMonthValue()+"월 " + date.getDayOfMonth()+"일 " +
+                getKoreanDayOfWeek(date.getDayOfWeek()) + "요일 " +
+                startTime.getHour() + "시 " + startTime.getMinute()+"분";
     }
 
 }
