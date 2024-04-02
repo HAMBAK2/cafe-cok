@@ -44,21 +44,21 @@ public class CafePlanService {
         List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(searchCond);
         if(inOperationHoursCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
         }
 
         //반경 범위 필터링(근처 카페 추천)
         List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, searchCond);
         if(distanceFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
         }
 
         //3. 카테고리 모두 불일치하는지에 대한 확인
         List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(searchCond, distanceFilteredCafes);
         if(keywordFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
         }
 
 
@@ -74,7 +74,7 @@ public class CafePlanService {
         }
 
         matchType = PlanMatchType.SIMILAR;
-        return CreatePlanDto.of(matchType, searchCond, keywordFilteredCafes);
+        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), keywordFilteredCafes);
     }
 
     @LogTrace
