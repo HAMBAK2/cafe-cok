@@ -12,6 +12,7 @@ import com.sideproject.hororok.operationHours.repository.OperationHourRepository
 import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
+import com.sideproject.hororok.utils.converter.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,9 @@ public class CafePlanService {
             orderByDistanceAndStarRating(allMatchAtKeywordCafes, searchCond.getLatitude(), searchCond.getLongitude());
             keywordFilteredCafes.removeAll(allMatchAtKeywordCafes);
             matchType = PlanMatchType.MATCH;
-            return CreatePlanDto.of(matchType, searchCond, allMatchAtKeywordCafes, keywordFilteredCafes);
+
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),
+                    allMatchAtKeywordCafes, keywordFilteredCafes);
         }
 
         matchType = PlanMatchType.SIMILAR;
@@ -212,4 +215,6 @@ public class CafePlanService {
 
         return distanceFilteredCafe;
     }
+
+
 }
