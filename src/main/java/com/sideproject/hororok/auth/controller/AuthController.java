@@ -1,6 +1,7 @@
 package com.sideproject.hororok.auth.controller;
 
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.auth.annotation.LoginUser;
 import com.sideproject.hororok.auth.dto.SessionUser;
 import com.sideproject.hororok.auth.kakao.dto.KakaoAccount;
@@ -23,6 +24,7 @@ public class AuthController {
     private final HttpSession httpSession;
 
     @GetMapping("/auth/kakao/login")
+    @LogTrace
     public ResponseEntity<SessionUser> kakaoLogin(@RequestParam("code") String code) {
 
         KakaoToken token = kakaoService.getToken(code);
