@@ -1,8 +1,6 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.category.dto.CategoryAndKeyword;
-import com.sideproject.hororok.category.dto.CategoryKeywordDto;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,12 +13,12 @@ import java.util.List;
 public class CafeCategorySearchDto {
 
     private final List<WithinRadiusCafeDto> cafes;
-    private final List<CategoryAndKeyword> keywordsByCategory;
+    private final CategoryKeywords categoryKeywords;
 
-    public static CafeReSearchDto of(List<WithinRadiusCafeDto> cafes, List<CategoryAndKeyword> keywordsByCategory) {
+    public static CafeReSearchDto of(List<WithinRadiusCafeDto> cafes, CategoryKeywords categoryKeywords) {
         return CafeReSearchDto.builder()
                 .cafes(cafes)
-                .keywordsByCategory(keywordsByCategory)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 }

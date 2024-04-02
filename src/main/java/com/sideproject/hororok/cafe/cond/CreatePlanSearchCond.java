@@ -1,13 +1,12 @@
 package com.sideproject.hororok.cafe.cond;
 
 
-import com.sideproject.hororok.category.dto.CategoryAndKeyword;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -23,11 +22,11 @@ public class CreatePlanSearchCond {
     private final String date;
     private final LocalTime startTime;
     private final LocalTime endTime;
-    private final List<CategoryAndKeyword> categoryKeywords;
+    private final CategoryKeywords categoryKeywords;
 
 
     public static CreatePlanSearchCond of(String locationName, BigDecimal longitude, BigDecimal latitude, Integer minutes,
-                                          String date, LocalTime startTime, LocalTime endTime, List<CategoryAndKeyword> categoryKeywords) {
+                                          String date, LocalTime startTime, LocalTime endTime, CategoryKeywords categoryKeywords) {
 
         return CreatePlanSearchCond.builder()
                 .locationName(locationName)

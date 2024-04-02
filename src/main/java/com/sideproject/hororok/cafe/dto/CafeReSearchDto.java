@@ -1,14 +1,11 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.category.dto.CategoryAndKeyword;
-import com.sideproject.hororok.category.dto.CategoryKeywordDto;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @Builder
 @Getter
@@ -17,13 +14,13 @@ public class CafeReSearchDto {
 
     private final boolean isExist;
     private final List<WithinRadiusCafeDto> cafes;
-    private final List<CategoryAndKeyword> keywordsByCategory;
+    private final CategoryKeywords categoryKeywords;
 
-    public static CafeReSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafes, List<CategoryAndKeyword> keywordsByCategory) {
+    public static CafeReSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafes, CategoryKeywords categoryKeywords) {
         return CafeReSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafes)
-                .keywordsByCategory(keywordsByCategory)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 
