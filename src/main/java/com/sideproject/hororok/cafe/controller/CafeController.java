@@ -58,16 +58,13 @@ public class CafeController {
         return ResponseEntity.ok(cafeService.barSearch(CafeSearchCond.of(latitude, longitude)));
     }
 
-    @GetMapping("/search/category")
+    @PostMapping("/search/category")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
     @Parameter(description = "현재 위치의 경도 위도 값, 선태한 키워드")
     @LogTrace
-    public ResponseEntity<CafeCategorySearchDto> searchCategory(
-            @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal longitude,
-            @RequestParam List<String> keywords) {
+    public ResponseEntity<CafeCategorySearchDto> searchCategory(@RequestBody CafeCategorySearchCond searchCond) {
 
-        return ResponseEntity.ok(cafeService.categorySearch(CafeCategorySearchCond.of(latitude, longitude, keywords)));
+        return ResponseEntity.ok(cafeService.categorySearch(searchCond));
     }
 
     @PostMapping("/plans")

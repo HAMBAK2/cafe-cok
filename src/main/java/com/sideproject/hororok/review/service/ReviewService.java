@@ -134,7 +134,36 @@ public class ReviewService {
     @LogTrace
     public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
 
-        return reviewRepository.findCafeWithKeywordsInReview(searchCond.getKeywords());
+
+        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
+        List<String> keywords = new ArrayList<>();
+        List<String> atmosphere = categoryKeywords.getAtmosphere();
+        List<String> facility = categoryKeywords.getFacility();
+        List<String> purpose = categoryKeywords.getPurpose();
+        List<String> theme = categoryKeywords.getTheme();
+        List<String> menu = categoryKeywords.getMenu();
+
+        if (atmosphere != null) {
+            keywords.addAll(atmosphere);
+        }
+        if (facility != null) {
+            keywords.addAll(facility);
+        }
+        if (purpose != null) {
+            keywords.addAll(purpose);
+        }
+        if (theme != null) {
+            keywords.addAll(theme);
+        }
+        if (menu != null) {
+            keywords.addAll(menu);
+        }
+
+
+        List<Cafe> cafeWithKeywordsInReview = reviewRepository.findCafeWithKeywordsInReview(keywords);
+
+
+        return reviewRepository.findCafeWithKeywordsInReview(keywords);
     }
 
 
