@@ -5,12 +5,10 @@ import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 
 @Getter
 @RequiredArgsConstructor
-public class SaveReviewDto {
+public class ReviewInfo {
 
     private Long cafeId;
     private @Lob String content;

@@ -3,7 +3,6 @@ package com.sideproject.hororok.review.service;
 import com.sideproject.hororok.S3.component.S3Uploader;
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
-import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
@@ -12,7 +11,7 @@ import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.keword.repository.KeywordRepository;
 import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.review.dto.SaveReviewDto;
+import com.sideproject.hororok.review.dto.ReviewInfo;
 import com.sideproject.hororok.review.repository.ReviewRepository;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import com.sideproject.hororok.user.entity.User;
@@ -38,7 +37,7 @@ public class ReviewService {
     private final KeywordRepository keywordRepository;
 
     @LogTrace
-    public void addReview(SaveReviewDto saveReviewDto, Long userId, List<MultipartFile> files) throws IOException {
+    public void addReview(ReviewInfo reviewInfo, Long userId, List<MultipartFile> files) throws IOException {
 
         //1. 이미지 외부 저장소 저장
         List<ReviewImage> reviewImages = new ArrayList<>();
@@ -50,11 +49,11 @@ public class ReviewService {
 
         //2. 이미지 url을 받아와서 리뷰 저장
         Review review = new Review();
-        review.setContent(saveReviewDto.getContent());
-        review.setSpecialNote(saveReviewDto.getSpecialNote());
-        review.setStarRating(saveReviewDto.getStarRating());
+        review.setContent(reviewInfo.getContent());
+        review.setSpecialNote(reviewInfo.getSpecialNote());
+        review.setStarRating(reviewInfo.getStarRating());
         review.setImages(reviewImages);
-        Cafe cafe = cafeRepository.findById(saveReviewDto.getCafeId())
+        Cafe cafe = cafeRepository.findById(reviewInfo.getCafeId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid cafe id"));
 
         review.setCafe(cafe);
@@ -66,7 +65,7 @@ public class ReviewService {
 
 
         //카테고리 키워드 저장
-        CategoryKeywords categoryKeywords = saveReviewDto.getCategoryKeywords();
+        CategoryKeywords categoryKeywords = reviewInfo.getCategoryKeywords();
         List<String> keywordNames = new ArrayList<>();
         List<Keyword> keywords = new ArrayList<>();
         List<String> atmosphere = categoryKeywords.getAtmosphere();
