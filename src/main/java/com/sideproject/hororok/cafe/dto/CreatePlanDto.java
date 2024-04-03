@@ -42,13 +42,15 @@ public class CreatePlanDto {
 
 
     //못맞춘경우 , 유사한경우
-    public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond, List<CafeDto> cafes) {
+    public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
+                                   String visitDateTime, List<CafeDto> cafes) {
 
         if(matchType.equals(PlanMatchType.SIMILAR)) {
             return CreatePlanDto.builder()
                     .matchType(matchType)
                     .locationName(searchCond.getLocationName())
                     .minutes(searchCond.getMinutes())
+                    .visitDateTime(visitDateTime)
                     .categoryKeywords(searchCond.getCategoryKeywords())
                     .similarCafes(cafes)
                     .build();
@@ -58,6 +60,7 @@ public class CreatePlanDto {
                 .matchType(matchType)
                 .locationName(searchCond.getLocationName())
                 .minutes(searchCond.getMinutes())
+                .visitDateTime(visitDateTime)
                 .categoryKeywords(searchCond.getCategoryKeywords())
                 .recommendCafes(cafes)
                 .build();
