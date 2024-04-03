@@ -75,7 +75,7 @@ public class CafePlanService {
 
         matchType = PlanMatchType.SIMILAR;
 
-        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), onvertCafeListToCafeDtoList(keywordFilteredCafes));
+        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(keywordFilteredCafes));
     }
 
     @LogTrace
