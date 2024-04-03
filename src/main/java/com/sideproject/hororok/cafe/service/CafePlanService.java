@@ -2,6 +2,7 @@ package com.sideproject.hororok.cafe.service;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
+import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafe.repository.CafeRepository;
@@ -39,26 +40,25 @@ public class CafePlanService {
         PlanMatchType matchType = PlanMatchType.MATCH;
         List<Cafe> recommendCafes = cafeService.findAllByOrderByStarRatingDescNameAsc();
 
-
         //방문시간 기준 필터링
         List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(searchCond);
         if(inOperationHoursCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //반경 범위 필터링(근처 카페 추천)
         List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, searchCond);
         if(distanceFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),  convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //3. 카테고리 모두 불일치하는지에 대한 확인
         List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(searchCond, distanceFilteredCafes);
         if(keywordFilteredCafes.isEmpty()) {
             matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), recommendCafes);
+            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
         }
 
 
@@ -70,11 +70,12 @@ public class CafePlanService {
             matchType = PlanMatchType.MATCH;
 
             return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),
-                    allMatchAtKeywordCafes, keywordFilteredCafes);
+                    convertCafeListToCafeDtoList(allMatchAtKeywordCafes), convertCafeListToCafeDtoList(keywordFilteredCafes));
         }
 
         matchType = PlanMatchType.SIMILAR;
-        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), keywordFilteredCafes);
+
+        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), onvertCafeListToCafeDtoList(keywordFilteredCafes));
     }
 
     @LogTrace
@@ -214,6 +215,18 @@ public class CafePlanService {
         }
 
         return distanceFilteredCafe;
+    }
+
+
+    private List<CafeDto> convertCafeListToCafeDtoList(List<Cafe> cafes) {
+
+        List<CafeDto> cafeDtos = new ArrayList<>();
+
+        for (Cafe cafe : cafes) {
+            cafeDtos.add(CafeDto.from(cafe));
+        }
+
+        return cafeDtos;
     }
 
 

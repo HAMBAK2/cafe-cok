@@ -20,14 +20,14 @@ public class CreatePlanDto {
     private final Integer minutes;
     private final String visitDateTime;
     private final CategoryKeywords categoryKeywords;
-    private final List<Cafe> recommendCafes;
-    private final List<Cafe> matchCafes;
-    private final List<Cafe> similarCafes;
+    private final List<CafeDto> recommendCafes;
+    private final List<CafeDto> matchCafes;
+    private final List<CafeDto> similarCafes;
 
 
     //맞춘 경우
     public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
-                                   String visitDateTime, List<Cafe> matchCafes, List<Cafe> similarCafes) {
+                                   String visitDateTime, List<CafeDto> matchCafes, List<CafeDto> similarCafes) {
 
         return CreatePlanDto.builder()
                 .matchType(matchType)
@@ -43,7 +43,7 @@ public class CreatePlanDto {
 
     //못맞춘경우 , 유사한경우
     public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
-                                   String visitDateTime, List<Cafe> cafes) {
+                                   String visitDateTime, List<CafeDto> cafes) {
 
         if(matchType.equals(PlanMatchType.SIMILAR)) {
             return CreatePlanDto.builder()
