@@ -2,6 +2,7 @@ package com.sideproject.hororok.keword.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.category.entity.Category;
+import com.sideproject.hororok.entity.BaseEntity;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
-public class Keyword {
+public class Keyword extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

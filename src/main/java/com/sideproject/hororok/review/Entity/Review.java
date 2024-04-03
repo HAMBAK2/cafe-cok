@@ -8,6 +8,7 @@ import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import com.sideproject.hororok.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 public class Review extends BaseEntity {
 
     @Id

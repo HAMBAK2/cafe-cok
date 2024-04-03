@@ -2,6 +2,7 @@ package com.sideproject.hororok.cafeImage.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-public class CafeImage {
+public class CafeImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

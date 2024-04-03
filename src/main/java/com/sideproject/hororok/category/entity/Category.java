@@ -1,6 +1,7 @@
 package com.sideproject.hororok.category.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sideproject.hororok.entity.BaseEntity;
 import com.sideproject.hororok.keword.entity.Keyword;
 
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-public class Category {
+public class Category extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
