@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.cond;
 
 
+import com.sideproject.hororok.category.dto.CategoryKeywords;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +16,14 @@ public class CafeCategorySearchCond {
 
     private final BigDecimal longitude;
     private final BigDecimal latitude;
-    private final List<String> keywords;
+    private final CategoryKeywords categoryKeywords;
 
-    public static CafeCategorySearchCond of(BigDecimal latitude, BigDecimal longitude, List<String> keywords) {
+    public static CafeCategorySearchCond of(BigDecimal latitude, BigDecimal longitude, CategoryKeywords categoryKeywords) {
 
         return CafeCategorySearchCond.builder()
                 .latitude(latitude)
                 .longitude(longitude)
-                .keywords(keywords)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 }

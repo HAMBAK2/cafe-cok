@@ -1,6 +1,8 @@
 package com.sideproject.hororok.cafe.service;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.service.MenuService;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
@@ -13,6 +15,7 @@ import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.operationHours.entity.OperationHour;
 import com.sideproject.hororok.operationHours.service.OperationHourService;
+import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
@@ -22,6 +25,7 @@ import com.sideproject.hororok.utils.converter.FormatConverter;
 import com.sideproject.hororok.cafe.enums.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -31,9 +35,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sideproject.hororok.cafe.dto.CafeReSearchDto.of;
@@ -195,24 +197,69 @@ public class CafeService {
     public CafeCategorySearchDto categorySearch(CafeCategorySearchCond searchCond) {
         CafeReSearchDto withinRadius = findWithinRadius(CafeSearchCond.from(searchCond));
 
-        List<Cafe> cafeWithKeywordsInReview = reviewService.findCafeWithKeywordsInReview(searchCond);
-        List<WithinRadiusCafeDto> cafes = withinRadius.getCafes();
+        List<String> targetKeywordNames = getKeywordNamesListFromCategoryKeywords(searchCond.getCategoryKeywords());
+        List<WithinRadiusCafeDto> withinRadiusCafeDtos = new ArrayList<>();
 
-        List<WithinRadiusCafeDto> sameCafes = cafeWithKeywordsInReview.stream()
-                .map(Cafe::getId)
-                .collect(Collectors.toSet())
-                .stream()
-                .flatMap(cafeId ->
-                        cafes.stream()
-                                .filter(cafe -> cafe.getId().equals(cafeId)))
-                .collect(Collectors.toList());
+
+        List<WithinRadiusCafeDto> withinRadiusCafes = withinRadius.getCafes();
+        for (WithinRadiusCafeDto withinRadiusCafe : withinRadiusCafes) {
+            Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
+            List<Review> reviews = cafe.getReviews();
+            Set<String> keywordNames = new HashSet<>();
+            for (Review review : reviews) {
+                keywordNames.addAll(getKeywordNamesListFromKeywords(review.getKeywords()));
+            }
+
+            boolean allMatch = targetKeywordNames.stream()
+                    .allMatch(keywordNames::contains);
+
+            if(allMatch) withinRadiusCafeDtos.add(withinRadiusCafe);
+        }
 
         return CafeCategorySearchDto.builder()
                 .categoryKeywords(withinRadius.getCategoryKeywords())
-                .cafes(sameCafes)
+                .cafes(withinRadiusCafeDtos)
                 .build();
     }
 
+    @LogTrace
+    public List<String> getKeywordNamesListFromKeywords(List<Keyword> keywords) {
+
+        List<String> keywordNames = new ArrayList<>();
+        for (Keyword keyword : keywords) {
+            keywordNames.add(keyword.getName());
+        }
+
+        return keywordNames;
+    }
+
+    @LogTrace
+    public List<String> getKeywordNamesListFromCategoryKeywords(CategoryKeywords categoryKeywords) {
+
+        List<String> keywordNames = new ArrayList<>();
+        List<String> atmosphere = categoryKeywords.getAtmosphere();
+        List<String> facility = categoryKeywords.getFacility();
+        List<String> purpose = categoryKeywords.getPurpose();
+        List<String> theme = categoryKeywords.getTheme();
+        List<String> menu = categoryKeywords.getMenu();
+        if (atmosphere != null) {
+            keywordNames.addAll(atmosphere);
+        }
+        if (facility != null) {
+            keywordNames.addAll(facility);
+        }
+        if (purpose != null) {
+            keywordNames.addAll(purpose);
+        }
+        if (theme != null) {
+            keywordNames.addAll(theme);
+        }
+        if (menu != null) {
+            keywordNames.addAll(menu);
+        }
+
+        return keywordNames;
+    }
 
     @LogTrace
     public List<Cafe> findAll() {
