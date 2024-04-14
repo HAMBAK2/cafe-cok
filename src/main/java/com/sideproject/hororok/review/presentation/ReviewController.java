@@ -2,6 +2,8 @@ package com.sideproject.hororok.review.controller;
 
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.auth.dto.LoginMember;
+import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.dto.ReviewInfo;
 import com.sideproject.hororok.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,15 +29,14 @@ public class ReviewController {
     @Parameter(description = "ReviewInfo: 사진을 제외한 Review의 정보를 담은 JSON, files: Multipart 파일의 List")
     @LogTrace
     public ResponseEntity<Void> addReview(
+            @AuthenticationPrincipal LoginMember loginMember,
             @RequestPart ReviewInfo reviewInfo,
             @RequestPart(value = "files", required = false) List<MultipartFile> files
         ) throws IOException {
 
 
         //임시로 임의의 유저 값을 사용! 로그인 개발 이후에는 헤더에 있는 유저 정보를 이용해 해당 유저의 값을 사용
-        Long userId = 1L;
-        reviewService.addReview(reviewInfo, userId, files);
-
+        reviewService.addReview(reviewInfo, loginMember.getId(), files);
         return ResponseEntity.ok().build();
 
     }
