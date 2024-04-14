@@ -1,7 +1,6 @@
-package com.sideproject.hororok.operationHours.repository;
+package com.sideproject.hororok.cafe.domain;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.operationHours.entity.OperationHour;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

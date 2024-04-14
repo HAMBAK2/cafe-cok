@@ -1,17 +1,12 @@
 package com.sideproject.hororok.cafe.presentation;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
-import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
-import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.*;
-import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
+import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
+import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafePlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
-import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,7 +60,7 @@ public class CafeController {
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
 
-        CafeFindAgainResponse response = cafeService.findCafeAgainByLatitudeAndLongitude(latitude, longitude);
+        CafeFindAgainResponse response = cafeService.findCafeByAgain(latitude, longitude);
         return ResponseEntity.ok(response);
     }
 
@@ -84,17 +79,18 @@ public class CafeController {
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
 
-        CafeFindBarResponse response = cafeService.findCafeBarByLatitudeAndLongitude(latitude, longitude);
+        CafeFindBarResponse response = cafeService.findCafeByBar(latitude, longitude);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/find/category")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
-    @Parameter(description = "현재 위치의 경도 위도 값, 선태한 키워드")
     @LogTrace
-    public ResponseEntity<CafeCategorySearchDto> findCategory(@RequestBody CafeCategorySearchCond searchCond) {
+    public ResponseEntity<CafeFindCategoryResponse> findCategory(
+            @RequestBody CafeFindCategoryRequest request) {
 
-        return ResponseEntity.ok(cafeService.categorySearch(searchCond));
+        CafeFindCategoryResponse response = cafeService.findCafeByCategory(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/plans")

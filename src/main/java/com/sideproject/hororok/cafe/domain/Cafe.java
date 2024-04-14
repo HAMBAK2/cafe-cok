@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.menu.entity.Menu;
 import com.sideproject.hororok.cafeImage.entity.CafeImage;
-import com.sideproject.hororok.operationHours.entity.OperationHour;
 import com.sideproject.hororok.review.Entity.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
