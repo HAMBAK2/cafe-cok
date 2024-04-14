@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
@@ -24,6 +25,7 @@ import com.sideproject.hororok.utils.converter.FormatConverter;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -123,6 +125,15 @@ public class CafeService {
     }
 
     @LogTrace
+    public CafeFindAgainResponse findCafeAgainByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude) {
+
+        List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+        CategoryKeywords categoryKeywords = categoryService.findAllCategoryAndKeyword();
+
+        return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywords);
+    }
+
+    @LogTrace
     public Cafe findByLongitudeAndLatitude(CafeSearchCond cafeSearchCond) {
         return cafeRepository.findByLongitudeAndLatitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
@@ -156,6 +167,29 @@ public class CafeService {
         return new CafeDetail(
                 cafe, menus, openStatus, businessHours, closedDay,
                 reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
+    }
+
+
+    @LogTrace
+    public List<WithinRadiusCafe> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
+        List<Cafe> cafes = findAll();
+        List<WithinRadiusCafe> withinRadiusCafes = new ArrayList<>();
+
+        for (Cafe cafe : cafes) {
+            boolean isWithinRadius = GeometricUtils
+                    .isWithinRadius(
+                            latitude, longitude,
+                            cafe.getLatitude(), cafe.getLongitude(), MAX_RADIUS);
+
+            if(isWithinRadius) {
+                String cafeImageUrl =
+                        cafeImageService.findOneImageUrlByCafeId(cafe.getId())
+                                .orElseThrow(() -> new NotFoundException("이미지를 찾을 수 없습니다."));
+                withinRadiusCafes.add(WithinRadiusCafe.of(cafe, cafeImageUrl));
+            }
+        }
+
+        return withinRadiusCafes;
     }
 
     @LogTrace

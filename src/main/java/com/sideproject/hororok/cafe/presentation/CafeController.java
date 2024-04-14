@@ -8,6 +8,7 @@ import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
 import com.sideproject.hororok.cafe.application.CafePlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,14 +54,15 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/find/re")
+    @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
-    @Parameter(description = "현재 위치의 경도 위도 값")
     @LogTrace
-    public ResponseEntity<CafeReSearchDto> findRe(
-            @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal longitude) {
-        return ResponseEntity.ok(cafeService.findWithinRadius(CafeSearchCond.of(latitude, longitude)));
+    public ResponseEntity<CafeFindAgainResponse> findAgain(
+            @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
+            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
+
+        CafeFindAgainResponse response = cafeService.findCafeAgainByLatitudeAndLongitude(latitude, longitude);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/find/bar")
