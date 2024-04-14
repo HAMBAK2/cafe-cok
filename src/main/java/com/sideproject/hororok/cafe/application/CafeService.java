@@ -2,6 +2,7 @@ package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
@@ -134,8 +135,22 @@ public class CafeService {
     }
 
     @LogTrace
+    public CafeFindBarResponse findCafeBarByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude) {
+
+        Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
+        if(findCafe.isEmpty()) {
+            List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+            CategoryKeywords categoryKeywords = categoryService.findAllCategoryAndKeyword();
+            return CafeFindBarResponse.notExistOf(withinRadiusCafes, categoryKeywords);
+        }
+
+        return CafeFindBarResponse
+                .existFrom(findCafeDetailByCafeId(findCafe.get().getId()));
+    }
+
+    @LogTrace
     public Cafe findByLongitudeAndLatitude(CafeSearchCond cafeSearchCond) {
-        return cafeRepository.findByLongitudeAndLatitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
+        return cafeRepository.findByLatitudeAndLongitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
@@ -216,14 +231,14 @@ public class CafeService {
     @LogTrace
     public CafeBarSearchDto barSearch(CafeSearchCond searchCond) {
 
-        if (!cafeRepository.existsByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude())) {
+        if (!cafeRepository.existsByLatitudeAndLongitude(searchCond.getLongitude(), searchCond.getLatitude())) {
             CafeReSearchDto withinRadius = findWithinRadius(searchCond);
             return CafeBarSearchDto.from(withinRadius);
         }
 
         return CafeBarSearchDto
                 .from(findCafeDetail(cafeRepository
-                        .findByLongitudeAndLatitude(searchCond.getLongitude(), searchCond.getLatitude()).get().getId()));
+                        .findByLatitudeAndLongitude(searchCond.getLongitude(), searchCond.getLatitude()).get().getId()));
     }
 
     @LogTrace

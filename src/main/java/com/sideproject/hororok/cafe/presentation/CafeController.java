@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.presentation;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
@@ -9,10 +10,13 @@ import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
 import com.sideproject.hororok.cafe.application.CafePlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
 import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -67,13 +71,21 @@ public class CafeController {
 
     @GetMapping("/find/bar")
     @Operation(summary = "검색창에 검색을 했을 때 동작하는 기능")
-    @Parameter(description = "현재 위치의 경도 위도 값")
-    @ApiResponse(description = "선택한 카페의 상세 정보를 전달, 카페가 존재하지 않는 경우 cafes, keywordsByCategory 정보 존재 나머지 X, \n카페가 존재하는 경우 반대 (exist 값은 항상 존재)")
+    @ApiResponse(
+            responseCode = "200",
+            description =
+                    "검색창 검색 성공\n\n" +
+                    "찾는 카페가 존재하는 경우: Cafe의 상세 정보 전달, exist = true\n\n" +
+                    "찾는 카페가 존재하지 않는 경우: 근처 카페의 리스트 cafes(근처에 카페가 있는 경우), 카테고리와 키워드 정보, exist=false",
+            content = @Content(schema = @Schema(implementation = CafeFindBarResponse.class))
+    )
     @LogTrace
-    public ResponseEntity<CafeBarSearchDto> findBar(
-            @RequestParam BigDecimal latitude,
-            @RequestParam BigDecimal longitude) {
-        return ResponseEntity.ok(cafeService.barSearch(CafeSearchCond.of(latitude, longitude)));
+    public ResponseEntity<CafeFindBarResponse> findBar(
+            @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
+            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
+
+        CafeFindBarResponse response = cafeService.findCafeBarByLatitudeAndLongitude(latitude, longitude);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/find/category")

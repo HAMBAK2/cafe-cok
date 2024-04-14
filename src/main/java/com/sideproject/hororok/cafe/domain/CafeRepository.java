@@ -18,10 +18,10 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     List<Cafe> findAll();
 
     @LogTrace
-    boolean existsByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
+    boolean existsByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     @LogTrace
-    Optional<Cafe> findByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
+    Optional<Cafe> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     @LogTrace
     List<Cafe> findAllByOrderByStarRatingDescNameAsc();
