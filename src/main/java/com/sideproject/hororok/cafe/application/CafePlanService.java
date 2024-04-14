@@ -1,11 +1,11 @@
-package com.sideproject.hororok.cafe.service;
+package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.CreatePlanDto;
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.cafe.repository.CafeRepository;
+import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.operationHours.entity.OperationHour;

@@ -6,9 +6,9 @@ import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
-import com.sideproject.hororok.cafe.service.CafePlanService;
-import com.sideproject.hororok.cafe.service.CafeService;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.cafe.application.CafePlanService;
+import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,9 +34,11 @@ public class CafeController {
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
     @LogTrace
-    public ResponseEntity<CategoryKeywords> home() {
+    public ResponseEntity<CafeHomeResponse> home() {
 
-        return ResponseEntity.ok(categoryService.findAllCategoryAndKeyword());
+        CafeHomeResponse response
+                = CafeHomeResponse.from(categoryService.findAllCategoryAndKeyword());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{cafeId}")
@@ -55,7 +57,7 @@ public class CafeController {
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     @Parameter(description = "현재 위치의 경도 위도 값")
     @LogTrace
-    public ResponseEntity<CafeReSearchDto> searchRe(
+    public ResponseEntity<CafeReSearchDto> findRe(
             @RequestParam BigDecimal latitude,
             @RequestParam BigDecimal longitude) {
         return ResponseEntity.ok(cafeService.findWithinRadius(CafeSearchCond.of(latitude, longitude)));
@@ -66,7 +68,7 @@ public class CafeController {
     @Parameter(description = "현재 위치의 경도 위도 값")
     @ApiResponse(description = "선택한 카페의 상세 정보를 전달, 카페가 존재하지 않는 경우 cafes, keywordsByCategory 정보 존재 나머지 X, \n카페가 존재하는 경우 반대 (exist 값은 항상 존재)")
     @LogTrace
-    public ResponseEntity<CafeBarSearchDto> searchBar(
+    public ResponseEntity<CafeBarSearchDto> findBar(
             @RequestParam BigDecimal latitude,
             @RequestParam BigDecimal longitude) {
         return ResponseEntity.ok(cafeService.barSearch(CafeSearchCond.of(latitude, longitude)));
@@ -76,7 +78,7 @@ public class CafeController {
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
     @Parameter(description = "현재 위치의 경도 위도 값, 선태한 키워드")
     @LogTrace
-    public ResponseEntity<CafeCategorySearchDto> searchCategory(@RequestBody CafeCategorySearchCond searchCond) {
+    public ResponseEntity<CafeCategorySearchDto> findCategory(@RequestBody CafeCategorySearchCond searchCond) {
 
         return ResponseEntity.ok(cafeService.categorySearch(searchCond));
     }

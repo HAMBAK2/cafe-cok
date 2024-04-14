@@ -1,11 +1,10 @@
 package com.sideproject.hororok.cafe.dto;
 
 
-import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 

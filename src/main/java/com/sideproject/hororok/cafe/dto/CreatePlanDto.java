@@ -1,7 +1,6 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
-import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
 import lombok.Builder;

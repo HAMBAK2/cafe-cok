@@ -1,7 +1,7 @@
 package com.sideproject.hororok.review.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;

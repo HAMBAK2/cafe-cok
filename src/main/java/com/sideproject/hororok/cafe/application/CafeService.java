@@ -1,7 +1,6 @@
-package com.sideproject.hororok.cafe.service;
+package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
@@ -9,8 +8,8 @@ import com.sideproject.hororok.menu.service.MenuService;
 import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.dto.*;
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.cafe.repository.CafeRepository;
+import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.cafeImage.service.CafeImageService;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
@@ -22,7 +21,7 @@ import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.utils.converter.FormatConverter;
-import com.sideproject.hororok.cafe.enums.OpenStatus;
+import com.sideproject.hororok.cafe.domain.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -150,6 +149,9 @@ public class CafeService {
         OpenStatus openStatus = getOpenStatus(cafeId);
         List<String> closedDay = getClosedDay(cafeId);
         List<String> businessHours = getBusinessHours(cafeId);
+
+        //유저들이 뽑은 키워드 내용 추가
+
 
         return new CafeDetail(
                 cafe, menus, openStatus, businessHours, closedDay,

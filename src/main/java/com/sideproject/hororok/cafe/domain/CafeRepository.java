@@ -1,12 +1,10 @@
-package com.sideproject.hororok.cafe.repository;
+package com.sideproject.hororok.cafe.domain;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.print.DocFlavor;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;

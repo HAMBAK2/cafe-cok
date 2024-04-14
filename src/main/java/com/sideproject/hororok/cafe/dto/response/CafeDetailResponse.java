@@ -1,9 +1,6 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDetail;
-import com.sideproject.hororok.cafe.dto.CafeDetailDto;
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.cafe.enums.OpenStatus;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
@@ -13,8 +10,8 @@ import lombok.Getter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
 @Builder
+@Getter
 public class CafeDetailResponse {
 
     private final Long id;

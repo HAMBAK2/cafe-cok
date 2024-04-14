@@ -1,12 +1,10 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.cafe.enums.OpenStatus;
+import com.sideproject.hororok.cafe.domain.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;

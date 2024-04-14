@@ -1,4 +1,4 @@
-package com.sideproject.hororok.cafe.entity;
+package com.sideproject.hororok.cafe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.global.entity.BaseEntity;
