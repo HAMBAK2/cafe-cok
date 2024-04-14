@@ -2,7 +2,7 @@ package com.sideproject.hororok.cafeImage.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.entity.BaseEntity;
+import com.sideproject.hororok.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 

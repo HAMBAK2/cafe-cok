@@ -9,13 +9,13 @@ import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.keword.repository.KeywordRepository;
+import com.sideproject.hororok.member.domain.MemberRepository;
 import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.dto.ReviewInfo;
 import com.sideproject.hororok.review.repository.ReviewRepository;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
-import com.sideproject.hororok.user.entity.User;
-import com.sideproject.hororok.user.repository.UserRepository;
+import com.sideproject.hororok.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,20 +32,18 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
     private final KeywordRepository keywordRepository;
 
     @LogTrace
-    public void addReview(ReviewInfo reviewInfo, Long userId, List<MultipartFile> files) throws IOException {
+    public void createReview(ReviewInfo reviewInfo, Long userId, List<MultipartFile> files) throws IOException {
 
-        //1. 이미지 외부 저장소 저장
+
         List<ReviewImage> reviewImages = new ArrayList<>();
-        for (MultipartFile file : files) {
-            ReviewImage reviewImage = new ReviewImage(s3Uploader.upload(file, "review"));
-            reviewImages.add(reviewImage);
+        if(files != null) {
+            reviewImages = saveImagesObjectStorage(files);
         }
-
 
         //2. 이미지 url을 받아와서 리뷰 저장
         Review review = new Review();
@@ -59,9 +57,9 @@ public class ReviewService {
         review.setCafe(cafe);
 
         //유저 저장
-        User user = userRepository.findById(userId)
+        Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
-        review.setUser(user);
+        review.setMember(member);
 
 
         //카테고리 키워드 저장
@@ -102,6 +100,19 @@ public class ReviewService {
 
     }
 
+    private List<ReviewImage> saveImagesObjectStorage(List<MultipartFile> files) throws IOException {
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        for (MultipartFile file : files) {
+            ReviewImage reviewImage = new ReviewImage(s3Uploader.upload(file, "review"));
+            reviewImages.add(reviewImage);
+        }
+        ;
+
+        return reviewImages;
+    }
+
+
+
 
     @LogTrace
     public List<ReviewDto> findReviewByCafeId(Long cafeId){
@@ -109,7 +120,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
         List<ReviewDto> reviewDtos = new ArrayList<>();
         for (Review review : reviews) {
-            reviewDtos.add(ReviewDto.of(review, review.getUser().getNickname()));
+            reviewDtos.add(ReviewDto.of(review, review.getMember().getNickname()));
         }
 
         return reviewDtos;

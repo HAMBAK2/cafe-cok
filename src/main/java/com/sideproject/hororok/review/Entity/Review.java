@@ -2,10 +2,10 @@ package com.sideproject.hororok.review.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.entity.BaseEntity;
+import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
-import com.sideproject.hororok.user.entity.User;
+import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,11 +53,7 @@ public class Review extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    public void addKeyword(Keyword keyword) {
-        this.keywords.add(keyword);
-        keyword.getReviews().add(this);
-    }
 }
