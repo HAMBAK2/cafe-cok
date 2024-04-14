@@ -1,7 +1,6 @@
 package com.sideproject.hororok.cafeImage.service;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.cafeImage.entity.CafeImage;
 import com.sideproject.hororok.cafeImage.repository.CafeImageRepository;
 import lombok.RequiredArgsConstructor;

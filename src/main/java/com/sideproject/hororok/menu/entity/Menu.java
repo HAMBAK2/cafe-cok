@@ -1,7 +1,7 @@
 package com.sideproject.hororok.menu.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sideproject.hororok.cafe.entity.Cafe;
+import com.sideproject.hororok.cafe.domain.Cafe;
 
 import com.sideproject.hororok.global.entity.BaseEntity;
 import jakarta.persistence.*;

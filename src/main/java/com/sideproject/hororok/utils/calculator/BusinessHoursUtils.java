@@ -1,7 +1,5 @@
 package com.sideproject.hororok.utils.calculator;
 
-import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
-import com.sideproject.hororok.cafe.entity.Cafe;
 import com.sideproject.hororok.utils.converter.FormatConverter;
 
 import java.time.DayOfWeek;

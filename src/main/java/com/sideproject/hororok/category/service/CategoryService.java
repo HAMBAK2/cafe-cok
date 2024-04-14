@@ -19,12 +19,10 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Transactional
     @LogTrace
     public CategoryKeywords findAllCategoryAndKeyword() {
 
         CategoryKeywords categoryKeywords = new CategoryKeywords();
-
         List<Category> categories = categoryRepository.findAll();
 
 

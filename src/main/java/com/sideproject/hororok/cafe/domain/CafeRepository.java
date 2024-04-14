@@ -1,12 +1,10 @@
-package com.sideproject.hororok.cafe.repository;
+package com.sideproject.hororok.cafe.domain;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafe.entity.Cafe;
-import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.print.DocFlavor;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +18,10 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     List<Cafe> findAll();
 
     @LogTrace
-    boolean existsByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
+    boolean existsByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     @LogTrace
-    Optional<Cafe> findByLongitudeAndLatitude(BigDecimal longitude, BigDecimal latitude);
+    Optional<Cafe> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     @LogTrace
     List<Cafe> findAllByOrderByStarRatingDescNameAsc();
