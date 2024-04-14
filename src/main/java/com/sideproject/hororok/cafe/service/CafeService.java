@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.service;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.entity.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
@@ -19,13 +20,11 @@ import com.sideproject.hororok.review.Entity.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.service.ReviewService;
 import com.sideproject.hororok.reviewImage.entity.ReviewImage;
-import com.sideproject.hororok.reviewImage.service.ReviewImageService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.utils.converter.FormatConverter;
 import com.sideproject.hororok.cafe.enums.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -36,7 +35,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.sideproject.hororok.cafe.dto.CafeReSearchDto.of;
 
@@ -45,7 +43,6 @@ import static com.sideproject.hororok.cafe.dto.CafeReSearchDto.of;
 @Transactional(readOnly = true)
 public class CafeService {
 
-    private final ReviewImageService reviewImageService;
     private final CafeImageService cafeImageService;
     private final ReviewService reviewService;
     private final CafeRepository cafeRepository;
@@ -54,33 +51,6 @@ public class CafeService {
     private final OperationHourService operationHourService;
 
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
-
-    @Transactional
-    @LogTrace
-    public CafeDetailDto findCafeDetail(Long cafeId){
-
-        Cafe cafe =  findCafeById(cafeId);
-        List<MenuDto> menus = menuService.findByCafeId(cafeId);
-        List<ReviewImage> reviewImages = reviewService.findReviewImagesByCafeId(cafeId);
-        List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
-
-        List<String> reviewImageUrls = new ArrayList<>();
-        for (ReviewImage reviewImage : reviewImages) {
-            reviewImageUrls.add(reviewImage.getImageUrl());
-        }
-
-        //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
-        List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
-        addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
-
-        OpenStatus openStatus = getOpenStatus(cafeId);
-        List<String> closedDay = getClosedDay(cafeId);
-        List<String> businessHours = getBusinessHours(cafeId);
-
-        return CafeDetailDto.of(cafe, menus, openStatus, businessHours, closedDay, reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
-    }
-
 
     @LogTrace
     private List<String> getBusinessHours(Long cafeId) {
@@ -157,6 +127,33 @@ public class CafeService {
     public Cafe findByLongitudeAndLatitude(CafeSearchCond cafeSearchCond) {
         return cafeRepository.findByLongitudeAndLatitude(cafeSearchCond.getLongitude(), cafeSearchCond.getLatitude())
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
+    }
+
+    @LogTrace
+    public CafeDetail findCafeDetailByCafeId(Long cafeId){
+
+        Cafe cafe =  findCafeById(cafeId);
+        List<MenuDto> menus = menuService.findByCafeId(cafeId);
+        List<ReviewImage> reviewImages = reviewService.findReviewImagesByCafeId(cafeId);
+        List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
+        List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
+
+        List<String> reviewImageUrls = new ArrayList<>();
+        for (ReviewImage reviewImage : reviewImages) {
+            reviewImageUrls.add(reviewImage.getImageUrl());
+        }
+
+        //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
+        List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
+        addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
+
+        OpenStatus openStatus = getOpenStatus(cafeId);
+        List<String> closedDay = getClosedDay(cafeId);
+        List<String> businessHours = getBusinessHours(cafeId);
+
+        return new CafeDetail(
+                cafe, menus, openStatus, businessHours, closedDay,
+                reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
     }
 
     @LogTrace
@@ -269,5 +266,30 @@ public class CafeService {
     @LogTrace
     public List<Cafe> findAllByOrderByStarRatingDescNameAsc() {
         return cafeRepository.findAllByOrderByStarRatingDescNameAsc();
+    }
+
+    @LogTrace
+    public CafeDetailDto findCafeDetail(Long cafeId){
+
+        Cafe cafe =  findCafeById(cafeId);
+        List<MenuDto> menus = menuService.findByCafeId(cafeId);
+        List<ReviewImage> reviewImages = reviewService.findReviewImagesByCafeId(cafeId);
+        List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
+        List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
+
+        List<String> reviewImageUrls = new ArrayList<>();
+        for (ReviewImage reviewImage : reviewImages) {
+            reviewImageUrls.add(reviewImage.getImageUrl());
+        }
+
+        //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
+        List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
+        addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
+
+        OpenStatus openStatus = getOpenStatus(cafeId);
+        List<String> closedDay = getClosedDay(cafeId);
+        List<String> businessHours = getBusinessHours(cafeId);
+
+        return CafeDetailDto.of(cafe, menus, openStatus, businessHours, closedDay, reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
     }
 }

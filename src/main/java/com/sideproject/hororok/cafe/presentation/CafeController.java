@@ -5,6 +5,7 @@ import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.cond.CafeSearchCond;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.*;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailResponse;
 import com.sideproject.hororok.cafe.service.CafePlanService;
 import com.sideproject.hororok.cafe.service.CafeService;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
@@ -41,12 +42,14 @@ public class CafeController {
     @GetMapping("/{cafeId}")
     @Operation(summary = "해당하는 카페의 상세 정보를 보여주는 기능")
     @LogTrace
-    public ResponseEntity<CafeDetailDto> detail(
+    public ResponseEntity<CafeDetailResponse> detail(
             @Parameter(description = "카페의 ID")
             @PathVariable Long cafeId){
-        return ResponseEntity.ok(cafeService.findCafeDetail(cafeId));
-    }
 
+        CafeDetailResponse response
+                = CafeDetailResponse.from(cafeService.findCafeDetailByCafeId(cafeId));
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/find/re")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
