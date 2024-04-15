@@ -7,7 +7,7 @@ import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.category.service.CategoryService;
+import com.sideproject.hororok.category.application.CategoryService;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.OperationHourRepository;
 import com.sideproject.hororok.review.application.ReviewService;

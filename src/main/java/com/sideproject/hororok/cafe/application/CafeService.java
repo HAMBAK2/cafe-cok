@@ -12,7 +12,7 @@ import com.sideproject.hororok.menu.service.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
-import com.sideproject.hororok.category.service.CategoryService;
+import com.sideproject.hororok.category.application.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;

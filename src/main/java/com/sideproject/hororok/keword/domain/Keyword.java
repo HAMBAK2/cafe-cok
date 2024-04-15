@@ -1,7 +1,7 @@
 package com.sideproject.hororok.keword.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sideproject.hororok.category.entity.Category;
+import com.sideproject.hororok.category.domain.Category;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;

@@ -17,8 +17,10 @@ public class CafeImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     @JsonIgnore

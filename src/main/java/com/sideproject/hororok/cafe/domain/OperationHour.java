@@ -20,15 +20,20 @@ public class OperationHour extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "date", nullable = false)
     private DayOfWeek date;
 
+    @Column(name = "opening_time")
     private LocalTime openingTime;
 
+    @Column(name = "closing_time")
     private LocalTime closingTime;
 
+    @Column(name = "is_closed")
     private boolean isClosed;
 
     @ManyToOne(fetch = LAZY)

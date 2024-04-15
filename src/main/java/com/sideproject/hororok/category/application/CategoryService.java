@@ -1,8 +1,8 @@
-package com.sideproject.hororok.category.service;
+package com.sideproject.hororok.category.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.category.entity.Category;
+import com.sideproject.hororok.category.domain.Category;
 import com.sideproject.hororok.category.repository.CategoryRepository;
 import com.sideproject.hororok.keword.domain.Keyword;
 import lombok.RequiredArgsConstructor;
