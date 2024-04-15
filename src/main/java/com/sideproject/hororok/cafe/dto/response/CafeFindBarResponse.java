@@ -3,8 +3,8 @@ package com.sideproject.hororok.cafe.dto.response;
 import com.sideproject.hororok.cafe.dto.CafeDetail;
 import com.sideproject.hororok.cafe.dto.WithinRadiusCafe;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.keword.dto.KeywordDto;
-import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,9 +36,9 @@ public class CafeFindBarResponse {
     private final List<String> closedDay;
     private final List<String> cafeImageUrls;
     private final List<String> reviewImageUrls;
-    private final List<MenuDto> menus;
+    private final List<MenuInfo> menus;
     private final List<ReviewDto> reviews;
-    private final List<KeywordDto> cafeKeywords;
+    private final List<KeywordInfo> cafeKeywords;
 
     public static CafeFindBarResponse notExistOf(List<WithinRadiusCafe> cafes,
                                                  CategoryKeywords categoryKeywords) {

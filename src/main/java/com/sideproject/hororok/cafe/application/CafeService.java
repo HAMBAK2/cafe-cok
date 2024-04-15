@@ -7,13 +7,13 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.domain.Keyword;
-import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.application.CategoryService;
-import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.application.ReviewService;
@@ -113,13 +113,13 @@ public class CafeService {
     public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
         Cafe cafe =  findCafeById(cafeId);
-        List<MenuDto> menus = menuService.findByCafeId(cafeId);
+        List<MenuInfo> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
         List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
         List<String> reviewImageUrls = reviewService.getReviewImageUrlsByCafeId(cafeId);
 
         //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
-        List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
+        List<KeywordInfo> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
         addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
 
         OpenStatus openStatus = operationHourService.getOpenStatus(cafeId);

@@ -1,9 +1,9 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import lombok.*;
@@ -36,14 +36,14 @@ public class CafeDetailDto {
     private final Long reviewCount;
     private final double starRating;
 
-    private final List<MenuDto> menus;
+    private final List<MenuInfo> menus;
     private final List<ReviewDto> reviews;
     private final List<String> reviewImageUrls;
-    private final List<KeywordDto> cafeKeywords;
+    private final List<KeywordInfo> cafeKeywords;
 
-    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus, OpenStatus openStatus,List<String> businessHours, List<String> closedDay,
+    public static CafeDetailDto of(Cafe cafe, List<MenuInfo> menus, OpenStatus openStatus, List<String> businessHours, List<String> closedDay,
                                    List<String> reviewImageUrls, List<ReviewDto> reviews,
-                                   List<KeywordDto> cafeKeywords, List<String> cafeImageUrls) {
+                                   List<KeywordInfo> cafeKeywords, List<String> cafeImageUrls) {
 
 
         return CafeDetailDto.builder()

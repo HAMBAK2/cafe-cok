@@ -8,15 +8,16 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
-public class MenuDto {
+public class MenuInfo {
 
+    private final Long id;
     private final String name;
     private final String price;
     private final String imageUrl;
 
-    public static MenuDto from(Menu menu) {
-        return MenuDto.builder()
+    public static MenuInfo from(Menu menu) {
+        return MenuInfo.builder()
+                .id(menu.getId())
                 .name(menu.getName())
                 .price(FormatConverter.priceConvert(menu.getPrice()))
                 .imageUrl(menu.getImageUrl())

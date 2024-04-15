@@ -7,16 +7,15 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
-public class KeywordDto {
+public class KeywordInfo {
 
     private final Long id;
     private final String name;
 
 
-    public static KeywordDto from(final Keyword keyword) {
+    public static KeywordInfo from(final Keyword keyword) {
 
-        return KeywordDto.builder()
+        return KeywordInfo.builder()
                 .id(keyword.getId())
                 .name(keyword.getName())
                 .build();

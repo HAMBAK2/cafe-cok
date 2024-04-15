@@ -5,7 +5,7 @@ import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.KeywordRepository;
 import com.sideproject.hororok.member.domain.MemberRepository;
@@ -123,18 +123,18 @@ public class ReviewService {
     }
 
     @LogTrace
-    public List<KeywordDto> findKeywordInReviewByCafeIdOrderByDesc(Long cafeId) {
+    public List<KeywordInfo> findKeywordInReviewByCafeIdOrderByDesc(Long cafeId) {
 
         List<Keyword> keywords = reviewRepository.findKeywordInReviewByCafeIdOrderByDesc(cafeId);
-        List<KeywordDto> keywordDtoList = new ArrayList<>();
+        List<KeywordInfo> keywordInfoList = new ArrayList<>();
         int idx = 0;
         for (Keyword keyword : keywords) {
             if(idx == 3) break;
-            keywordDtoList.add(KeywordDto.from(keyword));
+            keywordInfoList.add(KeywordInfo.from(keyword));
             idx++;
         }
 
-        return keywordDtoList;
+        return keywordInfoList;
     }
 
 

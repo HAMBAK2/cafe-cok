@@ -2,7 +2,7 @@ package com.sideproject.hororok.menu.application;
 
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.menu.domain.Menu;
 import com.sideproject.hororok.menu.domain.MenuRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +18,15 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @LogTrace
-    public List<MenuDto> findByCafeId(Long cafeId) {
+    public List<MenuInfo> findByCafeId(Long cafeId) {
 
         List<Menu> menuList = menuRepository.findByCafeId(cafeId);
-        List<MenuDto> menuDtos = new ArrayList<>();
+        List<MenuInfo> menuInfos = new ArrayList<>();
         for (Menu menu : menuList) {
-            menuDtos.add(MenuDto.from(menu));
+            menuInfos.add(MenuInfo.from(menu));
         }
 
-        return menuDtos;
+        return menuInfos;
     }
 
 }
