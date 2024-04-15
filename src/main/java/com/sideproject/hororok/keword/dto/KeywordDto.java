@@ -1,11 +1,9 @@
 package com.sideproject.hororok.keword.dto;
 
-import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.keword.domain.Keyword;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @Builder

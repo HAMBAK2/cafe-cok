@@ -1,6 +1,6 @@
-package com.sideproject.hororok.reviewImage.dto;
+package com.sideproject.hororok.review.dto;
 
-import com.sideproject.hororok.reviewImage.entity.ReviewImage;
+import com.sideproject.hororok.review.domain.ReviewImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

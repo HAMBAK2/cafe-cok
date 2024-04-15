@@ -1,6 +1,6 @@
-package com.sideproject.hororok.keword.repository;
+package com.sideproject.hororok.keword.domain;
 
-import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.keword.domain.Keyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

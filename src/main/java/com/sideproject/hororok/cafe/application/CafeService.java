@@ -6,7 +6,7 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.keword.entity.Keyword;
+import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.service.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
@@ -15,10 +15,9 @@ import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.cafeImage.service.CafeImageService;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordDto;
-import com.sideproject.hororok.review.Entity.Review;
+import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.review.service.ReviewService;
-import com.sideproject.hororok.reviewImage.entity.ReviewImage;
+import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
@@ -116,14 +115,9 @@ public class CafeService {
 
         Cafe cafe =  findCafeById(cafeId);
         List<MenuDto> menus = menuService.findByCafeId(cafeId);
-        List<ReviewImage> reviewImages = reviewService.findReviewImagesByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
         List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
-
-        List<String> reviewImageUrls = new ArrayList<>();
-        for (ReviewImage reviewImage : reviewImages) {
-            reviewImageUrls.add(reviewImage.getImageUrl());
-        }
+        List<String> reviewImageUrls = reviewService.getReviewImageUrlsByCafeId(cafeId);
 
         //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
         List<KeywordDto> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());

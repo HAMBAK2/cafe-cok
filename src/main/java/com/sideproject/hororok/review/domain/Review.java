@@ -1,10 +1,9 @@
-package com.sideproject.hororok.review.Entity;
+package com.sideproject.hororok.review.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
-import com.sideproject.hororok.keword.entity.Keyword;
-import com.sideproject.hororok.reviewImage.entity.ReviewImage;
+import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,9 +15,11 @@ import java.util.List;
 import static jakarta.persistence.FetchType.LAZY;
 
 
-@Entity
+
 @Getter
 @Setter
+@Entity
+@Table(name = "reviews")
 public class Review extends BaseEntity {
 
     @Id

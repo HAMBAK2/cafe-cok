@@ -5,7 +5,7 @@ import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.dto.ReviewInfo;
-import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.review.application.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

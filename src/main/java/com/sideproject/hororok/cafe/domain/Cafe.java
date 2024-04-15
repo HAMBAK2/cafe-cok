@@ -1,44 +1,56 @@
 package com.sideproject.hororok.cafe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sideproject.hororok.cafe.exception.InvalidCafeException;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.menu.entity.Menu;
 import com.sideproject.hororok.cafeImage.entity.CafeImage;
-import com.sideproject.hororok.review.Entity.Review;
+import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
 @Getter
+@Table(name = "cafes")
 @Entity
 public class Cafe extends BaseEntity {
 
+    private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "road_address")
     private String roadAddress;
 
-    @Column(precision = 17, scale = 14)
+    @Column(name = "longitude", nullable = false,
+            precision = 17, scale = 14)
     private BigDecimal longitude; //경도
 
-    @Column(precision = 17, scale = 14)
+    @Column(name = "latitude", nullable = false,
+            precision = 17, scale = 14)
     private BigDecimal latitude; //위도
 
-
-    @Column(precision = 2, scale = 1)
+    @Column(name = "star_rating", precision = 2, scale = 1)
     private BigDecimal starRating;
 
+    @Column(name = "review_count")
     private Long reviewCount;
 
     @JsonIgnore
@@ -56,4 +68,28 @@ public class Cafe extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<OperationHour> operationHours = new ArrayList<>();
+
+    protected Cafe(){}
+
+    public Cafe(final String name, final String phoneNumber, final String roadAddress,
+                final BigDecimal longitude, final BigDecimal latitude) {
+        validatePhoneNumber(phoneNumber);
+
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.starRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+    }
+
+    private void validatePhoneNumber(final String phoneNumber) {
+        Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
+        if(!matcher.matches()) {
+            throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
+        }
+    }
+
+
 }

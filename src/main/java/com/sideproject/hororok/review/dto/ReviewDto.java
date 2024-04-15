@@ -1,13 +1,12 @@
 package com.sideproject.hororok.review.dto;
 
-import com.sideproject.hororok.keword.entity.Keyword;
-import com.sideproject.hororok.review.Entity.Review;
-import com.sideproject.hororok.reviewImage.entity.ReviewImage;
+import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.review.domain.Review;
+import com.sideproject.hororok.review.domain.ReviewImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 

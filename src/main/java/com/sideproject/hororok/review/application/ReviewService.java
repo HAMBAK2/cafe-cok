@@ -1,20 +1,19 @@
-package com.sideproject.hororok.review.service;
+package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.S3.component.S3Uploader;
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafe.cond.CafeCategorySearchCond;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.dto.KeywordDto;
-import com.sideproject.hororok.keword.entity.Keyword;
-import com.sideproject.hororok.keword.repository.KeywordRepository;
+import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.domain.KeywordRepository;
 import com.sideproject.hororok.member.domain.MemberRepository;
-import com.sideproject.hororok.review.Entity.Review;
+import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDto;
 import com.sideproject.hororok.review.dto.ReviewInfo;
-import com.sideproject.hororok.review.repository.ReviewRepository;
-import com.sideproject.hororok.reviewImage.entity.ReviewImage;
+import com.sideproject.hororok.review.domain.ReviewRepository;
+import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -111,9 +110,6 @@ public class ReviewService {
         return reviewImages;
     }
 
-
-
-
     @LogTrace
     public List<ReviewDto> findReviewByCafeId(Long cafeId){
 
@@ -141,45 +137,22 @@ public class ReviewService {
         return keywordDtoList;
     }
 
-    @LogTrace
-    public List<Cafe> findCafeWithKeywordsInReview(CafeCategorySearchCond searchCond) {
-
-
-        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
-        List<String> keywords = new ArrayList<>();
-        List<String> atmosphere = categoryKeywords.getAtmosphere();
-        List<String> facility = categoryKeywords.getFacility();
-        List<String> purpose = categoryKeywords.getPurpose();
-        List<String> theme = categoryKeywords.getTheme();
-        List<String> menu = categoryKeywords.getMenu();
-
-        if (atmosphere != null) {
-            keywords.addAll(atmosphere);
-        }
-        if (facility != null) {
-            keywords.addAll(facility);
-        }
-        if (purpose != null) {
-            keywords.addAll(purpose);
-        }
-        if (theme != null) {
-            keywords.addAll(theme);
-        }
-        if (menu != null) {
-            keywords.addAll(menu);
-        }
-
-
-        List<Cafe> cafeWithKeywordsInReview = reviewRepository.findCafeWithKeywordsInReview(keywords);
-
-
-        return reviewRepository.findCafeWithKeywordsInReview(keywords);
-    }
-
 
     @LogTrace
     public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
         return reviewRepository.findReviewImagesByCafeId(cafeId);
+    }
+
+    @LogTrace
+    public List<String> getReviewImageUrlsByCafeId(Long cafeId) {
+
+        List<ReviewImage> reviewImagesByCafeId = findReviewImagesByCafeId(cafeId);
+        List<String> reviewImageUrls = new ArrayList<>();
+        for (ReviewImage reviewImage : reviewImagesByCafeId) {
+            reviewImageUrls.add(reviewImage.getImageUrl());
+        }
+
+        return reviewImageUrls;
     }
 
 }

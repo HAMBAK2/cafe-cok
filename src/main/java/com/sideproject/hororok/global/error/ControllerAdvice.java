@@ -1,6 +1,7 @@
 package com.sideproject.hororok.global.error;
 
 import com.sideproject.hororok.auth.exception.*;
+import com.sideproject.hororok.cafe.exception.InvalidCafeException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
@@ -31,7 +32,8 @@ public class ControllerAdvice {
 
 
     @ExceptionHandler({
-            InvalidMemberException.class
+            InvalidMemberException.class,
+            InvalidCafeException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

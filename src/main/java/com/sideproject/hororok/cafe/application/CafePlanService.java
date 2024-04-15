@@ -10,7 +10,7 @@ import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.category.service.CategoryService;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.OperationHourRepository;
-import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
 import com.sideproject.hororok.utils.converter.FormatConverter;
