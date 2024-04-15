@@ -17,12 +17,10 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     @Query("SELECT NEW com.sideproject.hororok.keword.dto.KeywordCount(k.id, k.name, COUNT(crk)) " +
             "FROM Keyword k " +
             "JOIN k.cafeReviewKeywords crk " +
-            "JOIN k.category c " +
             "WHERE crk.cafe.id = :cafeId " +
-            "AND c.code <> :categoryCode " +
             "GROUP BY k.id " +
             "ORDER BY COUNT(crk) DESC")
-    List<KeywordCount> findKeywordCountsByCafeId(@Param("cafeId") Long cafeId, @Param("categoryCode") String categoryCode);
+    List<KeywordCount> findKeywordCountsByCafeId(@Param("cafeId") Long cafeId);
 
     @Query("SELECT k FROM Keyword k " +
             "JOIN k.cafeReviewKeywords crk " +

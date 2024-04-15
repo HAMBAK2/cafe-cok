@@ -22,7 +22,6 @@ public class KeywordService {
     private final KeywordRepository keywordRepository;
 
     private final Integer USER_CHOICE_KEYWORD_CNT = 6;
-    private final String EXCLUDE_CATEGORY_CODE = "MENU";
 
     @LogTrace
     public KeywordInfo getKeywordInfoByReviewKeyword(CafeReviewKeyword cafeReviewKeyword) {
@@ -42,7 +41,7 @@ public class KeywordService {
     @LogTrace
     public List<KeywordCount> getUserChoiceKeywordCounts(Long cafeId) {
         List<KeywordCount> allCafeKeywordCounts
-                = keywordRepository.findKeywordCountsByCafeId(cafeId, EXCLUDE_CATEGORY_CODE);
+                = keywordRepository.findKeywordCountsByCafeId(cafeId);
 
         if (allCafeKeywordCounts != null && allCafeKeywordCounts.size() > USER_CHOICE_KEYWORD_CNT) {
             allCafeKeywordCounts = allCafeKeywordCounts.subList(0, USER_CHOICE_KEYWORD_CNT);
