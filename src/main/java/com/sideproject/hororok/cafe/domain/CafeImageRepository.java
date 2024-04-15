@@ -1,7 +1,7 @@
-package com.sideproject.hororok.cafeImage.repository;
+package com.sideproject.hororok.cafe.domain;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafeImage.entity.CafeImage;
+import com.sideproject.hororok.cafe.domain.CafeImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

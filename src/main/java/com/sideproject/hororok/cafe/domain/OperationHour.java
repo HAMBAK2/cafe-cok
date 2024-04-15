@@ -15,26 +15,24 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@Table(name = "operation_hours")
 public class OperationHour extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek date;
+
+    private LocalTime openingTime;
+
+    private LocalTime closingTime;
+
+    private boolean isClosed;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "CAFE_ID")
     private Cafe cafe;
-
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek date;
-    private LocalTime openingTime;
-    private LocalTime closingTime;
-    private boolean isClosed;
-
-
-
-
-
 
 }

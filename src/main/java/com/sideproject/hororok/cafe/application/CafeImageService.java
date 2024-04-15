@@ -1,8 +1,8 @@
-package com.sideproject.hororok.cafeImage.service;
+package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
-import com.sideproject.hororok.cafeImage.entity.CafeImage;
-import com.sideproject.hororok.cafeImage.repository.CafeImageRepository;
+import com.sideproject.hororok.cafe.domain.CafeImage;
+import com.sideproject.hororok.cafe.domain.CafeImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

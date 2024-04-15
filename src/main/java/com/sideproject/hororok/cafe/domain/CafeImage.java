@@ -1,4 +1,4 @@
-package com.sideproject.hororok.cafeImage.entity;
+package com.sideproject.hororok.cafe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.domain.Cafe;
@@ -12,6 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@Table(name = "cafe_images")
 public class CafeImage extends BaseEntity {
 
     @Id
