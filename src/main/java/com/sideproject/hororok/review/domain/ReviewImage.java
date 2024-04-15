@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
@@ -21,6 +24,9 @@ public class ReviewImage extends BaseEntity {
     @Lob
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviews_id")
+    private Review review;
 
 
     public ReviewImage(String imageUrl) {

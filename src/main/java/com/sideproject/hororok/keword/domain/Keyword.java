@@ -2,7 +2,6 @@ package com.sideproject.hororok.keword.domain;
 
 import com.sideproject.hororok.category.domain.Category;
 import com.sideproject.hororok.global.entity.BaseEntity;
-import com.sideproject.hororok.review.domain.ReviewKeyword;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -27,9 +26,9 @@ public class Keyword extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CATEGORY_ID")
+    @JoinColumn(name = "categories_id")
     private Category category;
 
     @OneToMany(mappedBy = "keyword")
-    private List<ReviewKeyword> reviewKeywords = new ArrayList<>();
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 }

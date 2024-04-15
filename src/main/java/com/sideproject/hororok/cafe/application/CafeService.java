@@ -6,7 +6,9 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.application.KeywordService;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
@@ -15,12 +17,13 @@ import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.application.CategoryService;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.dto.ReviewDto;
+import com.sideproject.hororok.review.dto.ReviewDetail;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -35,12 +38,14 @@ public class CafeService {
 
     private final MenuService menuService;
     private final ReviewService reviewService;
+    private final KeywordService keywordService;
     private final CafeRepository cafeRepository;
     private final CategoryService categoryService;
     private final CafeImageService cafeImageService;
     private final OperationHourService operationHourService;
 
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
+
 
     @LogTrace
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
@@ -94,7 +99,10 @@ public class CafeService {
             List<Review> reviews = cafe.getReviews();
             Set<String> keywordNames = new HashSet<>();
             for (Review review : reviews) {
-                keywordNames.addAll(getKeywordNamesListFromKeywords(review.getKeywords()));
+                List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
+                keywordNames
+                        .addAll(getKeywordNamesListFromKeywords
+                                (keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords)));
             }
 
             boolean allMatch = targetKeywordNames.stream()
@@ -115,11 +123,12 @@ public class CafeService {
         Cafe cafe =  findCafeById(cafeId);
         List<MenuInfo> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<ReviewDto> reviews = reviewService.findReviewByCafeId(cafeId);
+        List<ReviewDetail> reviews = reviewService.findReviewByCafeId(cafeId);
         List<String> reviewImageUrls = reviewService.getReviewImageUrlsByCafeId(cafeId);
 
-        //리뷰중에서 태그의 개수가 많은 거 3개 뽑아야함
-        List<KeywordInfo> cafeKeywords = reviewService.findKeywordInReviewByCafeIdOrderByDesc(cafe.getId());
+        //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
+        List<KeywordCount> KeywordCounts = keywordService.getUserChoiceKeywordCounts(cafeId);
+
         addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
 
         OpenStatus openStatus = operationHourService.getOpenStatus(cafeId);
@@ -131,7 +140,7 @@ public class CafeService {
 
         return new CafeDetail(
                 cafe, menus, openStatus, businessHours, closedDay,
-                reviewImageUrls, reviews, cafeKeywords, cafeImageUrls);
+                reviewImageUrls, reviews, KeywordCounts, cafeImageUrls);
     }
 
 
@@ -158,10 +167,10 @@ public class CafeService {
     }
 
     @LogTrace
-    public List<String> getKeywordNamesListFromKeywords(List<Keyword> keywords) {
+    public List<String> getKeywordNamesListFromKeywords(List<KeywordInfo> keywords) {
 
         List<String> keywordNames = new ArrayList<>();
-        for (Keyword keyword : keywords) {
+        for (KeywordInfo keyword : keywords) {
             keywordNames.add(keyword.getName());
         }
 

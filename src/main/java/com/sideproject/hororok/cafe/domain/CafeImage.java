@@ -1,7 +1,6 @@
 package com.sideproject.hororok.cafe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class CafeImage extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CAFE_ID")
+    @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
 }

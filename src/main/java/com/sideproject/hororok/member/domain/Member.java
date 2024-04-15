@@ -33,8 +33,8 @@ public class Member extends BaseEntity {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @OneToMany(mappedBy = "member")
-    private List<Review> reviews = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<Review> reviews = new ArrayList<>();
 
     protected Member() {
 

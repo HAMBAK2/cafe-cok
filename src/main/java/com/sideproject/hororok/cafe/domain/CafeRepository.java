@@ -18,46 +18,8 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
     List<Cafe> findAll();
 
     @LogTrace
-    boolean existsByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
-
-    @LogTrace
     Optional<Cafe> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     @LogTrace
     List<Cafe> findAllByOrderByStarRatingDescNameAsc();
-
-    @LogTrace
-    @Query("SELECT DISTINCT c FROM Cafe c " +
-            "JOIN c.reviews r " +
-            "JOIN r.keywords k " +
-            "WHERE k.name IN :keywords " +
-            "GROUP BY c.id " +
-            "HAVING COUNT(DISTINCT k.id) = :keywordCount")
-    List<Cafe> findAllByReviewAllInKeywords(List<String> keywords);
-
-    @LogTrace
-    @Query("SELECT c FROM Cafe c " +
-            "JOIN c.reviews r " +
-            "JOIN r.keywords k " +
-            "WHERE k.name IN :keywords")
-    List<Cafe> findAllByReviewSomeInKeywords(List<String> keywords);
-
-    @LogTrace
-    @Query("SELECT DISTINCT c " +
-            "FROM Cafe c " +
-            "JOIN c.reviews r " +
-            "JOIN r.keywords k " +
-            "WHERE " +
-            "c.id = :cafeId " +
-            "AND k.name IN :keywords")
-    Optional<Cafe> findDistinctByKeywordsAndCafeId(List<String> keywords, Long cafeId);
-
-    @LogTrace
-    @Query("SELECT DISTINCT k.name " +
-            "FROM Cafe c " +
-                "JOIN c.reviews r " +
-                "JOIN r.keywords k " +
-            "WHERE c.id = :cafeId")
-    List<String> findKeywordsByReviewsCafeId(Long cafeId);
-
 }

@@ -3,7 +3,7 @@ package com.sideproject.hororok.cafe.dto;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.review.dto.ReviewDto;
+import com.sideproject.hororok.review.dto.ReviewDetail;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class CafeBarSearchDto {
     private final Long reviewCount;
 
     private final List<MenuInfo> menus;
-    private final List<ReviewDto> reviews;
+    private final List<ReviewDetail> reviews;
     private final List<String> reviewImageUrls;
     private final List<KeywordInfo> cafeKeywords;
 

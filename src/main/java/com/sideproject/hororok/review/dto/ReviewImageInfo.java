@@ -7,14 +7,13 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
-public class ReviewImageDto {
+public class ReviewImageInfo {
 
     private final Long id;
     private final String imageUrl;
 
-    public static ReviewImageDto from(ReviewImage reviewImage) {
-        return ReviewImageDto.builder()
+    public static ReviewImageInfo from(ReviewImage reviewImage) {
+        return ReviewImageInfo.builder()
                 .id(reviewImage.getId())
                 .imageUrl(reviewImage.getImageUrl())
                 .build();

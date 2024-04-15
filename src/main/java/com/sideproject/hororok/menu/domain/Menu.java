@@ -31,8 +31,7 @@ public class Menu extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CAFE_ID")
+    @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 }

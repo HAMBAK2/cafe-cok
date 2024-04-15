@@ -3,6 +3,7 @@ package com.sideproject.hororok.review.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,18 +37,19 @@ public class Review extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "CAFE_ID")
+    @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "REVIEW_ID")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "members_id")
+    private Member member;
+
+    @OneToMany(mappedBy = "review")
     private List<ReviewImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "review")
-    private List<ReviewKeyword> reviewKeywords = new ArrayList<>();
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+
 
 }

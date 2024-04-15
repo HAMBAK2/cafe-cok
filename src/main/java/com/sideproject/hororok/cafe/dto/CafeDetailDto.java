@@ -4,7 +4,7 @@ import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.review.dto.ReviewDto;
+import com.sideproject.hororok.review.dto.ReviewDetail;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import lombok.*;
 
@@ -37,12 +37,12 @@ public class CafeDetailDto {
     private final double starRating;
 
     private final List<MenuInfo> menus;
-    private final List<ReviewDto> reviews;
+    private final List<ReviewDetail> reviews;
     private final List<String> reviewImageUrls;
     private final List<KeywordInfo> cafeKeywords;
 
     public static CafeDetailDto of(Cafe cafe, List<MenuInfo> menus, OpenStatus openStatus, List<String> businessHours, List<String> closedDay,
-                                   List<String> reviewImageUrls, List<ReviewDto> reviews,
+                                   List<String> reviewImageUrls, List<ReviewDetail> reviews,
                                    List<KeywordInfo> cafeKeywords, List<String> cafeImageUrls) {
 
 

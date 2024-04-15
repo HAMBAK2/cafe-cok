@@ -28,7 +28,6 @@ public class Category extends BaseEntity {
     @Column(name = "code", nullable = false)
     private String code;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Keyword> keywords;
 }

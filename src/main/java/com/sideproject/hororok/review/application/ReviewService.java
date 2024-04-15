@@ -5,16 +5,16 @@ import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.application.KeywordService;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.KeywordRepository;
 import com.sideproject.hororok.member.domain.MemberRepository;
-import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.dto.ReviewDto;
-import com.sideproject.hororok.review.dto.ReviewInfo;
-import com.sideproject.hororok.review.domain.ReviewRepository;
-import com.sideproject.hororok.review.domain.ReviewImage;
+import com.sideproject.hororok.review.domain.*;
+import com.sideproject.hororok.review.dto.ReviewDetail;
 import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -34,9 +34,11 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
     private final KeywordRepository keywordRepository;
+    private final KeywordService keywordService;
 
     @LogTrace
-    public void createReview(ReviewInfo reviewInfo, Long userId, List<MultipartFile> files) throws IOException {
+    @Transactional
+    public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) throws IOException {
 
 
         List<ReviewImage> reviewImages = new ArrayList<>();
@@ -46,13 +48,12 @@ public class ReviewService {
 
         //2. 이미지 url을 받아와서 리뷰 저장
         Review review = new Review();
-        review.setContent(reviewInfo.getContent());
-        review.setSpecialNote(reviewInfo.getSpecialNote());
-        review.setStarRating(reviewInfo.getStarRating());
+        review.setContent(request.getContent());
+        review.setSpecialNote(request.getSpecialNote());
+        review.setStarRating(request.getStarRating());
         review.setImages(reviewImages);
-        Cafe cafe = cafeRepository.findById(reviewInfo.getCafeId())
+        Cafe cafe = cafeRepository.findById(request.getCafeId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid cafe id"));
-
         review.setCafe(cafe);
 
         //유저 저장
@@ -60,11 +61,11 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
         review.setMember(member);
 
+        Review savedReview = reviewRepository.save(review);
 
         //카테고리 키워드 저장
-        CategoryKeywords categoryKeywords = reviewInfo.getCategoryKeywords();
+        CategoryKeywords categoryKeywords = request.getCategoryKeywords();
         List<String> keywordNames = new ArrayList<>();
-        List<Keyword> keywords = new ArrayList<>();
         List<String> atmosphere = categoryKeywords.getAtmosphere();
         List<String> facility = categoryKeywords.getFacility();
         List<String> purpose = categoryKeywords.getPurpose();
@@ -87,16 +88,18 @@ public class ReviewService {
             keywordNames.addAll(menu);
         }
 
-        for (String keyword : keywordNames) {
-            Keyword findKeyword = keywordRepository.findByName(keyword)
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid keyword name"));
-            keywords.add(findKeyword);
+        for (String keywordName : keywordNames) {
+            Keyword findKeyword = keywordRepository.findByName(keywordName)
+                    .orElseThrow(() -> new IllegalArgumentException("잘못된 키워드 이름입니다."));
+
+            CafeReviewKeyword cafeReviewKeyword = new CafeReviewKeyword();
+            cafeReviewKeyword.setReview(savedReview);
+            cafeReviewKeyword.setKeyword(findKeyword);
+            cafeReviewKeyword.setCafe(cafe);
+            cafe.getCafeReviewKeywords().add(cafeReviewKeyword);
+            savedReview.getCafeReviewKeywords().add(cafeReviewKeyword);
+            findKeyword.getCafeReviewKeywords().add(cafeReviewKeyword);
         }
-        review.setKeywords(keywords);
-
-
-        reviewRepository.save(review);
-
     }
 
     private List<ReviewImage> saveImagesObjectStorage(List<MultipartFile> files) throws IOException {
@@ -111,31 +114,20 @@ public class ReviewService {
     }
 
     @LogTrace
-    public List<ReviewDto> findReviewByCafeId(Long cafeId){
+    public List<ReviewDetail> findReviewByCafeId(Long cafeId){
 
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
-        List<ReviewDto> reviewDtos = new ArrayList<>();
+        List<ReviewDetail> reviewDetails = new ArrayList<>();
         for (Review review : reviews) {
-            reviewDtos.add(ReviewDto.of(review, review.getMember().getNickname()));
+
+            List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
+            List<KeywordInfo> keywords = keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords);
+            reviewDetails.add(ReviewDetail.of(review, keywords, review.getMember().getNickname()));
         }
 
-        return reviewDtos;
+        return reviewDetails;
     }
 
-    @LogTrace
-    public List<KeywordInfo> findKeywordInReviewByCafeIdOrderByDesc(Long cafeId) {
-
-        List<Keyword> keywords = reviewRepository.findKeywordInReviewByCafeIdOrderByDesc(cafeId);
-        List<KeywordInfo> keywordInfoList = new ArrayList<>();
-        int idx = 0;
-        for (Keyword keyword : keywords) {
-            if(idx == 3) break;
-            keywordInfoList.add(KeywordInfo.from(keyword));
-            idx++;
-        }
-
-        return keywordInfoList;
-    }
 
 
     @LogTrace

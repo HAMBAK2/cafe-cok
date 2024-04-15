@@ -1,9 +1,10 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDetail;
+import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.menu.dto.MenuInfo;
-import com.sideproject.hororok.review.dto.ReviewDto;
+import com.sideproject.hororok.review.dto.ReviewDetail;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,8 +30,8 @@ public class CafeDetailResponse {
     private final List<String> cafeImageUrls;
     private final List<MenuInfo> menus;
     private final List<String> reviewImageUrls;
-    private final List<ReviewDto> reviews;
-    private final List<KeywordInfo> cafeKeywords;
+    private final List<ReviewDetail> reviews;
+    private final List<KeywordCount> cafeKeywords;
 
     public static CafeDetailResponse from(final CafeDetail cafeDetail) {
 

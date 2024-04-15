@@ -3,6 +3,7 @@ package com.sideproject.hororok.cafe.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.exception.InvalidCafeException;
 import com.sideproject.hororok.global.entity.BaseEntity;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.menu.domain.Menu;
 import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;
@@ -52,21 +53,20 @@ public class Cafe extends BaseEntity {
     @Column(name = "review_count")
     private Long reviewCount;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<Menu> menus = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<Review> reviews = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<CafeImage> images = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cafe")
     private List<OperationHour> operationHours = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 
     protected Cafe(){}
 
