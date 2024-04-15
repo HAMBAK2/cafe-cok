@@ -1,7 +1,6 @@
 package com.sideproject.hororok.category.dto;
 
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

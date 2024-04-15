@@ -2,7 +2,7 @@ package com.sideproject.hororok.member.domain;
 
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
-import com.sideproject.hororok.review.Entity.Review;
+import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -33,8 +33,8 @@ public class Member extends BaseEntity {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @OneToMany(mappedBy = "member")
-    private List<Review> reviews = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<Review> reviews = new ArrayList<>();
 
     protected Member() {
 

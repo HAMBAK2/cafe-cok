@@ -7,10 +7,13 @@ import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.category.service.CategoryService;
+import com.sideproject.hororok.category.application.CategoryService;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.OperationHourRepository;
-import com.sideproject.hororok.review.service.ReviewService;
+import com.sideproject.hororok.keword.application.KeywordService;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
 import com.sideproject.hororok.utils.converter.FormatConverter;
@@ -29,10 +32,9 @@ public class CafePlanService {
 
 
     private final OperationHourRepository operationHourRepository;
-    private final CategoryService categoryService;
-    private final ReviewService reviewService;
     private final CafeService cafeService;
     private final CafeRepository cafeRepository;
+    private final KeywordService keywordService;
 
     @LogTrace
     public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
@@ -110,16 +112,17 @@ public class CafePlanService {
         }
 
         for (Cafe keywordFilteredCafe : keywordFilteredCafes) {
-            List<String> findKeywords = cafeRepository.findKeywordsByReviewsCafeId(keywordFilteredCafe.getId());
+            Long cafeId = keywordFilteredCafe.getId();
+            List<Keyword> findKeywords = keywordService.findByCafeId(cafeId);
 
-            if(keywords.size() > findKeywords.size()) continue;
+            boolean isAllMatch = keywords.stream()
+                    .allMatch(k -> findKeywords.stream()
+                            .anyMatch(fk -> fk.getName().equals(k)));
 
-            boolean isAllMatch = keywords.stream().allMatch(findKeywords::contains);
             if(isAllMatch) allMatchAtKeywordCafes.add(keywordFilteredCafe);
         }
 
         return allMatchAtKeywordCafes;
-
     }
 
     @LogTrace
@@ -152,12 +155,13 @@ public class CafePlanService {
             keywords.addAll(menu);
         }
 
-
         for (Cafe distanceFilteredCafe : distanceFilteredCafes) {
             Long cafeId = distanceFilteredCafe.getId();
-            Optional<Cafe> distinctByKeywordsAndCafeId = cafeRepository.findDistinctByKeywordsAndCafeId(keywords, cafeId);
-            if(distinctByKeywordsAndCafeId.isEmpty()) continue;
-            keywordFilteredCafes.add(distanceFilteredCafe);
+            List<Keyword> findKeywords = keywordService.findByCafeId(cafeId);
+            boolean isContain = findKeywords.stream()
+                    .anyMatch(fw -> keywords.contains(fw.getName()));
+
+            if(isContain) keywordFilteredCafes.add(distanceFilteredCafe);
         }
 
         return keywordFilteredCafes;
