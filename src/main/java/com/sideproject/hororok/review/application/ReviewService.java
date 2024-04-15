@@ -7,6 +7,7 @@ import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.domain.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.KeywordRepository;
@@ -37,7 +38,7 @@ public class ReviewService {
     private final CafeRepository cafeRepository;
     private final KeywordRepository keywordRepository;
     private final KeywordService keywordService;
-
+    private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
     @LogTrace
     @Transactional
     public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) throws IOException {
@@ -98,9 +99,11 @@ public class ReviewService {
             cafeReviewKeyword.setReview(savedReview);
             cafeReviewKeyword.setKeyword(findKeyword);
             cafeReviewKeyword.setCafe(cafe);
-            cafe.getCafeReviewKeywords().add(cafeReviewKeyword);
-            savedReview.getCafeReviewKeywords().add(cafeReviewKeyword);
-            findKeyword.getCafeReviewKeywords().add(cafeReviewKeyword);
+            cafeReviewKeywordRepository.save(cafeReviewKeyword);
+//            cafe.getCafeReviewKeywords().add(cafeReviewKeyword);
+//            savedReview.getCafeReviewKeywords().add(cafeReviewKeyword);
+//            findKeyword.getCafeReviewKeywords().add(cafeReviewKeyword);
+
         }
     }
 

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash(value = "authRefreshToken", timeToLive = 60*10)
+@RedisHash(value = "authRefreshToken", timeToLive = 24*60*60)
 @Getter
 public class AuthRefreshToken {
 
