@@ -8,8 +8,10 @@ import com.sideproject.hororok.menu.domain.Menu;
 import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 
 @Getter
+@Setter
 @Table(name = "cafes")
 @Entity
 public class Cafe extends BaseEntity {
@@ -88,6 +91,17 @@ public class Cafe extends BaseEntity {
         if(!matcher.matches()) {
             throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
         }
+    }
+
+
+    public void addReviewCountAndCalculateStarRating(Integer starRating) {
+        BigDecimal totalScore = this.starRating.multiply(BigDecimal.valueOf(this.reviewCount));
+        BigDecimal newReviewScore = BigDecimal.valueOf(starRating);
+        totalScore = totalScore.add(newReviewScore);
+
+        this.reviewCount++;
+        BigDecimal newReviewCount = BigDecimal.valueOf(this.reviewCount);
+        this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
 

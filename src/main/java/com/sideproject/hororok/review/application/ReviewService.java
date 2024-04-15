@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +40,9 @@ public class ReviewService {
     private final KeywordRepository keywordRepository;
     private final KeywordService keywordService;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
+
+    private final String REVIEW_IMAGE_URL_PREFIX = "https:";
+
     @LogTrace
     @Transactional
     public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) throws IOException {
@@ -55,14 +59,21 @@ public class ReviewService {
         review.setSpecialNote(request.getSpecialNote());
         review.setStarRating(request.getStarRating());
         review.setImages(reviewImages);
+
         Cafe cafe = cafeRepository.findById(request.getCafeId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid cafe id"));
+        cafe.addReviewCountAndCalculateStarRating(review.getStarRating());
         review.setCafe(cafe);
 
         //유저 저장
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
         review.setMember(member);
+
+        for (ReviewImage reviewImage : reviewImages) {
+            reviewImage.setReview(review);
+        }
+        review.getImages().addAll(reviewImages);
 
         Review savedReview = reviewRepository.save(review);
 
@@ -100,20 +111,17 @@ public class ReviewService {
             cafeReviewKeyword.setKeyword(findKeyword);
             cafeReviewKeyword.setCafe(cafe);
             cafeReviewKeywordRepository.save(cafeReviewKeyword);
-//            cafe.getCafeReviewKeywords().add(cafeReviewKeyword);
-//            savedReview.getCafeReviewKeywords().add(cafeReviewKeyword);
-//            findKeyword.getCafeReviewKeywords().add(cafeReviewKeyword);
-
         }
     }
 
     private List<ReviewImage> saveImagesObjectStorage(List<MultipartFile> files) throws IOException {
         List<ReviewImage> reviewImages = new ArrayList<>();
         for (MultipartFile file : files) {
-            ReviewImage reviewImage = new ReviewImage(s3Uploader.upload(file, "review"));
+            ReviewImage reviewImage =
+                    new ReviewImage(s3Uploader.upload(file, "review")
+                            .replace(REVIEW_IMAGE_URL_PREFIX, ""));
             reviewImages.add(reviewImage);
         }
-        ;
 
         return reviewImages;
     }
@@ -157,5 +165,6 @@ public class ReviewService {
 
         return reviewImageUrls;
     }
+
 
 }
