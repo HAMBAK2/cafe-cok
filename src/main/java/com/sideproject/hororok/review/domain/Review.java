@@ -3,7 +3,6 @@ package com.sideproject.hororok.review.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
-import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,8 +13,6 @@ import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
-
-
 @Getter
 @Setter
 @Entity
@@ -24,14 +21,17 @@ public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Lob
+    @Column(name = "content")
     private String content;
 
-    @Column(length = 1000)
+    @Column(name = "specialNote", length = 1000)
     private String specialNote;
 
+    @Column(name = "star_rating")
     private Integer starRating;
 
     @JsonIgnore
@@ -43,16 +43,9 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "REVIEW_ID")
     private List<ReviewImage> images = new ArrayList<>();
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "REVIEW_KEYWORD",
-            joinColumns = @JoinColumn(name = "REVIEW_ID"),
-            inverseJoinColumns = @JoinColumn(name = "KEYWORD_ID")
-    )
-    private List<Keyword> keywords = new ArrayList<>();
+    @OneToMany(mappedBy = "review")
+    private List<ReviewKeyword> reviewKeywords = new ArrayList<>();
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
