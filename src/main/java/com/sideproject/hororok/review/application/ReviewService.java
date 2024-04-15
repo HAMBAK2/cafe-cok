@@ -14,6 +14,7 @@ import com.sideproject.hororok.member.domain.MemberRepository;
 import com.sideproject.hororok.review.domain.*;
 import com.sideproject.hororok.review.dto.ReviewDetail;
 import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.review.dto.ReviewImageInfo;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -122,7 +124,13 @@ public class ReviewService {
 
             List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
             List<KeywordInfo> keywords = keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords);
-            reviewDetails.add(ReviewDetail.of(review, keywords, review.getMember().getNickname()));
+            List<ReviewImage> reviewImages = review.getImages();
+            List<ReviewImageInfo> reviewImageInfos = reviewImages.stream()
+                    .map(ReviewImageInfo::from)
+                    .collect(Collectors.toList());
+
+
+            reviewDetails.add(ReviewDetail.of(review, reviewImageInfos, keywords));
         }
 
         return reviewDetails;
