@@ -8,7 +8,7 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.menu.service.MenuService;
+import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;

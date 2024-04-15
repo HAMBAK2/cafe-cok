@@ -16,12 +16,15 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
+@Table(name = "keywords")
 public class Keyword extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
     @JsonIgnore

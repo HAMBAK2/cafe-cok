@@ -1,6 +1,6 @@
 package com.sideproject.hororok.menu.dto;
 
-import com.sideproject.hororok.menu.entity.Menu;
+import com.sideproject.hororok.menu.domain.Menu;
 import com.sideproject.hororok.utils.converter.FormatConverter;
 import lombok.Builder;
 import lombok.Getter;

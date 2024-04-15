@@ -1,10 +1,10 @@
-package com.sideproject.hororok.menu.service;
+package com.sideproject.hororok.menu.application;
 
 
 import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.menu.entity.Menu;
-import com.sideproject.hororok.menu.repository.MenuRepository;
+import com.sideproject.hororok.menu.domain.Menu;
+import com.sideproject.hororok.menu.domain.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
