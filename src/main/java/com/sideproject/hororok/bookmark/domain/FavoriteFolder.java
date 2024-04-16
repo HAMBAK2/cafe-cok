@@ -11,8 +11,8 @@ import static jakarta.persistence.GenerationType.*;
 
 @Getter
 @Entity
-@Table(name = "bookmark_folders")
-public class BookmarkFolder {
+@Table(name = "favorite_folders")
+public class FavoriteFolder {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
