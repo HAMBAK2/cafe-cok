@@ -1,5 +1,4 @@
-package com.sideproject.hororok.bookmark.domain;
-
+package com.sideproject.hororok.favorite.domain;
 
 import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
@@ -30,4 +29,15 @@ public class FavoriteFolder {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "members_id")
     private Member member;
+
+    protected FavoriteFolder() {
+    }
+
+    public FavoriteFolder(final String name, final String color,
+                          final Boolean isVisible, final Member member) {
+        this.name = name;
+        this.color = color;
+        this.isVisible = isVisible;
+        this.member = member;
+    }
 }

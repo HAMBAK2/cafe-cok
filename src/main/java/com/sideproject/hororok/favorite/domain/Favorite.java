@@ -1,4 +1,4 @@
-package com.sideproject.hororok.bookmark.domain;
+package com.sideproject.hororok.favorite.domain;
 
 import com.sideproject.hororok.cafe.domain.Cafe;
 import jakarta.persistence.*;
