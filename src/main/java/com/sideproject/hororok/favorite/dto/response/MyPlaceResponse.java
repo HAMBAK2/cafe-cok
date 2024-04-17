@@ -12,20 +12,20 @@ import java.util.stream.Collectors;
 @Getter
 public class MyPlaceResponse {
 
-    private Long count;
+    private Long folderCount;
     private List<FavoriteFolderDto> folders;
 
     private MyPlaceResponse() {
     }
 
-    public MyPlaceResponse(final Long count) {
-        this.count = count;
+    public MyPlaceResponse(final Long folderCount) {
+        this.folderCount = folderCount;
         this.folders = new ArrayList<>();
     }
 
-    public MyPlaceResponse(final Long count,
+    public MyPlaceResponse(final Long folderCount,
                            final List<FavoriteFolderDto> folders) {
-        this.count = count;
+        this.folderCount = folderCount;
         this.folders =folders;
     }
 

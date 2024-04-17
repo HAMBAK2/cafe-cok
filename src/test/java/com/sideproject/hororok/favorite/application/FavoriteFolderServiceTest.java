@@ -3,6 +3,7 @@ package com.sideproject.hororok.favorite.application;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.favorite.domain.FavoriteFolder;
 import com.sideproject.hororok.favorite.domain.FavoriteFolderRepository;
+import com.sideproject.hororok.favorite.domain.FavoriteRepository;
 import com.sideproject.hororok.favorite.dto.FavoriteFolderDto;
 import com.sideproject.hororok.favorite.dto.response.MyPlaceResponse;
 import com.sideproject.hororok.member.domain.Member;
@@ -28,6 +29,9 @@ class FavoriteFolderServiceTest{
     @Mock
     private FavoriteFolderRepository favoriteFolderRepository;
 
+    @Mock
+    private FavoriteRepository favoriteRepository;
+
     @InjectMocks
     private FavoriteFolderService favoriteFolderService;
 
@@ -44,7 +48,7 @@ class FavoriteFolderServiceTest{
         LoginMember loginMember = 로그인_맴버();
         when(favoriteFolderRepository
                 .countByMemberId(loginMember.getId()))
-                .thenReturn(폴더_있을때_개수);
+                .thenReturn(폴더_개수);
 
         Member member = 사용자();
         FavoriteFolder folder1 = 폴더1(member);
@@ -57,10 +61,10 @@ class FavoriteFolderServiceTest{
         MyPlaceResponse response = favoriteFolderService.myPlace(loginMember);
 
         //then
-        assertThat(response.getCount()).isEqualTo(폴더_있을때_개수);
-        assertThat(response.getFolders().size()).isEqualTo(폴더_있을때_리스트_사이즈);
-        assertThat(response.getFolders().get(폴더_있을때_리스트_인덱스1).getName()).isEqualTo(즐겨찾기_폴더_이름1);
-        assertThat(response.getFolders().get(폴더_있을때_리스트_인덱스2).getName()).isEqualTo(즐겨찾기_폴더_이름2);
+        assertThat(response.getFolderCount()).isEqualTo(폴더_개수);
+        assertThat(response.getFolders().size()).isEqualTo(폴더_리스트_사이즈);
+        assertThat(response.getFolders().get(폴더_리스트_인덱스1).getName()).isEqualTo(즐겨찾기_폴더_이름1);
+        assertThat(response.getFolders().get(폴더_리스트_인덱스2).getName()).isEqualTo(즐겨찾기_폴더_이름2);
     }
 
     @Test

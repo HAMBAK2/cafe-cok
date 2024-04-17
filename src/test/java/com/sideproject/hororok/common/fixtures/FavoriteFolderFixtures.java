@@ -7,15 +7,17 @@ import com.sideproject.hororok.member.domain.Member;
 
 import java.util.List;
 
+import static com.sideproject.hororok.common.fixtures.FavoriteFixtures.폴더_즐겨찾기_개수;
+
 
 public class FavoriteFolderFixtures {
 
-    public static final Long 폴더_있을때_개수 = 2L;
-    public static final Integer 폴더_있을때_리스트_사이즈 = 2;
-    public static final Integer 폴더_있을때_리스트_인덱스1 = 0;
-    public static final Integer 폴더_있을때_리스트_인덱스2 = 1;
-    public static final Long 폴더_있을때_ID_1 = 1L;
-    public static final Long 폴더_있을때_ID_2 = 2L;
+    public static final Long 폴더_개수 = 2L;
+    public static final Integer 폴더_리스트_사이즈 = 2;
+    public static final Integer 폴더_리스트_인덱스1 = 0;
+    public static final Integer 폴더_리스트_인덱스2 = 1;
+    public static final Long 폴더_ID_1 = 1L;
+    public static final Long 폴더_ID_2 = 2L;
 
     /* 폴더1 */
     public static final String 즐겨찾기_폴더_이름1 = "즐겨찾기_폴더_이름1";
@@ -42,7 +44,7 @@ public class FavoriteFolderFixtures {
             final Long folderId, final String name,
             final String color, final Boolean isVisible){
         return FavoriteFolderDto.of(
-                folderId, name, color, isVisible);
+                folderId, name, color, isVisible, 폴더_즐겨찾기_개수);
     }
 
     public static MyPlaceResponse 마이_플레이스_응답(

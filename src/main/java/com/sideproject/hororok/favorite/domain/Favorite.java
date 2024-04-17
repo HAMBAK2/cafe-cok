@@ -25,4 +25,12 @@ public class Favorite {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bookmark_folders_id")
     private FavoriteFolder favoriteFolder;
+
+    protected Favorite() {
+    }
+
+    public Favorite(final Cafe cafe, final FavoriteFolder favoriteFolder) {
+        this.cafe = cafe;
+        this.favoriteFolder = favoriteFolder;
+    }
 }
