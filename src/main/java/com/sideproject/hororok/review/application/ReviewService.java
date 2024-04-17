@@ -1,7 +1,6 @@
 package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.S3.component.S3Uploader;
-import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
@@ -43,7 +42,6 @@ public class ReviewService {
 
     private final String REVIEW_IMAGE_URL_PREFIX = "https:";
 
-    @LogTrace
     @Transactional
     public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) throws IOException {
 
@@ -126,7 +124,7 @@ public class ReviewService {
         return reviewImages;
     }
 
-    @LogTrace
+    
     public List<ReviewDetail> findReviewByCafeId(Long cafeId){
 
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
@@ -149,12 +147,12 @@ public class ReviewService {
 
 
 
-    @LogTrace
+    
     public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
         return reviewRepository.findReviewImagesByCafeId(cafeId);
     }
 
-    @LogTrace
+    
     public List<String> getReviewImageUrlsByCafeId(Long cafeId) {
 
         List<ReviewImage> reviewImagesByCafeId = findReviewImagesByCafeId(cafeId);

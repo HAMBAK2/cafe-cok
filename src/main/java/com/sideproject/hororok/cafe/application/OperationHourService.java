@@ -1,6 +1,5 @@
 package com.sideproject.hororok.cafe.application;
 
-import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.domain.OpenStatus;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.OperationHourRepository;
@@ -22,7 +21,7 @@ public class OperationHourService {
 
     private final OperationHourRepository operationHourRepository;
 
-    @LogTrace
+    
     public OpenStatus getOpenStatus(Long cafeId){
 
         LocalTime time = LocalTime.now();
@@ -39,7 +38,7 @@ public class OperationHourService {
         return OpenStatus.OPEN;
     }
 
-    @LogTrace
+    
     public List<String> getClosedDay(Long cafeId) {
 
 
@@ -56,7 +55,7 @@ public class OperationHourService {
         return closeDays;
     }
 
-    @LogTrace
+    
     public List<String> getBusinessHours(Long cafeId) {
 
         List<OperationHour> businessHours = findBusinessHoursByCafeId(cafeId);
@@ -77,18 +76,18 @@ public class OperationHourService {
         return convertedBusinessHours;
     }
 
-    @LogTrace
+    
     private Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date){
 
         return operationHourRepository.findByCafeIdAndDate(cafeId, date);
     }
 
-    @LogTrace
+    
     private List<OperationHour> findClosedDayByCafeId(Long cafeId) {
         return operationHourRepository.findClosedDayByCafeId(cafeId);
     }
 
-    @LogTrace
+    
     private List<OperationHour> findBusinessHoursByCafeId(Long cafeId) {
         return operationHourRepository.findBusinessHoursByCafeId(cafeId);
     }

@@ -1,19 +1,15 @@
 package com.sideproject.hororok.cafe.application;
 
-import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.CreatePlanDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.category.application.CategoryService;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.OperationHourRepository;
 import com.sideproject.hororok.keword.application.KeywordService;
-import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
-import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.enums.PlanMatchType;
 import com.sideproject.hororok.utils.converter.FormatConverter;
@@ -36,7 +32,6 @@ public class CafePlanService {
     private final CafeRepository cafeRepository;
     private final KeywordService keywordService;
 
-    @LogTrace
     public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
         
         PlanMatchType matchType = PlanMatchType.MATCH;
@@ -76,11 +71,10 @@ public class CafePlanService {
         }
 
         matchType = PlanMatchType.SIMILAR;
-
+        
         return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(keywordFilteredCafes));
     }
 
-    @LogTrace
     //카드가 모두 일치하는 경우를 찾는다.
     private List<Cafe> getAllMatchAtKeywordCafes(List<Cafe> keywordFilteredCafes, CreatePlanSearchCond searchCond) {
 
@@ -125,7 +119,6 @@ public class CafePlanService {
         return allMatchAtKeywordCafes;
     }
 
-    @LogTrace
     //키워드가 완전히 불일치 하는 경우가 있는지 판단한다.
     private List<Cafe> getKeywordFilteredCafes(CreatePlanSearchCond searchCond, List<Cafe> distanceFilteredCafes) {
 
@@ -167,7 +160,7 @@ public class CafePlanService {
         return keywordFilteredCafes;
     }
 
-    @LogTrace
+    
     private void orderByDistanceAndStarRating(List<Cafe> targetCafeList, BigDecimal userLatitude, BigDecimal userLongitude) {
 
         Comparator<Cafe> distanceAndRatingComparator = new Comparator<Cafe>() {
@@ -189,7 +182,7 @@ public class CafePlanService {
 
     }
 
-    @LogTrace
+    
     private List<OperationHour> dayAndTimeFiltering(CreatePlanSearchCond searchCond) {
 
         String dateString = searchCond.getDate();
@@ -203,7 +196,7 @@ public class CafePlanService {
 
     }
 
-    @LogTrace
+    
     private List<Cafe> distanceFiltering(List<OperationHour> inOperationHoursCafes, CreatePlanSearchCond searchCond) {
 
         List<Cafe> distanceFilteredCafe = new ArrayList<>();
