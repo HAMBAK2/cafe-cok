@@ -83,4 +83,11 @@ public class BookmarkFolderService {
         bookmarkFolderRepository.save(findFolder);
     }
 
+    @Transactional
+    public BookmarkFoldersResponse deleteFolder(Long folderId, LoginMember loginMember) {
+
+        bookmarkFolderRepository.deleteById(folderId);
+        return bookmarkFolders(loginMember);
+    }
+
 }

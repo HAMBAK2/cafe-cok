@@ -57,4 +57,15 @@ public class BookmarkController {
         bookmarkFolderService.updateFolderVisible(folderId);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/folder/{folderId}/delete")
+    @Operation(summary = "폴더 삭제 버튼을 눌렀을 때 동작하는 기능")
+    public ResponseEntity<BookmarkFoldersResponse> folderDelete(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long folderId){
+
+        BookmarkFoldersResponse response
+                = bookmarkFolderService.deleteFolder(folderId, loginMember);
+        return ResponseEntity.ok(response);
+    }
 }
