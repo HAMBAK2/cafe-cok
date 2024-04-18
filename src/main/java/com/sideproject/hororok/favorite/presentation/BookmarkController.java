@@ -5,6 +5,7 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.favorite.application.BookmarkFolderService;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,10 +30,21 @@ public class BookmarkController {
 
     @PostMapping("/folder/save")
     @Operation(summary = "북마크 -> 새 폴더 추가 -> 완료 선택 시 기능")
-    public ResponseEntity<BookmarkFoldersResponse> folderSave(@AuthenticationPrincipal LoginMember loginMember,
-                           @RequestBody BookmarkFolderSaveRequest request) {
+    public ResponseEntity<BookmarkFoldersResponse> folderSave(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestBody BookmarkFolderSaveRequest request) {
 
         BookmarkFoldersResponse response = bookmarkFolderService.save(request, loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/folder/update")
+    @Operation(summary = "'편집하기' -> '수정' -> '완료' 선택 시 기능")
+    public ResponseEntity<BookmarkFoldersResponse> folderUpdate(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestBody BookmarkFolderUpdateRequest request) {
+
+        BookmarkFoldersResponse response = bookmarkFolderService.update(request, loginMember);
         return ResponseEntity.ok(response);
     }
 }
