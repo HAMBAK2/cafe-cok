@@ -1,6 +1,7 @@
 package com.sideproject.hororok.auth.presentation;
 
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.auth.application.AuthService;
 import com.sideproject.hororok.auth.application.OAuthClient;
 import com.sideproject.hororok.auth.dto.OAuthMember;
@@ -48,6 +49,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
     })
+    @LogTrace
     public ResponseEntity<AccessAndRefreshTokenResponse> login(
             @Parameter(name = "code", description = "소셜 로그인 요청으로 발급받은 code")
             @RequestParam("code") final String code) {
@@ -83,6 +85,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
     })
+    @LogTrace
     public ResponseEntity<AccessTokenResponse> refresh(
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
 

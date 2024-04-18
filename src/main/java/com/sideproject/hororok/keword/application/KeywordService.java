@@ -1,5 +1,7 @@
 package com.sideproject.hororok.keword.application;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
+import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.KeywordRepository;
@@ -21,10 +23,12 @@ public class KeywordService {
 
     private final Integer USER_CHOICE_KEYWORD_CNT = 6;
 
+    @LogTrace
     public KeywordInfo getKeywordInfoByReviewKeyword(CafeReviewKeyword cafeReviewKeyword) {
         return KeywordInfo.from(cafeReviewKeyword.getKeyword());
     }
 
+    @LogTrace
     public List<KeywordInfo> getKeywordInfosByCafeReviewKeywords(List<CafeReviewKeyword> cafeReviewKeywords) {
         List<KeywordInfo> keywordInfos = new ArrayList<>();
         for (CafeReviewKeyword cafeReviewKeyword : cafeReviewKeywords) {
@@ -34,6 +38,7 @@ public class KeywordService {
         return keywordInfos;
     }
 
+    @LogTrace
     public List<KeywordCount> getUserChoiceKeywordCounts(Long cafeId) {
         List<KeywordCount> allCafeKeywordCounts
                 = keywordRepository.findKeywordCountsByCafeId(cafeId);
@@ -45,6 +50,7 @@ public class KeywordService {
         return allCafeKeywordCounts;
     }
 
+    @LogTrace
     public List<Keyword> findByCafeId(Long cafeId) {
         return keywordRepository.findByCafeId(cafeId);
     }

@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.presentation;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
@@ -32,7 +33,7 @@ public class CafeController {
 
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
-    
+    @LogTrace
     public ResponseEntity<CafeHomeResponse> home() {
 
         CafeHomeResponse response
@@ -42,7 +43,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}")
     @Operation(summary = "해당하는 카페의 상세 정보를 보여주는 기능")
-    
+    @LogTrace
     public ResponseEntity<CafeDetailResponse> detail(
             @Parameter(description = "카페의 ID")
             @PathVariable Long cafeId){
@@ -54,7 +55,7 @@ public class CafeController {
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
-    
+    @LogTrace
     public ResponseEntity<CafeFindAgainResponse> findAgain(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
@@ -73,7 +74,7 @@ public class CafeController {
                     "찾는 카페가 존재하지 않는 경우: 근처 카페의 리스트 cafes(근처에 카페가 있는 경우), 카테고리와 키워드 정보, exist=false",
             content = @Content(schema = @Schema(implementation = CafeFindBarResponse.class))
     )
-    
+    @LogTrace
     public ResponseEntity<CafeFindBarResponse> findBar(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
@@ -84,7 +85,7 @@ public class CafeController {
 
     @PostMapping("/find/category")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
-    
+    @LogTrace
     public ResponseEntity<CafeFindCategoryResponse> findCategory(
             @RequestBody CafeFindCategoryRequest request) {
 
@@ -95,7 +96,7 @@ public class CafeController {
     @PostMapping("/plans")
     @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
     @Parameter(description = "방문위치(좌표), 몇분거리, 방문일자(요일 하나, 시간은 범위), 키워드 5개")
-    
+    @LogTrace
     public ResponseEntity<CreatePlanDto> createPlan( @RequestBody CreatePlanSearchCond searchCond
             ) {
 

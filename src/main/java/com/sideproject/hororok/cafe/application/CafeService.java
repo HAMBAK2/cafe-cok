@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.application;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
@@ -46,7 +47,7 @@ public class CafeService {
     private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
 
-    
+    @LogTrace
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
 
         int idx = 0;
@@ -56,13 +57,13 @@ public class CafeService {
         }
     }
 
-    
+    @LogTrace
     public Cafe findCafeById(Long cafeId) {
         return cafeRepository.findById(cafeId)
                 .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
-    
+    @LogTrace
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
         List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
@@ -71,7 +72,7 @@ public class CafeService {
         return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywords);
     }
 
-    
+    @LogTrace
     public CafeFindBarResponse findCafeByBar(BigDecimal latitude, BigDecimal longitude) {
 
         Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
@@ -85,7 +86,7 @@ public class CafeService {
                 .existFrom(findCafeDetailByCafeId(findCafe.get().getId()));
     }
 
-    
+    @LogTrace
     public CafeFindCategoryResponse findCafeByCategory(CafeFindCategoryRequest request) {
 
         List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
@@ -116,7 +117,7 @@ public class CafeService {
                 .build();
     }
 
-    
+    @LogTrace
     public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
         Cafe cafe =  findCafeById(cafeId);
@@ -143,7 +144,7 @@ public class CafeService {
     }
 
 
-    
+    @LogTrace
     public List<WithinRadiusCafe> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
         List<Cafe> cafes = findAll();
         List<WithinRadiusCafe> withinRadiusCafes = new ArrayList<>();
@@ -165,7 +166,7 @@ public class CafeService {
         return withinRadiusCafes;
     }
 
-    
+    @LogTrace
     public List<String> getKeywordNamesListFromKeywords(List<KeywordInfo> keywords) {
 
         List<String> keywordNames = new ArrayList<>();
@@ -176,7 +177,7 @@ public class CafeService {
         return keywordNames;
     }
 
-    
+    @LogTrace
     public List<String> getKeywordNamesListFromCategoryKeywords(CategoryKeywords categoryKeywords) {
 
         List<String> keywordNames = new ArrayList<>();
@@ -204,12 +205,12 @@ public class CafeService {
         return keywordNames;
     }
 
-    
+    @LogTrace
     public List<Cafe> findAll() {
         return cafeRepository.findAll();
     }
 
-    
+    @LogTrace
     public List<Cafe> findAllByOrderByStarRatingDescNameAsc() {
         return cafeRepository.findAllByOrderByStarRatingDescNameAsc();
     }

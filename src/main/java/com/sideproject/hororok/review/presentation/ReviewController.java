@@ -1,6 +1,7 @@
 package com.sideproject.hororok.review.presentation;
 
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.application.ReviewService;
@@ -29,6 +30,7 @@ public class ReviewController {
     @PostMapping(value = "/review/create",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 작성 기능")
+    @LogTrace
     public ResponseEntity<Void> createReview(
             @AuthenticationPrincipal LoginMember loginMember,
             @Parameter(description = "사진을 제외한 Review의 정보를 담은 객체")

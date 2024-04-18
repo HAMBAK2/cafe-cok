@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.application;
 
+import com.sideproject.hororok.aop.annotation.LogTrace;
 import com.sideproject.hororok.cafe.domain.CafeImage;
 import com.sideproject.hororok.cafe.domain.CafeImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,12 @@ public class CafeImageService {
 
     private final CafeImageRepository cafeImageRepository;
 
+    @LogTrace
     public List<String> findCafeImageUrlsByCafeId(Long cafeId) {
         return cafeImageRepository.findCafeImagesUrlsByCafeId(cafeId);
     }
 
+    @LogTrace
     public Optional<String> findOneImageUrlByCafeId(Long cafeId) {
         List<CafeImage> cafeImages = cafeImageRepository.findByCafeId(cafeId);
         if (!cafeImages.isEmpty()) {

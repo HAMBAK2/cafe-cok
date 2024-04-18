@@ -8,31 +8,28 @@ import com.sideproject.hororok.auth.dto.OAuthMember;
 import com.sideproject.hororok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.hororok.auth.dto.response.AccessTokenResponse;
-import com.sideproject.hororok.favorite.domain.BookmarkFolder;
-import com.sideproject.hororok.favorite.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+@Service
 public class AuthService {
 
-    private final TokenCreator tokenCreator;
     private final MemberRepository memberRepository;
-    private final OAuthTokenRepository oAuthTokenRepository;
-    private final BookmarkFolderRepository bookmarkFolderRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
+    private final OAuthTokenRepository oAuthTokenRepository;
+    private final TokenCreator tokenCreator;
 
-    private final String BASIC_FOLDER_NAME = "기본 폴더";
-    private final String BASIC_FOLDER_COLOR = "기본 색상";
-    private final Boolean BASIC_FOLDER_VISIBLE = true;
-    private final Boolean BASIC_FOLDER_DEFAULT = true;
-
+    public AuthService(final MemberRepository memberRepository, final OAuthTokenRepository oAuthTokenRepository,
+                       final TokenCreator tokenCreator, final AuthRefreshTokenRepository authRefreshTokenRepository) {
+        this.memberRepository = memberRepository;
+        this.oAuthTokenRepository = oAuthTokenRepository;
+        this.tokenCreator = tokenCreator;
+        this.authRefreshTokenRepository = authRefreshTokenRepository;
+    }
 
     @Transactional
     public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final OAuthMember oAuthMember) {
@@ -68,10 +65,6 @@ public class AuthService {
 
     private Member saveMember(final OAuthMember oAuthMember) {
         Member savedMember = memberRepository.save(oAuthMember.toMember());
-        bookmarkFolderRepository
-                .save(new BookmarkFolder(
-                        BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR,
-                        BASIC_FOLDER_VISIBLE, BASIC_FOLDER_DEFAULT, savedMember));
         return savedMember;
     }
 
