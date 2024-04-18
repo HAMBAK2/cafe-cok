@@ -40,7 +40,7 @@ public class BookmarkRepositoryTest extends RepositoryTest {
         Bookmark savedBookmark = bookmarkRepository.save(즐겨찾기(savedCafe, savedFolder));
 
         //when
-        Long count = bookmarkRepository.countByFavoriteFolderId(savedFolder.getId());
+        Long count = bookmarkRepository.countByBookmarkFolderId(savedFolder.getId());
 
         //then
         assertThat(count).isEqualTo(1L);

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
-    Long countByFavoriteFolderId(Long favoriteFolderId);
+    Long countByBookmarkFolderId(Long favoriteFolderId);
 }

@@ -5,12 +5,17 @@ import com.sideproject.hororok.favorite.domain.BookmarkFolder;
 import com.sideproject.hororok.favorite.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.favorite.domain.BookmarkRepository;
 import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.member.domain.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +25,7 @@ public class BookmarkFolderService {
 
     private final BookmarkFolderRepository bookmarkFolderRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final MemberRepository memberRepository;
 
     public BookmarkFoldersResponse bookmarkFolders(LoginMember loginMember) {
 
@@ -37,8 +43,18 @@ public class BookmarkFolderService {
         return folders.stream()
                 .map(folder ->
                         BookmarkFolderDto
-                                .of(folder, bookmarkRepository.countByFavoriteFolderId(folder.getId())))
+                                .of(folder, bookmarkRepository.countByBookmarkFolderId(folder.getId())))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public BookmarkFoldersResponse save(BookmarkFolderSaveRequest request, LoginMember loginMember){
+
+        Member findMember = memberRepository.findById(loginMember.getId())
+                .orElseThrow(() -> new EntityNotFoundException("맴버가 존재하지 않습니다."));
+        BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
+        bookmarkFolderRepository.save(bookmarkFolder);
+        return bookmarkFolders(loginMember);
     }
 
 
