@@ -31,6 +31,7 @@ public class AuthService {
     private final String BASIC_FOLDER_NAME = "기본 폴더";
     private final String BASIC_FOLDER_COLOR = "기본 색상";
     private final Boolean BASIC_FOLDER_VISIBLE = true;
+    private final Boolean BASIC_FOLDER_DEFAULT = true;
 
 
     @Transactional
@@ -68,7 +69,9 @@ public class AuthService {
     private Member saveMember(final OAuthMember oAuthMember) {
         Member savedMember = memberRepository.save(oAuthMember.toMember());
         bookmarkFolderRepository
-                .save(new BookmarkFolder(BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR, BASIC_FOLDER_VISIBLE, savedMember));
+                .save(new BookmarkFolder(
+                        BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR,
+                        BASIC_FOLDER_VISIBLE, BASIC_FOLDER_DEFAULT, savedMember));
         return savedMember;
     }
 
