@@ -13,13 +13,13 @@ import static com.sideproject.hororok.common.fixtures.FavoriteFolderFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
-class FavoriteFolderRepositoryTest extends RepositoryTest {
+class BookmarkFolderRepositoryTest extends RepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
-    private FavoriteFolderRepository favoriteFolderRepository;
+    private BookmarkFolderRepository bookmarkFolderRepository;
     
     private final Long FOLDER_COUNT = 1L;
     private final Integer FOLDER_SIZE = 1;
@@ -30,10 +30,10 @@ class FavoriteFolderRepositoryTest extends RepositoryTest {
 
        //given
         Member member = memberRepository.save(사용자());
-        FavoriteFolder folder = favoriteFolderRepository.save(폴더1(member));
+        BookmarkFolder folder = bookmarkFolderRepository.save(폴더1(member));
 
         //when
-        Long count = favoriteFolderRepository.countByMemberId(member.getId());
+        Long count = bookmarkFolderRepository.countByMemberId(member.getId());
 
         //then
         assertThat(count).isEqualTo(FOLDER_COUNT);
@@ -46,11 +46,11 @@ class FavoriteFolderRepositoryTest extends RepositoryTest {
 
         //given
         Member member = memberRepository.save(사용자());
-        FavoriteFolder folder = favoriteFolderRepository.save(폴더1(member));
+        BookmarkFolder folder = bookmarkFolderRepository.save(폴더1(member));
 
         //when
-        List<FavoriteFolder> folders = favoriteFolderRepository.findByMemberId(member.getId());
-        FavoriteFolder findFolder = folders.get(0);
+        List<BookmarkFolder> folders = bookmarkFolderRepository.findByMemberId(member.getId());
+        BookmarkFolder findFolder = folders.get(0);
 
         //then
         assertThat(folders.size()).isEqualTo(FOLDER_SIZE);

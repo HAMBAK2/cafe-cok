@@ -8,9 +8,9 @@ import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 
 @Getter
-@Table(name = "favorites")
+@Table(name = "bookmarks")
 @Entity
-public class Favorite {
+public class Bookmark {
 
 
     @Id
@@ -24,13 +24,13 @@ public class Favorite {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bookmark_folders_id")
-    private FavoriteFolder favoriteFolder;
+    private BookmarkFolder bookmarkFolder;
 
-    protected Favorite() {
+    protected Bookmark() {
     }
 
-    public Favorite(final Cafe cafe, final FavoriteFolder favoriteFolder) {
+    public Bookmark(final Cafe cafe, final BookmarkFolder bookmarkFolder) {
         this.cafe = cafe;
-        this.favoriteFolder = favoriteFolder;
+        this.bookmarkFolder = bookmarkFolder;
     }
 }

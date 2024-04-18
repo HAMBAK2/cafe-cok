@@ -1,8 +1,8 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.favorite.domain.FavoriteFolder;
-import com.sideproject.hororok.favorite.dto.FavoriteFolderDto;
-import com.sideproject.hororok.favorite.dto.response.MyPlaceResponse;
+import com.sideproject.hororok.favorite.domain.BookmarkFolder;
+import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
+import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
 import java.util.List;
@@ -30,27 +30,27 @@ public class FavoriteFolderFixtures {
     public static final Boolean 즐겨찾기_폴더_노출여부2 = true;
 
 
-    public static FavoriteFolder 폴더1(final Member member) {
+    public static BookmarkFolder 폴더1(final Member member) {
 
-        return new FavoriteFolder(즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1, member);
+        return new BookmarkFolder(즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1, member);
     }
 
-    public static FavoriteFolder 폴더2(final Member member) {
+    public static BookmarkFolder 폴더2(final Member member) {
 
-        return new FavoriteFolder(즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2, 즐겨찾기_폴더_노출여부2, member);
+        return new BookmarkFolder(즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2, 즐겨찾기_폴더_노출여부2, member);
     }
 
-    public static FavoriteFolderDto 폴더_Dto(
+    public static BookmarkFolderDto 폴더_Dto(
             final Long folderId, final String name,
             final String color, final Boolean isVisible){
-        return FavoriteFolderDto.of(
+        return BookmarkFolderDto.of(
                 folderId, name, color, isVisible, 폴더_즐겨찾기_개수);
     }
 
-    public static MyPlaceResponse 마이_플레이스_응답(
+    public static BookmarkFoldersResponse 마이_플레이스_응답(
             final Long count,
-            List<FavoriteFolderDto> folders) {
+            List<BookmarkFolderDto> folders) {
 
-        return new MyPlaceResponse(count, folders);
+        return new BookmarkFoldersResponse(count, folders);
     }
 }
