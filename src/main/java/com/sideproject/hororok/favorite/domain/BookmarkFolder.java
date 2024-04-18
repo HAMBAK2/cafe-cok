@@ -1,5 +1,6 @@
 package com.sideproject.hororok.favorite.domain;
 
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,5 +40,11 @@ public class BookmarkFolder {
         this.color = color;
         this.isVisible = isVisible;
         this.member = member;
+    }
+
+    public void change(BookmarkFolderUpdateRequest request) {
+        this.name = request.getName();
+        this.color = request.getColor();
+        this.isVisible = request.getIsVisible();
     }
 }
