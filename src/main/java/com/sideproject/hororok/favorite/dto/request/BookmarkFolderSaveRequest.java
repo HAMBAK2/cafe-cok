@@ -24,6 +24,7 @@ public class BookmarkFolderSaveRequest {
 
     public BookmarkFolder toBookmarkFolder(Member member) {
         return new BookmarkFolder(
-                this.name, this.color, this.isVisible, member);
+                this.name, this.color,
+                this.isVisible, false, member);
     }
 }
