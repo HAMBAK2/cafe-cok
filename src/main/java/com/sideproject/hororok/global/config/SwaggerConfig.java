@@ -53,7 +53,7 @@ public class SwaggerConfig {
     public GroupedOpenApi requiredAccessTokenGroup() {
         String[] pathsToMatch = {
                 "/api/review/create",
-                "/api/favorite/**"
+                "/api/bookmark/**"
         };
 
 
@@ -71,7 +71,7 @@ public class SwaggerConfig {
 
         String[] pathsToExclude = {
                 "/api/review/create",
-                "/api/favorite/**"
+                "/api/bookmark/**"
         };
 
 
