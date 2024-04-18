@@ -4,9 +4,12 @@ package com.sideproject.hororok.favorite.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.favorite.application.BookmarkFolderService;
+import com.sideproject.hororok.favorite.application.BookmarkService;
+import com.sideproject.hororok.favorite.domain.BookmarkFolder;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.favorite.dto.response.BookmarksResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +22,23 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Favorite", description = "즐겨찾기(북마크) 관련 API")
 public class BookmarkController {
 
+    private final BookmarkService bookmarkService;
     private final BookmarkFolderService bookmarkFolderService;
     
     @GetMapping("/folders")
     @Operation(summary = "하단 탭의 \"저장\" 버튼을 눌렀을 때 필요한 정보 제공")
     public ResponseEntity<BookmarkFoldersResponse> myPlace(@AuthenticationPrincipal LoginMember loginMember) {
         BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/folder/{folderId}")
+    @Operation(summary = "북마크 폴더를 선택 시 동작하는 기능")
+    public ResponseEntity<BookmarksResponse> bookmarks(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long folderId) {
+
+        BookmarksResponse response = bookmarkService.bookmarks(folderId);
         return ResponseEntity.ok(response);
     }
 
