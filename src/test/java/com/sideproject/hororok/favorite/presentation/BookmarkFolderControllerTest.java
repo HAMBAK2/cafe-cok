@@ -22,23 +22,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class BookmarkControllerTest extends ControllerTest {
 
-
-
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer fake-token";
 
     @Test
     @DisplayName("하단 탭의 \"저장\" 버튼을 눌렀을 때 필요한 정보 제공한다.")
-    public void testMyPlace() throws Exception {
+    public void testBookmarkFolders() throws Exception {
 
         List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
         BookmarkFolderDto bookmarkFolderDto1 =
-                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1,
-                        즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
+                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
+                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
 
         BookmarkFolderDto bookmarkFolderDto2 =
-                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2,
-                        즐겨찾기_폴더_색상2, 즐겨찾기_폴더_노출여부2);
+                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
+                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
         fakeFolders.add(bookmarkFolderDto1);
         fakeFolders.add(bookmarkFolderDto2);
 
