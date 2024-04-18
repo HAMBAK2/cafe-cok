@@ -8,8 +8,8 @@ import com.sideproject.hororok.auth.dto.OAuthMember;
 import com.sideproject.hororok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.hororok.auth.dto.response.AccessTokenResponse;
-import com.sideproject.hororok.favorite.domain.FavoriteFolder;
-import com.sideproject.hororok.favorite.domain.FavoriteFolderRepository;
+import com.sideproject.hororok.favorite.domain.BookmarkFolder;
+import com.sideproject.hororok.favorite.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class AuthService {
     private final TokenCreator tokenCreator;
     private final MemberRepository memberRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
-    private final FavoriteFolderRepository favoriteFolderRepository;
+    private final BookmarkFolderRepository bookmarkFolderRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
@@ -67,8 +67,8 @@ public class AuthService {
 
     private Member saveMember(final OAuthMember oAuthMember) {
         Member savedMember = memberRepository.save(oAuthMember.toMember());
-        favoriteFolderRepository
-                .save(new FavoriteFolder(BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR, BASIC_FOLDER_VISIBLE, savedMember));
+        bookmarkFolderRepository
+                .save(new BookmarkFolder(BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR, BASIC_FOLDER_VISIBLE, savedMember));
         return savedMember;
     }
 

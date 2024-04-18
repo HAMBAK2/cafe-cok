@@ -2,8 +2,8 @@ package com.sideproject.hororok.favorite.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
-import com.sideproject.hororok.favorite.dto.FavoriteFolderDto;
-import com.sideproject.hororok.favorite.dto.response.MyPlaceResponse;
+import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
+import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
-class FavoriteControllerTest extends ControllerTest {
+class BookmarkControllerTest extends ControllerTest {
 
 
 
@@ -31,26 +31,26 @@ class FavoriteControllerTest extends ControllerTest {
     @DisplayName("하단 탭의 \"저장\" 버튼을 눌렀을 때 필요한 정보 제공한다.")
     public void testMyPlace() throws Exception {
 
-        List<FavoriteFolderDto> fakeFolders = new ArrayList<>();
-        FavoriteFolderDto favoriteFolderDto1 =
+        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
+        BookmarkFolderDto bookmarkFolderDto1 =
                 폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1,
                         즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
 
-        FavoriteFolderDto favoriteFolderDto2 =
+        BookmarkFolderDto bookmarkFolderDto2 =
                 폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2,
                         즐겨찾기_폴더_색상2, 즐겨찾기_폴더_노출여부2);
-        fakeFolders.add(favoriteFolderDto1);
-        fakeFolders.add(favoriteFolderDto2);
+        fakeFolders.add(bookmarkFolderDto1);
+        fakeFolders.add(bookmarkFolderDto2);
 
-        MyPlaceResponse fakeResponse = 마이_플레이스_응답(폴더_개수, fakeFolders);
+        BookmarkFoldersResponse fakeResponse = 마이_플레이스_응답(폴더_개수, fakeFolders);
 
 
-        when(favoriteFolderService
-                .myPlace(any(LoginMember.class)))
+        when(bookmarkFolderService
+                .bookmarkFolders(any(LoginMember.class)))
                 .thenReturn(fakeResponse);
 
         mockMvc.perform(
-                    get("/api/favorite/myPlace")
+                    get("/api/bookmark/folders")
                             .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                             .accept(MediaType.APPLICATION_JSON)
                             .contentType(MediaType.APPLICATION_JSON))

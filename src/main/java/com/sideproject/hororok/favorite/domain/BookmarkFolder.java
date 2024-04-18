@@ -10,8 +10,8 @@ import static jakarta.persistence.GenerationType.*;
 
 @Getter
 @Entity
-@Table(name = "favorite_folders")
-public class FavoriteFolder {
+@Table(name = "bookmark_folders")
+public class BookmarkFolder {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -30,10 +30,10 @@ public class FavoriteFolder {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    protected FavoriteFolder() {
+    protected BookmarkFolder() {
     }
 
-    public FavoriteFolder(final String name, final String color,
+    public BookmarkFolder(final String name, final String color,
                           final Boolean isVisible, final Member member) {
         this.name = name;
         this.color = color;

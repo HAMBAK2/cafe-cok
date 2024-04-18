@@ -15,7 +15,7 @@ import static com.sideproject.hororok.common.fixtures.FavoriteFolderFixtures.폴
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 import static org.assertj.core.api.Assertions.*;
 
-public class FavoriteRepositoryTest extends RepositoryTest {
+public class BookmarkRepositoryTest extends RepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -24,10 +24,10 @@ public class FavoriteRepositoryTest extends RepositoryTest {
     private CafeRepository cafeRepository;
 
     @Autowired
-    private FavoriteRepository favoriteRepository;
+    private BookmarkRepository bookmarkRepository;
 
     @Autowired
-    private FavoriteFolderRepository favoriteFolderRepository;
+    private BookmarkFolderRepository bookmarkFolderRepository;
 
     @Test
     @DisplayName("즐겨찾기 폴더의 ID와 연결된 즐겨찾기의 개수를 조회한다.")
@@ -36,11 +36,11 @@ public class FavoriteRepositoryTest extends RepositoryTest {
         //given
         Cafe savedCafe = cafeRepository.save(카페());
         Member savedMember = memberRepository.save(사용자());
-        FavoriteFolder savedFolder = favoriteFolderRepository.save(폴더1(savedMember));
-        Favorite savedFavorite = favoriteRepository.save(즐겨찾기(savedCafe, savedFolder));
+        BookmarkFolder savedFolder = bookmarkFolderRepository.save(폴더1(savedMember));
+        Bookmark savedBookmark = bookmarkRepository.save(즐겨찾기(savedCafe, savedFolder));
 
         //when
-        Long count = favoriteRepository.countByFavoriteFolderId(savedFolder.getId());
+        Long count = bookmarkRepository.countByFavoriteFolderId(savedFolder.getId());
 
         //then
         assertThat(count).isEqualTo(1L);
