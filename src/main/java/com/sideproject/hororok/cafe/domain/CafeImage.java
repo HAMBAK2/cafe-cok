@@ -22,7 +22,6 @@ public class CafeImage extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;

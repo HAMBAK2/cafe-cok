@@ -2,6 +2,9 @@ package com.sideproject.hororok.global.error;
 
 import com.sideproject.hororok.auth.exception.*;
 import com.sideproject.hororok.cafe.exception.InvalidCafeException;
+import com.sideproject.hororok.favorite.exception.DefaultFolderDeletionNotAllowedException;
+import com.sideproject.hororok.favorite.exception.NoSuchBookmarkException;
+import com.sideproject.hororok.favorite.exception.NoSuchFolderException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
@@ -72,7 +75,8 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoPermissionException.class
+            NoPermissionException.class,
+            DefaultFolderDeletionNotAllowedException.class
     })
     public ResponseEntity<ErrorResponse> handleNoPermission(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
@@ -80,6 +84,8 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
+            NoSuchBookmarkException.class,
+            NoSuchFolderException.class,
             NoSuchMemberException.class,
             NoSuchTokenException.class,
             NoSuchOAuthTokenException.class,
