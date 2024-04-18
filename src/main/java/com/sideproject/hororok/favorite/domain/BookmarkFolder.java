@@ -27,6 +27,9 @@ public class BookmarkFolder {
     @Column(name = "is_visible", nullable = false)
     private Boolean isVisible;
 
+    @Column(name = "is_default_folder", nullable = false)
+    private Boolean isDefaultFolder;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "members_id")
     private Member member;
@@ -35,10 +38,13 @@ public class BookmarkFolder {
     }
 
     public BookmarkFolder(final String name, final String color,
-                          final Boolean isVisible, final Member member) {
+                          final Boolean isVisible,
+                          final Boolean isDefaultFolder,
+                          final Member member) {
         this.name = name;
         this.color = color;
         this.isVisible = isVisible;
+        this.isDefaultFolder = isDefaultFolder;
         this.member = member;
     }
 

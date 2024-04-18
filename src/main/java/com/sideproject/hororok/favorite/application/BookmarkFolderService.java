@@ -8,18 +8,16 @@ import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.favorite.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.favorite.exception.NoSuchFolderException;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
 import com.sideproject.hororok.member.exception.NoSuchMemberException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,10 +84,21 @@ public class BookmarkFolderService {
     }
 
     @Transactional
-    public BookmarkFoldersResponse deleteFolder(Long folderId, LoginMember loginMember) {
+    public BookmarkFoldersResponse delete(Long folderId, LoginMember loginMember) {
+
+        if(validateDefaultFolder(folderId)) {
+            throw new DefaultFolderDeletionNotAllowedException();
+        }
 
         bookmarkFolderRepository.deleteById(folderId);
         return bookmarkFolders(loginMember);
+    }
+
+    private boolean validateDefaultFolder(Long folderId) {
+        BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
+                .orElseThrow(() -> new NoSuchFolderException());
+
+        return findFolder.getIsDefaultFolder();
     }
 
 }
