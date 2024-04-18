@@ -8,8 +8,10 @@ import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.favorite.exception.NoSuchFolderException;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
+import com.sideproject.hororok.member.exception.NoSuchMemberException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,7 @@ public class BookmarkFolderService {
     public BookmarkFoldersResponse save(BookmarkFolderSaveRequest request, LoginMember loginMember){
 
         Member findMember = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> new EntityNotFoundException("맴버가 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
         BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
         bookmarkFolderRepository.save(bookmarkFolder);
         return bookmarkFolders(loginMember);
@@ -63,10 +65,10 @@ public class BookmarkFolderService {
     public BookmarkFoldersResponse update(BookmarkFolderUpdateRequest request, LoginMember loginMember){
 
         Member findMember = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> new EntityNotFoundException("맴버가 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchMemberException());
 
         BookmarkFolder findFolder = bookmarkFolderRepository.findById(request.getFolderId())
-                .orElseThrow(() -> new EntityNotFoundException("폴더가 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchFolderException());
 
         findFolder.change(request);
         bookmarkFolderRepository.save(findFolder);
@@ -77,7 +79,7 @@ public class BookmarkFolderService {
     public void updateFolderVisible(Long folderId) {
 
         BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
-                .orElseThrow(() -> new EntityNotFoundException("폴더가 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchFolderException());
 
         findFolder.changeVisible();
         bookmarkFolderRepository.save(findFolder);

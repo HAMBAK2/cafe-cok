@@ -2,6 +2,8 @@ package com.sideproject.hororok.global.error;
 
 import com.sideproject.hororok.auth.exception.*;
 import com.sideproject.hororok.cafe.exception.InvalidCafeException;
+import com.sideproject.hororok.favorite.exception.NoSuchBookmarkException;
+import com.sideproject.hororok.favorite.exception.NoSuchFolderException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
@@ -40,11 +42,11 @@ public class ControllerAdvice {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
-//        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
-//        return ResponseEntity.badRequest().body(errorResponse);
-//    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {
@@ -80,6 +82,8 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
+            NoSuchBookmarkException.class,
+            NoSuchFolderException.class,
             NoSuchMemberException.class,
             NoSuchTokenException.class,
             NoSuchOAuthTokenException.class,
