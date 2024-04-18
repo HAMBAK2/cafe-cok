@@ -83,4 +83,6 @@ public class BookmarkFolderController {
         BookmarksResponse response = bookmarkService.bookmarks(folderId);
         return ResponseEntity.ok(response);
     }
+
+
 }
