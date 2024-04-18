@@ -47,4 +47,8 @@ public class BookmarkFolder {
         this.color = request.getColor();
         this.isVisible = request.getIsVisible();
     }
+
+    public void changeVisible() {
+        this.isVisible = !isVisible;
+    }
 }

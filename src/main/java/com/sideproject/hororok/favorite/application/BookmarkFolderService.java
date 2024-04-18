@@ -73,4 +73,14 @@ public class BookmarkFolderService {
         return bookmarkFolders(loginMember);
     }
 
+    @Transactional
+    public void updateFolderVisible(Long folderId) {
+
+        BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
+                .orElseThrow(() -> new EntityNotFoundException("폴더가 존재하지 않습니다."));
+
+        findFolder.changeVisible();
+        bookmarkFolderRepository.save(findFolder);
+    }
+
 }

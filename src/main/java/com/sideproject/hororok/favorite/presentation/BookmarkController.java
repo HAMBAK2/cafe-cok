@@ -47,4 +47,14 @@ public class BookmarkController {
         BookmarkFoldersResponse response = bookmarkFolderService.update(request, loginMember);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/folder/{folderId}/update/visible")
+    @Operation(summary = "폴더의  토글(지도 노출 여부) 버튼을 눌렀을 때 동작하는 기능")
+    public ResponseEntity<Void> folderVisibleUpdate(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long folderId){
+
+        bookmarkFolderService.updateFolderVisible(folderId);
+        return ResponseEntity.noContent().build();
+    }
 }
