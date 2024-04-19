@@ -154,4 +154,21 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+
+    @Test
+    @DisplayName("북마크 폴더 지도 노출 여부를 변경하는 기능을 테스트 한다")
+    public void test_update_folder_visible() throws Exception {
+
+        Long folderId = 폴더_ID_1;
+
+        //then
+        mockMvc.perform(
+                        put("/api/bookmark/folder/{folderId}/update/visible", folderId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+    }
 }

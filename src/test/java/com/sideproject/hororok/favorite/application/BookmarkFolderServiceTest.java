@@ -181,4 +181,22 @@ class BookmarkFolderServiceTest {
         verify(bookmarkFolderRepository, times(1)).deleteById(folderId);
         assertThat(response).isNotNull();
     }
+
+
+    @Test
+    @DisplayName("폴더의 노출 여부가 변경 되어야 한다.")
+    public void test_update_folder_visible() {
+
+        Long folderId = 폴더_ID_1;
+
+        Member member = 사용자();
+        BookmarkFolder folder = 폴더1(member);
+        when(bookmarkFolderRepository.findById(folderId)).thenReturn(Optional.of(folder));
+
+        bookmarkFolderService.updateFolderVisible(folderId);
+
+        //then
+        verify(bookmarkFolderRepository, times(1)).findById(folderId);
+        verify(bookmarkFolderRepository, times(1)).save(folder);
+    }
 }
