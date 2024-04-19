@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페;
-import static com.sideproject.hororok.common.fixtures.FavoriteFixtures.즐겨찾기;
-import static com.sideproject.hororok.common.fixtures.FavoriteFolderFixtures.폴더1;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.즐겨찾기;
+import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.폴더1;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 import static org.assertj.core.api.Assertions.*;
 

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.FavoriteFolderFixtures.*;
+import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 

@@ -3,15 +3,16 @@ package com.sideproject.hororok.common.fixtures;
 import com.sideproject.hororok.favorite.domain.BookmarkFolder;
 import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.FavoriteFixtures.폴더_즐겨찾기_개수;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.폴더_즐겨찾기_개수;
 
 
-public class FavoriteFolderFixtures {
+public class BookmarkFolderFixtures {
 
     public static final Long 폴더_개수 = 2L;
     public static final Integer 폴더_리스트_사이즈 = 2;
@@ -64,5 +65,10 @@ public class FavoriteFolderFixtures {
     public static BookmarkFolderSaveRequest 폴더_저장_요청() {
         return new BookmarkFolderSaveRequest(
                 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
+    }
+
+    public static BookmarkFolderUpdateRequest 폴더_수정_요청() {
+        return new BookmarkFolderUpdateRequest(
+                폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
     }
 }
