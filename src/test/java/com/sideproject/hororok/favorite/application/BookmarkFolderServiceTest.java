@@ -8,8 +8,10 @@ import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.favorite.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,7 +90,7 @@ class BookmarkFolderServiceTest {
 
         // Then
         assertThat(bookmarkFolderDtos.size()).isEqualTo(bookmarkFolders.size());
-        for(int i = 0; i < bookmarkFolders.size(); i++) {
+        for (int i = 0; i < bookmarkFolders.size(); i++) {
             assertThat(bookmarkFolderDtos.get(i).getName()).isEqualTo(bookmarkFolders.get(i).getName());
             assertThat(bookmarkFolderDtos.get(i).getColor()).isEqualTo(bookmarkFolders.get(i).getColor());
             assertThat(bookmarkFolderDtos.get(i).getFolderId()).isEqualTo(bookmarkFolders.get(i).getId());
@@ -97,7 +99,7 @@ class BookmarkFolderServiceTest {
 
     @Test
     @DisplayName("폴더를 저장하는 기능을 테스트한다.")
-    public void test_save(){
+    public void test_save() {
 
         // Given
         LoginMember fakeLoginMember = 로그인_맴버();
@@ -142,5 +144,41 @@ class BookmarkFolderServiceTest {
         verify(memberRepository, times(1)).findById(fakeLoginMember.getId());
         verify(bookmarkFolderRepository, times(1)).findById(fakeRequest.getFolderId());
         verify(bookmarkFolderRepository, times(1)).save(fakeFolder);
+    }
+
+    @Test
+    @DisplayName("디폴트 폴더를 삭제하는 경우 예외가 발생해야 한다.")
+    public void test_delete_default_folder() {
+
+        Long folderId = 폴더_ID_1;
+        LoginMember loginMember = 로그인_맴버();
+
+        //when
+        Member member = 사용자();
+        BookmarkFolder defaultFolder = 폴더1(member);
+        when(bookmarkFolderRepository.findById(folderId)).thenReturn(Optional.of(defaultFolder));
+
+        //then
+        Assertions.assertThrows(DefaultFolderDeletionNotAllowedException.class,
+                () -> bookmarkFolderService.delete(folderId, loginMember));
+    }
+
+    @Test
+    @DisplayName("일반 폴더를 삭제하는 경우 삭제가 되어야 한다.")
+    public void test_delete_not_default_folder() {
+
+        Long folderId = 폴더_ID_2;
+        LoginMember loginMember = 로그인_맴버();
+
+
+        Member member = 사용자();
+        BookmarkFolder notDefaultFolder = 폴더2(member);
+        when(bookmarkFolderRepository.findById(folderId)).thenReturn(Optional.of(notDefaultFolder));
+
+        BookmarkFoldersResponse response = bookmarkFolderService.delete(folderId, loginMember);
+
+        //then
+        verify(bookmarkFolderRepository, times(1)).deleteById(folderId);
+        assertThat(response).isNotNull();
     }
 }

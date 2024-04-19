@@ -15,6 +15,7 @@ import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.폴더_�
 public class BookmarkFolderFixtures {
 
     public static final Long 폴더_개수 = 2L;
+    public static final Long 삭제후_폴더_개수 = 1L;
     public static final Integer 폴더_리스트_사이즈 = 2;
     public static final Integer 폴더_리스트_인덱스1 = 0;
     public static final Integer 폴더_리스트_인덱스2 = 1;
@@ -31,7 +32,7 @@ public class BookmarkFolderFixtures {
     public static final String 즐겨찾기_폴더_이름2 = "즐겨찾기_폴더_이름2";
     public static final String 즐겨찾기_폴더_색상2 = "즐겨찾기_폴더_색상2";
     public static final Boolean 즐겨찾기_폴더_노출여부2 = true;
-    public static final Boolean 즐겨찾기_폴더_디폴트여부2 = true;
+    public static final Boolean 즐겨찾기_폴더_디폴트여부2 = false;
 
 
     public static BookmarkFolder 폴더1(final Member member) {
