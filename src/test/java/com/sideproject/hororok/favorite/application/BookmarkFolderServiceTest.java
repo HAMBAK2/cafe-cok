@@ -6,6 +6,7 @@ import com.sideproject.hororok.favorite.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.favorite.domain.BookmarkRepository;
 import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.sideproject.hororok.common.fixtures.FavoriteFolderFixtures.*;
+import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.*;
 import static com.sideproject.hororok.common.fixtures.LoginMemberFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -96,7 +97,7 @@ class BookmarkFolderServiceTest {
 
     @Test
     @DisplayName("폴더를 저장하는 기능을 테스트한다.")
-    public void testSave(){
+    public void test_save(){
 
         // Given
         LoginMember fakeLoginMember = 로그인_맴버();
@@ -104,7 +105,6 @@ class BookmarkFolderServiceTest {
 
         // When
         Member fakeMember = 사용자();
-        System.out.println(fakeMember.getId());
         when(memberRepository.findById(fakeLoginMember.getId()))
                 .thenReturn(Optional.of(fakeMember));
 
@@ -117,5 +117,30 @@ class BookmarkFolderServiceTest {
         //Then
         verify(bookmarkFolderRepository, times(1)).save(any(BookmarkFolder.class));
         assertThat(response).isNotNull();
+    }
+
+    @Test
+    @DisplayName("폴더를 수정하는 기능을 테스트 한다.")
+    public void test_update() {
+
+        //Given
+        LoginMember fakeLoginMember = 로그인_맴버();
+        BookmarkFolderUpdateRequest fakeRequest = 폴더_수정_요청();
+
+        //When
+        Member fakeMember = 사용자();
+        when(memberRepository.findById(fakeLoginMember.getId()))
+                .thenReturn(Optional.of(fakeMember));
+
+        BookmarkFolder fakeFolder = 폴더1(fakeMember);
+        when(bookmarkFolderRepository.findById(fakeRequest.getFolderId()))
+                .thenReturn(Optional.of(fakeFolder));
+
+        BookmarkFoldersResponse response = bookmarkFolderService.update(fakeRequest, fakeLoginMember);
+
+        //Then
+        verify(memberRepository, times(1)).findById(fakeLoginMember.getId());
+        verify(bookmarkFolderRepository, times(1)).findById(fakeRequest.getFolderId());
+        verify(bookmarkFolderRepository, times(1)).save(fakeFolder);
     }
 }
