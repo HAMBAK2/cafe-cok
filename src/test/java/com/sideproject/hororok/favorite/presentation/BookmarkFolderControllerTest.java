@@ -75,7 +75,14 @@ class BookmarkFolderControllerTest extends ControllerTest {
         BookmarkFolderDto bookmarkFolderDto1 =
                 폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
                         즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
+
+        BookmarkFolderDto bookmarkFolderDto2 =
+                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
+                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
+
         fakeFolders.add(bookmarkFolderDto1);
+        fakeFolders.add(bookmarkFolderDto2);
+
         BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(폴더_개수, fakeFolders);
 
         //when
@@ -100,7 +107,14 @@ class BookmarkFolderControllerTest extends ControllerTest {
         BookmarkFolderDto bookmarkFolderDto1 =
                 폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
                         즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
+
+        BookmarkFolderDto bookmarkFolderDto2 =
+                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
+                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
+
         fakeFolders.add(bookmarkFolderDto1);
+        fakeFolders.add(bookmarkFolderDto2);
+
         BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(폴더_개수, fakeFolders);
 
         when(bookmarkFolderService.update(any(BookmarkFolderUpdateRequest.class), any(LoginMember.class)))
@@ -113,6 +127,31 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("북마크 폴더를 삭제하는 기능을 테스트 한다.")
+    public void test_folder_delete() throws Exception {
+
+        Long folderId = 폴더_ID_1;
+        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
+        BookmarkFolderDto bookmarkFolderDto1 =
+                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
+                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
+        fakeFolders.add(bookmarkFolderDto1);
+
+        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(삭제후_폴더_개수, fakeFolders);
+
+        when(bookmarkFolderService.delete(any(Long.class), any(LoginMember.class)))
+                .thenReturn(expectedResponse);
+
+        //then
+        mockMvc.perform(
+                        delete("/api/bookmark/folder/{folderId}/delete", folderId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
