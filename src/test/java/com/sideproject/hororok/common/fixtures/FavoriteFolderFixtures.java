@@ -2,6 +2,7 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.favorite.domain.BookmarkFolder;
 import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
+import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
@@ -53,10 +54,15 @@ public class FavoriteFolderFixtures {
                 isDefaultFolder, 폴더_즐겨찾기_개수);
     }
 
-    public static BookmarkFoldersResponse 마이_플레이스_응답(
+    public static BookmarkFoldersResponse 북마크_폴더_응답(
             final Long count,
             List<BookmarkFolderDto> folders) {
 
         return new BookmarkFoldersResponse(count, folders);
+    }
+
+    public static BookmarkFolderSaveRequest 폴더_저장_요청() {
+        return new BookmarkFolderSaveRequest(
+                즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
     }
 }

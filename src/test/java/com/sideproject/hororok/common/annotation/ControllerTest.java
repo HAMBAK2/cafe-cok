@@ -1,6 +1,7 @@
 package com.sideproject.hororok.common.annotation;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sideproject.hororok.auth.application.AuthService;
 import com.sideproject.hororok.auth.application.OAuthClient;
 import com.sideproject.hororok.auth.presentation.AuthController;
@@ -23,6 +24,9 @@ public abstract class ControllerTest {
 
     @Autowired
     public MockMvc mockMvc;
+
+    @Autowired
+    public ObjectMapper objectMapper;
 
     @MockBean
     public BookmarkService bookmarkService;
