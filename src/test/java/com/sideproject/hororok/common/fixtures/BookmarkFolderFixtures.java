@@ -84,6 +84,19 @@ public class BookmarkFolderFixtures {
                 폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
     }
 
+    public static List<BookmarkFolderDto> 폴더_DTO_리스트() {
+        List<BookmarkFolderDto> folderDtos = new ArrayList<>();
+        BookmarkFolderDto folderDto = 폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
+                즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
+        BookmarkFolderDto folderDto2 =
+                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
+                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
+        folderDtos.add(folderDto);
+        folderDtos.add(folderDto2);
+
+        return folderDtos;
+    }
+
     public static BookmarkFolder setId(BookmarkFolder bookmarkFolder, final Long id) {
 
         try {
