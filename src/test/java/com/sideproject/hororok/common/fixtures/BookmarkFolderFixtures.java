@@ -8,6 +8,7 @@ import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_개수;
@@ -57,11 +58,20 @@ public class BookmarkFolderFixtures {
                 isDefaultFolder, 북마크_개수);
     }
 
-    public static BookmarkFoldersResponse 북마크_폴더_응답(
-            final Long count,
-            List<BookmarkFolderDto> folders) {
+    public static BookmarkFoldersResponse 북마크_폴더_응답() {
 
-        return new BookmarkFoldersResponse(count, folders);
+        List<BookmarkFolderDto> folders = new ArrayList<>();
+        BookmarkFolderDto bookmarkFolderDto1 =
+                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
+                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
+
+        BookmarkFolderDto bookmarkFolderDto2 =
+                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
+                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
+        folders.add(bookmarkFolderDto1);
+        folders.add(bookmarkFolderDto2);
+
+        return new BookmarkFoldersResponse(폴더_개수, folders);
     }
 
     public static BookmarkFolderSaveRequest 폴더_저장_요청() {

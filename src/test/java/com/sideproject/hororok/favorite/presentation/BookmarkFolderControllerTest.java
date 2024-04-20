@@ -34,18 +34,7 @@ class BookmarkFolderControllerTest extends ControllerTest {
     @DisplayName("하단 탭의 \"저장\" 버튼을 눌렀을 때 필요한 정보 제공한다.")
     public void test_bookmark_folders() throws Exception {
 
-        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
-        BookmarkFolderDto bookmarkFolderDto1 =
-                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
-                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
-
-        BookmarkFolderDto bookmarkFolderDto2 =
-                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
-                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
-        fakeFolders.add(bookmarkFolderDto1);
-        fakeFolders.add(bookmarkFolderDto2);
-
-        BookmarkFoldersResponse fakeResponse = 북마크_폴더_응답(폴더_개수, fakeFolders);
+        BookmarkFoldersResponse fakeResponse = 북마크_폴더_응답();
 
         when(bookmarkFolderService
                 .bookmarkFolders(any(LoginMember.class)))
@@ -72,19 +61,7 @@ class BookmarkFolderControllerTest extends ControllerTest {
 
         //given
         BookmarkFolderSaveRequest request = 폴더_저장_요청();
-        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
-        BookmarkFolderDto bookmarkFolderDto1 =
-                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
-                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
-
-        BookmarkFolderDto bookmarkFolderDto2 =
-                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
-                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
-
-        fakeFolders.add(bookmarkFolderDto1);
-        fakeFolders.add(bookmarkFolderDto2);
-
-        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(폴더_개수, fakeFolders);
+        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답();
 
         //when
         when(bookmarkFolderService.save(any(BookmarkFolderSaveRequest.class), any(LoginMember.class)))
@@ -103,20 +80,9 @@ class BookmarkFolderControllerTest extends ControllerTest {
     @Test
     @DisplayName("북마크 폴더를 수정하는 기능을 테스트한다")
     public void test_folder_update() throws Exception {
+
         BookmarkFolderUpdateRequest request = 폴더_수정_요청();
-        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
-        BookmarkFolderDto bookmarkFolderDto1 =
-                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
-                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
-
-        BookmarkFolderDto bookmarkFolderDto2 =
-                폴더_Dto(폴더_ID_2, 즐겨찾기_폴더_이름2, 즐겨찾기_폴더_색상2,
-                        즐겨찾기_폴더_노출여부2, 즐겨찾기_폴더_디폴트여부1);
-
-        fakeFolders.add(bookmarkFolderDto1);
-        fakeFolders.add(bookmarkFolderDto2);
-
-        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(폴더_개수, fakeFolders);
+        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답();
 
         when(bookmarkFolderService.update(any(BookmarkFolderUpdateRequest.class), any(LoginMember.class)))
                 .thenReturn(expectedResponse);
@@ -135,21 +101,15 @@ class BookmarkFolderControllerTest extends ControllerTest {
     @DisplayName("북마크 폴더를 삭제하는 기능을 테스트 한다.")
     public void test_folder_delete() throws Exception {
 
-        Long folderId = 폴더_ID_1;
-        List<BookmarkFolderDto> fakeFolders = new ArrayList<>();
-        BookmarkFolderDto bookmarkFolderDto1 =
-                폴더_Dto(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1,
-                        즐겨찾기_폴더_노출여부1, 즐겨찾기_폴더_디폴트여부1);
-        fakeFolders.add(bookmarkFolderDto1);
 
-        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답(삭제후_폴더_개수, fakeFolders);
 
+        BookmarkFoldersResponse expectedResponse = 북마크_폴더_응답();
         when(bookmarkFolderService.delete(any(Long.class), any(LoginMember.class)))
                 .thenReturn(expectedResponse);
 
         //then
         mockMvc.perform(
-                        delete("/api/bookmark/folder/{folderId}/delete", folderId)
+                        delete("/api/bookmark/folder/{folderId}/delete", 폴더_ID_1)
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
