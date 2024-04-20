@@ -199,4 +199,6 @@ class BookmarkFolderServiceTest {
         verify(bookmarkFolderRepository, times(1)).findById(folderId);
         verify(bookmarkFolderRepository, times(1)).save(folder);
     }
+
+
 }
