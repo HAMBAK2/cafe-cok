@@ -1,10 +1,10 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.favorite.domain.BookmarkFolder;
-import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
-import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
-import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
-import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
+import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
+import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
+import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderUpdateRequest;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
 import java.lang.reflect.Field;
