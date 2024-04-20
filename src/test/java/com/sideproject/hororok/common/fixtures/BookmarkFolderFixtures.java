@@ -7,9 +7,10 @@ import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.폴더_즐겨찾기_개수;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_개수;
 
 
 public class BookmarkFolderFixtures {
@@ -53,7 +54,7 @@ public class BookmarkFolderFixtures {
             final Boolean isDefaultFolder){
         return BookmarkFolderDto.of(
                 folderId, name, color, isVisible,
-                isDefaultFolder, 폴더_즐겨찾기_개수);
+                isDefaultFolder, 북마크_개수);
     }
 
     public static BookmarkFoldersResponse 북마크_폴더_응답(
@@ -71,5 +72,17 @@ public class BookmarkFolderFixtures {
     public static BookmarkFolderUpdateRequest 폴더_수정_요청() {
         return new BookmarkFolderUpdateRequest(
                 폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, 즐겨찾기_폴더_노출여부1);
+    }
+
+    public static BookmarkFolder setId(BookmarkFolder bookmarkFolder, final Long id) {
+
+        try {
+            Field idField = BookmarkFolder.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(bookmarkFolder, id);
+            return bookmarkFolder;
+        } catch (final NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 }

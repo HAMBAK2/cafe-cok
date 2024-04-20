@@ -1,12 +1,12 @@
 package com.sideproject.hororok.favorite.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.favorite.dto.BookmarkFolderDto;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.favorite.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.favorite.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.favorite.dto.response.BookmarksResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_리스트_응답;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.*;
@@ -170,5 +171,23 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
+    }
+
+    @Test
+    @DisplayName("북마크 폴더를 조회하면 북마크의 리스트를 리턴해야 한다.")
+    public void test_bookmarks() throws Exception {
+
+
+        Long folderId = 폴더_ID_1;
+
+        BookmarksResponse expectedResponse = 북마크_리스트_응답();
+        when(bookmarkService.bookmarks(any(Long.class))).thenReturn(expectedResponse);
+
+        mockMvc.perform(
+                        get("/api/bookmark/folder/{folderId}", folderId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

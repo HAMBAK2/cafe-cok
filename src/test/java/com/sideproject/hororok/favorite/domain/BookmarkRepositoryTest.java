@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페;
-import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.즐겨찾기;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.*;
 import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.폴더1;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 import static org.assertj.core.api.Assertions.*;
@@ -37,7 +37,7 @@ public class BookmarkRepositoryTest extends RepositoryTest {
         Cafe savedCafe = cafeRepository.save(카페());
         Member savedMember = memberRepository.save(사용자());
         BookmarkFolder savedFolder = bookmarkFolderRepository.save(폴더1(savedMember));
-        Bookmark savedBookmark = bookmarkRepository.save(즐겨찾기(savedCafe, savedFolder));
+        Bookmark savedBookmark = bookmarkRepository.save(북마크(savedCafe, savedFolder));
 
         //when
         Long count = bookmarkRepository.countByBookmarkFolderId(savedFolder.getId());
