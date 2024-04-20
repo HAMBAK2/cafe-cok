@@ -53,7 +53,8 @@ public class SwaggerConfig {
     public GroupedOpenApi requiredAccessTokenGroup() {
         String[] pathsToMatch = {
                 "/api/review/create",
-                "/api/bookmark/**"
+                "/api/bookmark/**",
+                "/api/member/**"
         };
 
 

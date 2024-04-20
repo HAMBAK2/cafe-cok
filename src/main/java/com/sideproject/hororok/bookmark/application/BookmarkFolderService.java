@@ -40,6 +40,17 @@ public class BookmarkFolderService {
         return new BookmarkFoldersResponse(count, folders);
     }
 
+    public List<BookmarkFolderDto> getBookmarkFolderDtos(Long memberId) {
+        List<BookmarkFolder> folders = bookmarkFolderRepository.findByMemberId(memberId);
+
+        return folders.stream()
+                .map(folder ->
+                        BookmarkFolderDto
+                                .of(folder, bookmarkRepository.countByBookmarkFolderId(folder.getId())))
+                .collect(Collectors.toList());
+    }
+
+    /* TODO: 이 메서드 제거하고 위의 메서드로 대체하는 작업 필요함*/
     public List<BookmarkFolderDto> mapToBookmarkFolderDtoList(List<BookmarkFolder> folders) {
 
         return folders.stream()

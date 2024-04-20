@@ -14,4 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     )
     List<ReviewImage> findReviewImagesByCafeId(Long cafeId);
 
+    @Query("SELECT COUNT (r) FROM Review r WHERE r.member.id = :memberId")
+    Long countReviewsByMemberId(Long memberId);
 }
