@@ -26,6 +26,9 @@ public class Member extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "picture", nullable = false)
+    private String picture;
+
     @Column(name = "nickname")
     private String nickname;
 
@@ -33,18 +36,19 @@ public class Member extends BaseEntity {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Review> reviews = new ArrayList<>();
-
     protected Member() {
 
     }
 
-    public Member(final String email, final String nickname, final SocialType socialType) {
+    public Member(final String email,
+                  final String nickname,
+                  final String picture,
+                  final SocialType socialType) {
         validateEmail(email);
 
         this.email = email;
         this.nickname = nickname;
+        this.picture = picture;
         this.socialType = socialType;
     }
 

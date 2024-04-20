@@ -9,6 +9,8 @@ import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
+import com.sideproject.hororok.member.application.MemberService;
+import com.sideproject.hororok.member.presentation.MemberController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,7 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest({
         AuthController.class,
         BookmarkFolderController.class,
-        BookmarkController.class
+        BookmarkController.class,
+        MemberController.class
 })
 @ActiveProfiles("test")
 public abstract class ControllerTest {
@@ -35,6 +38,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public BookmarkFolderService bookmarkFolderService;
+
+    @MockBean
+    public MemberService memberService;
 
     @MockBean
     public AuthService authService;
