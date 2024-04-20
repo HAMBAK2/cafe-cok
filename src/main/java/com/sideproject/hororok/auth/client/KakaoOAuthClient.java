@@ -27,6 +27,8 @@ import java.util.Base64;
 public class KakaoOAuthClient implements OAuthClient {
 
     private static final String JWT_DELIMITER = "\\.";
+    private static final String MEMBER_BASIC_PICTURE
+            = "https://kr.object.ncloudstorage.com/hororok-bucket/member/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-04-20%20%EC%98%A4%ED%9B%84%2011.46.07.png";
 
     private final KakaoProperties properties;
     private final ObjectMapper objectMapper;
@@ -49,7 +51,8 @@ public class KakaoOAuthClient implements OAuthClient {
         UserInfo userInfo = parseUserInfo(payload);
 
         String refreshToken = kakaoTokenResponse.getRefreshToken();
-        return new OAuthMember(userInfo.getEmail(), userInfo.getNickname(), refreshToken);
+        return new OAuthMember(userInfo.getEmail(),
+                userInfo.getNickname(), MEMBER_BASIC_PICTURE, refreshToken);
     }
 
     @Override
