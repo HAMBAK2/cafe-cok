@@ -7,6 +7,7 @@ import com.sideproject.hororok.auth.application.OAuthClient;
 import com.sideproject.hororok.auth.presentation.AuthController;
 import com.sideproject.hororok.favorite.application.BookmarkFolderService;
 import com.sideproject.hororok.favorite.application.BookmarkService;
+import com.sideproject.hororok.favorite.presentation.BookmarkController;
 import com.sideproject.hororok.favorite.presentation.BookmarkFolderController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,7 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest({
         AuthController.class,
-        BookmarkFolderController.class
+        BookmarkFolderController.class,
+        BookmarkController.class
 })
 @ActiveProfiles("test")
 public abstract class ControllerTest {
