@@ -2,9 +2,9 @@ package com.sideproject.hororok.global.error;
 
 import com.sideproject.hororok.auth.exception.*;
 import com.sideproject.hororok.cafe.exception.InvalidCafeException;
-import com.sideproject.hororok.favorite.exception.DefaultFolderDeletionNotAllowedException;
-import com.sideproject.hororok.favorite.exception.NoSuchBookmarkException;
-import com.sideproject.hororok.favorite.exception.NoSuchFolderException;
+import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
+import com.sideproject.hororok.bookmark.exception.NoSuchBookmarkException;
+import com.sideproject.hororok.bookmark.exception.NoSuchFolderException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
