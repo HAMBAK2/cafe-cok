@@ -3,6 +3,7 @@ package com.sideproject.hororok.bookmark.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.bookmark.dto.response.BookmarksResponse;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
 import com.sideproject.hororok.common.annotation.ControllerTest;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
@@ -259,7 +261,7 @@ class BookmarkFolderControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("북마크 폴더 지도 노출 여부를 변경 - 성공")
-    public void test_update_folder_visible() throws Exception {
+    public void test_update_folder_visible_success() throws Exception {
 
         Long folderId = 일반_폴더_ID;
 
@@ -287,5 +289,53 @@ class BookmarkFolderControllerTest extends ControllerTest {
         assertThat(capturedBookmarkFolderId).isEqualTo(folderId);
 
     }
+
+    @Test
+    @DisplayName("북마크 폴더 선택 시 해당 폴더의 북마크 리스트를 반환 - 성공")
+    public void test_get_bookmarks_success() throws Exception {
+
+        Long folderId = 일반_폴더_ID;
+        BookmarksResponse response = 북마크_리스트_응답();
+
+        when(bookmarkService
+                .bookmarks(any(Long.class)))
+                .thenReturn(response);
+
+        //then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/bookmark/folder/{folderId}", folderId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("bookmark/folder/choice/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(
+                                parameterWithName("folderId").description("선택한 폴더의 ID")),
+
+                        responseFields(
+                                fieldWithPath("folderId").description("선택한 폴더의 ID"),
+                                fieldWithPath("folderName").description("폴더 이름"),
+                                fieldWithPath("folderColor").description("폴더 색상"),
+                                fieldWithPath("bookmarks").description("북마크 리스트").type(JsonFieldType.ARRAY),
+                                fieldWithPath("bookmarks[].cafeId").description("북마크에 추가할 카페 ID"),
+                                fieldWithPath("bookmarks[].cafeName").description("카페 이름"),
+                                fieldWithPath("bookmarks[].roadAddress").description("도로명 주"),
+                                fieldWithPath("bookmarks[].latitude").description("위도"),
+                                fieldWithPath("bookmarks[].longitude").description("경도"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.folderId").value(folderId))
+                .andExpect(jsonPath("$.folderName").value(response.getFolderName()))
+                .andExpect(jsonPath("$.folderColor").value(response.getFolderColor()))
+                .andExpect(jsonPath("$.bookmarks").isArray())
+                .andExpect(jsonPath("$.bookmarks", hasSize(북마크_리스트_사이즈_1개)))
+                .andExpect(jsonPath("$.bookmarks[" + 북마크_리스트_인덱스 + "].cafeId")
+                        .value(response.getBookmarks().get(북마크_리스트_인덱스).getCafeId()));
+    }
+
+
 
 }

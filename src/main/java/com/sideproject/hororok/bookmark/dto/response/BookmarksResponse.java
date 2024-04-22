@@ -11,7 +11,7 @@ public class BookmarksResponse {
 
     private Long folderId;
     private String folderName;
-    private String color;
+    private String folderColor;
     private List<BookmarkDto> bookmarks = new ArrayList<>();
 
 
@@ -19,19 +19,19 @@ public class BookmarksResponse {
     }
 
     public BookmarksResponse(
-            final Long folderId, final String folderName, final String color) {
+            final Long folderId, final String folderName, final String folderColor) {
         this.folderId = folderId;
         this.folderName = folderName;
-        this.color = color;
+        this.folderColor = folderColor;
         this.bookmarks = new ArrayList<>();
     }
 
     public BookmarksResponse(
             final Long folderId, final String folderName,
-            final String color, final List<BookmarkDto> bookmarks) {
+            final String folderColor, final List<BookmarkDto> bookmarks) {
         this.folderId = folderId;
         this.folderName = folderName;
-        this.color = color;
+        this.folderColor = folderColor;
         this.bookmarks = bookmarks;
     }
 }

@@ -105,4 +105,22 @@ include::{snippets}/bookmark/folder/update/visible/success/path-parameters.adoc[
 include::{snippets}/bookmark/folder/update/visible/success/http-response.adoc[]
 
 
+=== 2-8. 북마크 폴더를 선택했을 때(GET) - 성공
+==== 폴더 선택 시 폴더 내 북마크 리스트와 폴더 정보를 반환한다.
+==== Request header
+include::{snippets}/bookmark/folder/choice/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/choice/success/http-request.adoc[]
+
+==== Path parameters
+include::{snippets}/bookmark/folder/choice/success/path-parameters.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/choice/success/http-response.adoc[]
+
+==== Response fields
+include::{snippets}/bookmark/folder/choice/success/response-fields.adoc[]
+
+
 === link:api-docs.html[API 목록으로]
