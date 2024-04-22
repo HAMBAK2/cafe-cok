@@ -449,11 +449,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_2_북마크_폴더">2. 북마크 폴더</a>
 <ul class="sectlevel2">
 <li><a href="#_2_1_북마크_폴더_수정put_성공">2-1. 북마크 폴더 수정(PUT) - 성공</a></li>
-<li><a href="#_2_2_북마크_폴더_수정put_실패디폴트_폴더의_이름색상_변경_요청_시">2-2. 북마크 폴더 수정(PUT) - 실패(디폴트 폴더의 이름/색상 변경 요청 시)</a></li>
+<li><a href="#_2_2_북마크_폴더_수정put_실패">2-2. 북마크 폴더 수정(PUT) - 실패</a></li>
 <li><a href="#_2_3_북마크_폴더_삭제delete_성공">2-3. 북마크 폴더 삭제(DELETE) - 성공</a></li>
-<li><a href="#_2_4_북마크_폴더_삭제delete_실패디폴트_폴더를_삭제하려는_경우">2-4. 북마크 폴더 삭제(DELETE) - 실패(디폴트 폴더를 삭제하려는 경우)</a></li>
+<li><a href="#_2_4_북마크_폴더_삭제delete_실패">2-4. 북마크 폴더 삭제(DELETE) - 실패</a></li>
 <li><a href="#_2_5_북마크_폴더_저장post_성공">2-5. 북마크 폴더 저장(POST) - 성공</a></li>
-<li><a href="#_2_6_메인_화면_하단_탭의_저장을_눌렀을_시get_성공">2-6. 메인 화면 하단 탭의 저장을 눌렀을 시(GET) - 성공</a></li>
+<li><a href="#_2_6_홈_하단_탭의_저장을_눌렀을_시get_성공">2-6. 홈 하단 탭의 저장을 눌렀을 시(GET) - 성공</a></li>
 </ul>
 </li>
 </ul>
@@ -558,7 +558,11 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_2_북마크_폴더_수정put_실패디폴트_폴더의_이름색상_변경_요청_시">2-2. 북마크 폴더 수정(PUT) - 실패(디폴트 폴더의 이름/색상 변경 요청 시)</h3>
+<h3 id="_2_2_북마크_폴더_수정put_실패">2-2. 북마크 폴더 수정(PUT) - 실패</h3>
+<div class="sect3">
+<h4 id="_실패_사유_디폴트_폴더의_이름색상_변경_요청">실패 사유: 디폴트 폴더의 이름/색상 변경 요청</h4>
+
+</div>
 <div class="sect3">
 <h4 id="_request_header_2">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -751,7 +755,11 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_4_북마크_폴더_삭제delete_실패디폴트_폴더를_삭제하려는_경우">2-4. 북마크 폴더 삭제(DELETE) - 실패(디폴트 폴더를 삭제하려는 경우)</h3>
+<h3 id="_2_4_북마크_폴더_삭제delete_실패">2-4. 북마크 폴더 삭제(DELETE) - 실패</h3>
+<div class="sect3">
+<h4 id="_실패_사유_디폴터_폴더_삭제_요청">실패 사유: 디폴터 폴더 삭제 요청</h4>
+
+</div>
 <div class="sect3">
 <h4 id="_request_header_4">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -938,7 +946,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_2_6_메인_화면_하단_탭의_저장을_눌렀을_시get_성공">2-6. 메인 화면 하단 탭의 저장을 눌렀을 시(GET) - 성공</h3>
+<h3 id="_2_6_홈_하단_탭의_저장을_눌렀을_시get_성공">2-6. 홈 하단 탭의 저장을 눌렀을 시(GET) - 성공</h3>
 <div class="sect3">
 <h4 id="_request_header_6">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -990,8 +998,8 @@ Content-Length: 204
     "name" : "폴더_이름",
     "color" : "폴더_색상",
     "bookmarkCount" : 1,
-    "defaultFolder" : false,
-    "visible" : true
+    "visible" : true,
+    "defaultFolder" : false
   } ]
 }</code></pre>
 </div>
@@ -1063,7 +1071,7 @@ Content-Length: 204
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-23 04:02:43 +0900
+Last updated 2024-04-23 04:09:51 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
