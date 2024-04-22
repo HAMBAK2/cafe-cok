@@ -29,8 +29,7 @@ public class BookmarkService {
 
     public BookmarksResponse bookmarks(Long folderId){
 
-        BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
-                .orElseThrow(() -> new NoSuchFolderException());
+        BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
 
         List<Bookmark> findBookmarks
                 = bookmarkRepository.findByBookmarkFolderId(folderId);
