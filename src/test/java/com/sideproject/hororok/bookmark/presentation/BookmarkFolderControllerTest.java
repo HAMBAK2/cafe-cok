@@ -323,7 +323,7 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 fieldWithPath("bookmarks").description("북마크 리스트").type(JsonFieldType.ARRAY),
                                 fieldWithPath("bookmarks[].cafeId").description("북마크에 추가할 카페 ID"),
                                 fieldWithPath("bookmarks[].cafeName").description("카페 이름"),
-                                fieldWithPath("bookmarks[].roadAddress").description("도로명 주"),
+                                fieldWithPath("bookmarks[].roadAddress").description("도로명 주소"),
                                 fieldWithPath("bookmarks[].latitude").description("위도"),
                                 fieldWithPath("bookmarks[].longitude").description("경도"))))
                 .andExpect(status().isOk())

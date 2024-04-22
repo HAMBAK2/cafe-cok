@@ -26,5 +26,15 @@ include::{snippets}/bookmark/save-post/request-fields.adoc[]
 ==== Http Response
 include::{snippets}/bookmark/save-post/http-response.adoc[]
 
+=== 1-3. 북마크 삭제(Delete) - 성공
+==== Request Header
+include::{snippets}/bookmark/delete/success/request-headers.adoc[]
+==== Http Request
+include::{snippets}/bookmark/delete/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/bookmark/delete/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/bookmark/delete/success/http-response.adoc[]
+
 === link:api-docs.html[API 목록으로]
 
