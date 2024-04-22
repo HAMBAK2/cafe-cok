@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_ID;
 import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_저장_요청;
 import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -21,6 +23,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -105,23 +109,32 @@ class BookmarkControllerTest extends ControllerTest {
         assertThat(capturedRequest.getCafeId()).isEqualTo(request.getCafeId());
     }
 
-//    @Test
-//    @DisplayName("북마크 삭제 기능을 수행할 경우 삭제 후 noContent를 반환한다.")
-//    public void test_delete_bookmark() throws Exception {
-//
-//        Long bookmarkId = 북마크_ID;
-//
-//        mockMvc.perform(
-//                        delete("/api/bookmark/delete/{bookmarkId}", bookmarkId)
-//                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNoContent());
-//
-//
-//        verify(bookmarkService).delete(bookmarkIdCaptor.capture());
-//
-//        Long capturedBookmarkId = bookmarkIdCaptor.getValue();
-//        assertThat(capturedBookmarkId).isEqualTo(bookmarkId);
-//    }
+    @Test
+    @DisplayName("북마크 삭제 - 성공")
+    public void test_delete_bookmark_success() throws Exception {
+
+        Long bookmarkId = 북마크_ID;
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/api/bookmark/delete/{bookmarkId}", bookmarkId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("bookmark/delete/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(
+                                parameterWithName("bookmarkId").description("삭제할 북마크의 ID"))))
+
+                .andExpect(status().isNoContent());
+
+
+        verify(bookmarkService).delete(bookmarkIdCaptor.capture());
+
+        Long capturedBookmarkId = bookmarkIdCaptor.getValue();
+        assertThat(capturedBookmarkId).isEqualTo(bookmarkId);
+    }
 }

@@ -1140,7 +1140,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div class="sect2">
 <h3 id="_2_8_북마크_폴더를_선택했을_때get_성공">2-8. 북마크 폴더를 선택했을 때(GET) - 성공</h3>
 <div class="sect3">
-<h4 id="_폴더_내_북마크_리스트와_폴더_정보를_반환한다">폴더 내 북마크 리스트와 폴더 정보를 반환한다.</h4>
+<h4 id="_폴더_선택_시_폴더_내_북마크_리스트와_폴더_정보를_반환한다">폴더 선택 시 폴더 내 북마크 리스트와 폴더 정보를 반환한다.</h4>
 
 </div>
 <div class="sect3">
@@ -1207,7 +1207,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 284
+Content-Length: 282
 
 {
   "folderId" : 1,
@@ -1217,8 +1217,8 @@ Content-Length: 284
     "cafeId" : 1,
     "cafeName" : "카페 이름",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : -160.05957822822333,
-    "longitude" : -41.35422985835325
+    "latitude" : 155.38744909396144,
+    "longitude" : -76.9092675159734
   } ]
 }</code></pre>
 </div>
@@ -1273,7 +1273,7 @@ Content-Length: 284
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks[].roadAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">도로명 주</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도로명 주소</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks[].latitude</code></p></td>
@@ -1299,7 +1299,7 @@ Content-Length: 284
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-23 05:28:15 +0900
+Last updated 2024-04-23 05:34:28 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
