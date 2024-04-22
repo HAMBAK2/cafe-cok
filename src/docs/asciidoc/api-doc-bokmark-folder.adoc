@@ -90,3 +90,19 @@ include::{snippets}/bookmark/folders/success/http-response.adoc[]
 
 ==== Response fields
 include::{snippets}/bookmark/folders/success/response-fields.adoc[]
+
+=== 2-7. 북마크 폴더의 지도 노출 여부를 수정(PATCH) - 성공
+==== Request header
+include::{snippets}/bookmark/folder/update/visible/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/update/visible/success/http-request.adoc[]
+
+==== Path parameters
+include::{snippets}/bookmark/folder/update/visible/success/path-parameters.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/update/visible/success/http-response.adoc[]
+
+
+=== link:api-docs.html[API 목록으로]

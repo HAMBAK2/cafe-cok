@@ -26,3 +26,5 @@ include::{snippets}/bookmark/save-post/request-fields.adoc[]
 ==== Http Response
 include::{snippets}/bookmark/save-post/http-response.adoc[]
 
+=== link:api-docs.html[API 목록으로]
+

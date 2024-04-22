@@ -256,39 +256,36 @@ class BookmarkFolderControllerTest extends ControllerTest {
                 .andExpect(status().isForbidden());
 
     }
-//
-//
-//    @Test
-//    @DisplayName("북마크 폴더 지도 노출 여부를 변경하는 기능을 테스트 한다")
-//    public void test_update_folder_visible() throws Exception {
-//
-//        Long folderId = 폴더_ID_1;
-//
-//        //then
-//        mockMvc.perform(
-//                        put("/api/bookmark/folder/{folderId}/update/visible", folderId)
-//                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNoContent());
-//
-//    }
-//
-//    @Test
-//    @DisplayName("북마크 폴더를 조회하면 북마크의 리스트를 리턴해야 한다.")
-//    public void test_bookmarks() throws Exception {
-//
-//
-//        Long folderId = 폴더_ID_1;
-//
-//        BookmarksResponse expectedResponse = 북마크_리스트_응답();
-//        when(bookmarkService.bookmarks(any(Long.class))).thenReturn(expectedResponse);
-//
-//        mockMvc.perform(
-//                        get("/api/bookmark/folder/{folderId}", folderId)
-//                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk());
-//    }
+
+    @Test
+    @DisplayName("북마크 폴더 지도 노출 여부를 변경 - 성공")
+    public void test_update_folder_visible() throws Exception {
+
+        Long folderId = 일반_폴더_ID;
+
+        //then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.patch("/api/bookmark/folder/{folderId}/update/visible", folderId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("bookmark/folder/update/visible/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(
+                                parameterWithName("folderId").description("지도 노출여부를 수정할 폴더의 ID"))))
+                .andExpect(status().isNoContent());
+
+
+        verify(bookmarkFolderService)
+                .updateFolderVisible(bookmarkFolderIdCaptor.capture());
+        Long capturedBookmarkFolderId = bookmarkFolderIdCaptor.getValue();
+
+        assertThat(capturedBookmarkFolderId).isEqualTo(folderId);
+
+    }
+
 }
