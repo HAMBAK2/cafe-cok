@@ -1,0 +1,90 @@
+= Bookmark Folder API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 2. 북마크 폴더
+
+=== 2-1. 북마크 폴더 수정(PUT) - 성공
+==== Request header
+include::{snippets}/bookmark/folder/update/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/update/success/http-request.adoc[]
+
+==== Request fields
+include::{snippets}/bookmark/folder/update/success/request-fields.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/update/success/http-response.adoc[]
+
+=== 2-2. 북마크 폴더 수정(PUT) - 실패(디폴트 폴더의 이름/색상 변경 요청 시)
+==== Request header
+include::{snippets}/bookmark/folder/update/fail/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/update/fail/http-request.adoc[]
+
+==== Request fields
+include::{snippets}/bookmark/folder/update/fail/request-fields.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/update/fail/http-response.adoc[]
+
+==== Response fields
+include::{snippets}/bookmark/folder/update/fail/response-fields.adoc[]
+
+=== 2-3. 북마크 폴더 삭제(DELETE) - 성공
+==== Request header
+include::{snippets}/bookmark/folder/delete/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/delete/success/http-request.adoc[]
+
+==== Path parameters
+include::{snippets}/bookmark/folder/delete/success/path-parameters.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/delete/success/http-response.adoc[]
+
+=== 2-4. 북마크 폴더 삭제(DELETE) - 실패(디폴트 폴더를 삭제하려는 경우)
+==== Request header
+include::{snippets}/bookmark/folder/delete/fail/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/delete/fail/http-request.adoc[]
+
+==== Path parameters
+include::{snippets}/bookmark/folder/delete/fail/path-parameters.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/delete/fail/http-response.adoc[]
+
+==== Response fields
+include::{snippets}/bookmark/folder/delete/fail/response-fields.adoc[]
+
+=== 2-5. 북마크 폴더 저장(POST) - 성공
+==== Request header
+include::{snippets}/bookmark/folder/save/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folder/save/success/http-request.adoc[]
+
+==== Request fields
+include::{snippets}/bookmark/folder/save/success/request-fields.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folder/save/success/http-response.adoc[]
+
+=== 2-6. 메인 화면 하단 탭의 저장을 눌렀을 시(GET) - 성공
+==== Request header
+include::{snippets}/bookmark/folders/success/request-headers.adoc[]
+
+==== Http request
+include::{snippets}/bookmark/folders/success/http-request.adoc[]
+
+==== Http response
+include::{snippets}/bookmark/folders/success/http-response.adoc[]
+
+==== Response fields
+include::{snippets}/bookmark/folders/success/response-fields.adoc[]

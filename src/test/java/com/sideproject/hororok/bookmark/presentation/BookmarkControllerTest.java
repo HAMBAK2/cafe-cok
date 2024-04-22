@@ -8,11 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_ID;
 import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_저장_요청;
 import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -44,7 +42,7 @@ class BookmarkControllerTest extends ControllerTest {
     @DisplayName("북마크 아이콘 저장 버튼 클릭 시 북마크의 리스트를 반환한다.")
     public void test_save_bookmark_get() throws Exception {
 
-        BookmarkFoldersResponse response = 북마크_폴더_응답();
+        BookmarkFoldersResponse response = 북마크_폴더_목록_응답();
 
 
         when(bookmarkFolderService.bookmarkFolders(any(LoginMember.class)))
@@ -70,9 +68,7 @@ class BookmarkControllerTest extends ControllerTest {
                                 fieldWithPath("folders[].color").description("폴더 색상"),
                                 fieldWithPath("folders[].bookmarkCount").description("폴더 내 북마크 개수"),
                                 fieldWithPath("folders[].visible").description("폴더 지도 노출 여부"),
-                                fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부")
-                        ))
-                )
+                                fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부"))))
                 .andExpect(status().isOk());
     }
 

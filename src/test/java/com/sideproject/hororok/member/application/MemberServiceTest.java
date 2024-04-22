@@ -14,9 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.폴더_DTO_리스트;
+import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.일반_폴더_DTO;
 import static com.sideproject.hororok.common.fixtures.LoginMemberFixtures.로그인_맴버;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_개수;
@@ -50,7 +52,7 @@ class MemberServiceTest {
 
         LoginMember loginMember = 로그인_맴버();
         Member findMember = 사용자();
-        List<BookmarkFolderDto> findFolders = 폴더_DTO_리스트();
+        List<BookmarkFolderDto> findFolders = Arrays.asList(일반_폴더_DTO());
 
         when(reviewRepository.countReviewsByMemberId(loginMember.getId())).thenReturn(리뷰_개수);
         when(bookmarkFolderService.getBookmarkFolderDtos(loginMember.getId())).thenReturn(findFolders);
