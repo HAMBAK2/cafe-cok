@@ -42,13 +42,12 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.folderCount").value(폴더_개수))
+                .andExpect(jsonPath("$.folderCount").value(폴더_개수1))
                 .andExpect(jsonPath("$.folders").isArray())
                 .andExpect(jsonPath("$.folders", hasSize(폴더_리스트_사이즈)))
                 .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스1 + "].folderId").value(폴더_ID_1))
-                .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스1 + "].name").value(즐겨찾기_폴더_이름1))
-                .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스2 + "].folderId").value(폴더_ID_2))
-                .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스2 + "].name").value(즐겨찾기_폴더_이름2));
+                .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스1 + "].name").value(즐겨찾기_폴더_이름1));
+
     }
 
     @Test

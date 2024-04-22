@@ -11,11 +11,20 @@ import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
 import com.sideproject.hororok.member.application.MemberService;
 import com.sideproject.hororok.member.presentation.MemberController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 @WebMvcTest({
         AuthController.class,
@@ -24,6 +33,7 @@ import org.springframework.test.web.servlet.MockMvc;
         MemberController.class
 })
 @ActiveProfiles("test")
+@ExtendWith(RestDocumentationExtension.class)
 public abstract class ControllerTest {
 
 
@@ -47,5 +57,12 @@ public abstract class ControllerTest {
 
     @MockBean
     public OAuthClient oAuthClient;
+
+    @BeforeEach
+    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation))
+                .build();
+    }
 
 }
