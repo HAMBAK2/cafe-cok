@@ -1,0 +1,28 @@
+= Bookmark API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 1. 북마크
+=== 1-1. 북마크 저장(Get) - 성공
+==== 북마크 저장 아이콘을 눌렀을 때 폴더의 목록을 제공
+==== Request Header
+include::{snippets}/bookmark/save-get/request-headers.adoc[]
+==== Http Request
+include::{snippets}/bookmark/save-get/http-request.adoc[]
+==== Http Response
+include::{snippets}/bookmark/save-get/http-response.adoc[]
+==== Response Fields
+include::{snippets}/bookmark/save-get/response-fields.adoc[]
+
+=== 1-2. 북마크 저장(Post) - 성공
+==== 북마크 저장 아이콘을 누른 후 실제 저장 작업을 수행
+==== Request Header
+include::{snippets}/bookmark/save-post/request-headers.adoc[]
+==== Http Request
+include::{snippets}/bookmark/save-post/http-request.adoc[]
+==== Request Fields
+include::{snippets}/bookmark/save-post/request-fields.adoc[]
+==== Http Response
+include::{snippets}/bookmark/save-post/http-response.adoc[]
+

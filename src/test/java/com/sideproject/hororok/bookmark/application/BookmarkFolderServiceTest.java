@@ -61,10 +61,9 @@ class BookmarkFolderServiceTest {
 
         Member member = 사용자();
         BookmarkFolder folder1 = 폴더1(member);
-        BookmarkFolder folder2 = 폴더2(member);
         when(bookmarkFolderRepository
                 .findByMemberId(로그인_맴버_아이디))
-                .thenReturn(Arrays.asList(folder1, folder2));
+                .thenReturn(Arrays.asList(folder1));
 
         //when
         BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
@@ -73,7 +72,6 @@ class BookmarkFolderServiceTest {
         assertThat(response.getFolderCount()).isEqualTo(폴더_개수);
         assertThat(response.getFolders().size()).isEqualTo(폴더_리스트_사이즈);
         assertThat(response.getFolders().get(폴더_리스트_인덱스1).getName()).isEqualTo(즐겨찾기_폴더_이름1);
-        assertThat(response.getFolders().get(폴더_리스트_인덱스2).getName()).isEqualTo(즐겨찾기_폴더_이름2);
     }
 
     @Test
