@@ -9,10 +9,9 @@ import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
-import com.sideproject.hororok.bookmark.exception.NoSuchFolderException;
+import com.sideproject.hororok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;
-import com.sideproject.hororok.member.exception.NoSuchMemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +32,40 @@ public class BookmarkFolderService {
 
         Long memberId = loginMember.getId();
         Long count = bookmarkFolderRepository.countByMemberId(memberId);
-
-        List<BookmarkFolderDto> folders =
-                mapToBookmarkFolderDtoList(bookmarkFolderRepository.findByMemberId(memberId));
+        List<BookmarkFolderDto> folders = getBookmarkFolderDtos(memberId);
 
         return new BookmarkFoldersResponse(count, folders);
+    }
+
+    @Transactional
+    public void save(BookmarkFolderSaveRequest request, LoginMember loginMember){
+
+        Member findMember = memberRepository.getById(loginMember.getId());
+        BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
+        bookmarkFolderRepository.save(bookmarkFolder);
+    }
+
+    @Transactional
+    public void update(BookmarkFolderUpdateRequest request){
+
+        BookmarkFolder findFolder = updateFolderIfPermissible(request);
+        findFolder.change(request);
+        bookmarkFolderRepository.save(findFolder);
+    }
+
+    @Transactional
+    public void updateFolderVisible(Long folderId) {
+
+        BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
+        findFolder.changeVisible();
+        bookmarkFolderRepository.save(findFolder);
+    }
+
+    @Transactional
+    public void delete(Long folderId) {
+
+        deleteFolderIfPermissible(folderId);
+        bookmarkFolderRepository.deleteById(folderId);
     }
 
     public List<BookmarkFolderDto> getBookmarkFolderDtos(Long memberId) {
@@ -45,71 +73,24 @@ public class BookmarkFolderService {
 
         return folders.stream()
                 .map(folder ->
-                        BookmarkFolderDto
-                                .of(folder, bookmarkRepository.countByBookmarkFolderId(folder.getId())))
+                        new BookmarkFolderDto(folder, bookmarkRepository.countByBookmarkFolderId(folder.getId())))
                 .collect(Collectors.toList());
     }
 
-    /* TODO: 이 메서드 제거하고 위의 메서드로 대체하는 작업 필요함*/
-    public List<BookmarkFolderDto> mapToBookmarkFolderDtoList(List<BookmarkFolder> folders) {
-
-        return folders.stream()
-                .map(folder ->
-                        BookmarkFolderDto
-                                .of(folder, bookmarkRepository.countByBookmarkFolderId(folder.getId())))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public BookmarkFoldersResponse save(BookmarkFolderSaveRequest request, LoginMember loginMember){
-
-        Member findMember = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> new NoSuchMemberException());
-        BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
-        bookmarkFolderRepository.save(bookmarkFolder);
-        return bookmarkFolders(loginMember);
-    }
-
-    @Transactional
-    public BookmarkFoldersResponse update(BookmarkFolderUpdateRequest request, LoginMember loginMember){
-
-        Member findMember = memberRepository.findById(loginMember.getId())
-                .orElseThrow(() -> new NoSuchMemberException());
-
-        BookmarkFolder findFolder = bookmarkFolderRepository.findById(request.getFolderId())
-                .orElseThrow(() -> new NoSuchFolderException());
-
-        findFolder.change(request);
-        bookmarkFolderRepository.save(findFolder);
-        return bookmarkFolders(loginMember);
-    }
-
-    @Transactional
-    public void updateFolderVisible(Long folderId) {
-
-        BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
-                .orElseThrow(() -> new NoSuchFolderException());
-
-        findFolder.changeVisible();
-        bookmarkFolderRepository.save(findFolder);
-    }
-
-    @Transactional
-    public BookmarkFoldersResponse delete(Long folderId, LoginMember loginMember) {
-
-        if(validateDefaultFolder(folderId)) {
+    public void deleteFolderIfPermissible(Long folderId) {
+        BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
+        if(findFolder.getIsDefaultFolder())
             throw new DefaultFolderDeletionNotAllowedException();
-        }
-
-        bookmarkFolderRepository.deleteById(folderId);
-        return bookmarkFolders(loginMember);
     }
 
-    private boolean validateDefaultFolder(Long folderId) {
-        BookmarkFolder findFolder = bookmarkFolderRepository.findById(folderId)
-                .orElseThrow(() -> new NoSuchFolderException());
+    public BookmarkFolder updateFolderIfPermissible(BookmarkFolderUpdateRequest request) {
+        BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
 
-        return findFolder.getIsDefaultFolder();
+        if(!findFolder.getIsDefaultFolder()) return findFolder;
+        if(findFolder.getName().equals(request.getName())
+                && findFolder.getColor().equals(request.getColor())) return findFolder;
+
+        throw new DefaultFolderUpdateNotAllowedException();
     }
 
 }

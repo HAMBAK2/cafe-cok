@@ -15,7 +15,7 @@ import static com.sideproject.hororok.common.fixtures.CafeFixtures.*;
 
 public class BookmarkFixtures {
 
-    public static final Long 북마크_개수 = 2L;
+    public static final Long 북마크_개수_1개 = 1L;
     public static final Long 북마크_ID = 1L;
 
     /* 북마크1 */
@@ -33,10 +33,10 @@ public class BookmarkFixtures {
 
         List<BookmarkDto> bookmarks = Arrays.asList(북마크_DTO(카페()), 북마크_DTO(카페2()));
 
-        return new BookmarksResponse(폴더_ID_1, 즐겨찾기_폴더_이름1, 즐겨찾기_폴더_색상1, bookmarks);
+        return new BookmarksResponse(일반_폴더_ID, 폴더_이름, 폴더_색상, bookmarks);
     }
 
     public static BookmarkSaveRequest 북마크_저장_요청() {
-        return new BookmarkSaveRequest(카페_아이디, 폴더_ID_1);
+        return new BookmarkSaveRequest(카페_아이디, 일반_폴더_ID);
     }
 }

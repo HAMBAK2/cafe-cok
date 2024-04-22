@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 public class BookmarkFolderDto {
     private Long folderId;
     private String name;
@@ -14,27 +13,24 @@ public class BookmarkFolderDto {
     private boolean isVisible;
     private boolean isDefaultFolder;
 
-    public static BookmarkFolderDto of(final BookmarkFolder bookmarkFolder, final Long bookmarkCount) {
-        return BookmarkFolderDto.builder()
-                .folderId(bookmarkFolder.getId())
-                .name(bookmarkFolder.getName())
-                .color(bookmarkFolder.getColor())
-                .bookmarkCount(bookmarkCount)
-                .isVisible(bookmarkFolder.getIsVisible())
-                .isDefaultFolder(bookmarkFolder.getIsDefaultFolder())
-                .build();
+
+    public BookmarkFolderDto(final Long folderId, final String name, final String color,
+                             final Long bookmarkCount, final boolean isVisible, final boolean isDefaultFolder) {
+        this.folderId = folderId;
+        this.name = name;
+        this.color = color;
+        this.bookmarkCount = bookmarkCount;
+        this.isVisible = isVisible;
+        this.isDefaultFolder = isDefaultFolder;
     }
 
-    public static BookmarkFolderDto of(final Long folderId, final String name, final String color,
-                                       final boolean isVisible, final boolean isDefaultFolder,
-                                       final Long bookmarkCount) {
-        return BookmarkFolderDto.builder()
-                .folderId(folderId)
-                .name(name)
-                .color(color)
-                .bookmarkCount(bookmarkCount)
-                .isVisible(isVisible)
-                .isDefaultFolder(isDefaultFolder)
-                .build();
+    public BookmarkFolderDto(final BookmarkFolder folder, final Long bookmarkCount) {
+        this.folderId = folder.getId();
+        this.name = folder.getName();
+        this.color = folder.getColor();
+        this.bookmarkCount = bookmarkCount;
+        this.isVisible = folder.getIsVisible();
+        this.isDefaultFolder = folder.getIsDefaultFolder();
+
     }
 }

@@ -2,7 +2,6 @@ package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
-import com.sideproject.hororok.bookmark.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.MemberRepository;

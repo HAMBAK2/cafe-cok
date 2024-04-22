@@ -34,25 +34,25 @@ public class BookmarkFolderController {
 
     @PostMapping("/folder/save")
     @Operation(summary = "새로운 북마크 폴더를 생성할 때 동작하는 기능")
-    public ResponseEntity<BookmarkFoldersResponse> saveFolder(
+    public ResponseEntity<Void> saveFolder(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestBody BookmarkFolderSaveRequest request) {
 
-        BookmarkFoldersResponse response = bookmarkFolderService.save(request, loginMember);
-        return ResponseEntity.ok(response);
+        bookmarkFolderService.save(request, loginMember);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/folder/update")
     @Operation(summary = "북마크 폴더 수정 시 동작하는 기능")
-    public ResponseEntity<BookmarkFoldersResponse> updateFolder(
+    public ResponseEntity<Void> updateFolder(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestBody BookmarkFolderUpdateRequest request) {
 
-        BookmarkFoldersResponse response = bookmarkFolderService.update(request, loginMember);
-        return ResponseEntity.ok(response);
+        bookmarkFolderService.update(request);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/folder/{folderId}/update/visible")
+    @PatchMapping("/folder/{folderId}/update/visible")
     @Operation(summary = "폴더의  토글(지도 노출 여부) 버튼을 눌렀을 때 동작하는 기능")
     public ResponseEntity<Void> updateFolderVisible(
             @AuthenticationPrincipal LoginMember loginMember,
@@ -64,13 +64,12 @@ public class BookmarkFolderController {
 
     @DeleteMapping("/folder/{folderId}/delete")
     @Operation(summary = "폴더 삭제 버튼을 눌렀을 때 동작하는 기능")
-    public ResponseEntity<BookmarkFoldersResponse> deleteFolder(
+    public ResponseEntity<Void> deleteFolder(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long folderId){
 
-        BookmarkFoldersResponse response
-                = bookmarkFolderService.delete(folderId, loginMember);
-        return ResponseEntity.ok(response);
+        bookmarkFolderService.delete(folderId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/folder/{folderId}")
