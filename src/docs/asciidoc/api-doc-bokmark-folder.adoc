@@ -48,6 +48,9 @@ include::{snippets}/bookmark/folder/delete/success/path-parameters.adoc[]
 ==== Http response
 include::{snippets}/bookmark/folder/delete/success/http-response.adoc[]
 
+==== Response fields
+include::{snippets}/bookmark/folder/delete/success/response-fields.adoc[]
+
 === 2-4. 북마크 폴더 삭제(DELETE) - 실패
 ==== 실패 사유: 디폴터 폴더 삭제 요청
 ==== Request header

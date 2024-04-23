@@ -7,6 +7,7 @@ import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderUpdateRequest;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkFolderDeleteResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarksResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,12 +65,12 @@ public class BookmarkFolderController {
 
     @DeleteMapping("/folder/{folderId}/delete")
     @Operation(summary = "폴더 삭제 버튼을 눌렀을 때 동작하는 기능")
-    public ResponseEntity<Void> deleteFolder(
+    public ResponseEntity<BookmarkFolderDeleteResponse> deleteFolder(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long folderId){
 
-        bookmarkFolderService.delete(folderId);
-        return ResponseEntity.noContent().build();
+        BookmarkFolderDeleteResponse response = bookmarkFolderService.delete(folderId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/folder/{folderId}")
