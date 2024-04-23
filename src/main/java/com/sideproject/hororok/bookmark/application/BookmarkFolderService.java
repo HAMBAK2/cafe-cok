@@ -7,6 +7,7 @@ import com.sideproject.hororok.bookmark.domain.BookmarkRepository;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderUpdateRequest;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkFolderDeleteResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
@@ -62,10 +63,13 @@ public class BookmarkFolderService {
     }
 
     @Transactional
-    public void delete(Long folderId) {
+    public BookmarkFolderDeleteResponse delete(Long folderId) {
 
         deleteFolderIfPermissible(folderId);
+        bookmarkRepository.deleteByBookmarkFolderId(folderId);
         bookmarkFolderRepository.deleteById(folderId);
+
+        return new BookmarkFolderDeleteResponse(folderId);
     }
 
     public List<BookmarkFolderDto> getBookmarkFolderDtos(Long memberId) {

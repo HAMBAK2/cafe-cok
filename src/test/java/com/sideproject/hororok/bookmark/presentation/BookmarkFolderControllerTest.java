@@ -2,6 +2,7 @@ package com.sideproject.hororok.bookmark.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkFolderDeleteResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarksResponse;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
@@ -205,6 +206,12 @@ class BookmarkFolderControllerTest extends ControllerTest {
     public void test_folder_delete_success() throws Exception {
 
         Long folderId = 일반_폴더_ID;
+        BookmarkFolderDeleteResponse response = 북마크_폴더_삭제_응답(일반_폴더_ID);
+
+        when(bookmarkFolderService
+                .delete(any(Long.class)))
+                .thenReturn(response);
+
 
         //then
         mockMvc.perform(
@@ -219,8 +226,11 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 requestHeaders(
                                         headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
                                 pathParameters(
-                                        parameterWithName("folderId").description("삭제할 폴더의 ID"))))
-                .andExpect(status().isNoContent());
+                                        parameterWithName("folderId").description("삭제할 폴더의 ID")),
+                                responseFields(
+                                        fieldWithPath("folderId").description("삭제된 폴더 ID"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.folderId").value(일반_폴더_ID));
 
         verify(bookmarkFolderService)
                 .delete(bookmarkFolderIdCaptor.capture());

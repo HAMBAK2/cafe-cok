@@ -4,6 +4,7 @@ import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkFolderUpdateRequest;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkFolderDeleteResponse;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.member.domain.Member;
 
@@ -63,6 +64,10 @@ public class BookmarkFolderFixtures {
 
     public static BookmarkFoldersResponse 북마크_폴더_목록_응답() {
         return new BookmarkFoldersResponse(폴더_개수_1개, Arrays.asList(일반_폴더_DTO()));
+    }
+
+    public static BookmarkFolderDeleteResponse 북마크_폴더_삭제_응답(Long folderId) {
+        return new BookmarkFolderDeleteResponse(folderId);
     }
 
 
