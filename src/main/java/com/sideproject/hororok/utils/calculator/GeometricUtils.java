@@ -46,7 +46,4 @@ public class GeometricUtils {
 
         return distance; // 단위: km
     }
-
-
-
 }

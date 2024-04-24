@@ -1,13 +1,11 @@
 package com.sideproject.hororok.member.domain;
 
 import com.sideproject.hororok.global.entity.BaseEntity;
+import com.sideproject.hororok.member.domain.enums.SocialType;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
-import com.sideproject.hororok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

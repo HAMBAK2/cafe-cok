@@ -1,25 +1,22 @@
 package com.sideproject.hororok.cafe.application;
 
-import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
+import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.CafeDto;
-import com.sideproject.hororok.cafe.dto.CreatePlanDto;
+import com.sideproject.hororok.cafe.dto.response.CreatePlanResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.cafe.domain.CafeRepository;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.cafe.domain.OperationHour;
-import com.sideproject.hororok.cafe.domain.OperationHourRepository;
+import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
-import com.sideproject.hororok.plan.enums.PlanMatchType;
-import com.sideproject.hororok.utils.converter.FormatConverter;
+import com.sideproject.hororok.plan.domain.enums.PlanResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -29,81 +26,67 @@ public class CafePlanService {
 
     private final OperationHourRepository operationHourRepository;
     private final CafeService cafeService;
-    private final CafeRepository cafeRepository;
     private final KeywordService keywordService;
 
-    public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
+    public CreatePlanResponse createPlans(CreatePlanRequest request) {
         
-        PlanMatchType matchType = PlanMatchType.MATCH;
+        PlanResult matchType = PlanResult.MATCH;
         List<Cafe> recommendCafes = cafeService.findAllByOrderByStarRatingDescNameAsc();
+        CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywordsByKeywordNames(request.getKeywords());
 
         //방문시간 기준 필터링
-        List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(searchCond);
+        List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(request);
         if(inOperationHoursCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
+            matchType = PlanResult.MISMATCH;
+            return new CreatePlanResponse(
+                    matchType, request, categoryKeywords,
+                    convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //반경 범위 필터링(근처 카페 추천)
-        List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, searchCond);
+        List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, request);
         if(distanceFilteredCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),  convertCafeListToCafeDtoList(recommendCafes));
+            matchType = PlanResult.MISMATCH;
+            return new CreatePlanResponse(
+                    matchType, request, categoryKeywords,
+                    convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //3. 카테고리 모두 불일치하는지에 대한 확인
-        List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(searchCond, distanceFilteredCafes);
+        List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(request, distanceFilteredCafes);
         if(keywordFilteredCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
+            matchType = PlanResult.MISMATCH;
+            return new CreatePlanResponse(
+                    matchType, request, categoryKeywords,
+                    convertCafeListToCafeDtoList(recommendCafes));
         }
 
 
         //모두 일치하는 것인지 확인
-        List<Cafe> allMatchAtKeywordCafes = getAllMatchAtKeywordCafes(keywordFilteredCafes, searchCond);
+        List<Cafe> allMatchAtKeywordCafes = getAllMatchAtKeywordCafes(keywordFilteredCafes, request);
         if(!allMatchAtKeywordCafes.isEmpty()) {
-            orderByDistanceAndStarRating(allMatchAtKeywordCafes, searchCond.getLatitude(), searchCond.getLongitude());
+            orderByDistanceAndStarRating(allMatchAtKeywordCafes, request.getLatitude(), request.getLongitude());
             keywordFilteredCafes.removeAll(allMatchAtKeywordCafes);
-            matchType = PlanMatchType.MATCH;
+            matchType = PlanResult.MATCH;
 
-            return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),
-                    convertCafeListToCafeDtoList(allMatchAtKeywordCafes), convertCafeListToCafeDtoList(keywordFilteredCafes));
+            return new CreatePlanResponse(
+                    matchType, request, categoryKeywords,
+                    convertCafeListToCafeDtoList(allMatchAtKeywordCafes),
+                    convertCafeListToCafeDtoList(keywordFilteredCafes));
         }
 
-        matchType = PlanMatchType.SIMILAR;
-        
-        return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(keywordFilteredCafes));
+        matchType = PlanResult.SIMILAR;
+        return new CreatePlanResponse(
+                matchType, request, categoryKeywords,
+                convertCafeListToCafeDtoList(keywordFilteredCafes));
     }
 
     //카드가 모두 일치하는 경우를 찾는다.
-    private List<Cafe> getAllMatchAtKeywordCafes(List<Cafe> keywordFilteredCafes, CreatePlanSearchCond searchCond) {
+    private List<Cafe> getAllMatchAtKeywordCafes(List<Cafe> keywordFilteredCafes, CreatePlanRequest request) {
 
         int idx = 0;
         List<Cafe> allMatchAtKeywordCafes = new ArrayList<>();
-        List<String> keywords = new ArrayList<>();
-
-        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
-        List<String> atmosphere = categoryKeywords.getAtmosphere();
-        List<String> facility = categoryKeywords.getFacility();
-        List<String> purpose = categoryKeywords.getPurpose();
-        List<String> theme = categoryKeywords.getTheme();
-        List<String> menu = categoryKeywords.getMenu();
-
-        if (atmosphere != null) {
-            keywords.addAll(atmosphere);
-        }
-        if (facility != null) {
-            keywords.addAll(facility);
-        }
-        if (purpose != null) {
-            keywords.addAll(purpose);
-        }
-        if (theme != null) {
-            keywords.addAll(theme);
-        }
-        if (menu != null) {
-            keywords.addAll(menu);
-        }
+        List<String> keywords = request.getKeywords();
 
         for (Cafe keywordFilteredCafe : keywordFilteredCafes) {
             Long cafeId = keywordFilteredCafe.getId();
@@ -120,33 +103,10 @@ public class CafePlanService {
     }
 
     //키워드가 완전히 불일치 하는 경우가 있는지 판단한다.
-    private List<Cafe> getKeywordFilteredCafes(CreatePlanSearchCond searchCond, List<Cafe> distanceFilteredCafes) {
+    private List<Cafe> getKeywordFilteredCafes(CreatePlanRequest request, List<Cafe> distanceFilteredCafes) {
 
         List<Cafe> keywordFilteredCafes = new ArrayList<>();
-        List<String> keywords = new ArrayList<>();
-
-        CategoryKeywords categoryKeywords = searchCond.getCategoryKeywords();
-        List<String> atmosphere = categoryKeywords.getAtmosphere();
-        List<String> facility = categoryKeywords.getFacility();
-        List<String> purpose = categoryKeywords.getPurpose();
-        List<String> theme = categoryKeywords.getTheme();
-        List<String> menu = categoryKeywords.getMenu();
-
-        if (atmosphere != null) {
-            keywords.addAll(atmosphere);
-        }
-        if (facility != null) {
-            keywords.addAll(facility);
-        }
-        if (purpose != null) {
-            keywords.addAll(purpose);
-        }
-        if (theme != null) {
-            keywords.addAll(theme);
-        }
-        if (menu != null) {
-            keywords.addAll(menu);
-        }
+        List<String> keywords = request.getKeywords();
 
         for (Cafe distanceFilteredCafe : distanceFilteredCafes) {
             Long cafeId = distanceFilteredCafe.getId();
@@ -183,30 +143,27 @@ public class CafePlanService {
     }
 
     
-    private List<OperationHour> dayAndTimeFiltering(CreatePlanSearchCond searchCond) {
+    private List<OperationHour> dayAndTimeFiltering(CreatePlanRequest request) {
 
-        String dateString = searchCond.getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        LocalDate date = LocalDate.parse(dateString, formatter);
-        DayOfWeek parseDate = date.getDayOfWeek();
+        LocalDate visitDate = request.getVisitDate();
+        DayOfWeek parseDate = visitDate.getDayOfWeek();
 
         return operationHourRepository
-                .findOpenHoursByDateAndTimeRange(parseDate, searchCond.getStartTime(), searchCond.getEndTime());
-
+                .findOpenHoursByDateAndTimeRange(
+                        parseDate, request.getVisitStartTime(), request.getVisitEndTime());
     }
 
     
-    private List<Cafe> distanceFiltering(List<OperationHour> inOperationHoursCafes, CreatePlanSearchCond searchCond) {
+    private List<Cafe> distanceFiltering(List<OperationHour> inOperationHoursCafes, CreatePlanRequest request) {
 
         List<Cafe> distanceFilteredCafe = new ArrayList<>();
 
         for (OperationHour inOperationHoursCafe : inOperationHoursCafes) {
             Cafe cafe = inOperationHoursCafe.getCafe();
             double walkingTime = GeometricUtils.calculateWalkingTime(cafe.getLatitude(), cafe.getLongitude(),
-                    searchCond.getLatitude(), searchCond.getLongitude());
+                    request.getLatitude(), request.getLongitude());
 
-            if (walkingTime <= searchCond.getMinutes()) {
+            if (walkingTime <= request.getWithinMinutes()) {
                 distanceFilteredCafe.add(cafe);
             }
         }

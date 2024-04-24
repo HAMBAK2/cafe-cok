@@ -1,7 +1,7 @@
 package com.sideproject.hororok.bookmark.application;
 
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.cafe.domain.CafeRepository;
+import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.cafe.exception.NoSuchCafeException;
 import com.sideproject.hororok.bookmark.domain.Bookmark;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;

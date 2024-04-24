@@ -1,12 +1,11 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDetail;
-import com.sideproject.hororok.cafe.dto.WithinRadiusCafe;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.cafe.dto.WithinRadiusCafeDto;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.menu.dto.MenuInfo;
-import com.sideproject.hororok.review.dto.ReviewDetail;
+import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,8 +19,8 @@ public class CafeFindBarResponse {
     private final boolean isExist;
 
     //검색한 카페가 존재하지 않는 경우
-    private final CategoryKeywords categoryKeywords;
-    private final List<WithinRadiusCafe> cafes;
+    private final CategoryKeywordsDto categoryKeywords;
+    private final List<WithinRadiusCafeDto> cafes;
 
     //검색한 카페가 존재하는 경우
     private final Long id;
@@ -37,12 +36,12 @@ public class CafeFindBarResponse {
     private final List<String> closedDay;
     private final List<String> cafeImageUrls;
     private final List<String> reviewImageUrls;
-    private final List<MenuInfo> menus;
-    private final List<ReviewDetail> reviews;
+    private final List<MenuDto> menus;
+    private final List<ReviewDetailDto> reviews;
     private final List<KeywordCount> cafeKeywords;
 
-    public static CafeFindBarResponse notExistOf(List<WithinRadiusCafe> cafes,
-                                                 CategoryKeywords categoryKeywords) {
+    public static CafeFindBarResponse notExistOf(List<WithinRadiusCafeDto> cafes,
+                                                 CategoryKeywordsDto categoryKeywords) {
 
         return CafeFindBarResponse.builder()
                 .isExist(false)

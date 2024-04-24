@@ -1,26 +1,27 @@
 package com.sideproject.hororok.review.dto.request;
 
 
-import com.sideproject.hororok.category.dto.CategoryKeywords;
 import jakarta.persistence.Lob;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class ReviewCreateRequest {
 
-    private final Long cafeId;
-    private final @Lob String content;
-    private final String specialNote;
-    private final CategoryKeywords categoryKeywords;
-    private final Integer starRating;
+    private Long cafeId;
+    private @Lob String content;
+    private String specialNote;
+    private List<String> keywords;
+    private Integer starRating;
 
     public ReviewCreateRequest(
             final Long cafeId, final String content, final String specialNote,
-            final CategoryKeywords categoryKeywords, final Integer starRating) {
+            final List<String> keywords, final Integer starRating) {
         this.cafeId = cafeId;
         this.content = content;
         this.specialNote = specialNote;
-        this.categoryKeywords = categoryKeywords;
+        this.keywords = keywords;
         this.starRating = starRating;
     }
 }

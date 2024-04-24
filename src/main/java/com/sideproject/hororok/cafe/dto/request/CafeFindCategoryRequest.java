@@ -1,22 +1,22 @@
 package com.sideproject.hororok.cafe.dto.request;
 
-import com.sideproject.hororok.category.dto.CategoryKeywords;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 public class CafeFindCategoryRequest {
 
-    private final BigDecimal longitude;
-    private final BigDecimal latitude;
-    private final CategoryKeywords categoryKeywords;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
+    private List<String> keywords;
 
-    public CafeFindCategoryRequest(final BigDecimal longitude,
-                                   final BigDecimal latitude,
-                                   final CategoryKeywords categoryKeywords) {
+    public CafeFindCategoryRequest(final BigDecimal latitude,
+                                   final BigDecimal longitude,
+                                   final List<String> keywords) {
         this.longitude = longitude;
         this.latitude = latitude;
-        this.categoryKeywords = categoryKeywords;
+        this.keywords = keywords;
     }
 }

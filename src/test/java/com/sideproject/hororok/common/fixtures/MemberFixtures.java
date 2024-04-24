@@ -1,7 +1,7 @@
 package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.member.domain.SocialType;
+import com.sideproject.hororok.member.domain.enums.SocialType;
 import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
 
 import java.util.Arrays;

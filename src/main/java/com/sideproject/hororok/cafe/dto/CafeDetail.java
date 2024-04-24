@@ -1,11 +1,10 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.menu.dto.MenuInfo;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.review.dto.ReviewDetail;
-import com.sideproject.hororok.cafe.domain.OpenStatus;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
+import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -27,14 +26,14 @@ public class CafeDetail {
     private final List<String> businessHours;
     private final List<String> closedDay;
     private final List<String> cafeImageUrls;
-    private final List<MenuInfo> menus;
+    private final List<MenuDto> menus;
     private final List<String> reviewImageUrls;
-    private final List<ReviewDetail> reviews;
+    private final List<ReviewDetailDto> reviews;
     private final List<KeywordCount> cafeKeywords;
 
-    public CafeDetail(final Cafe cafe, final List<MenuInfo> menus, final OpenStatus openStatus,
+    public CafeDetail(final Cafe cafe, final List<MenuDto> menus, final OpenStatus openStatus,
                       final List<String> businessHours, final List<String> closedDay,
-                      final List<String> reviewImageUrls, final List<ReviewDetail> reviews,
+                      final List<String> reviewImageUrls, final List<ReviewDetailDto> reviews,
                       final List<KeywordCount> cafeKeywords, final List<String> cafeImageUrls) {
 
         this.id = cafe.getId();
