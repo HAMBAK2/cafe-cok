@@ -1,6 +1,6 @@
 package com.sideproject.hororok.review.dto;
 
-import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class ReviewDetailDto {
     private final String content;
     private final String specialNote;
     private final List<ReviewImageInfoDto> images;
-    private final List<KeywordInfo> keywords;
+    private final List<KeywordDto> keywords;
     private final Integer starRating;
     private final LocalDate createdDate;
 
@@ -25,7 +25,7 @@ public class ReviewDetailDto {
 
     public static ReviewDetailDto of(final Review review,
                                      final List<ReviewImageInfoDto> images,
-                                     final List<KeywordInfo> keywords) {
+                                     final List<KeywordDto> keywords) {
 
         return ReviewDetailDto.builder()
                 .id(review.getId())

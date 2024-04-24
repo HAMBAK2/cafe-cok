@@ -3,7 +3,7 @@ package com.sideproject.hororok.cafe.presentation;
 import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
-import com.sideproject.hororok.cafe.application.CafePlanService;
+import com.sideproject.hororok.plan.domain.application.PlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 public class CafeController {
 
     private final CafeService cafeService;
-    private final CafePlanService cafePlanService;
 
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
@@ -88,13 +87,5 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/plans")
-    @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
-    @Parameter(description = "방문위치(좌표), 몇분거리, 방문일자(요일 하나, 시간은 범위), 키워드 5개")
-    
-    public ResponseEntity<CreatePlanResponse> createPlan(@RequestBody CreatePlanRequest searchCond
-            ) {
 
-        return ResponseEntity.ok(cafePlanService.createPlans(searchCond));
-    }
 }

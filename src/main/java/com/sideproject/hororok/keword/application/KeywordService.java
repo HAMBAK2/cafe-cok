@@ -5,7 +5,7 @@ import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +22,6 @@ public class KeywordService {
 
     private final Integer USER_CHOICE_KEYWORD_CNT = 6;
 
-    public KeywordInfo getKeywordInfoByReviewKeyword(CafeReviewKeyword cafeReviewKeyword) {
-        return KeywordInfo.from(cafeReviewKeyword.getKeyword());
-    }
-
-    public List<KeywordInfo> getKeywordInfosByCafeReviewKeywords(List<CafeReviewKeyword> cafeReviewKeywords) {
-        List<KeywordInfo> keywordInfos = new ArrayList<>();
-        for (CafeReviewKeyword cafeReviewKeyword : cafeReviewKeywords) {
-            keywordInfos.add(getKeywordInfoByReviewKeyword(cafeReviewKeyword));
-        }
-
-        return keywordInfos;
-    }
 
     public List<KeywordCount> getUserChoiceKeywordCounts(Long cafeId) {
         List<KeywordCount> allCafeKeywordCounts
@@ -46,10 +34,6 @@ public class KeywordService {
         return allCafeKeywordCounts;
     }
 
-    public List<Keyword> findByCafeId(Long cafeId) {
-        return keywordRepository.findByCafeId(cafeId);
-    }
-
     public CategoryKeywordsDto getAllCategoryKeywords() {
         List<Keyword> keywords = keywordRepository.findAll();
         return new CategoryKeywordsDto(keywords);
@@ -60,5 +44,7 @@ public class KeywordService {
         List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
         return new CategoryKeywordsDto(keywords);
     }
+
+
 
 }

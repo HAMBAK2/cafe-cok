@@ -12,8 +12,8 @@ import java.util.List;
 public class CreatePlanRequest {
 
     private String locationName;
-    private BigDecimal longitude;
     private BigDecimal latitude;
+    private BigDecimal longitude;
     private Integer withinMinutes;
     private LocalDate visitDate;
     private LocalTime visitStartTime;
@@ -21,12 +21,12 @@ public class CreatePlanRequest {
     private List<String> keywords;
 
     public CreatePlanRequest(
-            final String locationName, final BigDecimal longitude, final BigDecimal latitude,
+            final String locationName, final BigDecimal latitude, final BigDecimal longitude,
             final Integer withinMinutes, LocalDate visitDate, final LocalTime visitStartTime,
             final LocalTime visitEndTime, final List<String> keywords) {
         this.locationName = locationName;
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
         this.withinMinutes = withinMinutes;
         this.visitDate = visitDate;
         this.visitStartTime = visitStartTime;

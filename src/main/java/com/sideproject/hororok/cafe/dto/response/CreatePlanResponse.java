@@ -6,10 +6,10 @@ import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.plan.domain.enums.PlanResult;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sideproject.hororok.utils.converter.FormatConverter.dateTimeConvert;
 
 @Getter
 public class CreatePlanResponse {
@@ -17,8 +17,7 @@ public class CreatePlanResponse {
     private PlanResult planResult;
     private String locationName;
     private Integer withinMinutes;
-    private LocalDate visitDate;
-    private LocalTime visitTime;
+    private String visitDateTime;
     private CategoryKeywordsDto categoryKeywords;
     private List<CafeDto> recommendCafes = new ArrayList<>();
     private List<CafeDto> matchCafes = new ArrayList<>();
@@ -35,8 +34,7 @@ public class CreatePlanResponse {
         this.planResult = planResult;
         this.locationName = request.getLocationName();
         this.withinMinutes = request.getWithinMinutes();
-        this.visitDate = request.getVisitDate();
-        this.visitTime = request.getVisitStartTime();
+        this.visitDateTime = dateTimeConvert(request.getVisitDate(), request.getVisitStartTime());
         this.categoryKeywords = categoryKeywords;
         this.matchCafes = matchCafes;
         this.similarCafes = similarCafes;
@@ -50,8 +48,7 @@ public class CreatePlanResponse {
         this.planResult = planResult;
         this.locationName = request.getLocationName();
         this.withinMinutes = request.getWithinMinutes();
-        this.visitDate = request.getVisitDate();
-        this.visitTime = request.getVisitStartTime();
+        this.visitDateTime = dateTimeConvert(request.getVisitDate(), request.getVisitStartTime());
         this.categoryKeywords = categoryKeywords;
 
         if(planResult.getValue().equals(PlanResult.SIMILAR)) {

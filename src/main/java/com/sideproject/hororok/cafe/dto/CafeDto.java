@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -37,6 +39,12 @@ public class CafeDto {
                 .reviewCount(cafe.getReviewCount())
                 .image(cafe.getImages().get(0).getImageUrl())
                 .build();
+    }
+
+    public static List<CafeDto> fromList(List<Cafe> cafes) {
+        return cafes.stream()
+                .map(CafeDto::from)
+                .collect(Collectors.toList());
     }
 
 }

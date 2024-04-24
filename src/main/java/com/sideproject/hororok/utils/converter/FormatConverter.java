@@ -3,6 +3,8 @@ package com.sideproject.hororok.utils.converter;
 
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class FormatConverter {
 
@@ -10,6 +12,14 @@ public class FormatConverter {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         String formattedPrice = numberFormat.format(price) + "원";
         return formattedPrice;
+    }
+
+    public static String dateTimeConvert(LocalDate date, LocalTime time) {
+        String month = String.valueOf(date.getMonthValue());
+        String day = String.valueOf(date.getDayOfMonth());
+        String hour = String.valueOf(time.getHour());
+
+        return month + "월 " + day + "일 " + hour + "시";
     }
 
     public static String getKoreanDayOfWeek(DayOfWeek day) {

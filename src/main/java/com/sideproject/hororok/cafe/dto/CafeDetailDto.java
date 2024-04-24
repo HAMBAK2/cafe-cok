@@ -3,7 +3,7 @@ package com.sideproject.hororok.cafe.dto;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import lombok.*;
@@ -39,11 +39,11 @@ public class CafeDetailDto {
     private final List<MenuDto> menus;
     private final List<ReviewDetailDto> reviews;
     private final List<String> reviewImageUrls;
-    private final List<KeywordInfo> cafeKeywords;
+    private final List<KeywordDto> cafeKeywords;
 
     public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus, OpenStatus openStatus, List<String> businessHours, List<String> closedDay,
                                    List<String> reviewImageUrls, List<ReviewDetailDto> reviews,
-                                   List<KeywordInfo> cafeKeywords, List<String> cafeImageUrls) {
+                                   List<KeywordDto> cafeKeywords, List<String> cafeImageUrls) {
 
 
         return CafeDetailDto.builder()

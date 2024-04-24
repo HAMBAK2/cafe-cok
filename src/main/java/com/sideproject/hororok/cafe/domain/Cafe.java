@@ -6,6 +6,7 @@ import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.menu.domain.Menu;
 import com.sideproject.hororok.review.domain.Review;
+import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,6 +105,5 @@ public class Cafe extends BaseEntity {
         BigDecimal newReviewCount = BigDecimal.valueOf(this.reviewCount);
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
-
 
 }

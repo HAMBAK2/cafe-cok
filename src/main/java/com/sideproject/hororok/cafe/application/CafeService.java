@@ -1,5 +1,7 @@
 package com.sideproject.hororok.cafe.application;
 
+import com.sideproject.hororok.cafe.domain.OperationHour;
+import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
@@ -7,6 +9,7 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.menu.dto.MenuDto;
@@ -14,7 +17,6 @@ import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.review.application.ReviewService;
@@ -27,12 +29,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CafeService {
+
+    private final KeywordRepository keywordRepository;
+    private final OperationHourRepository operationHourRepository;
 
     private final MenuService menuService;
     private final ReviewService reviewService;
@@ -55,12 +64,6 @@ public class CafeService {
     public CafeHomeResponse home() {
         CategoryKeywordsDto allCategoryKeywords = keywordService.getAllCategoryKeywords();
         return new CafeHomeResponse(allCategoryKeywords);
-    }
-
-
-    public Cafe findCafeById(Long cafeId) {
-        return cafeRepository.findById(cafeId)
-                .orElseThrow(() -> new EntityNotFoundException("카페가 존재하지 않습니다."));
     }
 
     
@@ -97,12 +100,14 @@ public class CafeService {
         for (WithinRadiusCafeDto withinRadiusCafe : withinRadiusCafes) {
             Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
             List<Review> reviews = cafe.getReviews();
-            Set<String> keywordNames = new HashSet<>();
+            List<String> keywordNames = new ArrayList<>();
             for (Review review : reviews) {
                 List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
-                keywordNames
-                        .addAll(getKeywordNamesListFromKeywords
-                                (keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords)));
+                keywordNames = cafeReviewKeywords.stream()
+                        .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
+                        .distinct()
+                        .collect(Collectors.toList());
+
             }
 
             boolean allMatch = targetKeywordNames.stream()
@@ -120,7 +125,7 @@ public class CafeService {
     
     public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
-        Cafe cafe =  findCafeById(cafeId);
+        Cafe cafe =  cafeRepository.getById(cafeId);
         List<MenuDto> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
         List<ReviewDetailDto> reviews = reviewService.findReviewByCafeId(cafeId);
@@ -143,10 +148,9 @@ public class CafeService {
                 reviewImageUrls, reviews, KeywordCounts, cafeImageUrls);
     }
 
-
     
     public List<WithinRadiusCafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
-        List<Cafe> cafes = findAll();
+        List<Cafe> cafes = cafeRepository.findAll();
         List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
 
         for (Cafe cafe : cafes) {
@@ -166,23 +170,56 @@ public class CafeService {
         return withinRadiusCafes;
     }
 
-    
-    public List<String> getKeywordNamesListFromKeywords(List<KeywordInfo> keywords) {
 
-        List<String> keywordNames = new ArrayList<>();
-        for (KeywordInfo keyword : keywords) {
-            keywordNames.add(keyword.getName());
-        }
+    public List<Cafe> getCafesByDateAndTimeRange(
+            LocalDate visitDate, LocalTime startTime, LocalTime endTime) {
 
-        return keywordNames;
+        DayOfWeek dayOfWeek = visitDate.getDayOfWeek();
+        List<OperationHour> openHoursByDateAndTimeRange =
+                operationHourRepository.findOpenHoursByDateAndTimeRange(dayOfWeek, startTime, endTime);
+
+        List<Cafe> cafesByDateAndTimeRange =
+                openHoursByDateAndTimeRange.stream()
+                        .map(operationHour -> operationHour.getCafe())
+                        .collect(Collectors.toList());
+
+        return cafesByDateAndTimeRange;
     }
-    
-    public List<Cafe> findAll() {
-        return cafeRepository.findAll();
+
+
+    public List<Cafe> getCafesByDistance(
+            List<Cafe> cafes, BigDecimal latitude, BigDecimal longitude, Integer withinMinutes) {
+
+        List<Cafe> distanceFilteredCafe = cafes.stream()
+                .filter(cafe -> {
+                    double walkingTime = GeometricUtils.calculateWalkingTime(
+                            cafe.getLatitude(), cafe.getLongitude(), latitude, longitude);
+                    return walkingTime <= withinMinutes;
+                })
+                .collect(Collectors.toList());
+
+        return distanceFilteredCafe;
     }
 
-    
-    public List<Cafe> findAllByOrderByStarRatingDescNameAsc() {
-        return cafeRepository.findAllByOrderByStarRatingDescNameAsc();
+    public List<Cafe> getCafesByKeyword(List<Cafe> cafes, List<String> keywords) {
+
+        List<Cafe> cafesByKeyword = cafes.stream()
+                .filter(cafe -> keywordRepository.findByCafeId(cafe.getId()).stream()
+                        .anyMatch(keyword -> keywords.contains(keyword.getName())))
+                .collect(Collectors.toList());
+
+        return cafesByKeyword;
+    }
+
+    public List<Cafe> getCafesByKeywordAllMatch(List<Cafe> cafes, List<String> keywords) {
+
+        List<Cafe> cafesByKeywordAllMatch = cafes.stream()
+                .filter(cafe -> keywords.stream()
+                        .anyMatch(keyword -> keywordRepository.findByCafeId(cafe.getId())
+                                .stream()
+                                .anyMatch(findKeyword -> findKeyword.getName().equals(keyword))))
+                .collect(Collectors.toList());
+
+        return cafesByKeywordAllMatch;
     }
 }

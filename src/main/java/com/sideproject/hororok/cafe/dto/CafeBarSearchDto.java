@@ -2,7 +2,7 @@ package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class CafeBarSearchDto {
     private final List<MenuDto> menus;
     private final List<ReviewDetailDto> reviews;
     private final List<String> reviewImageUrls;
-    private final List<KeywordInfo> cafeKeywords;
+    private final List<KeywordDto> cafeKeywords;
 
     public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, CategoryKeywordsDto categoryKeywords) {
 
