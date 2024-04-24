@@ -8,7 +8,6 @@ import lombok.Getter;
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 
-
 @Getter
 @Entity
 @Table(name = "bookmark_folders")

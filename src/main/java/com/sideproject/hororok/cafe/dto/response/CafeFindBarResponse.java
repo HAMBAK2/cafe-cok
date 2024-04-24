@@ -2,9 +2,8 @@ package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDetail;
 import com.sideproject.hororok.cafe.dto.WithinRadiusCafe;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.review.dto.ReviewDetail;
 import lombok.Builder;
@@ -20,7 +19,7 @@ public class CafeFindBarResponse {
     private final boolean isExist;
 
     //검색한 카페가 존재하지 않는 경우
-    private final CategoryKeywords categoryKeywords;
+    private final CategoryKeywordsDto categoryKeywords;
     private final List<WithinRadiusCafe> cafes;
 
     //검색한 카페가 존재하는 경우
@@ -42,7 +41,7 @@ public class CafeFindBarResponse {
     private final List<KeywordCount> cafeKeywords;
 
     public static CafeFindBarResponse notExistOf(List<WithinRadiusCafe> cafes,
-                                                 CategoryKeywords categoryKeywords) {
+                                                 CategoryKeywordsDto categoryKeywords) {
 
         return CafeFindBarResponse.builder()
                 .isExist(false)

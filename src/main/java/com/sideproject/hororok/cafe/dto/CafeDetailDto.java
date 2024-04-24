@@ -1,6 +1,6 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
@@ -20,7 +20,7 @@ public class CafeDetailDto {
 
     //존재하지 않을 경우
     private final List<WithinRadiusCafeDto> cafes;
-    private final CategoryKeywords categoryKeywords;
+    private final CategoryKeywordsDto categoryKeywordsDto;
 
     //존재할 경우
     private final Long id;
@@ -72,7 +72,7 @@ public class CafeDetailDto {
         return CafeDetailDto.builder()
                 .isExist(false)
                 .cafes(cafeReSearchDto.getCafes())
-                .categoryKeywords(cafeReSearchDto.getCategoryKeywords())
+                .categoryKeywordsDto(cafeReSearchDto.getCategoryKeywordsDto())
                 .build();
     }
 

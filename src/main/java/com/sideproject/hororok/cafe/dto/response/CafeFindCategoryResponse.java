@@ -1,7 +1,7 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.WithinRadiusCafe;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,10 +12,10 @@ import java.util.List;
 public class CafeFindCategoryResponse {
 
     private final List<WithinRadiusCafe> cafes;
-    private final CategoryKeywords categoryKeywords;
+    private final CategoryKeywordsDto categoryKeywords;
 
     public static CafeFindCategoryResponse of(final List<WithinRadiusCafe> cafes,
-                                              final CategoryKeywords categoryKeywords) {
+                                              final CategoryKeywordsDto categoryKeywords) {
         return CafeFindCategoryResponse.builder()
                 .cafes(cafes)
                 .categoryKeywords(categoryKeywords)

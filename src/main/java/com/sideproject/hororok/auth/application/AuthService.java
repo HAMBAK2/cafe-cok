@@ -3,7 +3,6 @@ package com.sideproject.hororok.auth.application;
 import com.sideproject.hororok.auth.domain.AuthToken;
 import com.sideproject.hororok.auth.domain.OAuthToken;
 import com.sideproject.hororok.auth.domain.OAuthTokenRepository;
-import com.sideproject.hororok.auth.domain.redis.AuthRefreshTokenRepository;
 import com.sideproject.hororok.auth.dto.OAuthMember;
 import com.sideproject.hororok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;

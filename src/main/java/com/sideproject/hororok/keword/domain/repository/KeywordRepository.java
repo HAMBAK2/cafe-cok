@@ -1,5 +1,6 @@
-package com.sideproject.hororok.keword.domain;
+package com.sideproject.hororok.keword.domain.repository;
 
+import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.dto.KeywordCount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +27,8 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
             "JOIN k.cafeReviewKeywords crk " +
             "WHERE crk.cafe.id = :cafeId ")
     List<Keyword> findByCafeId(@Param("cafeId") Long cafeId);
+
+    List<Keyword> findByNameIn(List<String> keywordNames);
+
 
 }

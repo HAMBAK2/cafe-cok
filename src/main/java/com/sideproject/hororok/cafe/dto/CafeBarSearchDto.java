@@ -1,6 +1,6 @@
 package com.sideproject.hororok.cafe.dto;
 
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.menu.dto.MenuInfo;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.dto.ReviewDetail;
@@ -18,7 +18,7 @@ public class CafeBarSearchDto {
 
     private final boolean isExist;
     private final List<WithinRadiusCafeDto> cafes;
-    private final CategoryKeywords categoryKeywords;
+    private final CategoryKeywordsDto categoryKeywordsDto;
     private final CafeDetailDto cafeDetail;
 
     //존재할 경우
@@ -39,13 +39,13 @@ public class CafeBarSearchDto {
     private final List<String> reviewImageUrls;
     private final List<KeywordInfo> cafeKeywords;
 
-    public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, CategoryKeywords categoryKeywords) {
+    public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, CategoryKeywordsDto categoryKeywordsDto) {
 
 
         return CafeBarSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafe)
-                .categoryKeywords(categoryKeywords)
+                .categoryKeywordsDto(categoryKeywordsDto)
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class CafeBarSearchDto {
         return CafeBarSearchDto.builder()
                 .isExist(false)
                 .cafes(cafeReSearchDto.getCafes())
-                .categoryKeywords(cafeReSearchDto.getCategoryKeywords())
+                .categoryKeywordsDto(cafeReSearchDto.getCategoryKeywordsDto())
                 .build();
     }
 

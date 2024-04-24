@@ -1,14 +1,13 @@
 package com.sideproject.hororok.keword.domain;
 
-import com.sideproject.hororok.category.domain.Category;
 import com.sideproject.hororok.global.entity.BaseEntity;
+import com.sideproject.hororok.keword.domain.enums.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
@@ -25,8 +24,8 @@ public class Keyword extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "categories_id")
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "category", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "keyword")

@@ -3,13 +3,12 @@ package com.sideproject.hororok.review.application;
 import com.sideproject.hororok.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeRepository;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
-import com.sideproject.hororok.keword.domain.CafeReviewKeywordRepository;
+import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.keword.domain.Keyword;
-import com.sideproject.hororok.keword.domain.KeywordRepository;
+import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.member.domain.MemberRepository;
 import com.sideproject.hororok.review.domain.*;
 import com.sideproject.hororok.review.dto.ReviewDetail;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,29 +74,7 @@ public class ReviewService {
         Review savedReview = reviewRepository.save(review);
 
         //카테고리 키워드 저장
-        CategoryKeywords categoryKeywords = request.getCategoryKeywords();
-        List<String> keywordNames = new ArrayList<>();
-        List<String> atmosphere = categoryKeywords.getAtmosphere();
-        List<String> facility = categoryKeywords.getFacility();
-        List<String> purpose = categoryKeywords.getPurpose();
-        List<String> theme = categoryKeywords.getTheme();
-        List<String> menu = categoryKeywords.getMenu();
-
-        if (atmosphere != null) {
-            keywordNames.addAll(atmosphere);
-        }
-        if (facility != null) {
-            keywordNames.addAll(facility);
-        }
-        if (purpose != null) {
-            keywordNames.addAll(purpose);
-        }
-        if (theme != null) {
-            keywordNames.addAll(theme);
-        }
-        if (menu != null) {
-            keywordNames.addAll(menu);
-        }
+        List<String> keywordNames = request.getKeywords();
 
         for (String keywordName : keywordNames) {
             Keyword findKeyword = keywordRepository.findByName(keywordName)

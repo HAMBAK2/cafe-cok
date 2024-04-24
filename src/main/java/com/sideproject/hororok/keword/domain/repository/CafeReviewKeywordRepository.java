@@ -1,5 +1,6 @@
-package com.sideproject.hororok.keword.domain;
+package com.sideproject.hororok.keword.domain.repository;
 
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

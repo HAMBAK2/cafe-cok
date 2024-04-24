@@ -1,8 +1,7 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.dto.WithinRadiusCafe;
-import com.sideproject.hororok.cafe.dto.WithinRadiusCafeDto;
-import com.sideproject.hororok.category.dto.CategoryKeywords;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,9 +13,9 @@ public class CafeFindAgainResponse {
 
     private final boolean isExist;
     private final List<WithinRadiusCafe> cafes;
-    private final CategoryKeywords categoryKeywords;
+    private final CategoryKeywordsDto categoryKeywords;
 
-    public static CafeFindAgainResponse of(List<WithinRadiusCafe> cafes, CategoryKeywords categoryKeywords) {
+    public static CafeFindAgainResponse of(List<WithinRadiusCafe> cafes, CategoryKeywordsDto categoryKeywords) {
         return CafeFindAgainResponse.builder()
                 .isExist(!cafes.isEmpty())
                 .cafes(cafes)

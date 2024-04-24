@@ -2,7 +2,8 @@ package com.sideproject.hororok.keword.application;
 
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
-import com.sideproject.hororok.keword.domain.KeywordRepository;
+import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,17 @@ public class KeywordService {
 
     public List<Keyword> findByCafeId(Long cafeId) {
         return keywordRepository.findByCafeId(cafeId);
+    }
+
+    public CategoryKeywordsDto getAllCategoryKeywords() {
+        List<Keyword> keywords = keywordRepository.findAll();
+        return new CategoryKeywordsDto(keywords);
+    }
+
+    public CategoryKeywordsDto getCategoryKeywordsByKeywordNames(List<String> keywordNames) {
+
+        List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
+        return new CategoryKeywordsDto(keywords);
     }
 
 }

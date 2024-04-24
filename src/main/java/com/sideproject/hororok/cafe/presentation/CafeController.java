@@ -1,12 +1,10 @@
 package com.sideproject.hororok.cafe.presentation;
 
-import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
-import com.sideproject.hororok.cafe.dto.*;
+import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafePlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
-import com.sideproject.hororok.category.application.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,15 +26,13 @@ public class CafeController {
 
     private final CafeService cafeService;
     private final CafePlanService cafePlanService;
-    private final CategoryService categoryService;
 
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
     
     public ResponseEntity<CafeHomeResponse> home() {
 
-        CafeHomeResponse response
-                = CafeHomeResponse.from(categoryService.findAllCategoryAndKeyword());
+        CafeHomeResponse response = cafeService.home();
         return ResponseEntity.ok(response);
     }
 
@@ -96,7 +92,7 @@ public class CafeController {
     @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
     @Parameter(description = "방문위치(좌표), 몇분거리, 방문일자(요일 하나, 시간은 범위), 키워드 5개")
     
-    public ResponseEntity<CreatePlanDto> createPlan( @RequestBody CreatePlanSearchCond searchCond
+    public ResponseEntity<CreatePlanResponse> createPlan(@RequestBody CreatePlanRequest searchCond
             ) {
 
         return ResponseEntity.ok(cafePlanService.createPlans(searchCond));

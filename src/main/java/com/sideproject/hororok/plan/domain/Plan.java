@@ -2,6 +2,7 @@ package com.sideproject.hororok.plan.domain;
 
 
 import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.plan.domain.enums.PlanResult;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -26,16 +27,16 @@ public class Plan {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    @Column(name = "departure_name")
-    private String departureName;
+    @Column(name = "location_name")
+    private String locationName;
 
-    @Column(name = "departure_ latitude",
+    @Column(name = "latitude",
             precision = 17, scale = 14)
-    private BigDecimal departureLatitude;
+    private BigDecimal latitude;
 
-    @Column(name = "departure_ longitude",
+    @Column(name = "longitude",
             precision = 17, scale = 14)
-    private BigDecimal departureLongitude;
+    private BigDecimal longitude;
 
     @Column(name = "visit_date")
     private LocalDate visitDate;

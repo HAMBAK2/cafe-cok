@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class OAuthMember {
 
-    private final String email;
-    private final String nickname;
-    private final String picture;
-    private final String refreshToken;
+    private String email;
+    private String nickname;
+    private String picture;
+    private String refreshToken;
 
     public OAuthMember(final String email,
                        final String nickname,

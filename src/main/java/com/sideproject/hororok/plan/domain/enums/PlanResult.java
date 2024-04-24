@@ -1,4 +1,4 @@
-package com.sideproject.hororok.plan.domain;
+package com.sideproject.hororok.plan.domain.enums;
 
 public enum PlanResult {
     MATCH("일치"),
