@@ -9,17 +9,17 @@ import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.menu.dto.MenuInfo;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.cafe.domain.CafeRepository;
+import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.dto.ReviewDetail;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
-import com.sideproject.hororok.cafe.domain.OpenStatus;
+import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class CafeService {
     
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
-        List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+        List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
         CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
 
         return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywordsDto);
@@ -77,7 +77,7 @@ public class CafeService {
 
         Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
         if(findCafe.isEmpty()) {
-            List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+            List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
             CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
             return CafeFindBarResponse.notExistOf(withinRadiusCafes, categoryKeywordsDto);
         }
@@ -89,12 +89,12 @@ public class CafeService {
     
     public CafeFindCategoryResponse findCafeByCategory(CafeFindCategoryRequest request) {
 
-        List<WithinRadiusCafe> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
+        List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
         CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
 
         List<String> targetKeywordNames = request.getKeywords();
-        List<WithinRadiusCafe> filteredWithinRadiusCafes = new ArrayList<>();
-        for (WithinRadiusCafe withinRadiusCafe : withinRadiusCafes) {
+        List<WithinRadiusCafeDto> filteredWithinRadiusCafes = new ArrayList<>();
+        for (WithinRadiusCafeDto withinRadiusCafe : withinRadiusCafes) {
             Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
             List<Review> reviews = cafe.getReviews();
             Set<String> keywordNames = new HashSet<>();
@@ -121,9 +121,9 @@ public class CafeService {
     public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
         Cafe cafe =  findCafeById(cafeId);
-        List<MenuInfo> menus = menuService.findByCafeId(cafeId);
+        List<MenuDto> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<ReviewDetail> reviews = reviewService.findReviewByCafeId(cafeId);
+        List<ReviewDetailDto> reviews = reviewService.findReviewByCafeId(cafeId);
         List<String> reviewImageUrls = reviewService.getReviewImageUrlsByCafeId(cafeId);
 
         //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
@@ -145,9 +145,9 @@ public class CafeService {
 
 
     
-    public List<WithinRadiusCafe> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
+    public List<WithinRadiusCafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
         List<Cafe> cafes = findAll();
-        List<WithinRadiusCafe> withinRadiusCafes = new ArrayList<>();
+        List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
 
         for (Cafe cafe : cafes) {
             boolean isWithinRadius = GeometricUtils
@@ -159,7 +159,7 @@ public class CafeService {
                 String cafeImageUrl =
                         cafeImageService.findOneImageUrlByCafeId(cafe.getId())
                                 .orElseThrow(() -> new NotFoundException("이미지를 찾을 수 없습니다."));
-                withinRadiusCafes.add(WithinRadiusCafe.of(cafe, cafeImageUrl));
+                withinRadiusCafes.add(WithinRadiusCafeDto.of(cafe, cafeImageUrl));
             }
         }
 

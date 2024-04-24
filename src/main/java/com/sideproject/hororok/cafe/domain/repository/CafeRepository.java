@@ -1,5 +1,6 @@
-package com.sideproject.hororok.cafe.domain;
+package com.sideproject.hororok.cafe.domain.repository;
 
+import com.sideproject.hororok.cafe.domain.Cafe;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;

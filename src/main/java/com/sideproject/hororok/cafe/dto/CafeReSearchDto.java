@@ -14,13 +14,13 @@ public class CafeReSearchDto {
 
     private final boolean isExist;
     private final List<WithinRadiusCafeDto> cafes;
-    private final CategoryKeywordsDto categoryKeywordsDto;
+    private final CategoryKeywordsDto categoryKeywords;
 
-    public static CafeReSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafes, CategoryKeywordsDto categoryKeywordsDto) {
+    public static CafeReSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafes, CategoryKeywordsDto categoryKeywords) {
         return CafeReSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafes)
-                .categoryKeywordsDto(categoryKeywordsDto)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 

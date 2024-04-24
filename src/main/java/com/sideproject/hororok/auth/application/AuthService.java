@@ -10,7 +10,7 @@ import com.sideproject.hororok.auth.dto.response.AccessTokenResponse;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolderRepository;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.member.domain.MemberRepository;
+import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

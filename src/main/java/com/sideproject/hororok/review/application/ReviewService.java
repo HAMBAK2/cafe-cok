@@ -2,18 +2,19 @@ package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.cafe.domain.CafeRepository;
+import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
-import com.sideproject.hororok.member.domain.MemberRepository;
+import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.review.domain.*;
-import com.sideproject.hororok.review.dto.ReviewDetail;
+import com.sideproject.hororok.review.domain.repository.ReviewRepository;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.review.dto.ReviewImageInfo;
+import com.sideproject.hororok.review.dto.ReviewImageInfoDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -101,24 +102,24 @@ public class ReviewService {
     }
 
     
-    public List<ReviewDetail> findReviewByCafeId(Long cafeId){
+    public List<ReviewDetailDto> findReviewByCafeId(Long cafeId){
 
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
-        List<ReviewDetail> reviewDetails = new ArrayList<>();
+        List<ReviewDetailDto> reviewDetailDtos = new ArrayList<>();
         for (Review review : reviews) {
 
             List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
             List<KeywordInfo> keywords = keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords);
             List<ReviewImage> reviewImages = review.getImages();
-            List<ReviewImageInfo> reviewImageInfos = reviewImages.stream()
-                    .map(ReviewImageInfo::from)
+            List<ReviewImageInfoDto> reviewImageInfoDtos = reviewImages.stream()
+                    .map(ReviewImageInfoDto::from)
                     .collect(Collectors.toList());
 
 
-            reviewDetails.add(ReviewDetail.of(review, reviewImageInfos, keywords));
+            reviewDetailDtos.add(ReviewDetailDto.of(review, reviewImageInfoDtos, keywords));
         }
 
-        return reviewDetails;
+        return reviewDetailDtos;
     }
 
 

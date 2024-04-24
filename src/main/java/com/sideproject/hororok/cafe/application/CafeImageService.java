@@ -1,7 +1,7 @@
 package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.cafe.domain.CafeImage;
-import com.sideproject.hororok.cafe.domain.CafeImageRepository;
+import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

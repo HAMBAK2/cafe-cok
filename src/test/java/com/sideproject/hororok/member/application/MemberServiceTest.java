@@ -4,9 +4,9 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.member.domain.MemberRepository;
+import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
-import com.sideproject.hororok.review.domain.ReviewRepository;
+import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 

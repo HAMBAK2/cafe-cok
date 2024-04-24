@@ -1,11 +1,11 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.menu.dto.MenuInfo;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.review.dto.ReviewDetail;
-import com.sideproject.hororok.cafe.domain.OpenStatus;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
+import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -36,13 +36,13 @@ public class CafeDetailDto {
     private final Long reviewCount;
     private final double starRating;
 
-    private final List<MenuInfo> menus;
-    private final List<ReviewDetail> reviews;
+    private final List<MenuDto> menus;
+    private final List<ReviewDetailDto> reviews;
     private final List<String> reviewImageUrls;
     private final List<KeywordInfo> cafeKeywords;
 
-    public static CafeDetailDto of(Cafe cafe, List<MenuInfo> menus, OpenStatus openStatus, List<String> businessHours, List<String> closedDay,
-                                   List<String> reviewImageUrls, List<ReviewDetail> reviews,
+    public static CafeDetailDto of(Cafe cafe, List<MenuDto> menus, OpenStatus openStatus, List<String> businessHours, List<String> closedDay,
+                                   List<String> reviewImageUrls, List<ReviewDetailDto> reviews,
                                    List<KeywordInfo> cafeKeywords, List<String> cafeImageUrls) {
 
 
@@ -72,7 +72,7 @@ public class CafeDetailDto {
         return CafeDetailDto.builder()
                 .isExist(false)
                 .cafes(cafeReSearchDto.getCafes())
-                .categoryKeywordsDto(cafeReSearchDto.getCategoryKeywordsDto())
+                .categoryKeywordsDto(cafeReSearchDto.getCategoryKeywords())
                 .build();
     }
 

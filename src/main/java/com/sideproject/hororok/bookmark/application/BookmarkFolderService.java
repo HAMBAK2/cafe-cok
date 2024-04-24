@@ -12,7 +12,7 @@ import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.member.domain.MemberRepository;
+import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,9 +1,9 @@
 package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.menu.dto.MenuInfo;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.keword.dto.KeywordInfo;
-import com.sideproject.hororok.review.dto.ReviewDetail;
+import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class CafeBarSearchDto {
 
     private final boolean isExist;
     private final List<WithinRadiusCafeDto> cafes;
-    private final CategoryKeywordsDto categoryKeywordsDto;
+    private final CategoryKeywordsDto categoryKeywords;
     private final CafeDetailDto cafeDetail;
 
     //존재할 경우
@@ -34,18 +34,18 @@ public class CafeBarSearchDto {
     private final String phoneNumber;
     private final Long reviewCount;
 
-    private final List<MenuInfo> menus;
-    private final List<ReviewDetail> reviews;
+    private final List<MenuDto> menus;
+    private final List<ReviewDetailDto> reviews;
     private final List<String> reviewImageUrls;
     private final List<KeywordInfo> cafeKeywords;
 
-    public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, CategoryKeywordsDto categoryKeywordsDto) {
+    public static CafeBarSearchDto of(boolean isExist, List<WithinRadiusCafeDto> cafe, CategoryKeywordsDto categoryKeywords) {
 
 
         return CafeBarSearchDto.builder()
                 .isExist(isExist)
                 .cafes(cafe)
-                .categoryKeywordsDto(categoryKeywordsDto)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class CafeBarSearchDto {
         return CafeBarSearchDto.builder()
                 .isExist(false)
                 .cafes(cafeReSearchDto.getCafes())
-                .categoryKeywordsDto(cafeReSearchDto.getCategoryKeywordsDto())
+                .categoryKeywords(cafeReSearchDto.getCategoryKeywords())
                 .build();
     }
 

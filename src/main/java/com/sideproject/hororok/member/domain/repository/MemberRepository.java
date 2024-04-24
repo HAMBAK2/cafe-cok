@@ -1,5 +1,6 @@
-package com.sideproject.hororok.member.domain;
+package com.sideproject.hororok.member.domain.repository;
 
+import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.exception.NoSuchMemberException;
 import org.springframework.data.jpa.repository.JpaRepository;
 

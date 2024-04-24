@@ -10,12 +10,12 @@ import java.util.List;
 
 @Getter
 @Builder
-public class ReviewDetail {
+public class ReviewDetailDto {
 
     private final Long id;
     private final String content;
     private final String specialNote;
-    private final List<ReviewImageInfo> images;
+    private final List<ReviewImageInfoDto> images;
     private final List<KeywordInfo> keywords;
     private final Integer starRating;
     private final LocalDate createdDate;
@@ -23,11 +23,11 @@ public class ReviewDetail {
     private final String nickname;
 
 
-    public static ReviewDetail of(final Review review,
-                                  final List<ReviewImageInfo> images,
-                                  final List<KeywordInfo> keywords) {
+    public static ReviewDetailDto of(final Review review,
+                                     final List<ReviewImageInfoDto> images,
+                                     final List<KeywordInfo> keywords) {
 
-        return ReviewDetail.builder()
+        return ReviewDetailDto.builder()
                 .id(review.getId())
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())

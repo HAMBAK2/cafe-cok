@@ -23,7 +23,7 @@ public class WithinRadiusCafeDto {
     private Long reviewCount;
     private String imageUrl;
 
-    public static WithinRadiusCafeDto from(Cafe cafe, String imageUrl) {
+    public static WithinRadiusCafeDto of(Cafe cafe, String imageUrl) {
         return WithinRadiusCafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())

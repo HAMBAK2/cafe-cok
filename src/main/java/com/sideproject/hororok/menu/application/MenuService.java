@@ -1,9 +1,9 @@
 package com.sideproject.hororok.menu.application;
 
 
-import com.sideproject.hororok.menu.dto.MenuInfo;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.domain.Menu;
-import com.sideproject.hororok.menu.domain.MenuRepository;
+import com.sideproject.hororok.menu.domain.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +16,15 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
 
-    public List<MenuInfo> findByCafeId(Long cafeId) {
+    public List<MenuDto> findByCafeId(Long cafeId) {
 
         List<Menu> menuList = menuRepository.findByCafeId(cafeId);
-        List<MenuInfo> menuInfos = new ArrayList<>();
+        List<MenuDto> menuDtos = new ArrayList<>();
         for (Menu menu : menuList) {
-            menuInfos.add(MenuInfo.from(menu));
+            menuDtos.add(MenuDto.from(menu));
         }
 
-        return menuInfos;
+        return menuDtos;
     }
 
 }

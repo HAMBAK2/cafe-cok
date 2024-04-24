@@ -1,4 +1,4 @@
-package com.sideproject.hororok.review.domain;
+package com.sideproject.hororok.review.domain.repository;
 
 import com.sideproject.hororok.review.domain.ReviewImage;
 import org.springframework.data.jpa.repository.JpaRepository;

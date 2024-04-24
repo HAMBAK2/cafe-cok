@@ -1,7 +1,7 @@
 package com.sideproject.hororok.auth.dto;
 
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.member.domain.SocialType;
+import com.sideproject.hororok.member.domain.enums.SocialType;
 import lombok.Getter;
 
 @Getter

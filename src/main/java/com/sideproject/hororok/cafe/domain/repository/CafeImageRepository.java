@@ -1,5 +1,6 @@
-package com.sideproject.hororok.cafe.domain;
+package com.sideproject.hororok.cafe.domain.repository;
 
+import com.sideproject.hororok.cafe.domain.CafeImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
