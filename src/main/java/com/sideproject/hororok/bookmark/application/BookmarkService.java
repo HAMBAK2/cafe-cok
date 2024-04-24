@@ -42,9 +42,8 @@ public class BookmarkService {
 
         List<BookmarkDto> convertBookmarks
                 = findBookmarks.stream()
-                .map(bookmark -> BookmarkDto.from(bookmark.getCafe()))
+                .map(bookmark -> BookmarkDto.from(bookmark))
                 .collect(Collectors.toList());
-
 
         return new BookmarksResponse(
                 findFolder.getId(), findFolder.getName(),
