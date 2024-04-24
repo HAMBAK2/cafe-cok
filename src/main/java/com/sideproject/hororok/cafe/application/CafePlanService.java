@@ -11,7 +11,7 @@ import com.sideproject.hororok.cafe.domain.OperationHourRepository;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
-import com.sideproject.hororok.plan.enums.PlanMatchType;
+import com.sideproject.hororok.plan.domain.PlanResult;
 import com.sideproject.hororok.utils.converter.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,27 +34,27 @@ public class CafePlanService {
 
     public CreatePlanDto createPlans(CreatePlanSearchCond searchCond) {
         
-        PlanMatchType matchType = PlanMatchType.MATCH;
+        PlanResult matchType = PlanResult.MATCH;
         List<Cafe> recommendCafes = cafeService.findAllByOrderByStarRatingDescNameAsc();
 
         //방문시간 기준 필터링
         List<OperationHour> inOperationHoursCafes = dayAndTimeFiltering(searchCond);
         if(inOperationHoursCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
+            matchType = PlanResult.MISMATCH;
             return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //반경 범위 필터링(근처 카페 추천)
         List<Cafe> distanceFilteredCafes = distanceFiltering(inOperationHoursCafes, searchCond);
         if(distanceFilteredCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
+            matchType = PlanResult.MISMATCH;
             return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),  convertCafeListToCafeDtoList(recommendCafes));
         }
 
         //3. 카테고리 모두 불일치하는지에 대한 확인
         List<Cafe> keywordFilteredCafes = getKeywordFilteredCafes(searchCond, distanceFilteredCafes);
         if(keywordFilteredCafes.isEmpty()) {
-            matchType = PlanMatchType.MISMATCH;
+            matchType = PlanResult.MISMATCH;
             return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(recommendCafes));
         }
 
@@ -64,13 +64,13 @@ public class CafePlanService {
         if(!allMatchAtKeywordCafes.isEmpty()) {
             orderByDistanceAndStarRating(allMatchAtKeywordCafes, searchCond.getLatitude(), searchCond.getLongitude());
             keywordFilteredCafes.removeAll(allMatchAtKeywordCafes);
-            matchType = PlanMatchType.MATCH;
+            matchType = PlanResult.MATCH;
 
             return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond),
                     convertCafeListToCafeDtoList(allMatchAtKeywordCafes), convertCafeListToCafeDtoList(keywordFilteredCafes));
         }
 
-        matchType = PlanMatchType.SIMILAR;
+        matchType = PlanResult.SIMILAR;
         
         return CreatePlanDto.of(matchType, searchCond, FormatConverter.convertVisitDateTime(searchCond), convertCafeListToCafeDtoList(keywordFilteredCafes));
     }

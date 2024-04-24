@@ -1,13 +1,13 @@
-package com.sideproject.hororok.plan.enums;
+package com.sideproject.hororok.plan.domain;
 
-public enum PlanMatchType {
+public enum PlanResult {
     MATCH("일치"),
     SIMILAR("유사"),
     MISMATCH("불일치");
 
     private final String value;
 
-    PlanMatchType(String value) {
+    PlanResult(String value) {
         this.value = value;
     }
 

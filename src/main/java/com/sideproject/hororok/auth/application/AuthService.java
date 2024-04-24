@@ -26,10 +26,9 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
-    private final AuthRefreshTokenRepository authRefreshTokenRepository;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
-    private final String BASIC_FOLDER_COLOR = "기본 색상";
+    private final String BASIC_FOLDER_COLOR = "#FE8282";
     private final Boolean BASIC_FOLDER_VISIBLE = true;
     private final Boolean BASIC_FOLDER_DEFAULT = true;
 

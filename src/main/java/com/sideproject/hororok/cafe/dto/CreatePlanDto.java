@@ -2,7 +2,7 @@ package com.sideproject.hororok.cafe.dto;
 
 import com.sideproject.hororok.cafe.cond.CreatePlanSearchCond;
 import com.sideproject.hororok.category.dto.CategoryKeywords;
-import com.sideproject.hororok.plan.enums.PlanMatchType;
+import com.sideproject.hororok.plan.domain.PlanResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CreatePlanDto {
 
-    private final PlanMatchType matchType;
+    private final PlanResult matchType;
     private final String locationName;
     private final Integer minutes;
     private final String visitDateTime;
@@ -25,7 +25,7 @@ public class CreatePlanDto {
 
 
     //맞춘 경우
-    public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
+    public static CreatePlanDto of(PlanResult matchType, CreatePlanSearchCond searchCond,
                                    String visitDateTime, List<CafeDto> matchCafes, List<CafeDto> similarCafes) {
 
         return CreatePlanDto.builder()
@@ -41,10 +41,10 @@ public class CreatePlanDto {
 
 
     //못맞춘경우 , 유사한경우
-    public static CreatePlanDto of(PlanMatchType matchType, CreatePlanSearchCond searchCond,
+    public static CreatePlanDto of(PlanResult matchType, CreatePlanSearchCond searchCond,
                                    String visitDateTime, List<CafeDto> cafes) {
 
-        if(matchType.equals(PlanMatchType.SIMILAR)) {
+        if(matchType.equals(PlanResult.SIMILAR)) {
             return CreatePlanDto.builder()
                     .matchType(matchType)
                     .locationName(searchCond.getLocationName())
