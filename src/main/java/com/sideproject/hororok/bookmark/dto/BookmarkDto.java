@@ -1,6 +1,6 @@
 package com.sideproject.hororok.bookmark.dto;
 
-import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.bookmark.domain.Bookmark;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,20 +10,21 @@ import java.math.BigDecimal;
 @Builder
 public class BookmarkDto {
 
+    private Long bookmarkId;
     private Long cafeId;
     private String cafeName;
     private String roadAddress;
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-
-    public static BookmarkDto from(Cafe cafe) {
+    public static BookmarkDto from(Bookmark bookmark) {
         return BookmarkDto.builder()
-                .cafeId(cafe.getId())
-                .cafeName(cafe.getName())
-                .roadAddress(cafe.getRoadAddress())
-                .latitude(cafe.getLatitude())
-                .longitude(cafe.getLongitude())
+                .bookmarkId(bookmark.getId())
+                .cafeId(bookmark.getCafe().getId())
+                .cafeName(bookmark.getCafe().getName())
+                .roadAddress(bookmark.getCafe().getRoadAddress())
+                .latitude(bookmark.getCafe().getLatitude())
+                .longitude(bookmark.getCafe().getLongitude())
                 .build();
     }
 }
