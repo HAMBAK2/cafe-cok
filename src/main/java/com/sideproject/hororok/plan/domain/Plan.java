@@ -32,7 +32,7 @@ public class Plan extends BaseEntity {
     @Column(name = "visit_date_time")
     private String visitDateTime;
 
-    @Column(name = "within_minutes")
+    @Column(name = "minutes")
     private Integer minutes;
 
     @Enumerated(value = EnumType.STRING)

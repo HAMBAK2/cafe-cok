@@ -10,6 +10,7 @@ import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
 import com.sideproject.hororok.member.exception.NoSuchMemberException;
+import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,8 @@ public class ControllerAdvice {
             NoSuchMemberException.class,
             NoSuchTokenException.class,
             NoSuchOAuthTokenException.class,
-            NoResourceFoundException.class
+            NoResourceFoundException.class,
+            NoSuchPlanKeywordException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

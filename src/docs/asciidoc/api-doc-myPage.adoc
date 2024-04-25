@@ -1,0 +1,18 @@
+= Plan API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 4. 마이페이지
+=== 4-1. 마이페이지 리뷰 탭 - 성공
+==== 마이페이지에서 리뷰 탭을 눌렀을 때 동작
+==== Request Header
+include::{snippets}/member/myPage/plan/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/member/myPage/plan/success/http-request.adoc[]
+==== Http Response
+include::{snippets}/member/myPage/plan/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/member/myPage/plan/success/response-fields.adoc[]
+
+=== link:api-docs.html[API 목록으로]

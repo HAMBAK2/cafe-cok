@@ -1,6 +1,9 @@
 package com.sideproject.hororok.common.fixtures;
 
+import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
+import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
+import com.sideproject.hororok.plan.dto.PlanDto;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
@@ -8,13 +11,14 @@ import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.*;
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.카테고리_키워드_DTO;
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_이름_리스트;
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.*;
+import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 
 public class PlanFixtures {
 
@@ -28,7 +32,17 @@ public class PlanFixtures {
     public static final LocalTime 끝_시간 = LocalTime.of(11, 0);
     public static final String 계획_일자_시간 = "00월 00일 00시 00분";
 
-    public static CreatePlanRequest 계획_요청() {
+    public static Plan 계획() {
+        Plan plan = new Plan(사용자(), 위치_이름, 계획_일자_시간, 도보_시간, MatchType.SIMILAR, true, true);
+        setId(plan, 계획_ID);
+        return plan;
+    }
+
+    public static PlanDto 계획_DTO() {
+        return PlanDto.of(계획(), 키워드_이름);
+    }
+
+        public static CreatePlanRequest 계획_요청() {
         return new CreatePlanRequest(
                 위치_이름, 계획_위도, 계획_경도, 도보_시간, 날짜, 시작_시간, 끝_시간, 키워드_이름_리스트);
     }
@@ -56,6 +70,17 @@ public class PlanFixtures {
         return new SharePlanResponse(계획_ID);
     }
 
+    public static Plan setId(Plan plan, final Long id) {
+
+        try {
+            Field idField = Plan.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(plan, id);
+            return plan;
+        } catch (final NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 
 
 

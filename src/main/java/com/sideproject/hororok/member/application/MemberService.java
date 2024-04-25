@@ -3,27 +3,38 @@ package com.sideproject.hororok.member.application;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
+import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
-import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
+import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
+import com.sideproject.hororok.member.dto.response.MyPageResponse;
+import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
+import com.sideproject.hororok.plan.domain.repository.PlanRepository;
+import com.sideproject.hororok.plan.dto.PlanDto;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
 
+    private final PlanRepository planRepository;
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
+    private final PlanKeywordRepository planKeywordRepository;
+
     private final BookmarkFolderService bookmarkFolderService;
 
+    private static final Integer MY_PAGE_PLAN_MAX_CNT = 5;
 
-    public MemberMyPageResponse myPage(LoginMember loginMember) {
+    public MyPageResponse myPage(LoginMember loginMember) {
 
         Long memberId = loginMember.getId();
 
@@ -32,6 +43,43 @@ public class MemberService {
         List<BookmarkFolderDto> findFolders
                 = bookmarkFolderService.getBookmarkFolderDtos(memberId);
 
-        return new MemberMyPageResponse(findMember, findReviewCount, findFolders);
+        return new MyPageResponse(findMember, findReviewCount, findFolders);
+    }
+
+    public MyPagePlanResponse plan(LoginMember loginMember) {
+
+        List<Plan> findPlans = planRepository.findByMemberIdOrderByCreatedDateDesc(loginMember.getId());
+
+        List<PlanDto> savedPlanDtos = getSavedPlanDtos(findPlans);
+        List<PlanDto> sharedPlanDtos = getSharedPlanDtos(findPlans);
+
+        return MyPagePlanResponse.from(savedPlanDtos, sharedPlanDtos);
+    }
+
+    private List<PlanDto> getSavedPlanDtos(List<Plan> findPlans) {
+        return findPlans.stream()
+                .filter(findPlan -> findPlan.getIsSaved())
+                .map(findPlan -> {
+                    String findKeyword = planKeywordRepository
+                            .getFirstByPlanIdAndKeywordCategory(findPlan.getId(), Category.PURPOSE)
+                            .getKeyword().getName();
+                    return PlanDto.of(findPlan, findKeyword);
+                })
+                .limit(MY_PAGE_PLAN_MAX_CNT)
+                .collect(Collectors.toList());
+    }
+
+
+    private List<PlanDto> getSharedPlanDtos(List<Plan> findPlans) {
+        return findPlans.stream()
+                .filter(findPlan -> findPlan.getIsShared())
+                .map(findPlan -> {
+                    String findKeyword = planKeywordRepository
+                            .getFirstByPlanIdAndKeywordCategory(findPlan.getId(), Category.PURPOSE)
+                            .getKeyword().getName();
+                    return PlanDto.of(findPlan, findKeyword);
+                })
+                .limit(MY_PAGE_PLAN_MAX_CNT)
+                .collect(Collectors.toList());
     }
 }
