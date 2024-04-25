@@ -3,11 +3,17 @@ package com.sideproject.hororok.member.application;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
+import com.sideproject.hororok.cafe.dto.CafeDto;
+import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
+import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 import com.sideproject.hororok.member.dto.response.MyPageResponse;
+import com.sideproject.hororok.plan.application.PlanCafeService;
+import com.sideproject.hororok.plan.application.PlanKeywordService;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
@@ -30,7 +36,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PlanKeywordRepository planKeywordRepository;
 
+    private final PlanKeywordService planKeywordService;
     private final BookmarkFolderService bookmarkFolderService;
+    private final PlanCafeService planCafeService;
 
     private static final Integer MY_PAGE_PLAN_MAX_CNT = 5;
 
@@ -54,6 +62,16 @@ public class MemberService {
         List<PlanDto> sharedPlanDtos = getSharedPlanDtos(findPlans);
 
         return MyPagePlanResponse.from(savedPlanDtos, sharedPlanDtos);
+    }
+
+    public MyPagePlanDetailResponse planDetail(Long planId) {
+
+        Plan findPlan = planRepository.getById(planId);
+        List<Keyword> findKeywords = planKeywordService.getKeywordsByPlanId(planId);
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
+        List<CafeDto> findCafes = planCafeService.getCafeDtosByPlanId(planId);
+
+        return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findCafes);
     }
 
     private List<PlanDto> getSavedPlanDtos(List<Plan> findPlans) {
@@ -82,4 +100,6 @@ public class MemberService {
                 .limit(MY_PAGE_PLAN_MAX_CNT)
                 .collect(Collectors.toList());
     }
+
+
 }

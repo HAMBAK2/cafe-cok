@@ -1,6 +1,7 @@
 package com.sideproject.hororok.plan.application;
 
 import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.plan.domain.Plan;
@@ -16,8 +17,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlanCafeService {
 
-    private final PlanCafeRepository planCafeRepository;
+
     private final CafeRepository cafeRepository;
+    private final PlanCafeRepository planCafeRepository;
+    private final CafeImageRepository cafeImageRepository;
 
 
     public void saveAll(Plan plan, List<CafeDto> cafes) {
@@ -32,7 +35,12 @@ public class PlanCafeService {
         planCafeRepository.saveAll(planCafes);
     }
 
-
-
-
+    public List<CafeDto> getCafeDtosByPlanId(Long planId) {
+        List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanId(planId);
+        return findPlanCafes.stream()
+                .map(planCafe -> CafeDto.of(
+                        planCafe.getCafe(),
+                        cafeImageRepository.findByCafeId(planCafe.getCafe().getId()).get(0).getImageUrl()))
+                .collect(Collectors.toList());
+    }
 }

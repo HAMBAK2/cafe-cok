@@ -4,6 +4,7 @@ package com.sideproject.hororok.member.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MemberService;
+import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -37,4 +39,14 @@ public class MemberController {
         MyPagePlanResponse response = memberService.plan(loginMember);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/myPage/plan/{planId}")
+    @Operation(summary = "마이페이지 계획탭에서 계획(여정)을 선택했을 때 동작")
+    public ResponseEntity<MyPagePlanDetailResponse> planDetail(
+            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long planId){
+
+        MyPagePlanDetailResponse response = memberService.planDetail(planId);
+        return ResponseEntity.ok(response);
+    }
+
 }
