@@ -41,4 +41,19 @@ include::{snippets}/plan/share/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/plan/share/success/response-fields.adoc[]
 
+=== 3-4. 계획 삭제(DELETE) - 성공
+==== 계획(여정)) 삭제를 눌렀을 때 동작하는 기능
+==== Request Header
+include::{snippets}/plan/delete/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/plan/delete/success/http-request.adoc[]
+==== Path-parameters
+include::{snippets}/plan/delete/success/path-parameters.adoc[]
+==== Request fields
+include::{snippets}/plan/delete/success/request-fields.adoc[]
+==== Http Response
+include::{snippets}/plan/delete/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/plan/delete/success/response-fields.adoc[]
+
 === link:api-docs.html[API 목록으로]
