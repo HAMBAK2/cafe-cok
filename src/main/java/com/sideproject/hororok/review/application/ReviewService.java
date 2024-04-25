@@ -6,7 +6,7 @@ import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
-import com.sideproject.hororok.keword.dto.KeywordInfo;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
@@ -31,12 +31,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
-    private final MemberRepository memberRepository;
+
     private final CafeRepository cafeRepository;
+    private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
-    private final KeywordService keywordService;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private final String REVIEW_IMAGE_URL_PREFIX = "https:";
@@ -109,7 +109,9 @@ public class ReviewService {
         for (Review review : reviews) {
 
             List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
-            List<KeywordInfo> keywords = keywordService.getKeywordInfosByCafeReviewKeywords(cafeReviewKeywords);
+            List<KeywordDto> keywords = cafeReviewKeywords.stream()
+                    .map(cafeReviewKeyword -> KeywordDto.from(cafeReviewKeyword.getKeyword()))
+                    .collect(Collectors.toList());
             List<ReviewImage> reviewImages = review.getImages();
             List<ReviewImageInfoDto> reviewImageInfoDtos = reviewImages.stream()
                     .map(ReviewImageInfoDto::from)
@@ -122,9 +124,6 @@ public class ReviewService {
         return reviewDetailDtos;
     }
 
-
-
-    
     public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
         return reviewRepository.findReviewImagesByCafeId(cafeId);
     }

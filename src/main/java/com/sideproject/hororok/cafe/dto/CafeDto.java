@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -25,7 +27,7 @@ public class CafeDto {
     private final Long reviewCount;
     private final String image;
 
-    public static CafeDto from(Cafe cafe) {
+    public static CafeDto of(Cafe cafe, String imageUrl) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -35,8 +37,7 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating())
                 .reviewCount(cafe.getReviewCount())
-                .image(cafe.getImages().get(0).getImageUrl())
+                .image(imageUrl)
                 .build();
     }
-
 }

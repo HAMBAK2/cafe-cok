@@ -1,7 +1,8 @@
 package com.sideproject.hororok.plan.domain;
 
 
-import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -9,9 +10,9 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
-@Table(name = "plan_keywords")
+@Table(name = "plan_cafes")
 @Entity
-public class PlanKeywords {
+public class PlanCafe extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -23,6 +24,14 @@ public class PlanKeywords {
     private Plan plan;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "keywords_id")
-    private Keyword keyword;
+    @JoinColumn(name = "cafes_id")
+    private Cafe cafe;
+
+    protected PlanCafe() {
+    }
+
+    public PlanCafe(Plan plan, Cafe cafe) {
+        this.plan = plan;
+        this.cafe = cafe;
+    }
 }

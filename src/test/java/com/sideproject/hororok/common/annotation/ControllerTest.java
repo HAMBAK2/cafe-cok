@@ -11,6 +11,8 @@ import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
 import com.sideproject.hororok.member.application.MemberService;
 import com.sideproject.hororok.member.presentation.MemberController;
+import com.sideproject.hororok.plan.application.PlanService;
+import com.sideproject.hororok.plan.presentation.PlanController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         AuthController.class,
         BookmarkFolderController.class,
         BookmarkController.class,
-        MemberController.class
+        MemberController.class,
+        PlanController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
@@ -57,6 +60,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public OAuthClient oAuthClient;
+
+    @MockBean
+    public PlanService planService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
