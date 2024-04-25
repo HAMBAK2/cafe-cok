@@ -8,15 +8,19 @@ import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
+import com.sideproject.hororok.plan.domain.enums.PlanStatus;
+import com.sideproject.hororok.plan.domain.repository.PlanCafeRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.CafeDto;
+import com.sideproject.hororok.plan.dto.request.DeletePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.application.KeywordService;
+import com.sideproject.hororok.plan.dto.response.DeletePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
@@ -40,6 +44,7 @@ public class PlanService {
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
     private final PlanKeywordRepository planKeywordRepository;
+    private final PlanCafeRepository planCafeRepository;
 
     private final CafeService cafeService;
     private final KeywordService keywordService;
@@ -87,6 +92,29 @@ public class PlanService {
         Plan savedPlan = planRepository.save(findPlan);
 
         return new SharePlanResponse(savedPlan.getId());
+    }
+
+    @Transactional
+    public DeletePlanResponse delete(DeletePlanRequest request, Long planId) {
+
+        Plan findPlan = planRepository.getById(planId);
+
+        PlanStatus requestPlanStatus = request.getPlanStatus();
+
+        if(requestPlanStatus.equals(PlanStatus.SAVED)) {
+            findPlan.setIsSaved(false);
+        } else {
+            findPlan.setIsShared(false);
+        }
+        Plan updatedPlan = planRepository.save(findPlan);
+
+        if(!updatedPlan.getIsSaved() && !updatedPlan.getIsShared()) {
+            planKeywordRepository.deleteByPlanId(updatedPlan.getId());
+            planCafeRepository.deleteByPlanId(updatedPlan.getId());
+            planRepository.delete(updatedPlan);
+        }
+
+        return new DeletePlanResponse(updatedPlan.getId());
     }
 
     private Boolean isMismatchPlan(CreatePlanRequest request, List<Cafe> filteredCafes) {

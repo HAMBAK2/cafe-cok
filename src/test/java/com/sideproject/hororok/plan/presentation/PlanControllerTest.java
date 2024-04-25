@@ -3,17 +3,23 @@ package com.sideproject.hororok.plan.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
+import com.sideproject.hororok.plan.dto.request.DeletePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
+import com.sideproject.hororok.plan.dto.response.DeletePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_리스트_사이즈_1개;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_리스트_인덱스;
 import static com.sideproject.hororok.common.fixtures.PlanFixtures.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -21,6 +27,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,7 +39,6 @@ class PlanControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer JWT TOKEN";
-
 
     @Test
     @DisplayName("계획하기 저장 - 성공")
@@ -153,6 +160,42 @@ class PlanControllerTest extends ControllerTest {
                                         .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트, 형식은 추천 카페와 동일)"))))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("계획(여정)을 삭제하는 기능")
+    public void test_plan_delete_success() throws Exception {
+
+        Long planId = 계획_ID;
+        DeletePlanRequest request = 계획_삭제_요청();
+        DeletePlanResponse response = 계획_삭제_응답();
+
+        when(planService
+                .delete(any(DeletePlanRequest.class), any(Long.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/api/plan/{planId}/delete", planId)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("plan/delete/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(
+                                parameterWithName("planId").description("삭제할 계획의 ID")),
+                        requestFields(
+                                fieldWithPath("planStatus").description("삭제하려는 계획의 상태(SAVED, SHARED)")),
+                        responseFields(
+                                fieldWithPath("planId").description("삭제한 계획의 ID"))))
+                .andExpect(status().isOk());
+
+    }
+
+
 
 
 }
