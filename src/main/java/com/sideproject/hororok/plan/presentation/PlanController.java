@@ -1,11 +1,14 @@
 package com.sideproject.hororok.plan.presentation;
 
 
-import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
-import com.sideproject.hororok.cafe.dto.response.CreatePlanResponse;
-import com.sideproject.hororok.plan.domain.application.PlanService;
+import com.sideproject.hororok.auth.dto.LoginMember;
+import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
+import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
+import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
+import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
+import com.sideproject.hororok.plan.application.PlanService;
+import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +32,18 @@ public class PlanController {
         CreatePlanResponse response = planService.plan(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/save")
+    @Operation(summary = "계획하기 결과를 저장")
+    public ResponseEntity<SavePlanResponse> save(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestBody SavePlanRequest request) {
+
+        SavePlanResponse response = planService.save(request, loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    /*TODO: 계획 공유하기 */
+
 
 }

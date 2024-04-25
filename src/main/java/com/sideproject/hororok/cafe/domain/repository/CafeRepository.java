@@ -23,4 +23,6 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
     
     List<Cafe> findAllByOrderByStarRatingDescNameAsc();
+
+    List<Cafe> findByIdIn(List<Long> ids);
 }

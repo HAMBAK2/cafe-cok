@@ -45,6 +45,11 @@ public class KeywordService {
         return new CategoryKeywordsDto(keywords);
     }
 
+    public List<KeywordDto> getKeywordsByKeywordNames(List<String> keywordNames) {
+        List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
+        return KeywordDto.fromList(keywords);
+    }
+
 
 
 }

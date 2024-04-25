@@ -1,9 +1,7 @@
 package com.sideproject.hororok.cafe.presentation;
 
-import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
-import com.sideproject.hororok.plan.domain.application.PlanService;
 import com.sideproject.hororok.cafe.application.CafeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

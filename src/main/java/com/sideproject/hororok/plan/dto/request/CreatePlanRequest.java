@@ -1,5 +1,4 @@
-package com.sideproject.hororok.cafe.dto.request;
-
+package com.sideproject.hororok.plan.dto.request;
 
 import lombok.Getter;
 
@@ -14,23 +13,23 @@ public class CreatePlanRequest {
     private String locationName;
     private BigDecimal latitude;
     private BigDecimal longitude;
-    private Integer withinMinutes;
-    private LocalDate visitDate;
-    private LocalTime visitStartTime;
-    private LocalTime visitEndTime;
+    private Integer minutes;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private List<String> keywords;
 
     public CreatePlanRequest(
             final String locationName, final BigDecimal latitude, final BigDecimal longitude,
-            final Integer withinMinutes, LocalDate visitDate, final LocalTime visitStartTime,
-            final LocalTime visitEndTime, final List<String> keywords) {
+            final Integer minutes, LocalDate date, final LocalTime startTime,
+            final LocalTime endTime, final List<String> keywords) {
         this.locationName = locationName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.withinMinutes = withinMinutes;
-        this.visitDate = visitDate;
-        this.visitStartTime = visitStartTime;
-        this.visitEndTime = visitEndTime;
+        this.minutes = minutes;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.keywords = keywords;
     }
 }

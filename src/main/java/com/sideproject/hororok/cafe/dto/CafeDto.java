@@ -47,4 +47,5 @@ public class CafeDto {
                 .collect(Collectors.toList());
     }
 
+
 }

@@ -1,9 +1,11 @@
-package com.sideproject.hororok.cafe.dto.response;
+package com.sideproject.hororok.plan.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDto;
-import com.sideproject.hororok.cafe.dto.request.CreatePlanRequest;
+import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.plan.domain.enums.PlanResult;
+import com.sideproject.hororok.plan.domain.enums.MatchType;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -14,9 +16,10 @@ import static com.sideproject.hororok.utils.converter.FormatConverter.dateTimeCo
 @Getter
 public class CreatePlanResponse {
 
-    private PlanResult planResult;
+    private Long planId;
+    private MatchType matchType;
     private String locationName;
-    private Integer withinMinutes;
+    private Integer minutes;
     private String visitDateTime;
     private CategoryKeywordsDto categoryKeywords;
     private List<CafeDto> recommendCafes = new ArrayList<>();
@@ -26,15 +29,15 @@ public class CreatePlanResponse {
     protected CreatePlanResponse() {
     }
 
-    //Match인 경우
+    //Match 경우
     public CreatePlanResponse(
-            final PlanResult planResult, final CreatePlanRequest request, final CategoryKeywordsDto categoryKeywords,
+            final MatchType matchType, final CreatePlanRequest request, final CategoryKeywordsDto categoryKeywords,
             final List<CafeDto> matchCafes, final List<CafeDto> similarCafes) {
 
-        this.planResult = planResult;
+        this.matchType = matchType;
         this.locationName = request.getLocationName();
-        this.withinMinutes = request.getWithinMinutes();
-        this.visitDateTime = dateTimeConvert(request.getVisitDate(), request.getVisitStartTime());
+        this.minutes = request.getMinutes();
+        this.visitDateTime = dateTimeConvert(request.getDate(), request.getStartTime());
         this.categoryKeywords = categoryKeywords;
         this.matchCafes = matchCafes;
         this.similarCafes = similarCafes;
@@ -42,19 +45,29 @@ public class CreatePlanResponse {
 
     //SIMILAR / MISMATCH 경우
     public CreatePlanResponse(
-            final PlanResult planResult, final CreatePlanRequest request,
+            final MatchType matchType, final CreatePlanRequest request,
             final CategoryKeywordsDto categoryKeywords, final List<CafeDto> cafes) {
 
-        this.planResult = planResult;
+        this.matchType = matchType;
         this.locationName = request.getLocationName();
-        this.withinMinutes = request.getWithinMinutes();
-        this.visitDateTime = dateTimeConvert(request.getVisitDate(), request.getVisitStartTime());
+        this.minutes = request.getMinutes();
+        this.visitDateTime = dateTimeConvert(request.getDate(), request.getStartTime());
         this.categoryKeywords = categoryKeywords;
 
-        if(planResult.getValue().equals(PlanResult.SIMILAR)) {
+        if(matchType.getValue().equals(MatchType.SIMILAR)) {
             this.similarCafes = cafes;
             return;
         }
         this.recommendCafes = cafes;
+    }
+
+    public Plan toEntity(final Member member) {
+        return new Plan(
+                member, this.locationName, this.visitDateTime,
+                this.minutes, this.matchType, false, false);
+    }
+
+    public void setPlanId(Long planId) {
+        this.planId = planId;
     }
 }

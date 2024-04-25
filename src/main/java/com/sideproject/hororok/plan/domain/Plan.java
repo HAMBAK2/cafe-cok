@@ -1,14 +1,12 @@
 package com.sideproject.hororok.plan.domain;
 
 
+import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.plan.domain.enums.PlanResult;
+import com.sideproject.hororok.plan.domain.enums.MatchType;
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -16,7 +14,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Table(name = "plans")
 @Entity
-public class Plan {
+@NoArgsConstructor
+public class Plan extends BaseEntity {
 
     @Id
     @Column(name = "id")
@@ -30,29 +29,15 @@ public class Plan {
     @Column(name = "location_name")
     private String locationName;
 
-    @Column(name = "latitude",
-            precision = 17, scale = 14)
-    private BigDecimal latitude;
-
-    @Column(name = "longitude",
-            precision = 17, scale = 14)
-    private BigDecimal longitude;
-
-    @Column(name = "visit_date")
-    private LocalDate visitDate;
-
-    @Column(name = "visit_start_time")
-    private LocalTime visitStartTime;
-
-    @Column(name = "visit_end_time")
-    private LocalTime visitEndTime;
+    @Column(name = "visit_date_time")
+    private String visitDateTime;
 
     @Column(name = "within_minutes")
-    private Integer withinMinutes;
+    private Integer minutes;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "plan_result", nullable = false)
-    private PlanResult planResult;
+    @Column(name = "match_type", nullable = false)
+    private MatchType matchType;
 
     @Column(name = "is_saved", nullable = false)
     private Boolean isSaved;
@@ -60,5 +45,23 @@ public class Plan {
     @Column(name = "is_shared", nullable = false)
     private Boolean isShared;
 
+    public Plan(final Member member, final String locationName,
+                final String visitDateTime, final Integer minutes,
+                final MatchType matchType, final Boolean isSaved, final Boolean isShared) {
+        this.member = member;
+        this.locationName = locationName;
+        this.visitDateTime = visitDateTime;
+        this.minutes = minutes;
+        this.matchType = matchType;
+        this.isSaved = isSaved;
+        this.isShared = isShared;
+    }
 
+    public void setIsSaved(final Boolean isSaved) {
+        this.isSaved = isSaved;
+    }
+
+    public void setMember(final Member member) {
+        this.member = member;
+    }
 }
