@@ -3,14 +3,14 @@ package com.sideproject.hororok.plan.dto.request;
 import lombok.Getter;
 
 @Getter
-public class SavePlanRequest {
+public class SharePlanRequest {
 
     private Long planId;
 
-    private SavePlanRequest() {
+    private SharePlanRequest() {
     }
 
-    public SavePlanRequest(Long planId) {
+    public SharePlanRequest(Long planId) {
         this.planId = planId;
     }
 }

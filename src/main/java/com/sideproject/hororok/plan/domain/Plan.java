@@ -60,6 +60,9 @@ public class Plan extends BaseEntity {
     public void setIsSaved(final Boolean isSaved) {
         this.isSaved = isSaved;
     }
+    public void setIsShared(final Boolean isShared) {
+        this.isShared = isShared;
+    }
 
     public void setMember(final Member member) {
         this.member = member;

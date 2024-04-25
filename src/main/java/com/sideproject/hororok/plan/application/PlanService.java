@@ -11,10 +11,12 @@ import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
+import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
+import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,18 @@ public class PlanService {
         Plan savedPlan = planRepository.save(findPlan);
 
         return new SavePlanResponse(savedPlan.getId());
+    }
+
+    @Transactional
+    public SharePlanResponse share(SharePlanRequest request, LoginMember loginMember) {
+
+        Plan findPlan = planRepository.getById(request.getPlanId());
+        Member findMember = memberRepository.getById(loginMember.getId());
+        findPlan.setIsShared(true);
+        findPlan.setMember(findMember);
+        Plan savedPlan = planRepository.save(findPlan);
+
+        return new SharePlanResponse(savedPlan.getId());
     }
 
     private Boolean isMismatchPlan(CreatePlanRequest request, List<Cafe> filteredCafes) {
