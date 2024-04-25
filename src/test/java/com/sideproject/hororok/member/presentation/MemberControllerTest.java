@@ -40,7 +40,7 @@ class MemberControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("마이 페이지 버튼을 클릭하면 MemberMyPageResponse와 200Ok를 반환한다.")
-    public void test_my_page() throws Exception {
+    public void test_my_page_success() throws Exception {
 
         MyPageResponse response = 마이페이지_조회_응답();
         when(memberService.myPage(any(LoginMember.class)))
@@ -52,12 +52,25 @@ class MemberControllerTest extends ControllerTest {
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nickname").value(response.getNickname()))
-                .andExpect(jsonPath("$.folderCount").value(response.getFolderCount()))
-                .andExpect(jsonPath("$.reviewCount").value(response.getReviewCount()))
-                .andExpect(jsonPath("$.picture").value(response.getPicture()))
-                .andExpect(jsonPath("$.folders", hasSize(response.getFolders().size())));
+                .andDo(print())
+                .andDo(document("member/myPage/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(
+                                fieldWithPath("nickname").description("유저 nickname"),
+                                fieldWithPath("picture").description("유저 프로필 이미지 URL"),
+                                fieldWithPath("reviewCount").description("리뷰의 총 개수"),
+                                fieldWithPath("folderCount").description("북마크 폴더의 개수"),
+                                fieldWithPath("folders").type(JsonFieldType.ARRAY).description("북마크 폴더의 정보를 담은 리스트"),
+                                fieldWithPath("folders[].folderId").description("폴더의 ID"),
+                                fieldWithPath("folders[].name").description("폴더의 이름"),
+                                fieldWithPath("folders[].color").description("폴더 색상"),
+                                fieldWithPath("folders[].bookmarkCount").description("폴더 내 북마크 개수"),
+                                fieldWithPath("folders[].visible").description("지도 노출 여부"),
+                                fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부"))))
+                .andExpect(status().isOk());
     }
 
     @Test
