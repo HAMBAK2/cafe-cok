@@ -11,8 +11,7 @@ import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
-import com.sideproject.hororok.plan.dto.SavedPlanDto;
-import com.sideproject.hororok.plan.dto.SharedPlanDto;
+import com.sideproject.hororok.plan.dto.PlanDto;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,34 +50,34 @@ public class MemberService {
 
         List<Plan> findPlans = planRepository.findByMemberIdOrderByCreatedDateDesc(loginMember.getId());
 
-        List<SavedPlanDto> savedPlanDtos = getSavedPlanDtos(findPlans);
-        List<SharedPlanDto> sharedPlanDtos = getSharedPlanDtos(findPlans);
+        List<PlanDto> savedPlanDtos = getSavedPlanDtos(findPlans);
+        List<PlanDto> sharedPlanDtos = getSharedPlanDtos(findPlans);
 
         return MyPagePlanResponse.from(savedPlanDtos, sharedPlanDtos);
     }
 
-    private List<SavedPlanDto> getSavedPlanDtos(List<Plan> findPlans) {
+    private List<PlanDto> getSavedPlanDtos(List<Plan> findPlans) {
         return findPlans.stream()
                 .filter(findPlan -> findPlan.getIsSaved())
                 .map(findPlan -> {
                     String findKeyword = planKeywordRepository
                             .getFirstByPlanIdAndKeywordCategory(findPlan.getId(), Category.PURPOSE)
                             .getKeyword().getName();
-                    return SavedPlanDto.of(findPlan, findKeyword);
+                    return PlanDto.of(findPlan, findKeyword);
                 })
                 .limit(MY_PAGE_PLAN_MAX_CNT)
                 .collect(Collectors.toList());
     }
 
 
-    private List<SharedPlanDto> getSharedPlanDtos(List<Plan> findPlans) {
+    private List<PlanDto> getSharedPlanDtos(List<Plan> findPlans) {
         return findPlans.stream()
                 .filter(findPlan -> findPlan.getIsShared())
                 .map(findPlan -> {
                     String findKeyword = planKeywordRepository
                             .getFirstByPlanIdAndKeywordCategory(findPlan.getId(), Category.PURPOSE)
                             .getKeyword().getName();
-                    return SharedPlanDto.of(findPlan, findKeyword);
+                    return PlanDto.of(findPlan, findKeyword);
                 })
                 .limit(MY_PAGE_PLAN_MAX_CNT)
                 .collect(Collectors.toList());

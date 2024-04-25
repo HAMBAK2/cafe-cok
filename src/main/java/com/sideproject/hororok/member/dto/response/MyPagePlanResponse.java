@@ -1,7 +1,6 @@
 package com.sideproject.hororok.member.dto.response;
 
-import com.sideproject.hororok.plan.dto.SavedPlanDto;
-import com.sideproject.hororok.plan.dto.SharedPlanDto;
+import com.sideproject.hororok.plan.dto.PlanDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,11 +10,11 @@ import java.util.List;
 @Builder
 public class MyPagePlanResponse {
 
-    private final List<SavedPlanDto> savedPlans;
-    private final List<SharedPlanDto> sharedPlans;
+    private final List<PlanDto> savedPlans;
+    private final List<PlanDto> sharedPlans;
 
-    public static MyPagePlanResponse from(final List<SavedPlanDto> savedPlans,
-                                          final List<SharedPlanDto> sharedPlans) {
+    public static MyPagePlanResponse from(final List<PlanDto> savedPlans,
+                                          final List<PlanDto> sharedPlans) {
 
         return MyPagePlanResponse.builder()
                 .savedPlans(savedPlans)
