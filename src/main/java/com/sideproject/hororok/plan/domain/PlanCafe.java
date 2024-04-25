@@ -3,6 +3,8 @@ package com.sideproject.hororok.plan.domain;
 
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.global.entity.BaseEntity;
+import com.sideproject.hororok.plan.domain.enums.MatchType;
+import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -27,11 +29,16 @@ public class PlanCafe extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "match_type", nullable = false)
+    private PlanCafeMatchType matchType;
+
     protected PlanCafe() {
     }
 
-    public PlanCafe(Plan plan, Cafe cafe) {
+    public PlanCafe(Plan plan, Cafe cafe, PlanCafeMatchType matchType) {
         this.plan = plan;
         this.cafe = cafe;
+        this.matchType = matchType;
     }
 }

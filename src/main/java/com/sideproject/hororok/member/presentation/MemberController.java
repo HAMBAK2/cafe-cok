@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @GetMapping("/myPage/plan/{planId}")
-    @Operation(summary = "마이페이지 계획탭에서 계획(여정)을 선택했을 때 동작")
+    @Operation(summary = "마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작")
     public ResponseEntity<MyPagePlanDetailResponse> planDetail(
             @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long planId){
 

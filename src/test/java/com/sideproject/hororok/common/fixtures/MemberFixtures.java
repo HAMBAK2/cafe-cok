@@ -1,15 +1,17 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.enums.SocialType;
+import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 import com.sideproject.hororok.member.dto.response.MyPageResponse;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.일반_폴더_DTO;
+import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페_DTO_리스트;
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.카테고리_키워드_DTO;
+import static com.sideproject.hororok.common.fixtures.PlanFixtures.계획;
 import static com.sideproject.hororok.common.fixtures.PlanFixtures.계획_DTO;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_개수;
 
@@ -33,6 +35,10 @@ public class MemberFixtures {
 
     public static MyPagePlanResponse 마이페이지_계획_응답() {
         return MyPagePlanResponse.from(Arrays.asList(계획_DTO()), Arrays.asList(계획_DTO()));
+    }
+
+    public static MyPagePlanDetailResponse 마이페이지_계획_상세_응답() {
+        return MyPagePlanDetailResponse.of(계획(), 카테고리_키워드_DTO(), 카페_DTO_리스트());
     }
 
 

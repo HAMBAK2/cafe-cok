@@ -6,6 +6,7 @@ import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.PlanCafe;
+import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.hororok.plan.domain.repository.PlanCafeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ public class PlanCafeService {
     private final CafeImageRepository cafeImageRepository;
 
 
-    public void saveAll(Plan plan, List<CafeDto> cafes) {
+    public void saveAll(Plan plan, List<CafeDto> cafes, PlanCafeMatchType matchType) {
 
         List<Long> cafeIds = cafes.stream()
                 .map(cafeDto -> cafeDto.getId())
                 .collect(Collectors.toList());
         List<Cafe> findCafes = cafeRepository.findByIdIn(cafeIds);
         List<PlanCafe> planCafes = findCafes.stream()
-                .map(findCafe -> new PlanCafe(plan, findCafe))
+                .map(findCafe -> new PlanCafe(plan, findCafe, matchType))
                 .collect(Collectors.toList());
         planCafeRepository.saveAll(planCafes);
     }
 
-    public List<CafeDto> getCafeDtosByPlanId(Long planId) {
-        List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanId(planId);
+    public List<CafeDto> getCafeDtosByPlanIdAndMatchType(Long planId, PlanCafeMatchType matchType) {
+        List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanIdAndMatchType(planId, matchType);
         return findPlanCafes.stream()
                 .map(planCafe -> CafeDto.of(
                         planCafe.getCafe(),

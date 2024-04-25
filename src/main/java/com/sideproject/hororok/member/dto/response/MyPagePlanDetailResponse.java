@@ -24,20 +24,33 @@ public class MyPagePlanDetailResponse {
     private final List<CafeDto> similarCafes;
 
     public static MyPagePlanDetailResponse of(
-            Plan plan, CategoryKeywordsDto categoryKeywords, List<CafeDto> cafes) {
+            Plan plan, CategoryKeywordsDto categoryKeywords, List<CafeDto> similarCafes) {
 
-        MyPagePlanDetailResponseBuilder builder = MyPagePlanDetailResponse.builder()
+        return MyPagePlanDetailResponse.builder()
                 .planId(plan.getId())
                 .matchType(plan.getMatchType())
                 .locationName(plan.getLocationName())
                 .minutes(plan.getMinutes())
                 .visitDateTime(plan.getVisitDateTime())
-                .categoryKeywords(categoryKeywords);
+                .categoryKeywords(categoryKeywords)
+                .similarCafes(similarCafes)
+                .matchCafes(new ArrayList<>())
+                .build();
+    }
 
-        if(plan.getMatchType().equals(MatchType.MATCH)) builder.matchCafes = cafes;
-        else if(plan.getMatchType().equals(MatchType.SIMILAR)) builder.similarCafes(cafes);
+    public static MyPagePlanDetailResponse of(
+            Plan plan, CategoryKeywordsDto categoryKeywords, List<CafeDto> similarCafes, List<CafeDto> matchCafes) {
 
-        return builder.build();
+        return MyPagePlanDetailResponse.builder()
+                .planId(plan.getId())
+                .matchType(plan.getMatchType())
+                .locationName(plan.getLocationName())
+                .minutes(plan.getMinutes())
+                .visitDateTime(plan.getVisitDateTime())
+                .categoryKeywords(categoryKeywords)
+                .similarCafes(similarCafes)
+                .matchCafes(matchCafes)
+                .build();
     }
 
 

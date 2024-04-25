@@ -7,6 +7,7 @@ import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
@@ -179,10 +180,10 @@ public class PlanService {
         response.setPlanId(savedPlan.getId());
 
         List<CafeDto> similarCafes = response.getSimilarCafes();
-        planCafeService.saveAll(savedPlan, similarCafes);
+        planCafeService.saveAll(savedPlan, similarCafes, PlanCafeMatchType.SIMILAR);
 
         List<CafeDto> matchCafes = response.getMatchCafes();
-        if(!matchCafes.isEmpty()) planCafeService.saveAll(savedPlan, matchCafes);
+        if(!matchCafes.isEmpty()) planCafeService.saveAll(savedPlan, matchCafes, PlanCafeMatchType.MATCH);
 
         planKeywordService.saveAll(savedPlan, keywords);
 

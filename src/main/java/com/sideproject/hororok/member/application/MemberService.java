@@ -15,6 +15,8 @@ import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import com.sideproject.hororok.plan.application.PlanCafeService;
 import com.sideproject.hororok.plan.application.PlanKeywordService;
 import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.enums.MatchType;
+import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.PlanDto;
@@ -69,9 +71,14 @@ public class MemberService {
         Plan findPlan = planRepository.getById(planId);
         List<Keyword> findKeywords = planKeywordService.getKeywordsByPlanId(planId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-        List<CafeDto> findCafes = planCafeService.getCafeDtosByPlanId(planId);
+        List<CafeDto> findSimilarCafes = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
 
-        return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findCafes);
+        if(findPlan.getMatchType().equals(MatchType.MATCH)) {
+            List<CafeDto> findMatchCafes = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
+            MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
+        }
+
+        return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
     }
 
     private List<PlanDto> getSavedPlanDtos(List<Plan> findPlans) {
