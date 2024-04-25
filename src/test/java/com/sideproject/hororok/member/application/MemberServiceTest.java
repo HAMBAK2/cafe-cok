@@ -5,7 +5,7 @@ import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
-import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
+import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +57,7 @@ class MemberServiceTest {
         when(bookmarkFolderService.getBookmarkFolderDtos(loginMember.getId())).thenReturn(findFolders);
         when(memberRepository.getById(loginMember.getId())).thenReturn(findMember);
 
-        MemberMyPageResponse response = memberService.myPage(loginMember);
+        MyPageResponse response = memberService.myPage(loginMember);
 
 
         assertAll(() -> {

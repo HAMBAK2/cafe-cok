@@ -2,7 +2,7 @@ package com.sideproject.hororok.member.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
-import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
+import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -29,7 +29,7 @@ class MemberControllerTest extends ControllerTest {
     @DisplayName("마이 페이지 버튼을 클릭하면 MemberMyPageResponse와 200Ok를 반환한다.")
     public void test_my_page() throws Exception {
 
-        MemberMyPageResponse response = 마이페이지_조회_응답();
+        MyPageResponse response = 마이페이지_조회_응답();
         when(memberService.myPage(any(LoginMember.class)))
                 .thenReturn(response);
 

@@ -2,7 +2,7 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.enums.SocialType;
-import com.sideproject.hororok.member.dto.response.MemberMyPageResponse;
+import com.sideproject.hororok.member.dto.response.MyPageResponse;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public class MemberFixtures {
         return new Member(맴버_이메일, 맴버_닉네임, 멤버_기본_이미지, SocialType.KAKAO);
     }
 
-    public static MemberMyPageResponse 마이페이지_조회_응답() {
-        return new MemberMyPageResponse(사용자(), 리뷰_개수, Arrays.asList(일반_폴더_DTO()));
+    public static MyPageResponse 마이페이지_조회_응답() {
+        return new MyPageResponse(사용자(), 리뷰_개수, Arrays.asList(일반_폴더_DTO()));
     }
 }

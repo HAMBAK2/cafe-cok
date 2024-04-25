@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class MemberMyPageResponse {
+public class MyPageResponse {
 
     private String nickname;
     private String picture;
@@ -15,12 +15,12 @@ public class MemberMyPageResponse {
     private Integer folderCount;
     private List<BookmarkFolderDto> folders;
 
-    private MemberMyPageResponse() {
+    private MyPageResponse() {
     }
 
-    public MemberMyPageResponse(final Member member,
-                                final Long reviewCount,
-                                final List<BookmarkFolderDto> folders) {
+    public MyPageResponse(final Member member,
+                          final Long reviewCount,
+                          final List<BookmarkFolderDto> folders) {
         this.nickname = member.getNickname();
         this.picture = member.getPicture();
         this.reviewCount = reviewCount;

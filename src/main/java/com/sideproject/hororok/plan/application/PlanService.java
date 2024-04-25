@@ -7,6 +7,7 @@ import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.CafeDto;
@@ -17,6 +18,8 @@ import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
+import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
+import com.sideproject.hororok.utils.ListUtils;
 import com.sideproject.hororok.utils.calculator.GeometricUtils;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class PlanService {
     private final CafeRepository cafeRepository;
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
+    private final PlanKeywordRepository planKeywordRepository;
 
     private final CafeService cafeService;
     private final KeywordService keywordService;
@@ -47,6 +52,7 @@ public class PlanService {
 
         List<Cafe> filteredCafes = new ArrayList<>();
         CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywordsByKeywordNames(request.getKeywords());
+        if(categoryKeywords.getPurpose().isEmpty()) throw new NoSuchPlanKeywordException();
 
         Boolean isMismatch = isMismatchPlan(request, filteredCafes);
         if(isMismatch) return createMisMatchPlan(request, categoryKeywords);
@@ -149,11 +155,24 @@ public class PlanService {
         Member findMember = memberRepository.getById(NO_MEMBER_ID);
 
         Plan plan = response.toEntity(findMember);
-        Optional<Plan> matchingPlan = planRepository.findMatchingPlan(plan);
-        if(matchingPlan.isPresent()) {
-            Long planId = matchingPlan.get().getId();
-            response.setPlanId(planId);
-            return response;
+        List<Plan> matchingPlans = planRepository.findMatchingPlan(plan);
+        if(!matchingPlans.isEmpty()) {
+
+            Optional<Long> matchingPlanId = matchingPlans.stream()
+                    .filter(matchingPlan -> {
+                        List<String> findKeywordNames = planKeywordRepository.findByPlanId(matchingPlan.getId())
+                                .stream().map(planKeyword -> planKeyword.getKeyword().getName())
+                                .collect(Collectors.toList());
+                        return ListUtils.areListEqual(keywords, findKeywordNames);
+                    })
+                    .map(Plan::getId)
+                    .findFirst();
+
+            if(matchingPlanId.isPresent()) {
+                Long planId = matchingPlanId.get();
+                response.setPlanId(planId);
+                return response;
+            }
         }
 
         Plan savedPlan = planRepository.save(plan);
