@@ -65,9 +65,6 @@ public class Cafe extends BaseEntity {
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "cafe")
-    private List<CafeImage> images = new ArrayList<>();
-
-    @OneToMany(mappedBy = "cafe")
     private List<OperationHour> operationHours = new ArrayList<>();
 
     @OneToMany(mappedBy = "cafe")

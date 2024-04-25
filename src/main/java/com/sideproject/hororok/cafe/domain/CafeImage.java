@@ -26,4 +26,11 @@ public class CafeImage extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
+    protected CafeImage() {
+    }
+
+    public CafeImage(final String imageUrl, final Cafe cafe) {
+        this.imageUrl = imageUrl;
+        this.cafe = cafe;
+    }
 }

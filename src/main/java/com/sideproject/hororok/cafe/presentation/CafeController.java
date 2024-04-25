@@ -75,13 +75,13 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/find/category")
+    @PostMapping("/find/keyword")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
     
-    public ResponseEntity<CafeFindCategoryResponse> findCategory(
+    public ResponseEntity<CafeFindCategoryResponse> findKeyword(
             @RequestBody CafeFindCategoryRequest request) {
 
-        CafeFindCategoryResponse response = cafeService.findCafeByCategory(request);
+        CafeFindCategoryResponse response = cafeService.findCafeByKeyword(request);
         return ResponseEntity.ok(response);
     }
 

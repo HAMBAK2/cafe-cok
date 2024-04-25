@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.cafe.domain.OperationHour;
+import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 public class CafeService {
 
     private final KeywordRepository keywordRepository;
+    private final CafeImageRepository cafeImageRepository;
     private final OperationHourRepository operationHourRepository;
 
     private final MenuService menuService;
@@ -90,7 +92,7 @@ public class CafeService {
     }
 
     
-    public CafeFindCategoryResponse findCafeByCategory(CafeFindCategoryRequest request) {
+    public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
 
         List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
         CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
@@ -221,5 +223,14 @@ public class CafeService {
                 .collect(Collectors.toList());
 
         return cafesByKeywordAllMatch;
+    }
+
+    public List<CafeDto> getCafeDtosByCafes(List<Cafe> cafes){
+
+        return cafes.stream()
+                .map(cafe -> CafeDto.of(
+                        cafe,
+                        cafeImageRepository.findByCafeId(cafe.getId()).get(0).getImageUrl()))
+                .collect(Collectors.toList());
     }
 }

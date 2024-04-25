@@ -25,7 +25,7 @@ public class PlanController {
     private final PlanService planService;
 
     @PostMapping
-    @Operation(summary = "계획하기를 통해 선택한 항목에 대한 결과를 제공")
+    @Operation(summary = "계획하기 결과보기 요청")
     public ResponseEntity<CreatePlanResponse> plan(@RequestBody CreatePlanRequest request) {
 
         CreatePlanResponse response = planService.plan(request);

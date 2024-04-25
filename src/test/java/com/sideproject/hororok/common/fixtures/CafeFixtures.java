@@ -2,30 +2,42 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.cafe.domain.CafeImage;
+import com.sideproject.hororok.cafe.dto.CafeDto;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class CafeFixtures {
 
     public static final Long 카페_아이디 = 1L;
     public static final String 카페_이름 = "카페 이름";
-    public static final String 카페_전화번호 = "000-0000-0000";
+    public static final String 카페_전화번호 = "010-1234-5678";
     public static final String 카페_도로명_주소 = "OO시 OO구 OO동";
-    public static final BigDecimal 카페_위도 = getRandomBigDecimal(-90, 90);
-    public static final BigDecimal 카페_경도 = getRandomBigDecimal(-180, 180);
+    public static final BigDecimal 카페_위도 = getRandomBigDecimal(0, 90);
+    public static final BigDecimal 카페_경도 = getRandomBigDecimal(0, 180);
+
+    public static final String 카페_이미지_URL = "//카페이미지";
 
     public static Cafe 카페() {
-
         Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도);
         setId(cafe, 카페_아이디);
 
         return cafe;
     }
 
+    public static CafeDto 카페_DTO() {
+        return CafeDto.of(카페(), 카페_이미지_URL);
+    }
 
-    private static BigDecimal getRandomBigDecimal(int min, int max) {
+    public static List<CafeDto> 카페_DTO_리스트() {
+        return Arrays.asList(카페_DTO());
+    }
+
+    public static BigDecimal getRandomBigDecimal(int min, int max) {
         Random random = new Random();
         double range = max - min;
         double scaled = random.nextDouble() * range;

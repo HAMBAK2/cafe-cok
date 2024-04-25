@@ -27,7 +27,7 @@ public class CafeDto {
     private final Long reviewCount;
     private final String image;
 
-    public static CafeDto from(Cafe cafe) {
+    public static CafeDto of(Cafe cafe, String imageUrl) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -37,15 +37,7 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating())
                 .reviewCount(cafe.getReviewCount())
-                .image(cafe.getImages().get(0).getImageUrl())
+                .image(imageUrl)
                 .build();
     }
-
-    public static List<CafeDto> fromList(List<Cafe> cafes) {
-        return cafes.stream()
-                .map(CafeDto::from)
-                .collect(Collectors.toList());
-    }
-
-
 }

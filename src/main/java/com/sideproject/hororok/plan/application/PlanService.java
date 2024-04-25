@@ -114,7 +114,7 @@ public class PlanService {
 
         List<Cafe> recommendCafes = cafeRepository.findAllByOrderByStarRatingDescNameAsc();
         CreatePlanResponse response = new CreatePlanResponse(
-                MatchType.MISMATCH, request, categoryKeywords, CafeDto.fromList(recommendCafes));
+                MatchType.MISMATCH, request, categoryKeywords, cafeService.getCafeDtosByCafes(recommendCafes));
 
         return response;
     }
@@ -124,7 +124,7 @@ public class PlanService {
 
         CreatePlanResponse response =  new CreatePlanResponse(
                 MatchType.SIMILAR, request, categoryKeywords,
-                CafeDto.fromList(filteredCafes));
+                cafeService.getCafeDtosByCafes(filteredCafes));
 
         return createPlan(response, request.getKeywords());
     }
@@ -138,8 +138,8 @@ public class PlanService {
 
         CreatePlanResponse response = new CreatePlanResponse(
                 MatchType.MATCH, request, categoryKeywords,
-                CafeDto.fromList(allMatchCafes),
-                CafeDto.fromList(filteredCafes));
+                cafeService.getCafeDtosByCafes(allMatchCafes),
+                cafeService.getCafeDtosByCafes(filteredCafes));
 
         return createPlan(response, request.getKeywords());
     }
