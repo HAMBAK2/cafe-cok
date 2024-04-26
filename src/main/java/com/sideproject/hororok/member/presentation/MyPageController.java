@@ -6,6 +6,7 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
+import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,14 @@ public class MyPageController {
     public ResponseEntity<MyPageProfileResponse> profile(@AuthenticationPrincipal LoginMember loginMember) {
 
         MyPageProfileResponse response = myPageService.profile(loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/tag/save")
+    @Operation(summary = "마이페이지의 저장 태그를 눌렀을 때 동작")
+    public ResponseEntity<MyPageTagSaveResponse> tagSave(@AuthenticationPrincipal LoginMember loginMember) {
+
+        MyPageTagSaveResponse response = myPageService.tagSave(loginMember);
         return ResponseEntity.ok(response);
     }
 }
