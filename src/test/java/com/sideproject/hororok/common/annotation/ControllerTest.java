@@ -9,14 +9,13 @@ import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
-import com.sideproject.hororok.member.application.MemberService;
-import com.sideproject.hororok.member.presentation.MemberController;
+import com.sideproject.hororok.member.application.MyPageService;
+import com.sideproject.hororok.member.presentation.MyPageController;
 import com.sideproject.hororok.plan.application.PlanService;
 import com.sideproject.hororok.plan.presentation.PlanController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -32,8 +31,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         AuthController.class,
         BookmarkFolderController.class,
         BookmarkController.class,
-        MemberController.class,
-        PlanController.class
+        PlanController.class,
+        MyPageController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
@@ -53,9 +52,6 @@ public abstract class ControllerTest {
     public BookmarkFolderService bookmarkFolderService;
 
     @MockBean
-    public MemberService memberService;
-
-    @MockBean
     public AuthService authService;
 
     @MockBean
@@ -63,6 +59,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public PlanService planService;
+
+    @MockBean
+    public MyPageService myPageService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {

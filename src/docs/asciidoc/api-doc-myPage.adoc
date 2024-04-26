@@ -4,37 +4,62 @@
 :source-highlighter: highlightjs
 
 == 4. 마이페이지
-=== 4-1. 마이 페이지 선택 및 마이 페이지 저장 탭 클릭 시(GET) - 성공
-==== Request Header
-include::{snippets}/member/myPage/success/request-headers.adoc[]
-==== Http request
-include::{snippets}/member/myPage/success/http-request.adoc[]
-==== Http Response
-include::{snippets}/member/myPage/success/http-response.adoc[]
-==== Response Fields
-include::{snippets}/member/myPage/success/response-fields.adoc[]
 
-=== 4-2. 마이페이지 계획 탭(GET) - 성공
+=== 4-1. 마이페이지 상단 프로필(GET) - 성공
 ==== Request Header
-include::{snippets}/member/myPage/plan/success/request-headers.adoc[]
+include::{snippets}/myPage/profile/success/request-headers.adoc[]
 ==== Http request
-include::{snippets}/member/myPage/plan/success/http-request.adoc[]
+include::{snippets}/myPage/profile/success/http-request.adoc[]
 ==== Http Response
-include::{snippets}/member/myPage/plan/success/http-response.adoc[]
+include::{snippets}/myPage/profile/success/http-response.adoc[]
 ==== Response Fields
-include::{snippets}/member/myPage/plan/success/response-fields.adoc[]
+include::{snippets}/myPage/profile/success/response-fields.adoc[]
 
-=== 4-3. 마이페이지 계획 탭의 하나의 계획을 눌렀을 때(GET) - 성공
+=== 4-2. 마이페이지 저장 태그(GET) - 성공
 ==== Request Header
-include::{snippets}/member/myPage/plan/detail/success/request-headers.adoc[]
+include::{snippets}/myPage/tag/save/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/tag/save/success/http-request.adoc[]
+==== Http Response
+include::{snippets}/myPage/tag/save/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/tag/save/success/response-fields.adoc[]
+
+=== 4-3. 마이페이지 계획 탭의 저장한 여정(GET) - 성공
+==== Request Header
+include::{snippets}/myPage/saved/plan/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/saved/plan/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/myPage/saved/plan/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/saved/plan/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/saved/plan/success/response-fields.adoc[]
+
+=== 4-4. 마이페이지 계획 탭의 공유한 여정(GET) - 성공
+==== Request Header
+include::{snippets}/myPage/shared/plan/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/shared/plan/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/myPage/shared/plan/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/shared/plan/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/shared/plan/success/response-fields.adoc[]
+
+=== 4-4. 마이페이지 계획 탭의 하나의 계획을 눌렀을 때(GET) - 성공
+==== Request Header
+include::{snippets}/myPage/plan/detail/success/request-headers.adoc[]
 ==== Path parameters
-include::{snippets}/member/myPage/plan/detail/success/path-parameters.adoc[]
+include::{snippets}/myPage/plan/detail/success/path-parameters.adoc[]
 ==== Http request
-include::{snippets}/member/myPage/plan/detail/success/http-request.adoc[]
+include::{snippets}/myPage/plan/detail/success/http-request.adoc[]
 ==== Http Response
-include::{snippets}/member/myPage/plan/detail/success/http-response.adoc[]
+include::{snippets}/myPage/plan/detail/success/http-response.adoc[]
 ==== Response Fields
-include::{snippets}/member/myPage/plan/detail/success/response-fields.adoc[]
+include::{snippets}/myPage/plan/detail/success/response-fields.adoc[]
 
 
 === link:api-docs.html[API 목록으로]

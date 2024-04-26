@@ -89,9 +89,9 @@ class BookmarkFolderControllerTest extends ControllerTest {
                                 fieldWithPath("folders[].visible").description("폴더 지도 노출 여부"),
                                 fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.folderCount").value(폴더_개수_1개))
+                .andExpect(jsonPath("$.folderCount").value(폴더_개수))
                 .andExpect(jsonPath("$.folders").isArray())
-                .andExpect(jsonPath("$.folders", hasSize(폴더_리스트_사이즈_1개)))
+                .andExpect(jsonPath("$.folders", hasSize(폴더_리스트_사이즈)))
                 .andExpect(jsonPath("$.folders[" + 폴더_리스트_인덱스 + "].folderId").value(일반_폴더_ID));
     }
 

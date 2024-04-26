@@ -1,9 +1,8 @@
 package com.sideproject.hororok.review.application;
 
-import com.sideproject.hororok.S3.component.S3Uploader;
+import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
-import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.dto.KeywordDto;

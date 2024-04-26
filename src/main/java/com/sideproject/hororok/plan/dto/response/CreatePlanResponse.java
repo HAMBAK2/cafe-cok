@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.hororok.utils.converter.FormatConverter.dateTimeConvert;
+import static com.sideproject.hororok.utils.FormatConverter.*;
 
 @Getter
 public class CreatePlanResponse {
@@ -37,7 +37,7 @@ public class CreatePlanResponse {
         this.matchType = matchType;
         this.locationName = request.getLocationName();
         this.minutes = request.getMinutes();
-        this.visitDateTime = dateTimeConvert(request.getDate(), request.getStartTime());
+        this.visitDateTime = convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime());
         this.categoryKeywords = categoryKeywords;
         this.matchCafes = matchCafes;
         this.similarCafes = similarCafes;
@@ -51,7 +51,7 @@ public class CreatePlanResponse {
         this.matchType = matchType;
         this.locationName = request.getLocationName();
         this.minutes = request.getMinutes();
-        this.visitDateTime = dateTimeConvert(request.getDate(), request.getStartTime());
+        this.visitDateTime = convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime());
         this.categoryKeywords = categoryKeywords;
 
         if(matchType.getValue().equals(MatchType.SIMILAR)) {
@@ -59,12 +59,6 @@ public class CreatePlanResponse {
             return;
         }
         this.recommendCafes = cafes;
-    }
-
-    public Plan toEntity(final Member member) {
-        return new Plan(
-                member, this.locationName, this.visitDateTime,
-                this.minutes, this.matchType, false, false);
     }
 
     public void setPlanId(Long planId) {

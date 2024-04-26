@@ -8,6 +8,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -29,8 +33,14 @@ public class Plan extends BaseEntity {
     @Column(name = "location_name")
     private String locationName;
 
-    @Column(name = "visit_date_time")
-    private String visitDateTime;
+    @Column(name = "visit_date")
+    private LocalDate visitDate;
+
+    @Column(name = "visit_start_time")
+    private LocalTime visitStartTime;
+
+    @Column(name = "visit_end_time")
+    private LocalTime visitEndTime;
 
     @Column(name = "minutes")
     private Integer minutes;
@@ -46,11 +56,13 @@ public class Plan extends BaseEntity {
     private Boolean isShared;
 
     public Plan(final Member member, final String locationName,
-                final String visitDateTime, final Integer minutes,
-                final MatchType matchType, final Boolean isSaved, final Boolean isShared) {
+                final LocalDate visitDate, final LocalTime visitStartTime, final LocalTime visitEndTime,
+                final Integer minutes,final MatchType matchType, final Boolean isSaved, final Boolean isShared) {
         this.member = member;
         this.locationName = locationName;
-        this.visitDateTime = visitDateTime;
+        this.visitDate = visitDate;
+        this.visitStartTime = visitStartTime;
+        this.visitEndTime = visitEndTime;
         this.minutes = minutes;
         this.matchType = matchType;
         this.isSaved = isSaved;

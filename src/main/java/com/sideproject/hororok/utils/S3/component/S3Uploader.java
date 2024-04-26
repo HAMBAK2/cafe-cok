@@ -1,4 +1,4 @@
-package com.sideproject.hororok.S3.component;
+package com.sideproject.hororok.utils.S3.component;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
