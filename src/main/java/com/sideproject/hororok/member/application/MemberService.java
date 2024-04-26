@@ -107,6 +107,4 @@ public class MemberService {
                 .limit(MY_PAGE_PLAN_MAX_CNT)
                 .collect(Collectors.toList());
     }
-
-
 }
