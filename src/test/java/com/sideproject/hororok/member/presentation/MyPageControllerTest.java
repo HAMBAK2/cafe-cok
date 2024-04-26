@@ -2,6 +2,7 @@ package com.sideproject.hororok.member.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
+import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
 import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
@@ -9,8 +10,10 @@ import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.sideproject.hororok.common.fixtures.MemberFixtures.마이페이지_계획_상세_응답;
 import static com.sideproject.hororok.common.fixtures.MyPageFixtures.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -19,8 +22,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -160,6 +162,57 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("마이페이지 계획텝에서 하나의 계획(여정)을 선택했을 때 동작")
+    public void test_my_page_detail_success() throws Exception{
+
+
+        MyPagePlanDetailResponse response = 마이페이지_계획_상세_응답();
+
+        when(myPageService.planDetail(any(Long.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/myPage/plan/{planId}", response.getPlanId())
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/plan/detail/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(
+                                parameterWithName("planId").description("선택한 계획(여정)의 ID")),
+                        responseFields(
+                                fieldWithPath("planId").description("계획 ID"),
+                                fieldWithPath("matchType").description("계획하기 결과 타입(MATCH, SIMILAR, MISMATCH)"),
+                                fieldWithPath("locationName").description("검색한 위치 이름"),
+                                fieldWithPath("minutes").description("도보 시간"),
+                                fieldWithPath("visitDateTime").description("방문 날짜와 시간(월-일-시간-분"),
+                                fieldWithPath("categoryKeywords").type(JsonFieldType.OBJECT).description("카테고리 별 키워드 정보"),
+                                fieldWithPath("categoryKeywords.purpose").type(JsonFieldType.ARRAY).description("목적 카테고리 리스트(필수)"),
+                                fieldWithPath("categoryKeywords.menu").type(JsonFieldType.ARRAY).description("메뉴 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.theme").type(JsonFieldType.ARRAY).description("테마 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.facility").type(JsonFieldType.ARRAY).description("시설 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.atmosphere").type(JsonFieldType.ARRAY).description("분위기 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)
+                                        .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트)"),
+                                fieldWithPath("similarCafes[].id").description("카페 ID"),
+                                fieldWithPath("similarCafes[].name").description("카페 이름"),
+                                fieldWithPath("similarCafes[].phoneNumber").description("전화번호"),
+                                fieldWithPath("similarCafes[].roadAddress").description("도로명 주소"),
+                                fieldWithPath("similarCafes[].longitude").description("경도"),
+                                fieldWithPath("similarCafes[].latitude").description("위도"),
+                                fieldWithPath("similarCafes[].starRating").description("별점"),
+                                fieldWithPath("similarCafes[].reviewCount").description("리뷰 수"),
+                                fieldWithPath("similarCafes[].image").description("카페 이미지 URL"),
+                                fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
+                                        .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"))))
                 .andExpect(status().isOk());
     }
 }

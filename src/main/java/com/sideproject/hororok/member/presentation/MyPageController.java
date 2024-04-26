@@ -4,6 +4,7 @@ package com.sideproject.hororok.member.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;
+import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
 import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -59,6 +61,15 @@ public class MyPageController {
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
         MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/plan/{planId}")
+    @Operation(summary = "마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작")
+    public ResponseEntity<MyPagePlanDetailResponse> planDetail(
+            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long planId){
+
+        MyPagePlanDetailResponse response = myPageService.planDetail(planId);
         return ResponseEntity.ok(response);
     }
 }

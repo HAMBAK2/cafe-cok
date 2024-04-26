@@ -51,15 +51,15 @@ include::{snippets}/myPage/shared/plan/success/response-fields.adoc[]
 
 === 4-4. 마이페이지 계획 탭의 하나의 계획을 눌렀을 때(GET) - 성공
 ==== Request Header
-include::{snippets}/member/myPage/plan/detail/success/request-headers.adoc[]
+include::{snippets}/myPage/plan/detail/success/request-headers.adoc[]
 ==== Path parameters
-include::{snippets}/member/myPage/plan/detail/success/path-parameters.adoc[]
+include::{snippets}/myPage/plan/detail/success/path-parameters.adoc[]
 ==== Http request
-include::{snippets}/member/myPage/plan/detail/success/http-request.adoc[]
+include::{snippets}/myPage/plan/detail/success/http-request.adoc[]
 ==== Http Response
-include::{snippets}/member/myPage/plan/detail/success/http-response.adoc[]
+include::{snippets}/myPage/plan/detail/success/http-response.adoc[]
 ==== Response Fields
-include::{snippets}/member/myPage/plan/detail/success/response-fields.adoc[]
+include::{snippets}/myPage/plan/detail/success/response-fields.adoc[]
 
 
 === link:api-docs.html[API 목록으로]
