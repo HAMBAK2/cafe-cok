@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface CafeImageRepository extends JpaRepository<CafeImage, Long> {
 
-    @Query(
-            "SELECT ci.imageUrl FROM CafeImage ci " +
+    @Query("SELECT ci.imageUrl FROM CafeImage ci " +
             "WHERE ci.cafe.id = :cafeId")
     List<String> findCafeImagesUrlsByCafeId(Long cafeId);
 

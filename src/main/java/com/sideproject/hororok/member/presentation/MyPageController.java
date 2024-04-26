@@ -64,6 +64,31 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/saved/plans")
+    @Operation(summary = "저장된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlanResponse> savedPlans(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        MyPagePlanResponse response = myPageService.savedPlans(loginMember, sortBy, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/shared/plans")
+    @Operation(summary = "공유된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlanResponse> sharedPlans(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        MyPagePlanResponse response = myPageService.sharedPlans(loginMember, sortBy, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+
     @GetMapping("/plan/{planId}")
     @Operation(summary = "마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작")
     public ResponseEntity<MyPagePlanDetailResponse> planDetail(

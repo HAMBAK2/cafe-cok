@@ -4,18 +4,23 @@ import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.exception.NoSuchPlanException;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
 
     Page<Plan> findPageByMemberId(Long memberId, Pageable pageable);
 
-    Page<Plan> findPageByMemberIdAndVisitDateGreaterThanEqualAndVisitStartTimeAfter(
+    @Query("SELECT p " +
+            "FROM Plan p " +
+            "WHERE p.member.id = :memberId " +
+                "AND (p.visitDate >= :visitDate " +
+                    "AND (p.visitStartTime >= :visitStartTime OR p.visitStartTime IS NULL))")
+    Page<Plan> findPageByMemberIdAndUpcomingPlanCondition(
             Long memberId, LocalDate visitDate, LocalTime visitStartTime, Pageable pageable);
 
     default List<Plan> findMatchingPlan(final Plan plan) {

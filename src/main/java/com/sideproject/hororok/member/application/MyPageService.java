@@ -28,6 +28,8 @@ import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,8 @@ public class MyPageService {
     private final PlanKeywordService planKeywordService;
     private final BookmarkFolderService bookmarkFolderService;
 
-    private static final Integer PLAN_MAX_CNT = 4;
+    private static final Integer PLAN_MAX_PAGE_SIZE = 4;
+    private static final Integer PLAN_DEFAULT_PAGE = 1;
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -73,25 +76,52 @@ public class MyPageService {
         return MyPageTagSaveResponse.of(findFolders.size(), findFolders);
     }
 
-
     public MyPagePlanResponse savedPlan(final LoginMember loginMember, final PlanSortBy sortBy) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
-            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SAVED);
-            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SAVED);
+            case RECENT -> plans
+                    = getPlansByRecent(loginMember, PlanStatus.SAVED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
+            case UPCOMING -> plans
+                    = getPlansByUpcoming(loginMember, PlanStatus.SAVED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
         }
 
         return new MyPagePlanResponse(plans);
     }
 
     public MyPagePlanResponse sharedPlan(final LoginMember loginMember,
-                                        final PlanSortBy sortBy) {
+                                         final PlanSortBy sortBy) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
-            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SHARED);
-            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SHARED);
+            case RECENT -> plans
+                    = getPlansByRecent(loginMember, PlanStatus.SHARED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
+            case UPCOMING -> plans
+                    = getPlansByUpcoming(loginMember, PlanStatus.SHARED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
+        }
+
+        return new MyPagePlanResponse(plans);
+    }
+
+    public MyPagePlanResponse savedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
+                                         final Integer page, final Integer size) {
+
+        List<MyPagePlanDto> plans = new ArrayList<>();
+        switch (sortBy){
+            case RECENT -> plans = getPlansByRecent(loginMember, PlanStatus.SAVED, page, size);
+            case UPCOMING -> plans = getPlansByUpcoming(loginMember, PlanStatus.SAVED, page, size);
+        }
+
+        return new MyPagePlanResponse(plans);
+    }
+
+    public MyPagePlanResponse sharedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
+                                         final Integer page, final Integer size) {
+
+        List<MyPagePlanDto> plans = new ArrayList<>();
+        switch (sortBy){
+            case RECENT -> plans = getPlansByRecent(loginMember, PlanStatus.SHARED, page, size);
+            case UPCOMING -> plans = getPlansByUpcoming(loginMember, PlanStatus.SHARED, page, size);
         }
 
         return new MyPagePlanResponse(plans);
@@ -102,21 +132,24 @@ public class MyPageService {
         Plan findPlan = planRepository.getById(planId);
         List<Keyword> findKeywords = planKeywordService.getKeywordsByPlanId(planId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-        List<CafeDto> findSimilarCafes = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
+        List<CafeDto> findSimilarCafes
+                = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
 
         if(findPlan.getMatchType().equals(MatchType.MATCH)) {
-            List<CafeDto> findMatchCafes = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
+            List<CafeDto> findMatchCafes
+                    = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
             return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
         }
 
         return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
     }
 
-    private List<MyPagePlanDto> getPlanByRecent(final LoginMember loginMember,
-                                                     final PlanStatus planStatus) {
+    private List<MyPagePlanDto> getPlansByRecent(final LoginMember loginMember,
+                                                 final PlanStatus planStatus,
+                                                 final Integer page, final Integer size) {
 
         PageRequest pageRequest =
-                PageRequest.of(0, PLAN_MAX_CNT, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
+                PageRequest.of(page-1, size, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
 
         Page<Plan> findPlanPage = planRepository.findPageByMemberId(loginMember.getId(), pageRequest);
 
@@ -136,16 +169,16 @@ public class MyPageService {
         return plans;
     }
 
-    private List<MyPagePlanDto> getPlanByUpcoming(final LoginMember loginMember,
-                                                       final PlanStatus planStatus) {
+    private List<MyPagePlanDto> getPlansByUpcoming(final LoginMember loginMember,
+                                                   final PlanStatus planStatus,
+                                                   final Integer page, final Integer size) {
 
         PageRequest pageRequest =
-                PageRequest.of(0, PLAN_MAX_CNT, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
+                PageRequest.of(page-1, size, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
                         .and(by(Direction.ASC, "visitStartTime")));
 
-        Page<Plan> findPlanPage = planRepository
-                .findPageByMemberIdAndVisitDateGreaterThanEqualAndVisitStartTimeAfter(
-                        loginMember.getId(), LocalDate.now(), LocalTime.now(), pageRequest);
+        Page<Plan> findPlanPage = planRepository.findPageByMemberIdAndUpcomingPlanCondition(
+                loginMember.getId(), LocalDate.now(), LocalTime.now(), pageRequest);
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         for (Plan plan : findPlanPage) {
@@ -162,7 +195,4 @@ public class MyPageService {
 
         return plans;
     }
-
-
-
 }
