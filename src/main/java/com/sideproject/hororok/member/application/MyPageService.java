@@ -13,6 +13,7 @@ import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
 import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
+import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
@@ -68,14 +69,28 @@ public class MyPageService {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
-            case RECENT -> plans = getSavedPlanByRecent(loginMember, count);
-            case UPCOMING -> plans = getSavedPlanByUpcoming(loginMember, count);
+            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SAVED, count);
+            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SAVED, count);
         }
 
         return new MyPagePlanResponse(plans);
     }
 
-    private List<MyPagePlanDto> getSavedPlanByRecent(final LoginMember loginMember,
+    public MyPagePlanResponse sharedPlan(final LoginMember loginMember,
+                                        final PlanSortBy sortBy,
+                                        final Integer count) {
+
+        List<MyPagePlanDto> plans = new ArrayList<>();
+        switch (sortBy){
+            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SHARED, count);
+            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SHARED, count);
+        }
+
+        return new MyPagePlanResponse(plans);
+    }
+
+    private List<MyPagePlanDto> getPlanByRecent(final LoginMember loginMember,
+                                                     final PlanStatus planStatus,
                                                      final Integer count) {
 
         PageRequest pageRequest =
@@ -85,6 +100,8 @@ public class MyPageService {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         for (Plan plan : findPlanPage) {
+            if(planStatus.equals(PlanStatus.SAVED) && !plan.getIsSaved()) continue;
+            if(planStatus.equals(PlanStatus.SHARED) && !plan.getIsShared()) continue;
             if(!plan.getIsSaved()) continue;
             KeywordDto findKeywordDto = KeywordDto
                     .from(planKeywordRepository
@@ -97,8 +114,9 @@ public class MyPageService {
         return plans;
     }
 
-    private List<MyPagePlanDto> getSavedPlanByUpcoming(final LoginMember loginMember,
-                                                     final Integer count) {
+    private List<MyPagePlanDto> getPlanByUpcoming(final LoginMember loginMember,
+                                                       final PlanStatus planStatus,
+                                                       final Integer count) {
 
         PageRequest pageRequest =
                 PageRequest.of(0, count, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
@@ -110,7 +128,8 @@ public class MyPageService {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         for (Plan plan : findPlanPage) {
-            if(!plan.getIsSaved()) continue;
+            if(planStatus.equals(PlanStatus.SAVED) && !plan.getIsSaved()) continue;
+            if(planStatus.equals(PlanStatus.SHARED) && !plan.getIsShared()) continue;
 
             KeywordDto findKeywordDto = KeywordDto
                     .from(planKeywordRepository

@@ -42,7 +42,6 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
-    //저장된 계획
     @GetMapping("/saved/plan")
     @Operation(summary = "계획 탭의 저장된 계획을 나타내는 API")
     public ResponseEntity<MyPagePlanResponse> savedPlan(
@@ -55,4 +54,14 @@ public class MyPageController {
     }
 
     //공유된 계획
+    @GetMapping("/shared/plan")
+    @Operation(summary = "계획 탭의 공유된 계획을 나타내는 API")
+    public ResponseEntity<MyPagePlanResponse> sharedPlan(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+            @RequestParam(defaultValue = "4") Integer count) {
+
+        MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy, count);
+        return ResponseEntity.ok(response);
+    }
 }
