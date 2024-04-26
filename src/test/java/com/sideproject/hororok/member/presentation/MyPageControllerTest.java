@@ -166,6 +166,84 @@ class MyPageControllerTest extends ControllerTest {
     }
 
     @Test
+    @DisplayName("저장된 계획의 전체 리스트를 나타내는 API - 성공")
+    public void test_saved_plans_success() throws Exception {
+
+        MyPagePlanResponse response = 마이페이지_계획_응답();
+
+        when(myPageService
+                .savedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/saved/plans?sortBy="+PlanSortBy.RECENT.name()+"&page=1&size=10")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/saved/plans/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        queryParameters(
+                                parameterWithName("sortBy")
+                                        .description("정렬 방식을 구분하는 필드\n\n" +
+                                                "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순"),
+                                parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
+                                parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
+                        responseFields(
+                                fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
+                                fieldWithPath("plans[].id").description("계획(여정)의 ID"),
+                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
+                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
+                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
+                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
+                                fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
+                                fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("공유된 계획의 전체 리스트를 나타내는 API - 성공")
+    public void test_shared_plans_success() throws Exception {
+
+        MyPagePlanResponse response = 마이페이지_계획_응답();
+
+        when(myPageService
+                .sharedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/shared/plans?sortBy="+PlanSortBy.RECENT.name()+"&page=1&size=10")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/shared/plans/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        queryParameters(
+                                parameterWithName("sortBy")
+                                        .description("정렬 방식을 구분하는 필드\n\n" +
+                                                "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순"),
+                                parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
+                                parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
+                        responseFields(
+                                fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
+                                fieldWithPath("plans[].id").description("계획(여정)의 ID"),
+                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
+                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
+                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
+                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
+                                fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
+                                fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("마이페이지 계획텝에서 하나의 계획(여정)을 선택했을 때 동작 - 성공")
     public void test_my_page_detail_success() throws Exception{
 
