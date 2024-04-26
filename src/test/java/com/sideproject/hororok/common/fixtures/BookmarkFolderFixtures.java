@@ -19,8 +19,8 @@ import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 
 public class BookmarkFolderFixtures {
 
-    public static final Long 폴더_개수_1개 = 1L;
-    public static final Integer 폴더_리스트_사이즈_1개 = 1;
+    public static final Long 폴더_개수 = 1L;
+    public static final Integer 폴더_리스트_사이즈 = 1;
     public static final Integer 폴더_리스트_인덱스 = 0;
     public static final Long 일반_폴더_ID = 1L;
     public static final Long 디폴트_폴더_ID = 2L;
@@ -63,7 +63,7 @@ public class BookmarkFolderFixtures {
     }
 
     public static BookmarkFoldersResponse 북마크_폴더_목록_응답() {
-        return new BookmarkFoldersResponse(폴더_개수_1개, Arrays.asList(일반_폴더_DTO()));
+        return new BookmarkFoldersResponse(폴더_개수, Arrays.asList(일반_폴더_DTO()));
     }
 
     public static BookmarkFolderDeleteResponse 북마크_폴더_삭제_응답(Long folderId) {
@@ -73,6 +73,9 @@ public class BookmarkFolderFixtures {
 
     public static BookmarkFolderDto 일반_폴더_DTO() {
         return new BookmarkFolderDto(일반_폴더(), 북마크_개수_1개);
+    }
+    public static List<BookmarkFolderDto> 일반_폴더_DTO_리스트() {
+        return Arrays.asList(일반_폴더_DTO());
     }
 
     public static BookmarkFolder 일반_폴더() {

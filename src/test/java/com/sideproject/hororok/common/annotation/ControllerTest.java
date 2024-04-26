@@ -10,7 +10,9 @@ import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
 import com.sideproject.hororok.member.application.MemberService;
+import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.presentation.MemberController;
+import com.sideproject.hororok.member.presentation.MyPageController;
 import com.sideproject.hororok.plan.application.PlanService;
 import com.sideproject.hororok.plan.presentation.PlanController;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +35,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         BookmarkFolderController.class,
         BookmarkController.class,
         MemberController.class,
-        PlanController.class
+        PlanController.class,
+        MyPageController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
@@ -63,6 +66,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public PlanService planService;
+
+    @MockBean
+    public MyPageService myPageService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
