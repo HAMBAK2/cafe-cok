@@ -1,4 +1,4 @@
-package com.sideproject.hororok.utils.converter;
+package com.sideproject.hororok.utils;
 
 
 import java.text.NumberFormat;

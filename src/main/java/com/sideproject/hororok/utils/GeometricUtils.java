@@ -1,4 +1,4 @@
-package com.sideproject.hororok.utils.calculator;
+package com.sideproject.hororok.utils;
 
 import java.math.BigDecimal;
 

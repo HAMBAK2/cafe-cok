@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.hororok.utils.converter.FormatConverter.dateTimeConvert;
+import static com.sideproject.hororok.utils.FormatConverter.dateTimeConvert;
 
 @Getter
 public class CreatePlanResponse {

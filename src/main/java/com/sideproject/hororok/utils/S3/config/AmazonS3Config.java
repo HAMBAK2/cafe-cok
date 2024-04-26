@@ -1,4 +1,4 @@
-package com.sideproject.hororok.S3.config;
+package com.sideproject.hororok.utils.S3.config;
 
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

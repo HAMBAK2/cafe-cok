@@ -25,7 +25,7 @@ import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
 import com.sideproject.hororok.utils.ListUtils;
-import com.sideproject.hororok.utils.calculator.GeometricUtils;
+import com.sideproject.hororok.utils.GeometricUtils;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

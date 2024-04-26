@@ -3,7 +3,7 @@ package com.sideproject.hororok.cafe.application;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
-import com.sideproject.hororok.utils.converter.FormatConverter;
+import com.sideproject.hororok.utils.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
