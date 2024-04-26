@@ -10,6 +10,8 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sideproject.hororok.utils.FormatConverter.convertLocalDateLocalTimeToString;
+
 @Getter
 @Builder
 public class MyPagePlanDetailResponse {
@@ -31,7 +33,7 @@ public class MyPagePlanDetailResponse {
                 .matchType(plan.getMatchType())
                 .locationName(plan.getLocationName())
                 .minutes(plan.getMinutes())
-                .visitDateTime(plan.getVisitDateTime())
+                .visitDateTime(convertLocalDateLocalTimeToString(plan.getVisitDate(), plan.getVisitStartTime()))
                 .categoryKeywords(categoryKeywords)
                 .similarCafes(similarCafes)
                 .matchCafes(new ArrayList<>())
@@ -46,7 +48,7 @@ public class MyPagePlanDetailResponse {
                 .matchType(plan.getMatchType())
                 .locationName(plan.getLocationName())
                 .minutes(plan.getMinutes())
-                .visitDateTime(plan.getVisitDateTime())
+                .visitDateTime(convertLocalDateLocalTimeToString(plan.getVisitDate(), plan.getVisitStartTime()))
                 .categoryKeywords(categoryKeywords)
                 .similarCafes(similarCafes)
                 .matchCafes(matchCafes)

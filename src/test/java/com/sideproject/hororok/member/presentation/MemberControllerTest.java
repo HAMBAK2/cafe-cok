@@ -4,7 +4,6 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,43 +35,6 @@ class MemberControllerTest extends ControllerTest {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String AUTHORIZATION_HEADER_VALUE = "Bearer fake-token";
-
-    @Test
-    @DisplayName("마이페이지의 계획 탭을 눌렀을 때 동작 - 성공")
-    public void test_my_page_plan_success() throws Exception {
-
-        MyPagePlanResponse response = 마이페이지_계획_응답();
-        when(memberService
-                .plan(any(LoginMember.class)))
-                .thenReturn(response);
-
-        mockMvc.perform(
-                        get("/api/member/myPage/plan")
-                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("member/myPage/plan/success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        responseFields(
-                                fieldWithPath("savedPlans").type(JsonFieldType.ARRAY)
-                                        .description("저장한 여정의 리스트(최신 저장순으로 정렬 최대 5개)"),
-                                fieldWithPath("savedPlans[].id").description("계획(여정) ID"),
-                                fieldWithPath("savedPlans[].purpose").description("목적 카테고리의 키워드"),
-                                fieldWithPath("savedPlans[].location").description("장소"),
-                                fieldWithPath("savedPlans[].visitDateTime").description("방문일"),
-                                fieldWithPath("sharedPlans").type(JsonFieldType.ARRAY)
-                                        .description("공유한 여정의 리스트(최신 저장순으로 정렬 최대 5개)"),
-                                fieldWithPath("sharedPlans[].id").description("계획(여정) ID"),
-                                fieldWithPath("sharedPlans[].purpose").description("목적 카테고리의 키워드"),
-                                fieldWithPath("sharedPlans[].location").description("장소"),
-                                fieldWithPath("sharedPlans[].visitDateTime").description("방문일"))))
-                .andExpect(status().isOk());
-    }
-
 
     @Test
     @DisplayName("마이페이지 계획텝에서 하나의 계획(여정)을 선택했을 때 동작")

@@ -1,25 +1,19 @@
 package com.sideproject.hororok.member.dto.response;
 
-import com.sideproject.hororok.plan.dto.PlanDto;
-import lombok.Builder;
+import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-@Builder
 public class MyPagePlanResponse {
 
-    private final List<PlanDto> savedPlans;
-    private final List<PlanDto> sharedPlans;
+    private List<MyPagePlanDto> plans;
 
-    public static MyPagePlanResponse from(final List<PlanDto> savedPlans,
-                                          final List<PlanDto> sharedPlans) {
-
-        return MyPagePlanResponse.builder()
-                .savedPlans(savedPlans)
-                .sharedPlans(sharedPlans)
-                .build();
+    protected MyPagePlanResponse() {
     }
 
+    public MyPagePlanResponse(final List<MyPagePlanDto> plans) {
+        this.plans = plans;
+    }
 }

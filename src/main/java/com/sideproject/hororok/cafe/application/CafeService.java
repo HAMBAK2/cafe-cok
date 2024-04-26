@@ -10,6 +10,8 @@ import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
@@ -21,7 +23,6 @@ import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.review.application.ReviewService;
-import com.sideproject.hororok.utils.GeometricUtils;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.sideproject.hororok.utils.GeometricUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,7 @@ public class CafeService {
     private final KeywordRepository keywordRepository;
     private final CafeImageRepository cafeImageRepository;
     private final OperationHourRepository operationHourRepository;
+    private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private final MenuService menuService;
     private final ReviewService reviewService;
@@ -50,8 +53,6 @@ public class CafeService {
     private final CafeRepository cafeRepository;
     private final CafeImageService cafeImageService;
     private final OperationHourService operationHourService;
-
-    private final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
     
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
 
@@ -155,10 +156,9 @@ public class CafeService {
         List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
 
         for (Cafe cafe : cafes) {
-            boolean isWithinRadius = GeometricUtils
-                    .isWithinRadius(
+            boolean isWithinRadius = isWithinRadius(
                             latitude, longitude,
-                            cafe.getLatitude(), cafe.getLongitude(), MAX_RADIUS);
+                            cafe.getLatitude(), cafe.getLongitude());
 
             if(isWithinRadius) {
                 String cafeImageUrl =
@@ -171,29 +171,58 @@ public class CafeService {
         return withinRadiusCafes;
     }
 
+    public List<Cafe> getFilteredCafesByWithinRadius(
+            final BigDecimal latitude, final BigDecimal longitude, final List<Cafe> cafes) {
+
+        return cafes.stream()
+                .filter(cafe -> isWithinRadius(latitude, longitude, cafe.getLatitude(), cafe.getLongitude()))
+                .collect(Collectors.toList());
+    }
+
 
     public List<Cafe> getCafesByDateAndTimeRange(
-            LocalDate visitDate, LocalTime startTime, LocalTime endTime) {
+            final LocalDate visitDate, final LocalTime startTime, final LocalTime endTime) {
 
-        DayOfWeek dayOfWeek = visitDate.getDayOfWeek();
-        List<OperationHour> openHoursByDateAndTimeRange =
-                operationHourRepository.findOpenHoursByDateAndTimeRange(dayOfWeek, startTime, endTime);
+        if(visitDate == null)
+            return Arrays.asList();
 
-        List<Cafe> cafesByDateAndTimeRange =
-                openHoursByDateAndTimeRange.stream()
-                        .map(operationHour -> operationHour.getCafe())
-                        .collect(Collectors.toList());
+        if(startTime == null) {
+            List<OperationHour> findOperationHours = operationHourRepository.findByDate(visitDate.getDayOfWeek());
+            return getCafesByOperationHours(findOperationHours);
+        }
 
-        return cafesByDateAndTimeRange;
+        if(endTime == null) {
+            List<OperationHour> findOperationHours =
+                    operationHourRepository.findByDateAndStartTime(visitDate.getDayOfWeek(), startTime);
+            return getCafesByOperationHours(findOperationHours);
+        }
+
+        List<OperationHour> findOperationHours =
+                operationHourRepository.findOpenHoursByDateAndTimeRange(visitDate.getDayOfWeek(), startTime, endTime);
+
+        return getCafesByOperationHours(findOperationHours);
+    }
+
+    private List<Cafe> getCafesByOperationHours(final List<OperationHour> operationHours) {
+        return operationHours.stream()
+                .map(operationHour -> operationHour.getCafe())
+                .collect(Collectors.toList());
     }
 
 
     public List<Cafe> getCafesByDistance(
-            List<Cafe> cafes, BigDecimal latitude, BigDecimal longitude, Integer withinMinutes) {
+            final List<Cafe> cafes, final BigDecimal latitude,
+            final BigDecimal longitude, final Integer withinMinutes) {
+
+        if(latitude == null) return cafes;
+
+        if(withinMinutes == null) {
+            return getFilteredCafesByWithinRadius(latitude, longitude, cafes);
+        }
 
         List<Cafe> distanceFilteredCafe = cafes.stream()
                 .filter(cafe -> {
-                    double walkingTime = GeometricUtils.calculateWalkingTime(
+                    double walkingTime = calculateWalkingTime(
                             cafe.getLatitude(), cafe.getLongitude(), latitude, longitude);
                     return walkingTime <= withinMinutes;
                 })
@@ -202,14 +231,30 @@ public class CafeService {
         return distanceFilteredCafe;
     }
 
-    public List<Cafe> getCafesByKeyword(List<Cafe> cafes, List<String> keywords) {
+    public List<Cafe> getCafesByCafesAndKeywordNames(
+            final List<Cafe> cafes, final List<String> keywordNames) {
 
-        List<Cafe> cafesByKeyword = cafes.stream()
-                .filter(cafe -> keywordRepository.findByCafeId(cafe.getId()).stream()
-                        .anyMatch(keyword -> keywords.contains(keyword.getName())))
+        List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
+        List<CafeReviewKeyword> findCafeReviewKeywords = cafeReviewKeywordRepository.findByKeywordIn(findKeywords);
+        List<Cafe> filteredCafesByKeyword = getCafesByCafeReviewKeywords(findCafeReviewKeywords);
+
+        if(!cafes.isEmpty()) return getEqualCafes(cafes, filteredCafesByKeyword);
+
+        return getCafesByCafeReviewKeywords(findCafeReviewKeywords);
+    }
+
+    public List<Cafe> getEqualCafes(List<Cafe> firstCafes, List<Cafe> secondCafes) {
+        return firstCafes.stream()
+                .filter(secondCafes::contains)
                 .collect(Collectors.toList());
+    }
 
-        return cafesByKeyword;
+    public List<Cafe> getCafesByCafeReviewKeywords(List<CafeReviewKeyword> cafeReviewKeywords) {
+
+        return cafeReviewKeywords .stream()
+                .map(cafeReviewKeyword -> cafeReviewKeyword.getCafe())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public List<Cafe> getCafesByKeywordAllMatch(List<Cafe> cafes, List<String> keywords) {

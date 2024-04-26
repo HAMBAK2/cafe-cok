@@ -5,8 +5,6 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MemberService;
 import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
-import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +22,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/myPage/plan")
-    @Operation(summary = "마이페이지의 계획 탭을 눌렀을 때 동작")
-    public ResponseEntity<MyPagePlanResponse> plan(@AuthenticationPrincipal LoginMember loginMember) {
-
-        MyPagePlanResponse response = memberService.plan(loginMember);
-        return ResponseEntity.ok(response);
-    }
 
     @GetMapping("/myPage/plan/{planId}")
     @Operation(summary = "마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작")

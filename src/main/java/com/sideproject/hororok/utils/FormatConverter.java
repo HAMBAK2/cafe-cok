@@ -2,9 +2,9 @@ package com.sideproject.hororok.utils;
 
 
 import java.text.NumberFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FormatConverter {
 
@@ -14,12 +14,58 @@ public class FormatConverter {
         return formattedPrice;
     }
 
-    public static String dateTimeConvert(LocalDate date, LocalTime time) {
-        String month = String.valueOf(date.getMonthValue());
-        String day = String.valueOf(date.getDayOfMonth());
-        String hour = String.valueOf(time.getHour());
+    public static String convertLocalDateLocalTimeToString(final LocalDate localDate, final LocalTime localTime) {
 
-        return month + "월 " + day + "일 " + hour + "시";
+        StringBuilder convertedDateTime = new StringBuilder();
+
+        if(localDate == null) return convertedDateTime.toString();
+        String month = String.valueOf(localDate.getMonthValue());
+        String day = String.valueOf(localDate.getDayOfMonth());
+        convertedDateTime.append(month + "월");
+        convertedDateTime.append(" " + day + "일");
+
+        if(localTime == null) return convertedDateTime.toString();
+
+        String hour = String.valueOf(localTime.getHour());
+        String minute = String.valueOf(localTime.getMinute());
+
+        convertedDateTime.append(" " + hour + "시");
+        convertedDateTime.append(" " + minute + "분");
+        return convertedDateTime.toString();
+    }
+
+    public static LocalDate convertStringToLocalDate(String dateTimeString) {
+
+        if(dateTimeString.isEmpty()) return null;
+
+        String yearStr = String.valueOf(LocalDateTime.now().getYear()) + "년 ";
+        String yearDateTimeStr = yearStr + dateTimeString;
+
+        Pattern pattern = Pattern.compile("(\\d{4})년 (\\d{1,2})월 (\\d{1,2})일");
+        Matcher matcher = pattern.matcher(yearDateTimeStr);
+
+        if (!matcher.find()) return null;
+
+        int year = Integer.parseInt(matcher.group(1));
+        int month = Integer.parseInt(matcher.group(2));
+        int dayOfMonth = Integer.parseInt(matcher.group(3));
+
+        return LocalDate.of(year, month, dayOfMonth);
+    }
+
+    public static LocalTime convertStringToLocalTime(String dateTimeString) {
+
+        if(dateTimeString.isEmpty()) return null;
+
+        Pattern pattern = Pattern.compile("(\\d{1,2})시 (\\d{1,2})분");
+        Matcher matcher = pattern.matcher(dateTimeString);
+
+        if(!matcher.find()) return null;
+
+        int hour = Integer.parseInt(matcher.group(1));
+        int minute = Integer.parseInt(matcher.group(2));
+
+        return LocalTime.of(hour, minute);
     }
 
     public static String getKoreanDayOfWeek(DayOfWeek day) {

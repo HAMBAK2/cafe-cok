@@ -121,18 +121,15 @@ public class PlanService {
 
         List<Cafe> cafesByDateAndTimeRange = cafeService.getCafesByDateAndTimeRange(
                 request.getDate(), request.getStartTime(), request.getEndTime());
-        if(cafesByDateAndTimeRange.isEmpty()) return true;
+
+        List<Cafe> cafesByKeyword =
+                cafeService.getCafesByCafesAndKeywordNames(cafesByDateAndTimeRange, request.getKeywords());
 
         List<Cafe> cafesByDistance = cafeService.getCafesByDistance(
-                cafesByDateAndTimeRange, request.getLatitude(), request.getLongitude(), request.getMinutes());
+                cafesByKeyword, request.getLatitude(), request.getLongitude(), request.getMinutes());
         if(cafesByDistance.isEmpty()) return true;
 
-
-        List<Cafe> cafesByKeyword = cafeService.getCafesByKeyword(cafesByDistance, request.getKeywords());
-        if(cafesByKeyword.isEmpty()) return true;
-
-        filteredCafes.addAll(cafesByKeyword);
-
+        filteredCafes.addAll(cafesByDistance);
         return false;
     }
 
@@ -161,7 +158,7 @@ public class PlanService {
                 MatchType.SIMILAR, request, categoryKeywords,
                 cafeService.getCafeDtosByCafes(filteredCafes));
 
-        return createPlan(response, request.getKeywords());
+        return createPlan(response, request);
     }
 
     private CreatePlanResponse createMatchPlan(
@@ -176,14 +173,14 @@ public class PlanService {
                 cafeService.getCafeDtosByCafes(allMatchCafes),
                 cafeService.getCafeDtosByCafes(filteredCafes));
 
-        return createPlan(response, request.getKeywords());
+        return createPlan(response, request);
     }
 
-    private CreatePlanResponse createPlan(CreatePlanResponse response, List<String> keywords) {
+    private CreatePlanResponse createPlan(CreatePlanResponse response, CreatePlanRequest request) {
 
         Member findMember = memberRepository.getById(NO_MEMBER_ID);
 
-        Plan plan = response.toEntity(findMember);
+        Plan plan = request.toEntity(findMember, response.getMatchType());
         List<Plan> matchingPlans = planRepository.findMatchingPlan(plan);
         if(!matchingPlans.isEmpty()) {
 
@@ -192,7 +189,7 @@ public class PlanService {
                         List<String> findKeywordNames = planKeywordRepository.findByPlanId(matchingPlan.getId())
                                 .stream().map(planKeyword -> planKeyword.getKeyword().getName())
                                 .collect(Collectors.toList());
-                        return ListUtils.areListEqual(keywords, findKeywordNames);
+                        return ListUtils.areListEqual(request.getKeywords(), findKeywordNames);
                     })
                     .map(Plan::getId)
                     .findFirst();
@@ -213,18 +210,21 @@ public class PlanService {
         List<CafeDto> matchCafes = response.getMatchCafes();
         if(!matchCafes.isEmpty()) planCafeService.saveAll(savedPlan, matchCafes, PlanCafeMatchType.MATCH);
 
-        planKeywordService.saveAll(savedPlan, keywords);
+        planKeywordService.saveAll(savedPlan, request.getKeywords());
 
         return response;
     }
 
-    private void orderByDistanceAndStarRating(List<Cafe> targetCafeList, BigDecimal userLatitude, BigDecimal userLongitude) {
+    private void orderByDistanceAndStarRating(List<Cafe> targetCafeList, BigDecimal latitude, BigDecimal longitude) {
 
         Comparator<Cafe> distanceAndRatingComparator = new Comparator<Cafe>() {
             @Override
             public int compare(Cafe cafe1, Cafe cafe2) {
-                double distance1 = GeometricUtils.calculateDistance(userLatitude, userLongitude, cafe1.getLatitude(), cafe1.getLongitude());
-                double distance2 = GeometricUtils.calculateDistance(userLatitude, userLongitude, cafe2.getLatitude(), cafe2.getLongitude());
+
+                if(latitude == null) return cafe2.getStarRating().compareTo(cafe1.getStarRating());
+
+                double distance1 = GeometricUtils.calculateDistance(latitude, longitude, cafe1.getLatitude(), cafe1.getLongitude());
+                double distance2 = GeometricUtils.calculateDistance(latitude, longitude, cafe2.getLatitude(), cafe2.getLongitude());
                 int distanceComparison = Double.compare(distance1, distance2);
                 if (distanceComparison != 0) {
                     return distanceComparison; // 거리가 다르면 거리 순으로 정렬
@@ -233,7 +233,6 @@ public class PlanService {
                 }
             }
         };
-
 
         Collections.sort(targetCafeList, distanceAndRatingComparator);
     }

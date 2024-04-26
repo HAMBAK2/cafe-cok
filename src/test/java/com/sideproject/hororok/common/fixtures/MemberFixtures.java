@@ -4,7 +4,6 @@ import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.enums.SocialType;
 import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageResponse;
 
 import java.util.Arrays;
 
@@ -27,14 +26,6 @@ public class MemberFixtures {
 
     public static Member 사용자() {
         return new Member(맴버_이메일, 맴버_닉네임, 멤버_기본_이미지, SocialType.KAKAO);
-    }
-
-    public static MyPageResponse 마이페이지_조회_응답() {
-        return new MyPageResponse(사용자(), 리뷰_개수, Arrays.asList(일반_폴더_DTO()));
-    }
-
-    public static MyPagePlanResponse 마이페이지_계획_응답() {
-        return MyPagePlanResponse.from(Arrays.asList(계획_DTO()), Arrays.asList(계획_DTO()));
     }
 
     public static MyPagePlanDetailResponse 마이페이지_계획_상세_응답() {
