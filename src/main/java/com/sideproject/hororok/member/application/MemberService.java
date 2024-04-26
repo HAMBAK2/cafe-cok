@@ -34,27 +34,12 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final PlanRepository planRepository;
-    private final ReviewRepository reviewRepository;
-    private final MemberRepository memberRepository;
     private final PlanKeywordRepository planKeywordRepository;
 
     private final PlanKeywordService planKeywordService;
-    private final BookmarkFolderService bookmarkFolderService;
     private final PlanCafeService planCafeService;
 
     private static final Integer MY_PAGE_PLAN_MAX_CNT = 5;
-
-    public MyPageResponse myPage(LoginMember loginMember) {
-
-        Long memberId = loginMember.getId();
-
-        Member findMember = memberRepository.getById(memberId);
-        Long findReviewCount = reviewRepository.countReviewsByMemberId(memberId);
-        List<BookmarkFolderDto> findFolders
-                = bookmarkFolderService.getBookmarkFolderDtos(memberId);
-
-        return new MyPageResponse(findMember, findReviewCount, findFolders);
-    }
 
     public MyPagePlanResponse plan(LoginMember loginMember) {
 

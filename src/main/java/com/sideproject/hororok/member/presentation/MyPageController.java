@@ -1,7 +1,6 @@
 package com.sideproject.hororok.member.presentation;
 
 
-import com.amazonaws.Response;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;

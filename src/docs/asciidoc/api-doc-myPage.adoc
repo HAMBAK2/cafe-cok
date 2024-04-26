@@ -4,15 +4,6 @@
 :source-highlighter: highlightjs
 
 == 4. 마이페이지
-=== 4-1. 마이 페이지 선택 및 마이 페이지 저장 탭 클릭 시(GET) - 성공
-==== Request Header
-include::{snippets}/member/myPage/success/request-headers.adoc[]
-==== Http request
-include::{snippets}/member/myPage/success/http-request.adoc[]
-==== Http Response
-include::{snippets}/member/myPage/success/http-response.adoc[]
-==== Response Fields
-include::{snippets}/member/myPage/success/response-fields.adoc[]
 
 === 4-2. 마이페이지 계획 탭(GET) - 성공
 ==== Request Header

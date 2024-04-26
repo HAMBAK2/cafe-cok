@@ -24,14 +24,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/myPage")
-    @Operation(summary = "마이 페이지 또는 마이페이지/저장 탭을 눌렀을 때 동작")
-    public ResponseEntity<MyPageResponse> myPage(@AuthenticationPrincipal LoginMember loginMember) {
-
-        MyPageResponse response = memberService.myPage(loginMember);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/myPage/plan")
     @Operation(summary = "마이페이지의 계획 탭을 눌렀을 때 동작")
     public ResponseEntity<MyPagePlanResponse> plan(@AuthenticationPrincipal LoginMember loginMember) {
