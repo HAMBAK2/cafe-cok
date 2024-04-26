@@ -3,16 +3,10 @@ package com.sideproject.hororok.common.fixtures;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.enums.SocialType;
 import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
-import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
 
-import java.util.Arrays;
-
-import static com.sideproject.hororok.common.fixtures.BookmarkFolderFixtures.일반_폴더_DTO;
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페_DTO_리스트;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.카테고리_키워드_DTO;
 import static com.sideproject.hororok.common.fixtures.PlanFixtures.계획;
-import static com.sideproject.hororok.common.fixtures.PlanFixtures.계획_DTO;
-import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_개수;
 
 
 public class MemberFixtures {

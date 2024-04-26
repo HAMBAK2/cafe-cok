@@ -36,13 +36,13 @@ public class PlanFixtures {
     public static final String 계획_일자_시간 = "00월 00일 00시 00분";
 
     public static Plan 계획() {
-        Plan plan = new Plan(사용자(), 위치_이름, 계획_일자_시간, 도보_시간, MatchType.SIMILAR, true, true);
+        Plan plan = new Plan(사용자(), 위치_이름, 날짜, 시작_시간, 끝_시간, 도보_시간, MatchType.SIMILAR, true, true);
         setId(plan, 계획_ID);
         return plan;
     }
 
     public static PlanDto 계획_DTO() {
-        return PlanDto.of(계획(), 키워드_이름);
+        return PlanDto.of(계획(), 키워드_DTO());
     }
 
         public static CreatePlanRequest 계획_요청() {

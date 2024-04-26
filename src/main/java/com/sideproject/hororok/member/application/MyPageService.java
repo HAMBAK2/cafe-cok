@@ -41,8 +41,9 @@ public class MyPageService {
     private final ReviewRepository reviewRepository;
     private final PlanKeywordRepository planKeywordRepository;
 
-
     private final BookmarkFolderService bookmarkFolderService;
+
+    private static final Integer PLAN_MAX_CNT = 4;
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -63,38 +64,34 @@ public class MyPageService {
     }
 
 
-    public MyPagePlanResponse savedPlan(final LoginMember loginMember,
-                                        final PlanSortBy sortBy,
-                                        final Integer count) {
+    public MyPagePlanResponse savedPlan(final LoginMember loginMember, final PlanSortBy sortBy) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
-            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SAVED, count);
-            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SAVED, count);
+            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SAVED);
+            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SAVED);
         }
 
         return new MyPagePlanResponse(plans);
     }
 
     public MyPagePlanResponse sharedPlan(final LoginMember loginMember,
-                                        final PlanSortBy sortBy,
-                                        final Integer count) {
+                                        final PlanSortBy sortBy) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
-            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SHARED, count);
-            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SHARED, count);
+            case RECENT -> plans = getPlanByRecent(loginMember, PlanStatus.SHARED);
+            case UPCOMING -> plans = getPlanByUpcoming(loginMember, PlanStatus.SHARED);
         }
 
         return new MyPagePlanResponse(plans);
     }
 
     private List<MyPagePlanDto> getPlanByRecent(final LoginMember loginMember,
-                                                     final PlanStatus planStatus,
-                                                     final Integer count) {
+                                                     final PlanStatus planStatus) {
 
         PageRequest pageRequest =
-                PageRequest.of(0, count, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
+                PageRequest.of(0, PLAN_MAX_CNT, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
 
         Page<Plan> findPlanPage = planRepository.findPageByMemberId(loginMember.getId(), pageRequest);
 
@@ -115,11 +112,10 @@ public class MyPageService {
     }
 
     private List<MyPagePlanDto> getPlanByUpcoming(final LoginMember loginMember,
-                                                       final PlanStatus planStatus,
-                                                       final Integer count) {
+                                                       final PlanStatus planStatus) {
 
         PageRequest pageRequest =
-                PageRequest.of(0, count, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
+                PageRequest.of(0, PLAN_MAX_CNT, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
                         .and(by(Direction.ASC, "visitStartTime")));
 
         Page<Plan> findPlanPage = planRepository

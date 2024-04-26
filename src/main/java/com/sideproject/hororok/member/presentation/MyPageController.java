@@ -46,22 +46,19 @@ public class MyPageController {
     @Operation(summary = "계획 탭의 저장된 계획을 나타내는 API")
     public ResponseEntity<MyPagePlanResponse> savedPlan(
             @AuthenticationPrincipal LoginMember loginMember,
-            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(defaultValue = "4") Integer count) {
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
-        MyPagePlanResponse response = myPageService.savedPlan(loginMember, sortBy, count);
+        MyPagePlanResponse response = myPageService.savedPlan(loginMember, sortBy);
         return ResponseEntity.ok(response);
     }
 
-    //공유된 계획
     @GetMapping("/shared/plan")
     @Operation(summary = "계획 탭의 공유된 계획을 나타내는 API")
     public ResponseEntity<MyPagePlanResponse> sharedPlan(
             @AuthenticationPrincipal LoginMember loginMember,
-            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(defaultValue = "4") Integer count) {
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
-        MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy, count);
+        MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy);
         return ResponseEntity.ok(response);
     }
 }

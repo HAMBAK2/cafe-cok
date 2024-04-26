@@ -2,13 +2,9 @@ package com.sideproject.hororok.member.dto;
 
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.plan.domain.Plan;
-import com.sideproject.hororok.plan.dto.PlanDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static com.sideproject.hororok.utils.FormatConverter.convertLocalDateLocalTimeToString;
 
