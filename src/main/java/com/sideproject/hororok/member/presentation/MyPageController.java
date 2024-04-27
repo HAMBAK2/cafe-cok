@@ -4,10 +4,7 @@ package com.sideproject.hororok.member.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;
-import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
-import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
-import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
+import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,6 +60,31 @@ public class MyPageController {
         MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/saved/plans")
+    @Operation(summary = "저장된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlansResponse> savedPlans(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        MyPagePlansResponse response = myPageService.savedPlans(loginMember, sortBy, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/shared/plans")
+    @Operation(summary = "공유된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlansResponse> sharedPlans(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        MyPagePlansResponse response = myPageService.sharedPlans(loginMember, sortBy, page, size);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/plan/{planId}")
     @Operation(summary = "마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작")

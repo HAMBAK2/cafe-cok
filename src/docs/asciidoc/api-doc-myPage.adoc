@@ -49,17 +49,41 @@ include::{snippets}/myPage/shared/plan/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/shared/plan/success/response-fields.adoc[]
 
-=== 4-4. 마이페이지 계획 탭의 하나의 계획을 눌렀을 때(GET) - 성공
+
+=== 4-5. 저장한 여정의 전체 리스트(GET) - 성공
+==== Request Header
+include::{snippets}/myPage/saved/plans/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/saved/plans/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/myPage/saved/plans/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/saved/plans/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/saved/plans/success/response-fields.adoc[]
+
+=== 4-6. 공유한 여정의 전체 리스트(GET) - 성공
+==== Request Header
+include::{snippets}/myPage/shared/plans/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/shared/plans/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/myPage/shared/plans/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/shared/plans/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/shared/plans/success/response-fields.adoc[]
+
+=== 4-7. 계획을 선택했을 때 계획의 상세 내용(GET) - 성공
 ==== Request Header
 include::{snippets}/myPage/plan/detail/success/request-headers.adoc[]
-==== Path parameters
-include::{snippets}/myPage/plan/detail/success/path-parameters.adoc[]
 ==== Http request
 include::{snippets}/myPage/plan/detail/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/myPage/plan/detail/success/path-parameters.adoc[]
 ==== Http Response
 include::{snippets}/myPage/plan/detail/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/plan/detail/success/response-fields.adoc[]
-
 
 === link:api-docs.html[API 목록으로]
