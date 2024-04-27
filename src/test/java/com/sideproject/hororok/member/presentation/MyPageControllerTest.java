@@ -6,11 +6,18 @@ import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.마이페이지_계획_상세_응답;
+import static com.sideproject.hororok.common.fixtures.MemberFixtures.맴버_닉네임;
 import static com.sideproject.hororok.common.fixtures.MyPageFixtures.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -21,6 +28,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +67,45 @@ class MyPageControllerTest extends ControllerTest {
     }
 
     @Test
+    @DisplayName("프로필을 수정하는 API - 성공")
+    public void test_myPage_profile_edit_success() throws Exception{
+
+        String nickname = 맴버_닉네임;
+        String fileName = "test.jpg";
+        byte[] content = "Test file content".getBytes();
+        String contentType = "image/jpeg";
+        MockMultipartFile file = new MockMultipartFile("file", fileName, contentType, content);
+
+        MyPageProfileEditResponse response = 마이페이지_프로필_수정_응답();
+
+        when(myPageService
+                .profileEdit(any(LoginMember.class), any(String.class), any(MultipartFile.class)))
+                .thenReturn(response);
+
+
+        mockMvc.perform(
+                        multipart(HttpMethod.POST,"/api/myPage/profile/edit?nickname="+nickname)
+                                .file(file)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andDo(document("myPage/profile/edit/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        requestParts(
+                                partWithName("file").description("사용자 프로필 이미지(null으로 전달 시 기본 이미지 설정)")),
+                        queryParameters(
+                                parameterWithName("nickname").description("변경하려는 사용자의 닉네임(null 전달시 변경X)")),
+                        responseFields(
+                                fieldWithPath("nickname").description("사용자 닉네임"),
+                                fieldWithPath("picture").description("사용자 프로필 사진 URL"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @DisplayName("마이페이지 저장 탭을 눌렀을 때 동작 하는 API - 성공")
     public void test_myPage_tag_save_success() throws Exception {
 
@@ -90,6 +137,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부"))))
                 .andExpect(status().isOk());
     }
+
     @Test
     @DisplayName("마이페이지 계획 탭의 저장한 계획(여정) 나타내는 API - 성공")
     public void test_saved_plan_success() throws Exception {

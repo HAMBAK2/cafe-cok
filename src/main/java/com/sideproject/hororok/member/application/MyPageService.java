@@ -75,7 +75,7 @@ public class MyPageService {
             (final LoginMember loginMember, final String nickname, final MultipartFile file) throws IOException {
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        findMember.changeNickname(nickname);
+        if(nickname != null) findMember.changeNickname(nickname);
 
         String picture = DEFAULT_IMAGE_URL;
         if(file != null) {
