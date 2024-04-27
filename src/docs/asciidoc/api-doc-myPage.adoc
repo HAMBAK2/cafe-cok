@@ -86,4 +86,18 @@ include::{snippets}/myPage/plan/detail/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/plan/detail/success/response-fields.adoc[]
 
+=== 4-8. 마이페이지 프로필 수정 - 성공
+==== Request Header
+include::{snippets}/myPage/profile/edit/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/profile/edit/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/myPage/profile/edit/success/request-parts.adoc[]
+==== Query parameters
+include::{snippets}/myPage/profile/edit/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/profile/edit/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/profile/edit/success/response-fields.adoc[]
+
 === link:api-docs.html[API 목록으로]

@@ -56,14 +56,12 @@ public class ReviewService {
         review.setStarRating(request.getStarRating());
         review.setImages(reviewImages);
 
-        Cafe cafe = cafeRepository.findById(request.getCafeId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid cafe id"));
+        Cafe cafe = cafeRepository.getById(request.getCafeId());
         cafe.addReviewCountAndCalculateStarRating(review.getStarRating());
         review.setCafe(cafe);
 
         //유저 저장
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
+        Member member = memberRepository.getById(userId);
         review.setMember(member);
 
         for (ReviewImage reviewImage : reviewImages) {
