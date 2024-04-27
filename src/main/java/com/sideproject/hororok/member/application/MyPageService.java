@@ -11,10 +11,7 @@ import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
-import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
-import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
-import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
+import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.application.PlanCafeService;
 import com.sideproject.hororok.plan.application.PlanKeywordService;
 import com.sideproject.hororok.plan.domain.Plan;
@@ -28,8 +25,6 @@ import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,8 +98,8 @@ public class MyPageService {
         return new MyPagePlanResponse(plans);
     }
 
-    public MyPagePlanResponse savedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
-                                         final Integer page, final Integer size) {
+    public MyPagePlansResponse savedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
+                                          final Integer page, final Integer size) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
         switch (sortBy){
@@ -112,10 +107,10 @@ public class MyPageService {
             case UPCOMING -> plans = getPlansByUpcoming(loginMember, PlanStatus.SAVED, page, size);
         }
 
-        return new MyPagePlanResponse(plans);
+        return new MyPagePlansResponse(page, plans);
     }
 
-    public MyPagePlanResponse sharedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
+    public MyPagePlansResponse sharedPlans(final LoginMember loginMember, final PlanSortBy sortBy,
                                          final Integer page, final Integer size) {
 
         List<MyPagePlanDto> plans = new ArrayList<>();
@@ -124,7 +119,7 @@ public class MyPageService {
             case UPCOMING -> plans = getPlansByUpcoming(loginMember, PlanStatus.SHARED, page, size);
         }
 
-        return new MyPagePlanResponse(plans);
+        return new MyPagePlansResponse(page, plans);
     }
 
     public MyPagePlanDetailResponse planDetail(Long planId) {
@@ -175,7 +170,8 @@ public class MyPageService {
 
         PageRequest pageRequest =
                 PageRequest.of(page-1, size, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
-                        .and(by(Direction.ASC, "visitStartTime")));
+                        .and(by(Direction.ASC, "visitStartTime"))
+                        .and(by(Direction.ASC, "id")));
 
         Page<Plan> findPlanPage = planRepository.findPageByMemberIdAndUpcomingPlanCondition(
                 loginMember.getId(), LocalDate.now(), LocalTime.now(), pageRequest);

@@ -607,8 +607,8 @@ Content-Length: 204
     "name" : "폴더_이름",
     "color" : "폴더_색상",
     "bookmarkCount" : 1,
-    "defaultFolder" : false,
-    "visible" : true
+    "visible" : true,
+    "defaultFolder" : false
   } ]
 }</code></pre>
 </div>
@@ -1037,9 +1037,10 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 223
+Content-Length: 237
 
 {
+  "page" : 1,
   "plans" : [ {
     "id" : 1,
     "keyword" : {
@@ -1070,6 +1071,11 @@ Content-Length: 223
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
@@ -1189,9 +1195,10 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 223
+Content-Length: 237
 
 {
+  "page" : 1,
   "plans" : [ {
     "id" : 1,
     "keyword" : {
@@ -1222,6 +1229,11 @@ Content-Length: 223
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
@@ -1332,7 +1344,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 623
+Content-Length: 622
 
 {
   "planId" : 1,
@@ -1353,8 +1365,8 @@ Content-Length: 623
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "longitude" : 21.405039551272896,
-    "latitude" : 16.407943924136127,
+    "longitude" : 11.97333319096298,
+    "latitude" : 122.07690021494817,
     "starRating" : 0,
     "reviewCount" : 0,
     "image" : "//카페이미지"

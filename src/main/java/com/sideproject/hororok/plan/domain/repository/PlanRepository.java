@@ -15,7 +15,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     Page<Plan> findPageByMemberId(Long memberId, Pageable pageable);
 
-    @Query("SELECT p " +
+    @Query("SELECT p "+
             "FROM Plan p " +
             "WHERE p.member.id = :memberId " +
                 "AND (p.visitDate >= :visitDate " +

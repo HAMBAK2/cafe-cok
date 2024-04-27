@@ -2,6 +2,7 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
+import com.sideproject.hororok.member.dto.response.MyPagePlansResponse;
 import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
 import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
 
@@ -15,6 +16,7 @@ import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_개�
 
 public class MyPageFixtures {
 
+    public static final Integer 페이지_번호 = 1;
 
     public static MyPageProfileResponse 마이페이지_프로필_응답() {
         return MyPageProfileResponse.of(사용자(), 리뷰_개수);
@@ -30,6 +32,10 @@ public class MyPageFixtures {
 
     public static MyPagePlanResponse 마이페이지_계획_응답() {
         return new MyPagePlanResponse(Arrays.asList(마이페이지_계획_DTO()));
+    }
+
+    public static MyPagePlansResponse 마이페이지_계획_리스트_응답() {
+        return new MyPagePlansResponse(페이지_번호, Arrays.asList(마이페이지_계획_DTO()));
     }
 
 

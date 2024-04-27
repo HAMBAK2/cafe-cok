@@ -2,10 +2,7 @@ package com.sideproject.hororok.member.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
-import com.sideproject.hororok.member.dto.response.MyPagePlanDetailResponse;
-import com.sideproject.hororok.member.dto.response.MyPagePlanResponse;
-import com.sideproject.hororok.member.dto.response.MyPageProfileResponse;
-import com.sideproject.hororok.member.dto.response.MyPageTagSaveResponse;
+import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -169,7 +166,7 @@ class MyPageControllerTest extends ControllerTest {
     @DisplayName("저장된 계획의 전체 리스트를 나타내는 API - 성공")
     public void test_saved_plans_success() throws Exception {
 
-        MyPagePlanResponse response = 마이페이지_계획_응답();
+        MyPagePlansResponse response = 마이페이지_계획_리스트_응답();
 
         when(myPageService
                 .savedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
@@ -193,6 +190,7 @@ class MyPageControllerTest extends ControllerTest {
                                 parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
                                 parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
                         responseFields(
+                                fieldWithPath("page").description("페이지 번호"),
                                 fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
                                 fieldWithPath("plans[].id").description("계획(여정)의 ID"),
                                 fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
@@ -208,7 +206,7 @@ class MyPageControllerTest extends ControllerTest {
     @DisplayName("공유된 계획의 전체 리스트를 나타내는 API - 성공")
     public void test_shared_plans_success() throws Exception {
 
-        MyPagePlanResponse response = 마이페이지_계획_응답();
+        MyPagePlansResponse response = 마이페이지_계획_리스트_응답();
 
         when(myPageService
                 .sharedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
@@ -232,6 +230,7 @@ class MyPageControllerTest extends ControllerTest {
                                 parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
                                 parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
                         responseFields(
+                                fieldWithPath("page").description("페이지 번호"),
                                 fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
                                 fieldWithPath("plans[].id").description("계획(여정)의 ID"),
                                 fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
