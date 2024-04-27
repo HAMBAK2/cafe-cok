@@ -22,12 +22,15 @@ import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
+import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ import static org.springframework.data.domain.Sort.*;
 @Transactional(readOnly = true)
 public class MyPageService {
 
+    private final S3Uploader s3Uploader;
 
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
@@ -52,6 +56,10 @@ public class MyPageService {
 
     private static final Integer PLAN_MAX_PAGE_SIZE = 4;
     private static final Integer PLAN_DEFAULT_PAGE = 1;
+    private static final String IMAGE_URL_PREFIX = "https:";
+    private static final String DEFAULT_IMAGE_URL
+            = "//kr.object.ncloudstorage.com/hororok-bucket/member/" +
+            "%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-04-20%20%EC%98%A4%ED%9B%84%2011.46.07.png";
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -61,6 +69,23 @@ public class MyPageService {
         Long findReviewCount = reviewRepository.countReviewsByMemberId(memberId);
 
         return MyPageProfileResponse.of(findMember, findReviewCount);
+    }
+
+    public MyPageProfileEditResponse profileEdit
+            (final LoginMember loginMember, final String nickname, final MultipartFile file) throws IOException {
+
+        Member findMember = memberRepository.getById(loginMember.getId());
+        findMember.changeNickname(nickname);
+
+        String picture = DEFAULT_IMAGE_URL;
+        if(file != null) {
+            picture = s3Uploader.upload(file, "member").replace(IMAGE_URL_PREFIX, "");
+        }
+
+        findMember.changePicture(picture);
+        Member savedMember = memberRepository.save(findMember);
+
+        return new MyPageProfileEditResponse(savedMember.getNickname(), savedMember.getPicture());
     }
 
     public MyPageTagSaveResponse tagSave(final LoginMember loginMember) {

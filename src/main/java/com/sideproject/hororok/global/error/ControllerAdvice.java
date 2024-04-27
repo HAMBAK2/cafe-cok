@@ -45,11 +45,11 @@ public class ControllerAdvice {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
-        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
+//        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+//        return ResponseEntity.badRequest().body(errorResponse);
+//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {
