@@ -6,6 +6,7 @@ import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
+import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,13 +43,21 @@ public class ReviewController {
         return ResponseEntity.noContent().build();
     }
 
-
     @DeleteMapping("/review/{reviewId}/delete")
     @Operation(summary = "리뷰 삭제 기능")
     public ResponseEntity<ReviewDeleteResponse> delete(
             @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
 
         ReviewDeleteResponse response = reviewService.delete(reviewId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/review/{reviewId}/edit")
+    @Operation(summary = "리뷰 수정 버튼을 눌렀을 때 넘어가는 페이지에서 필요한 정보 전달")
+    public ResponseEntity<ReviewEditGetResponse> editGet(
+            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
+
+        ReviewEditGetResponse response = reviewService.editGet(reviewId);
         return ResponseEntity.ok(response);
     }
 }

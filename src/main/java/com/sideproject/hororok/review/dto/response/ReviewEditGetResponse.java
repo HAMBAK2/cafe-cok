@@ -1,8 +1,9 @@
-package com.sideproject.hororok.review.dto;
+package com.sideproject.hororok.review.dto.response;
 
-import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.keword.dto.KeywordDto;
+
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.review.domain.Review;
+import com.sideproject.hororok.review.dto.ReviewImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class MyPageReviewDto {
+public class ReviewEditGetResponse {
 
     private Long cafeId;
     private String cafeName;
@@ -19,13 +20,13 @@ public class MyPageReviewDto {
     private String content;
     private String specialNote;
     private List<ReviewImageDto> images;
-    private List<KeywordDto> keywords;
+    private CategoryKeywordsDto categoryKeywords;
 
 
-    public static MyPageReviewDto of(
-            final Review review, final List<ReviewImageDto> images, final List<KeywordDto> keywords) {
+    public static ReviewEditGetResponse of(
+            final Review review, final List<ReviewImageDto> images, final CategoryKeywordsDto categoryKeywords) {
 
-        return MyPageReviewDto.builder()
+        return ReviewEditGetResponse.builder()
                 .cafeId(review.getCafe().getId())
                 .cafeName(review.getCafe().getName())
                 .reviewId(review.getId())
@@ -33,7 +34,7 @@ public class MyPageReviewDto {
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())
                 .images(images)
-                .keywords(keywords)
+                .categoryKeywords(categoryKeywords)
                 .build();
     }
 }

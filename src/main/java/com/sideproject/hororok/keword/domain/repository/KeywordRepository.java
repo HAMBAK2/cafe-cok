@@ -23,6 +23,12 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
                 "AND k.category = :category")
     List<Keyword> findByReviewIdAndCategory(final Long reviewId, final Category category);
 
+    @Query("SELECT k " +
+            "FROM Keyword k " +
+            "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
+            "WHERE crk.review.id = :reviewId")
+    List<Keyword> findByReviewId(final Long reviewId);
+
 
     @Query("SELECT NEW com.sideproject.hororok.keword.dto.KeywordCount(k.id, k.name, COUNT(crk)) " +
             "FROM Keyword k " +

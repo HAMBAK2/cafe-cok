@@ -4,6 +4,9 @@ import com.sideproject.hororok.review.domain.ReviewImage;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 public class ReviewImageDto {
@@ -16,5 +19,11 @@ public class ReviewImageDto {
                 .id(reviewImage.getId())
                 .imageUrl(reviewImage.getImageUrl())
                 .build();
+    }
+
+    public static List<ReviewImageDto> fromList(List<ReviewImage> reviewImages) {
+        return reviewImages.stream()
+                .map(reviewImage -> ReviewImageDto.from(reviewImage))
+                .collect(Collectors.toList());
     }
 }

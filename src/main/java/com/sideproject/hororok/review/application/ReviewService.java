@@ -2,10 +2,12 @@ package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.keword.domain.enums.Category;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
 import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
+import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
 import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
@@ -148,13 +150,10 @@ public class ReviewService {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
-            List<ReviewImageDto> findImages = reviewImageRepository.findByReviewId(review.getId())
-                    .stream().map(reviewImage -> ReviewImageDto.from(reviewImage))
-                    .collect(Collectors.toList());
-            List<KeywordDto> findKeywords =
-                    keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU)
-                            .stream().map(keyword -> KeywordDto.from(keyword))
-                            .collect(Collectors.toList());
+            List<ReviewImageDto> findImages
+                    = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(review.getId()));
+            List<KeywordDto> findKeywords
+                    = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
             return MyPageReviewDto.of(review, findImages, findKeywords);
         }).collect(Collectors.toList());
 
@@ -167,7 +166,15 @@ public class ReviewService {
         reviewImageRepository.deleteByReviewId(reviewId);
         cafeReviewKeywordRepository.deleteByReviewId(reviewId);
         reviewRepository.deleteById(reviewId);
-
         return new ReviewDeleteResponse(reviewId);
+    }
+
+    public ReviewEditGetResponse editGet(final Long reviewId) {
+        Review findReview = reviewRepository.getById(reviewId);
+        List<ReviewImageDto> reviewImages
+                = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(reviewId));
+        CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
+
+        return ReviewEditGetResponse.of(findReview, reviewImages, CategoryKeywords);
     }
 }
