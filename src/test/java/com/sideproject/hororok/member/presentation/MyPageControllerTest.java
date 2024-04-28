@@ -106,39 +106,6 @@ class MyPageControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("마이페이지 저장 탭을 눌렀을 때 동작 하는 API - 성공")
-    public void test_myPage_tag_save_success() throws Exception {
-
-        MyPageTagSaveResponse response = 마이페이지_태그_저장_응답();
-
-        when(myPageService
-                .tagSave(any(LoginMember.class)))
-                .thenReturn(response);
-
-        mockMvc.perform(
-                        get("/api/myPage/tag/save")
-                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("myPage/tag/save/success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        responseFields(
-                                fieldWithPath("folderCount").description("폴더 개수"),
-                                fieldWithPath("folders").description("폴더 리스트").type(JsonFieldType.ARRAY),
-                                fieldWithPath("folders[].folderId").description("폴더 ID"),
-                                fieldWithPath("folders[].name").description("폴더 이름"),
-                                fieldWithPath("folders[].color").description("폴더 색상"),
-                                fieldWithPath("folders[].bookmarkCount").description("폴더 내 북마크 개수"),
-                                fieldWithPath("folders[].visible").description("폴더 지도 노출 여부"),
-                                fieldWithPath("folders[].defaultFolder").description("기본 폴더 여부"))))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("마이페이지 계획 탭의 저장한 계획(여정) 나타내는 API - 성공")
     public void test_saved_plan_success() throws Exception {
 

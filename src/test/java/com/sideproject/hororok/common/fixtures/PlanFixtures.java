@@ -1,6 +1,5 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
 import com.sideproject.hororok.plan.domain.enums.PlanStatus;
