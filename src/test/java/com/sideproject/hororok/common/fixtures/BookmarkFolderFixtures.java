@@ -29,23 +29,7 @@ public class BookmarkFolderFixtures {
     public static final String 폴더_이름 = "폴더_이름";
     public static final String 폴더_색상 = "폴더_색상";
     public static final Boolean 폴더_지도_노출_O = true;
-    public static final Boolean 폴더_지도_노출_X = true;
-    public static final Boolean 폴더_디폴트_O = true;
     public static final Boolean 폴더_디폴트_X = false;
-
-
-
-    public static BookmarkFolder 일반_폴더(final Member member) {
-        return new BookmarkFolder(폴더_이름, 폴더_색상,
-                폴더_지도_노출_O, 폴더_디폴트_X, member);
-    }
-
-    public static BookmarkFolder 디폴트_폴더(final Member member) {
-
-        return new BookmarkFolder(폴더_이름, 폴더_색상,
-                폴더_지도_노출_O, 폴더_디폴트_O, member);
-    }
-
 
     public static BookmarkFolderSaveRequest 폴더_저장_요청() {
         return new BookmarkFolderSaveRequest(
@@ -70,10 +54,10 @@ public class BookmarkFolderFixtures {
         return new BookmarkFolderDeleteResponse(folderId);
     }
 
-
     public static BookmarkFolderDto 일반_폴더_DTO() {
         return new BookmarkFolderDto(일반_폴더(), 북마크_개수_1개);
     }
+
     public static List<BookmarkFolderDto> 일반_폴더_DTO_리스트() {
         return Arrays.asList(일반_폴더_DTO());
     }
@@ -82,7 +66,6 @@ public class BookmarkFolderFixtures {
         BookmarkFolder folder = setId(new BookmarkFolder(폴더_이름, 폴더_색상, 폴더_지도_노출_O, 폴더_디폴트_X, 사용자()), 일반_폴더_ID);
         return folder;
     }
-
 
     public static BookmarkFolder setId(BookmarkFolder bookmarkFolder, final Long id) {
 

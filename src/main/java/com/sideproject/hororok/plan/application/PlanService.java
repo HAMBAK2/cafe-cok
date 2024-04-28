@@ -14,7 +14,6 @@ import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.cafe.dto.CafeDto;
-import com.sideproject.hororok.plan.dto.request.DeletePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
@@ -95,13 +94,11 @@ public class PlanService {
     }
 
     @Transactional
-    public DeletePlanResponse delete(DeletePlanRequest request, Long planId) {
+    public DeletePlanResponse delete(PlanStatus status, Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
 
-        PlanStatus requestPlanStatus = request.getPlanStatus();
-
-        if(requestPlanStatus.equals(PlanStatus.SAVED)) {
+        if(status.equals(PlanStatus.SAVED)) {
             findPlan.setIsSaved(false);
         } else {
             findPlan.setIsShared(false);
@@ -236,8 +233,4 @@ public class PlanService {
 
         Collections.sort(targetCafeList, distanceAndRatingComparator);
     }
-
-
-
-
 }

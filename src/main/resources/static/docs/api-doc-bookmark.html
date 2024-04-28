@@ -468,7 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 </div>
 <div class="sect3">
-<h4 id="_request_header">Request Header</h4>
+<h4 id="_request_header">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -489,10 +489,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </table>
 </div>
 <div class="sect3">
-<h4 id="_http_request">Http Request</h4>
+<h4 id="_http_request">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/bookmark/save HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/bookmark/folders HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer JWT TOKEN
 Accept: application/json
@@ -501,7 +501,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_http_response">Http Response</h4>
+<h4 id="_http_response">Http response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -518,15 +518,15 @@ Content-Length: 204
     "name" : "폴더_이름",
     "color" : "폴더_색상",
     "bookmarkCount" : 1,
-    "defaultFolder" : false,
-    "visible" : true
+    "visible" : true,
+    "defaultFolder" : false
   } ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields">Response Fields</h4>
+<h4 id="_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -750,7 +750,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-25 18:00:41 +0900
+Last updated 2024-04-28 19:47:27 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

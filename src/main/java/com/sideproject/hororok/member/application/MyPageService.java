@@ -2,7 +2,6 @@ package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
-import com.sideproject.hororok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
@@ -52,7 +51,6 @@ public class MyPageService {
 
     private final PlanCafeService planCafeService;
     private final PlanKeywordService planKeywordService;
-    private final BookmarkFolderService bookmarkFolderService;
 
     private static final Integer PLAN_MAX_PAGE_SIZE = 4;
     private static final Integer PLAN_DEFAULT_PAGE = 1;
@@ -86,14 +84,6 @@ public class MyPageService {
         Member savedMember = memberRepository.save(findMember);
 
         return new MyPageProfileEditResponse(savedMember.getNickname(), savedMember.getPicture());
-    }
-
-    public MyPageTagSaveResponse tagSave(final LoginMember loginMember) {
-
-        List<BookmarkFolderDto> findFolders
-                = bookmarkFolderService.getBookmarkFolderDtos(loginMember.getId());
-
-        return MyPageTagSaveResponse.of(findFolders.size(), findFolders);
     }
 
     public MyPagePlanResponse savedPlan(final LoginMember loginMember, final PlanSortBy sortBy) {

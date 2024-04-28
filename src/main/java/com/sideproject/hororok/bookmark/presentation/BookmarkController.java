@@ -19,16 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
-    private final BookmarkFolderService bookmarkFolderService;
-
-    @GetMapping("/save")
-    @Operation(summary = "북마크 저장 버튼 클릭 시 동작, 폴더 목록을 반환 받는다.")
-    public ResponseEntity<BookmarkFoldersResponse> saveBookmark(
-            @AuthenticationPrincipal LoginMember loginMember) {
-
-        BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
-        return ResponseEntity.ok(response);
-    }
 
     @PostMapping("/save")
     @Operation(summary = "저장버튼 클릭 -> 폴더 선택 후 저장 완료 시 동작하는 기능")

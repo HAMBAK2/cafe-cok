@@ -558,7 +558,7 @@ Content-Length: 220
 <div class="sect2">
 <h3 id="_4_2_마이페이지_저장_태그get_성공">4-2. 마이페이지 저장 태그(GET) - 성공</h3>
 <div class="sect3">
-<h4 id="_request_header_2">Request Header</h4>
+<h4 id="_request_header_2">Request header</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -582,16 +582,16 @@ Content-Length: 220
 <h4 id="_http_request_2">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/tag/save HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/bookmark/folders HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer fake-token
+Authorization: Bearer JWT TOKEN
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_http_response_2">Http Response</h4>
+<h4 id="_http_response_2">Http response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -608,15 +608,15 @@ Content-Length: 204
     "name" : "폴더_이름",
     "color" : "폴더_색상",
     "bookmarkCount" : 1,
-    "defaultFolder" : false,
-    "visible" : true
+    "visible" : true,
+    "defaultFolder" : false
   } ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_2">Response Fields</h4>
+<h4 id="_response_fields_2">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -753,7 +753,7 @@ Content-Length: 223
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 27일 9시 0분"
+    "visitDateTime" : "4월 28일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -897,7 +897,7 @@ Content-Length: 223
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 27일 9시 0분"
+    "visitDateTime" : "4월 28일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1050,7 +1050,7 @@ Content-Length: 237
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 27일 9시 0분"
+    "visitDateTime" : "4월 28일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1208,7 +1208,7 @@ Content-Length: 237
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 27일 9시 0분"
+    "visitDateTime" : "4월 28일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1345,14 +1345,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 621
+Content-Length: 623
 
 {
   "planId" : 1,
   "matchType" : "SIMILAR",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "4월 27일 9시 0분",
+  "visitDateTime" : "4월 28일 9시 0분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -1366,8 +1366,8 @@ Content-Length: 621
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "longitude" : 74.71717613580516,
-    "latitude" : 42.55680489315634,
+    "longitude" : 53.162915766437344,
+    "latitude" : 108.04460614103648,
     "starRating" : 0,
     "reviewCount" : 0,
     "image" : "//카페이미지"
@@ -1648,7 +1648,7 @@ Content-Length: 199
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-27 10:54:02 +0900
+Last updated 2024-04-28 19:40:59 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

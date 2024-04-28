@@ -47,10 +47,10 @@ include::{snippets}/plan/share/success/response-fields.adoc[]
 include::{snippets}/plan/delete/success/request-headers.adoc[]
 ==== Http request
 include::{snippets}/plan/delete/success/http-request.adoc[]
-==== Path-parameters
+==== Path parameters
 include::{snippets}/plan/delete/success/path-parameters.adoc[]
-==== Request fields
-include::{snippets}/plan/delete/success/request-fields.adoc[]
+==== Query parameters
+include::{snippets}/plan/delete/success/query-parameters.adoc[]
 ==== Http Response
 include::{snippets}/plan/delete/success/http-response.adoc[]
 ==== Response Fields

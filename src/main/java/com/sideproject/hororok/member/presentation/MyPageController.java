@@ -45,14 +45,6 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/tag/save")
-    @Operation(summary = "마이페이지의 저장 태그를 눌렀을 때 동작")
-    public ResponseEntity<MyPageTagSaveResponse> tagSave(@AuthenticationPrincipal LoginMember loginMember) {
-
-        MyPageTagSaveResponse response = myPageService.tagSave(loginMember);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/saved/plan")
     @Operation(summary = "계획 탭의 저장된 계획을 나타내는 API")
     public ResponseEntity<MyPagePlanResponse> savedPlan(
