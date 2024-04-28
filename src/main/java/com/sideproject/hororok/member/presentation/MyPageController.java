@@ -6,6 +6,7 @@ import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
+import com.sideproject.hororok.review.application.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final ReviewService reviewService;
 
     @GetMapping("/profile")
     @Operation(summary = "마이페이지 상단의 사용자 프로필을 나타냄")
@@ -98,4 +100,11 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/reviews")
+    @Operation(summary = "마이페이지 리뷰탭을 눌렀을 때 동작")
+    public ResponseEntity<MyPageReviewResponse> reviews(@AuthenticationPrincipal LoginMember loginMember) {
+
+        MyPageReviewResponse response = reviewService.getMyPageReviews(loginMember);
+        return ResponseEntity.ok(response);
+    }
 }

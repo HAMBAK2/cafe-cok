@@ -16,8 +16,6 @@ public class KeywordDto {
     private final Category category;
     private final String name;
 
-
-
     public static KeywordDto from(final Keyword keyword) {
 
         return KeywordDto.builder()
@@ -32,10 +30,4 @@ public class KeywordDto {
                 .map(KeywordDto::from)
                 .collect(Collectors.toList());
     }
-
-    public Keyword toEntity() {
-        return new Keyword(this.name, this.category);
-    }
-
-
 }

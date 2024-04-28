@@ -11,6 +11,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByCafeId(Long cafeId);
 
+    List<Review> findByMemberId(Long memberId);
+
     @Query("SELECT ri FROM Review r JOIN r.cafe c JOIN r.images ri " +
             "WHERE c.id = :cafeId "
     )

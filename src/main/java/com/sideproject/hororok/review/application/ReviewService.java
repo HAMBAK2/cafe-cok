@@ -1,5 +1,11 @@
 package com.sideproject.hororok.review.application;
 
+import com.sideproject.hororok.auth.dto.LoginMember;
+import com.sideproject.hororok.keword.domain.enums.Category;
+import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
+import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
+import com.sideproject.hororok.review.dto.MyPageReviewDto;
+import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
@@ -13,7 +19,7 @@ import com.sideproject.hororok.review.domain.*;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.review.dto.ReviewImageInfoDto;
+import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +42,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
+    private final ReviewImageRepository reviewImageRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private final String REVIEW_IMAGE_URL_PREFIX = "https:";
@@ -110,12 +117,12 @@ public class ReviewService {
                     .map(cafeReviewKeyword -> KeywordDto.from(cafeReviewKeyword.getKeyword()))
                     .collect(Collectors.toList());
             List<ReviewImage> reviewImages = review.getImages();
-            List<ReviewImageInfoDto> reviewImageInfoDtos = reviewImages.stream()
-                    .map(ReviewImageInfoDto::from)
+            List<ReviewImageDto> reviewImageDtos = reviewImages.stream()
+                    .map(ReviewImageDto::from)
                     .collect(Collectors.toList());
 
 
-            reviewDetailDtos.add(ReviewDetailDto.of(review, reviewImageInfoDtos, keywords));
+            reviewDetailDtos.add(ReviewDetailDto.of(review, reviewImageDtos, keywords));
         }
 
         return reviewDetailDtos;
@@ -137,5 +144,30 @@ public class ReviewService {
         return reviewImageUrls;
     }
 
+    public MyPageReviewResponse getMyPageReviews(final LoginMember loginMember) {
 
+        List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
+        List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
+            List<ReviewImageDto> findImages = reviewImageRepository.findByReviewId(review.getId())
+                    .stream().map(reviewImage -> ReviewImageDto.from(reviewImage))
+                    .collect(Collectors.toList());
+            List<KeywordDto> findKeywords =
+                    keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU)
+                            .stream().map(keyword -> KeywordDto.from(keyword))
+                            .collect(Collectors.toList());
+            return MyPageReviewDto.of(review, findImages, findKeywords);
+        }).collect(Collectors.toList());
+
+        return new MyPageReviewResponse(findReviewDtos);
+    }
+
+    @Transactional
+    public ReviewDeleteResponse delete(final Long reviewId) {
+
+        reviewImageRepository.deleteByReviewId(reviewId);
+        cafeReviewKeywordRepository.deleteByReviewId(reviewId);
+        reviewRepository.deleteById(reviewId);
+
+        return new ReviewDeleteResponse(reviewId);
+    }
 }

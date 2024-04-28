@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReviewImageInfoDto {
+public class ReviewImageDto {
 
     private final Long id;
     private final String imageUrl;
 
-    public static ReviewImageInfoDto from(ReviewImage reviewImage) {
-        return ReviewImageInfoDto.builder()
+    public static ReviewImageDto from(ReviewImage reviewImage) {
+        return ReviewImageDto.builder()
                 .id(reviewImage.getId())
                 .imageUrl(reviewImage.getImageUrl())
                 .build();

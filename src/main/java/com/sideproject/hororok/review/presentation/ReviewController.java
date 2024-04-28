@@ -5,6 +5,7 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,9 +40,15 @@ public class ReviewController {
 
         reviewService.createReview(request, loginMember.getId(), files);
         return ResponseEntity.noContent().build();
-
     }
 
 
+    @DeleteMapping("/review/{reviewId}/delete")
+    @Operation(summary = "리뷰 삭제 기능")
+    public ResponseEntity<ReviewDeleteResponse> delete(
+            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
 
+        ReviewDeleteResponse response = reviewService.delete(reviewId);
+        return ResponseEntity.ok(response);
+    }
 }

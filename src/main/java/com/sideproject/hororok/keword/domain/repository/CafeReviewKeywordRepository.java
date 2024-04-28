@@ -12,4 +12,6 @@ public interface CafeReviewKeywordRepository extends JpaRepository<CafeReviewKey
 
     List<CafeReviewKeyword> findByKeywordIn(List<Keyword> keywords);
 
+    void deleteByReviewId(Long reviewId);
+
 }

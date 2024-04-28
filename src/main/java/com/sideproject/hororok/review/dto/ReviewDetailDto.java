@@ -15,7 +15,7 @@ public class ReviewDetailDto {
     private final Long id;
     private final String content;
     private final String specialNote;
-    private final List<ReviewImageInfoDto> images;
+    private final List<ReviewImageDto> images;
     private final List<KeywordDto> keywords;
     private final Integer starRating;
     private final LocalDate createdDate;
@@ -24,7 +24,7 @@ public class ReviewDetailDto {
 
 
     public static ReviewDetailDto of(final Review review,
-                                     final List<ReviewImageInfoDto> images,
+                                     final List<ReviewImageDto> images,
                                      final List<KeywordDto> keywords) {
 
         return ReviewDetailDto.builder()
