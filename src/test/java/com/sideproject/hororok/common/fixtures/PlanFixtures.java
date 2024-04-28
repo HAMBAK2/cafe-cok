@@ -2,10 +2,8 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
-import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.dto.PlanDto;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
-import com.sideproject.hororok.plan.dto.request.DeletePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
@@ -70,10 +68,6 @@ public class PlanFixtures {
 
     public static SharePlanResponse 계획_공유_응답() {
         return new SharePlanResponse(계획_ID);
-    }
-
-    public static DeletePlanRequest 계획_삭제_요청() {
-        return new DeletePlanRequest(PlanStatus.SAVED);
     }
 
     public static DeletePlanResponse 계획_삭제_응답() {

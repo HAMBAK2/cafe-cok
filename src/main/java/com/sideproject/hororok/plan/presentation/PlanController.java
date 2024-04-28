@@ -1,11 +1,9 @@
 package com.sideproject.hororok.plan.presentation;
 
-
-import com.amazonaws.Response;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
+import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
-import com.sideproject.hororok.plan.dto.request.DeletePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
@@ -16,7 +14,6 @@ import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,9 +57,9 @@ public class PlanController {
     @Operation(summary = "선택한 계획하기를 삭제")
     public ResponseEntity<DeletePlanResponse> delete(
             @AuthenticationPrincipal LoginMember loginMember,
-            @PathVariable Long planId, @RequestBody DeletePlanRequest request){
+            @PathVariable Long planId, @RequestParam PlanStatus status){
 
-        DeletePlanResponse response = planService.delete(request, planId);
+        DeletePlanResponse response = planService.delete(status, planId);
         return ResponseEntity.ok(response);
     }
 
