@@ -1,27 +1,25 @@
 package com.sideproject.hororok.review.dto.request;
 
-
-import jakarta.persistence.Lob;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class ReviewCreateRequest {
+public class ReviewEditRequest {
 
-    private Long cafeId;
     private String content;
     private String specialNote;
     private List<String> keywords;
     private Integer starRating;
+    private List<Long> deletedImageIds;
 
-    public ReviewCreateRequest(
-            final Long cafeId, final String content, final String specialNote,
-            final List<String> keywords, final Integer starRating) {
-        this.cafeId = cafeId;
+    public ReviewEditRequest(
+            final String content, final String specialNote, final List<String> keywords,
+            final Integer starRating, final List<Long> deleteImageIds) {
         this.content = content;
         this.specialNote = specialNote;
         this.keywords = keywords;
         this.starRating = starRating;
+        this.deletedImageIds = deleteImageIds;
     }
 }

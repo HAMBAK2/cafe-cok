@@ -22,10 +22,6 @@ public class MyPageFixtures {
         return MyPagePlanDto.of(계획(), 키워드_DTO());
     }
 
-    public static MyPagePlanResponse 마이페이지_계획_응답() {
-        return new MyPagePlanResponse(Arrays.asList(마이페이지_계획_DTO()));
-    }
-
     public static MyPagePlansResponse 마이페이지_계획_리스트_응답() {
         return new MyPagePlansResponse(페이지_번호, Arrays.asList(마이페이지_계획_DTO()));
     }

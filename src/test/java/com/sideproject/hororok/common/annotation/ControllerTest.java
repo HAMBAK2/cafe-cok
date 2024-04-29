@@ -13,6 +13,7 @@ import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.presentation.MyPageController;
 import com.sideproject.hororok.plan.application.PlanService;
 import com.sideproject.hororok.plan.presentation.PlanController;
+import com.sideproject.hororok.review.application.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public MyPageService myPageService;
+
+    @MockBean
+    public ReviewService reviewService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {

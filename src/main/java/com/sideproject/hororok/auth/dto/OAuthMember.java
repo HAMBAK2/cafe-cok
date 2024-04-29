@@ -9,20 +9,17 @@ public class OAuthMember {
 
     private String email;
     private String nickname;
-    private String picture;
     private String refreshToken;
 
     public OAuthMember(final String email,
                        final String nickname,
-                       final String picture,
                        final String refreshToken) {
         this.email = email;
         this.nickname = nickname;
-        this.picture = picture;
         this.refreshToken = refreshToken;
     }
 
     public Member toMember() {
-        return new Member(email, nickname, picture, SocialType.KAKAO);
+        return new Member(email, nickname, SocialType.KAKAO);
     }
 }

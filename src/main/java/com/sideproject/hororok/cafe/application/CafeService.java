@@ -15,6 +15,8 @@ import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordReposit
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
+import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
@@ -104,7 +106,8 @@ public class CafeService {
             List<Review> reviews = cafe.getReviews();
             List<String> keywordNames = new ArrayList<>();
             for (Review review : reviews) {
-                List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
+
+                List<CafeReviewKeyword> cafeReviewKeywords = cafeReviewKeywordRepository.findByReviewId(review.getId());
                 keywordNames = cafeReviewKeywords.stream()
                         .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
                         .distinct()

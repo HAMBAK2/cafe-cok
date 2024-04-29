@@ -44,12 +44,15 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
-    private List<ReviewImage> images = new ArrayList<>();
+    public void changeContent(String content) {
+        this.content = content;
+    }
 
-    @OneToMany(mappedBy = "review")
-    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
+    public void changeSpecialNote(String specialNote) {
+        this.specialNote = specialNote;
+    }
 
-
-
+    public void changeStarRating(Integer starRating) {
+        this.starRating = starRating;
+    }
 }
