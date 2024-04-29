@@ -26,6 +26,7 @@ public class Constants {
     public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT = 3;
 
     public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT = 5;
+    public static final Integer CAFE_DETAIL_IMAGE_REVIEW_IMG_CNT = 5;
 
     public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;

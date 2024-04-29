@@ -20,7 +20,6 @@ import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
-import com.sideproject.hororok.utils.Constants;
 import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

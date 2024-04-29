@@ -3,7 +3,6 @@ package com.sideproject.hororok.cafe.presentation;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
-import com.sideproject.hororok.menu.application.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +23,6 @@ import java.math.BigDecimal;
 public class CafeController {
 
     private final CafeService cafeService;
-    private final MenuService menuService;
 
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
@@ -32,18 +30,6 @@ public class CafeController {
     public ResponseEntity<CafeHomeResponse> home() {
 
         CafeHomeResponse response = cafeService.home();
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{cafeId}")
-    @Operation(summary = "해당하는 카페의 상세 정보를 보여주는 기능")
-    
-    public ResponseEntity<CafeDetailResponse> detail(
-            @Parameter(description = "카페의 ID")
-            @PathVariable Long cafeId){
-
-        CafeDetailResponse response
-                = CafeDetailResponse.from(cafeService.findCafeDetailByCafeId(cafeId));
         return ResponseEntity.ok(response);
     }
 
@@ -68,11 +54,18 @@ public class CafeController {
     @GetMapping("/{cafeId}/menus")
     @Operation(summary = "카페 상세 정보의 메뉴 탭")
     public ResponseEntity<CafeDetailMenuResponse> detailMenus(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "6") Integer size) {
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
 
-        CafeDetailMenuResponse response = cafeService.detailMenus(cafeId, page, size);
+        CafeDetailMenuResponse response = cafeService.detailMenus(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/images")
+    @Operation(summary = "카페 상세 정보의 사진 탭")
+    public ResponseEntity<CafeDetailImageResponse> detailImage(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailImageResponse response = cafeService.detailImages(cafeId);
         return ResponseEntity.ok(response);
     }
 

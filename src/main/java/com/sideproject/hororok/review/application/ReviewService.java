@@ -83,17 +83,6 @@ public class ReviewService {
         return reviewDetailResponses;
     }
 
-    public List<CafeDetailReviewDto> getCafeDetailReviewDtosByCafeId(final Long cafeId) {
-        List<Review> reviews = reviewRepository.findByCafeId(cafeId);
-        List<CafeDetailReviewDto> cafeDetailReviewDtos = new ArrayList<>();
-        for (Review review : reviews) {
-            List<KeywordDto> keywordDtos = keywordService.getKeywordDtosByReviewId(review.getId());
-            List<ReviewImageDto> images = reviewImageService.getReviewImageDtosByReviewId(review.getId());
-            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, images, keywordDtos));
-        }
-        return cafeDetailReviewDtos;
-    }
-
     public MyPageReviewResponse getMyPageReviews(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());

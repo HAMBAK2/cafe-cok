@@ -30,15 +30,6 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
                 "AND oh.closingTime >= :endTime")
     List<OperationHour> findOpenHoursByDateAndTimeRange(DayOfWeek date, LocalTime startTime, LocalTime endTime);
 
-
-    
-    @Query(
-            "SELECT oh FROM OperationHour oh " +
-                    "WHERE oh.cafe.id = :cafeId " +
-                    "AND oh.date = :date"
-    )
-    Optional<OperationHour> findByCafeIdAndDate(Long cafeId, DayOfWeek date);
-
     @Query("SELECT oh " +
             "FROM OperationHour oh " +
             "WHERE oh.cafe.id = :cafeId " +

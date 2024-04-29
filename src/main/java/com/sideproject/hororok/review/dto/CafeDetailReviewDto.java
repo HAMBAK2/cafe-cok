@@ -20,12 +20,12 @@ public class CafeDetailReviewDto {
     private LocalDate createDate;
     private String picture;
     private String nickname;
-    private List<ReviewImageDto> images;
+    private List<String> imageUrls;
     private List<KeywordDto> recommendMenus;
 
 
     public static CafeDetailReviewDto of(
-            final Review review, final List<ReviewImageDto> images, final List<KeywordDto> keywords) {
+            final Review review, final List<String> imageUrls, final List<KeywordDto> keywords) {
 
         return CafeDetailReviewDto.builder()
                 .id(review.getId())
@@ -35,7 +35,7 @@ public class CafeDetailReviewDto {
                 .createDate(review.getCreatedDate().toLocalDate())
                 .picture(review.getMember().getPicture())
                 .nickname(review.getMember().getNickname())
-                .images(images)
+                .imageUrls(imageUrls)
                 .recommendMenus(keywords)
                 .build();
     }

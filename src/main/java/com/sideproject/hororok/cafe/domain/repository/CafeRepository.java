@@ -10,15 +10,11 @@ import java.util.Optional;
 
 public interface CafeRepository extends JpaRepository<Cafe, Long> {
 
-    
-
     default Cafe getById(final Long id) {
         return findById(id)
                 .orElseThrow(NoSuchCafeException::new);
     }
 
-
-    
     Optional<Cafe> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
 
     

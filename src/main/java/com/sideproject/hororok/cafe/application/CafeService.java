@@ -16,23 +16,17 @@ import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.menu.domain.repository.MenuRepository;
 import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
-import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
-import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
-import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.utils.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -47,7 +41,6 @@ import java.util.stream.Collectors;
 
 import static com.sideproject.hororok.utils.Constants.*;
 import static com.sideproject.hororok.utils.GeometricUtils.*;
-import static org.springframework.data.domain.Sort.by;
 
 @Service
 @RequiredArgsConstructor
@@ -62,22 +55,9 @@ public class CafeService {
     private final OperationHourRepository operationHourRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
-    private final MenuService menuService;
-    private final ReviewService reviewService;
     private final KeywordService keywordService;
     private final CafeRepository cafeRepository;
     private final CafeImageService cafeImageService;
-    private final ReviewImageService reviewImageService;
-    private final OperationHourService operationHourService;
-    
-    private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
-
-        int idx = 0;
-        while(idx < reviewImageUrls.size() && idx < 2) {
-            cafeImageUrls.add(reviewImageUrls.get(idx));
-            idx++;
-        }
-    }
 
     public CafeHomeResponse home() {
         CategoryKeywordsDto allCategoryKeywords = keywordService.getAllCategoryKeywords();
@@ -87,7 +67,7 @@ public class CafeService {
     
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
-        List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+        List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
         CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
 
         return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywordsDto);
@@ -98,24 +78,24 @@ public class CafeService {
 
         Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
         if(findCafe.isEmpty()) {
-            List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+            List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
             CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
             return CafeFindBarResponse.notExistOf(withinRadiusCafes, categoryKeywordsDto);
         }
 
         return CafeFindBarResponse
-                .existFrom(findCafeDetailByCafeId(findCafe.get().getId()));
+                .existFrom(detailTop(findCafe.get().getId()), detailBasicInfo(findCafe.get().getId()));
     }
 
     
     public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
 
-        List<WithinRadiusCafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
+        List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
         CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
 
         List<String> targetKeywordNames = request.getKeywords();
-        List<WithinRadiusCafeDto> filteredWithinRadiusCafes = new ArrayList<>();
-        for (WithinRadiusCafeDto withinRadiusCafe : withinRadiusCafes) {
+        List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
+        for (CafeDto withinRadiusCafe : withinRadiusCafes) {
             Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
             List<Review> reviews = cafe.getReviews();
             List<String> keywordNames = new ArrayList<>();
@@ -134,10 +114,7 @@ public class CafeService {
             if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
         }
 
-        return CafeFindCategoryResponse.builder()
-                .categoryKeywords(categoryKeywordsDto)
-                .cafes(filteredWithinRadiusCafes)
-                .build();
+        return CafeFindCategoryResponse.of(filteredWithinRadiusCafes, categoryKeywordsDto);
     }
 
     public CafeDetailTopResponse detailTop(final Long cafeId) {
@@ -158,7 +135,7 @@ public class CafeService {
         List<String> closedDay = getCloseDayByCafeId(cafeId);
         List<MenuDto> menus = MenuDto.fromList(menuRepository
                 .findByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_MENU_CNT)));
-        List<String> imageUrls = getDetailBasicInfoImageUrls(cafeId);
+        List<String> imageUrls = getImageUrlsByCafeIdAndReviewImageCnt(cafeId, CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtosByCafeId(cafeId);
 
@@ -167,11 +144,15 @@ public class CafeService {
                         imageUrls, userChoiceKeywords, reviews);
     }
 
-    public CafeDetailMenuResponse detailMenus(final Long cafeId, final Integer page, final Integer size) {
+    public CafeDetailMenuResponse detailMenus(final Long cafeId) {
 
-        PageRequest pageRequest = PageRequest.of(page-1, size);
-        List<MenuDto> menuDtos = MenuDto.fromList(menuRepository.findByCafeId(cafeId, pageRequest));
+        List<MenuDto> menuDtos = MenuDto.fromList(menuRepository.findByCafeId(cafeId));
         return CafeDetailMenuResponse.from(menuDtos);
+    }
+
+    public CafeDetailImageResponse detailImages(final Long cafeId) {
+        List<String> imageUrls = getImageUrlsByCafeIdAndReviewImageCnt(cafeId, CAFE_DETAIL_IMAGE_REVIEW_IMG_CNT);
+        return CafeDetailImageResponse.from(imageUrls);
     }
 
 
@@ -184,10 +165,9 @@ public class CafeService {
                     KeywordDto.fromList(keywordRepository
                             .findByReviewIdAndCategory(review.getId(), Category.MENU,
                                     PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT)));
-            List<ReviewImageDto> images = ReviewImageDto.fromList(reviewImageRepository
-                    .findByCafeIdOrderByCreatedDateDesc(cafeId,
-                            PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT)));
-            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, images, keywordDtos));
+            List<String> imageUrls = reviewImageRepository.findImageUrlsByCafeIdOrderByCreatedDateDesc(cafeId,
+                            PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT));
+            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, imageUrls, keywordDtos));
         }
         return cafeDetailReviewDtos;
     }
@@ -246,7 +226,7 @@ public class CafeService {
         return closeDays;
     }
 
-    private List<String> getDetailBasicInfoImageUrls(final Long cafeId) {
+    private List<String> getImageUrlsByCafeIdAndReviewImageCnt(final Long cafeId, final Integer reviewImageCnt) {
 
         List<String> combinedImageUrls = new ArrayList<>();
 
@@ -255,7 +235,7 @@ public class CafeService {
 
         List<String> reviewImageUrls = reviewImageRepository
                 .findImageUrlsByCafeIdOrderByCreatedDateDesc(cafeId,
-                        PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT - cafeImageUrls.size()));
+                        PageRequest.of(0, reviewImageCnt - cafeImageUrls.size()));
 
         combinedImageUrls.addAll(cafeImageUrls);
         combinedImageUrls.addAll(reviewImageUrls);
@@ -263,33 +243,10 @@ public class CafeService {
         return combinedImageUrls;
 
     }
-    
-    public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
-        Cafe cafe =  cafeRepository.getById(cafeId);
-        List<MenuDto> menus = menuService.findByCafeId(cafeId);
-        List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<CafeDetailReviewDto> reviews = reviewService.getCafeDetailReviewDtosByCafeId(cafeId);
-        List<String> reviewImageUrls = reviewImageService.getReviewImageUrlsByCafeId(cafeId);
-
-        //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
-        List<KeywordCountDto> keywordCountDtos = keywordService.getUserChoiceKeywordCounts(cafeId);
-
-        addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
-
-        OpenStatus openStatus = operationHourService.getOpenStatus(cafeId);
-        List<String> closedDay = operationHourService.getClosedDay(cafeId);
-        List<String> businessHours = operationHourService.getBusinessHours(cafeId);
-
-        return new CafeDetail(
-                cafe, menus, openStatus, businessHours, closedDay,
-                reviewImageUrls, reviews, keywordCountDtos, cafeImageUrls);
-    }
-
-    
-    public List<WithinRadiusCafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
+    public List<CafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
         List<Cafe> cafes = cafeRepository.findAll();
-        List<WithinRadiusCafeDto> withinRadiusCafes = new ArrayList<>();
+        List<CafeDto> withinRadiusCafes = new ArrayList<>();
 
         for (Cafe cafe : cafes) {
             boolean isWithinRadius = isWithinRadius(
@@ -300,7 +257,7 @@ public class CafeService {
                 String cafeImageUrl =
                         cafeImageService.findOneImageUrlByCafeId(cafe.getId())
                                 .orElseThrow(() -> new NotFoundException("이미지를 찾을 수 없습니다."));
-                withinRadiusCafes.add(WithinRadiusCafeDto.of(cafe, cafeImageUrl));
+                withinRadiusCafes.add(CafeDto.of(cafe, cafeImageUrl));
             }
         }
 

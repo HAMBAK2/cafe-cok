@@ -2,11 +2,9 @@ package com.sideproject.hororok.cafe.dto.response;
 
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
-import com.sideproject.hororok.cafe.dto.CafeImageDto;
 import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
-import com.sideproject.hororok.review.dto.ReviewImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,11 +17,12 @@ public class CafeDetailBasicInfoResponse {
     private String roadAddress;
     private String openStatus;
     private List<String> businessHours;
-    private final List<String> closedDay;
-    private final List<MenuDto> menus;
-    private final List<String> imageUrls;
-    private final List<KeywordCountDto> userChoiceKeywords;
-    private final List<CafeDetailReviewDto> reviews;
+    private List<String> closedDay;
+    private String phoneNumber;
+    private List<MenuDto> menus;
+    private List<String> imageUrls;
+    private List<KeywordCountDto> userChoiceKeywords;
+    private List<CafeDetailReviewDto> reviews;
 
     public static CafeDetailBasicInfoResponse of(
             final Cafe cafe, final OpenStatus openStatus, final List<String> businessHours,
@@ -34,6 +33,7 @@ public class CafeDetailBasicInfoResponse {
                 .openStatus(openStatus.getValue())
                 .businessHours(businessHours)
                 .closedDay(closedDay)
+                .phoneNumber(cafe.getPhoneNumber())
                 .menus(menus)
                 .imageUrls(imageUrls)
                 .userChoiceKeywords(userChoiceKeywords)
