@@ -5,9 +5,11 @@ import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
+import com.sideproject.hororok.review.dto.response.ReviewEditResponse;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -59,6 +61,14 @@ public class ReviewFixtures {
 
     public static ReviewCreateRequest 리뷰_생성_요청() {
         return new ReviewCreateRequest(카페_아이디, 리뷰_내용, 리뷰_특이사항, 키워드_이름_리스트,리뷰_별점);
+    }
+
+    public static ReviewEditRequest 리뷰_수정_요청() {
+        return new ReviewEditRequest(리뷰_내용, 리뷰_특이사항, 키워드_이름_리스트, 리뷰_별점, Arrays.asList(리뷰_이미지_ID));
+    }
+
+    public static ReviewEditResponse 리뷰_수정_응답() {
+        return new ReviewEditResponse(리뷰_ID);
     }
 
     public static ReviewCreateResponse 리뷰_생성_응답() {

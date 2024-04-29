@@ -3,15 +3,15 @@ package com.sideproject.hororok.review.dto.response;
 import lombok.Getter;
 
 @Getter
-public class ReviewEditPatchResponse {
+public class ReviewEditResponse {
 
     private Long reviewId;
 
 
-    protected ReviewEditPatchResponse() {
+    protected ReviewEditResponse() {
     }
 
-    public ReviewEditPatchResponse(final Long reviewId) {
+    public ReviewEditResponse(final Long reviewId) {
         this.reviewId = reviewId;
     }
 }

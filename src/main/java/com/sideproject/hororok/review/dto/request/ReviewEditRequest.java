@@ -9,8 +9,8 @@ public class ReviewEditRequest {
 
     private String content;
     private String specialNote;
-    private List<String> keywords;
     private Integer starRating;
+    private List<String> keywords;
     private List<Long> deletedImageIds;
 
     public ReviewEditRequest(

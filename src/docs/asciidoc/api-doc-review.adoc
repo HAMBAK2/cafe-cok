@@ -43,3 +43,18 @@ include::{snippets}/review/detail/success/path-parameters.adoc[]
 include::{snippets}/review/detail/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/review/detail/success/response-fields.adoc[]
+
+=== 5-4. 리뷰 수정(PATCH) - 성공
+==== Request Header
+include::{snippets}/review/edit/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/edit/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/review/edit/success/request-parts.adoc[]
+==== Request part(Request fields)
+===== 리뷰 요청 객체(request)에 대한 상세 명세
+include::{snippets}/review/edit/success/request-part-request-fields.adoc[]
+==== Http Response
+include::{snippets}/review/edit/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/edit/success/response-fields.adoc[]

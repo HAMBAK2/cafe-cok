@@ -11,7 +11,7 @@ import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
-import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
+import com.sideproject.hororok.review.dto.response.ReviewEditResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
@@ -140,7 +140,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewEditPatchResponse editPatch(final ReviewEditRequest request, final List<MultipartFile> files, final Long reviewId) {
+    public ReviewEditResponse edit(final ReviewEditRequest request, final List<MultipartFile> files, final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
 
@@ -152,6 +152,6 @@ public class ReviewService {
         if(request.getKeywords() != null)
             cafeReviewKeywordService.changeByReviewAndKeywordNames(findReview, request.getKeywords());
 
-        return new ReviewEditPatchResponse(reviewId);
+        return new ReviewEditResponse(reviewId);
     }
 }

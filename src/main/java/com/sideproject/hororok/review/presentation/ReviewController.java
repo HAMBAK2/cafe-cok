@@ -9,7 +9,7 @@ import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
-import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
+import com.sideproject.hororok.review.dto.response.ReviewEditResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,14 +64,14 @@ public class ReviewController {
 
     @PatchMapping(value = "/review/{reviewId}/edit",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "리뷰 수정 후 수정을 적용하기 위한 요청")
-    public ResponseEntity<ReviewEditPatchResponse> editPost(
+    @Operation(summary = "리뷰 수정 기능")
+    public ResponseEntity<ReviewEditResponse> edit(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long reviewId,
             @RequestPart ReviewEditRequest request,
             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
 
-        ReviewEditPatchResponse response = reviewService.editPatch(request, files, reviewId);
+        ReviewEditResponse response = reviewService.edit(request, files, reviewId);
         return ResponseEntity.ok(response);
     }
 
