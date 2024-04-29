@@ -1,15 +1,11 @@
 package com.sideproject.hororok.keword.dto;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.sideproject.hororok.cafe.exception.NoSuchCategoryException;
 import com.sideproject.hororok.keword.domain.Keyword;
-import com.sideproject.hororok.keword.domain.enums.Category;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 public class CategoryKeywordsDto {

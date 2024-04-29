@@ -4,13 +4,14 @@ public enum OpenStatus {
 
     OPEN("영업중"), CLOSE("영업종료"), HOLY_DAY("휴무일");
 
-    private final String description;
 
-    OpenStatus(String description) {
-        this.description = description;
+    private final String value;
+
+    OpenStatus(String value) {
+        this.value = value;
     }
 
-    public String getDescription() {
-        return description;
+    public String getValue() {
+        return value;
     }
 }

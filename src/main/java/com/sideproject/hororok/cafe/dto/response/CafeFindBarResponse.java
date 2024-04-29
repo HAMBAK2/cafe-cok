@@ -1,12 +1,7 @@
 package com.sideproject.hororok.cafe.dto.response;
 
-import com.sideproject.hororok.cafe.dto.CafeDetail;
-import com.sideproject.hororok.cafe.dto.WithinRadiusCafeDto;
+import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.keword.dto.KeywordCount;
-import com.sideproject.hororok.menu.dto.MenuDto;
-import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
-import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,28 +16,14 @@ public class CafeFindBarResponse {
 
     //검색한 카페가 존재하지 않는 경우
     private final CategoryKeywordsDto categoryKeywords;
-    private final List<WithinRadiusCafeDto> cafes;
+    private final List<CafeDto> cafes;
 
     //검색한 카페가 존재하는 경우
-    private final Long id;
-    private final Long reviewCount;
-    private final String cafeName;
-    private final String openStatus;
-    private final String phoneNumber;
-    private final String roadAddress;
-    private final BigDecimal longitude;
-    private final BigDecimal latitude;
+    private final CafeDetailTopResponse top;
+    private final CafeDetailBasicInfoResponse basicInfo;
 
-    private final List<String> businessHours;
-    private final List<String> closedDay;
-    private final List<String> cafeImageUrls;
-    private final List<String> reviewImageUrls;
-    private final List<MenuDto> menus;
-    private final List<CafeDetailReviewDto> reviews;
-    private final List<KeywordCount> cafeKeywords;
-
-    public static CafeFindBarResponse notExistOf(List<WithinRadiusCafeDto> cafes,
-                                                 CategoryKeywordsDto categoryKeywords) {
+    public static CafeFindBarResponse notExistOf(final List<CafeDto> cafes,
+                                                 final CategoryKeywordsDto categoryKeywords) {
 
         return CafeFindBarResponse.builder()
                 .isExist(false)
@@ -51,25 +32,13 @@ public class CafeFindBarResponse {
                 .build();
     }
 
-    public static CafeFindBarResponse existFrom(CafeDetail cafeDetail) {
+    public static CafeFindBarResponse existFrom(final CafeDetailTopResponse top,
+                                                final CafeDetailBasicInfoResponse basicInfo) {
 
         return CafeFindBarResponse.builder()
                 .isExist(true)
-                .id(cafeDetail.getId())
-                .cafeName(cafeDetail.getCafeName())
-                .roadAddress(cafeDetail.getRoadAddress())
-                .longitude(cafeDetail.getLongitude())
-                .latitude(cafeDetail.getLatitude())
-                .businessHours(cafeDetail.getBusinessHours())
-                .closedDay(cafeDetail.getClosedDay())
-                .cafeImageUrls(cafeDetail.getCafeImageUrls())
-                .openStatus(cafeDetail.getOpenStatus())
-                .phoneNumber(cafeDetail.getPhoneNumber())
-                .menus(cafeDetail.getMenus())
-                .reviews(cafeDetail.getReviews())
-                .reviewImageUrls(cafeDetail.getReviewImageUrls())
-                .cafeKeywords(cafeDetail.getCafeKeywords())
-                .reviewCount(cafeDetail.getReviewCount())
+                .top(top)
+                .basicInfo(basicInfo)
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package com.sideproject.hororok.review.domain.repository;
 
 import com.sideproject.hororok.review.domain.ReviewImage;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,6 +10,8 @@ import java.util.List;
 public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
 
     List<ReviewImage> findByReviewId(Long reviewId);
+
+    List<ReviewImage> findByReviewId(final Long reviewId, final Pageable pageable);
 
 
     void deleteByReviewId(Long reviewId);
@@ -26,11 +29,20 @@ public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> 
             "WHERE c.id = :cafeId ")
     List<String> findImageUrlByCafeId(final Long cafeId);
 
-    @Query("SELECT ri FROM Review r " +
+    @Query("SELECT ri.imageUrl FROM ReviewImage ri " +
+            "JOIN ri.review r " +
             "JOIN r.cafe c " +
-            "JOIN ReviewImage ri ON r.id = ri.review.id " +
-            "WHERE c.id = :cafeId ")
-    List<ReviewImage> findByCafeId(Long cafeId);
+            "WHERE c.id = :cafeId " +
+            "ORDER BY ri.createdDate DESC")
+    List<String> findImageUrlsByCafeIdOrderByCreatedDateDesc(final Long cafeId, final Pageable pageable);
+
+
+    @Query("SELECT ri FROM ReviewImage ri " +
+            "JOIN ri.review r " +
+            "JOIN r.cafe c " +
+            "WHERE c.id = :cafeId " +
+            "ORDER BY ri.createdDate DESC")
+    List<ReviewImage> findByCafeIdOrderByCreatedDateDesc(final Long cafeId, final Pageable pageable);
 
 
 }

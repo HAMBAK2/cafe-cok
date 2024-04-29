@@ -1,4 +1,4 @@
-= Plan API
+= Review API
 :toc: left
 :toclevels: 2
 :source-highlighter: highlightjs

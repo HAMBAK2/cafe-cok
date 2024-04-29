@@ -33,17 +33,42 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{cafeId}")
-    @Operation(summary = "해당하는 카페의 상세 정보를 보여주는 기능")
-    
-    public ResponseEntity<CafeDetailResponse> detail(
-            @Parameter(description = "카페의 ID")
-            @PathVariable Long cafeId){
+    @GetMapping("/{cafeId}/top")
+    @Operation(summary = "해당하는 카페의 상세 정보 상단")
+    public ResponseEntity<CafeDetailTopResponse> detailTop(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId){
 
-        CafeDetailResponse response
-                = CafeDetailResponse.from(cafeService.findCafeDetailByCafeId(cafeId));
+        CafeDetailTopResponse response = cafeService.detailTop(cafeId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{cafeId}/basicInfo")
+    @Operation(summary = "카페 상세 정보의 기본 정보 탭")
+    public ResponseEntity<CafeDetailBasicInfoResponse> detailBasicInfo(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailBasicInfoResponse response = cafeService.detailBasicInfo(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/menus")
+    @Operation(summary = "카페 상세 정보의 메뉴 탭")
+    public ResponseEntity<CafeDetailMenuResponse> detailMenus(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailMenuResponse response = cafeService.detailMenus(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/images")
+    @Operation(summary = "카페 상세 정보의 사진 탭")
+    public ResponseEntity<CafeDetailImageResponse> detailImage(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailImageResponse response = cafeService.detailImages(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")

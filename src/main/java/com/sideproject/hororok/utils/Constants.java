@@ -14,7 +14,22 @@ public class Constants {
     public static final String URL_DECODER_DECODE_ENC = "UTF-8";
 
     public static final Integer RECOMMEND_MENU_MAX_CNT = 3;
-    
+
+    public static final Integer CAFE_DETAIL_TOP_KEYWORD_MAX_CNT = 3;
+
+    public static final Integer CAFE_DETAIL_IMAGE_MAX_CNT = 3;
+
+    public static final Integer CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT = 6;
+
+    public static final Integer USER_CHOICE_KEYWORD_CNT = 6;
+
+    public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT = 3;
+
+    public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT = 5;
+    public static final Integer CAFE_DETAIL_IMAGE_REVIEW_IMG_CNT = 5;
+
+    public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
+    public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
 
 
 }

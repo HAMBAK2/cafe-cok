@@ -9,6 +9,8 @@ import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.presentation.BookmarkController;
 import com.sideproject.hororok.bookmark.presentation.BookmarkFolderController;
+import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.cafe.presentation.CafeController;
 import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.presentation.MyPageController;
 import com.sideproject.hororok.plan.application.PlanService;
@@ -35,7 +37,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         BookmarkController.class,
         PlanController.class,
         MyPageController.class,
-        ReviewController.class
+        ReviewController.class,
+        CafeController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
@@ -68,6 +71,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public ReviewService reviewService;
+
+    @MockBean
+    public CafeService cafeService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {

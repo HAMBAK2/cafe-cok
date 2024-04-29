@@ -14,10 +14,6 @@ public class CafeImageService {
 
     private final CafeImageRepository cafeImageRepository;
 
-    public List<String> findCafeImageUrlsByCafeId(Long cafeId) {
-        return cafeImageRepository.findCafeImagesUrlsByCafeId(cafeId);
-    }
-
     public Optional<String> findOneImageUrlByCafeId(Long cafeId) {
         List<CafeImage> cafeImages = cafeImageRepository.findByCafeId(cafeId);
         if (!cafeImages.isEmpty()) {

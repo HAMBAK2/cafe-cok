@@ -1,7 +1,6 @@
 package com.sideproject.hororok.review.dto.request;
 
 
-import jakarta.persistence.Lob;
 import lombok.Getter;
 
 import java.util.List;

@@ -45,6 +45,9 @@ public class Review extends BaseEntity {
     private Member member;
 
 
+    protected Review() {
+    }
+
     public Review(final String content, final String specialNote, final Integer starRating,
                   final Cafe cafe, final Member member) {
         this.content = content;
