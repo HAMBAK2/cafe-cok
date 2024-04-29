@@ -8,7 +8,7 @@ import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
-import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
+import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -54,12 +53,12 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/review/{reviewId}/edit")
-    @Operation(summary = "리뷰 수정 버튼을 눌렀을 때 넘어가는 페이지에서 필요한 정보 전달")
-    public ResponseEntity<ReviewEditGetResponse> editGet(
+    @GetMapping("/review/{reviewId}")
+    @Operation(summary = "리뷰 상세 정보를 반환하는 기능")
+    public ResponseEntity<ReviewDetailResponse> detail(
             @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
 
-        ReviewEditGetResponse response = reviewService.editGet(reviewId);
+        ReviewDetailResponse response = reviewService.detail(reviewId);
         return ResponseEntity.ok(response);
     }
 

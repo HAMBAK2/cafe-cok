@@ -6,6 +6,7 @@ import com.sideproject.hororok.member.dto.response.MyPageProfileEditResponse;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
+import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -109,6 +110,45 @@ class ReviewControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(reviewService, times(1)).delete(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("리뷰 상세 정보를 응답하는 기능 - 성공")
+    public void test_review_detail_success() throws Exception{
+
+        ReviewDetailResponse response = 리뷰_상세_응답();
+        when(reviewService.detail(any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/review/{reviewId}", 리뷰_ID)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andDo(document("review/detail/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(parameterWithName("reviewId").description("리뷰의 ID")),
+                        responseFields(
+                                fieldWithPath("cafeId").description("카페 ID"),
+                                fieldWithPath("cafeName").description("카페 이름"),
+                                fieldWithPath("reviewId").description("리뷰 ID"),
+                                fieldWithPath("starRating").description("리뷰 별점"),
+                                fieldWithPath("content").description("리뷰 내용"),
+                                fieldWithPath("specialNote").description("리뷰 특이사항"),
+                                fieldWithPath("images").type(JsonFieldType.ARRAY).description("리뷰 이미지 리스트"),
+                                fieldWithPath("images[].id").description("리뷰 이미지 ID"),
+                                fieldWithPath("images[].imageUrl").description("리뷰 이미지 URL"),
+                                fieldWithPath("categoryKeywords").type(JsonFieldType.OBJECT).description("카테고리 별 키워드 정보"),
+                                fieldWithPath("categoryKeywords.purpose").type(JsonFieldType.ARRAY).description("목적 카테고리 리스트(필수)"),
+                                fieldWithPath("categoryKeywords.menu").type(JsonFieldType.ARRAY).description("메뉴 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.theme").type(JsonFieldType.ARRAY).description("테마 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.facility").type(JsonFieldType.ARRAY).description("시설 카테고리 리스트(없으면 빈 리스트)"),
+                                fieldWithPath("categoryKeywords.atmosphere").type(JsonFieldType.ARRAY).description("분위기 카테고리 리스트(없으면 빈 리스트)"))))
+                .andExpect(status().isOk());
+
+        verify(reviewService, times(1)).detail(any(Long.class));
     }
 
 

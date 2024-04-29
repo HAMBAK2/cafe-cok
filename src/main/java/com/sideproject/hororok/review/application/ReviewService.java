@@ -10,7 +10,7 @@ import com.sideproject.hororok.review.dto.MyPageReviewDto;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
-import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
+import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
@@ -130,13 +130,13 @@ public class ReviewService {
         return new ReviewDeleteResponse(reviewId);
     }
 
-    public ReviewEditGetResponse editGet(final Long reviewId) {
+    public ReviewDetailResponse detail(final Long reviewId) {
         Review findReview = reviewRepository.getById(reviewId);
         List<ReviewImageDto> reviewImages
                 = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(reviewId));
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
 
-        return ReviewEditGetResponse.of(findReview, reviewImages, CategoryKeywords);
+        return ReviewDetailResponse.of(findReview, reviewImages, CategoryKeywords);
     }
 
     @Transactional

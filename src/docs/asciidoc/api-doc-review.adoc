@@ -20,7 +20,7 @@ include::{snippets}/review/create/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/review/create/success/response-fields.adoc[]
 
-=== 5-1. 리뷰 삭제(DELETE) - 성공
+=== 5-2. 리뷰 삭제(DELETE) - 성공
 ==== Request Header
 include::{snippets}/review/delete/success/request-headers.adoc[]
 ==== Http request
@@ -31,3 +31,15 @@ include::{snippets}/review/delete/success/path-parameters.adoc[]
 include::{snippets}/review/delete/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/review/delete/success/response-fields.adoc[]
+
+=== 5-3. 리뷰 상세(GET) - 성공
+==== Request Header
+include::{snippets}/review/detail/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/detail/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/review/detail/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/review/detail/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/detail/success/response-fields.adoc[]
