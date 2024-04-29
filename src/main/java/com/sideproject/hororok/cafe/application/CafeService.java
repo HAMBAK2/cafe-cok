@@ -20,6 +20,7 @@ import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
+import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.application.ReviewService;
@@ -31,6 +32,7 @@ import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.utils.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
 
 import static com.sideproject.hororok.utils.Constants.*;
 import static com.sideproject.hororok.utils.GeometricUtils.*;
+import static org.springframework.data.domain.Sort.by;
 
 @Service
 @RequiredArgsConstructor
@@ -123,7 +126,6 @@ public class CafeService {
                         .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
                         .distinct()
                         .collect(Collectors.toList());
-
             }
 
             boolean allMatch = targetKeywordNames.stream()
@@ -164,6 +166,14 @@ public class CafeService {
                 .of(findCafe, openStatus, businessHours, closedDay, menus,
                         imageUrls, userChoiceKeywords, reviews);
     }
+
+    public CafeDetailMenuResponse detailMenus(final Long cafeId, final Integer page, final Integer size) {
+
+        PageRequest pageRequest = PageRequest.of(page-1, size);
+        List<MenuDto> menuDtos = MenuDto.fromList(menuRepository.findByCafeId(cafeId, pageRequest));
+        return CafeDetailMenuResponse.from(menuDtos);
+    }
+
 
     public List<CafeDetailReviewDto> getCafeDetailReviewDtosByCafeId(final Long cafeId) {
         List<Review> reviews = reviewRepository

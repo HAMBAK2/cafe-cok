@@ -3,6 +3,7 @@ package com.sideproject.hororok.cafe.presentation;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.menu.application.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,6 +24,7 @@ import java.math.BigDecimal;
 public class CafeController {
 
     private final CafeService cafeService;
+    private final MenuService menuService;
 
     @GetMapping
     @Operation(summary = "홈 화면에 보여줄 정보를 제공")
@@ -60,6 +62,17 @@ public class CafeController {
             @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
 
         CafeDetailBasicInfoResponse response = cafeService.detailBasicInfo(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/menus")
+    @Operation(summary = "카페 상세 정보의 메뉴 탭")
+    public ResponseEntity<CafeDetailMenuResponse> detailMenus(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "6") Integer size) {
+
+        CafeDetailMenuResponse response = cafeService.detailMenus(cafeId, page, size);
         return ResponseEntity.ok(response);
     }
 
