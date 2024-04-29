@@ -8,11 +8,13 @@ import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.menu.domain.repository.MenuRepository;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
@@ -22,22 +24,26 @@ import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
+import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
+import com.sideproject.hororok.review.dto.ReviewImageDto;
+import com.sideproject.hororok.utils.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sideproject.hororok.utils.Constants.CAFE_DETAIL_TOP_KEYWORD_MAX_CNT;
+import static com.sideproject.hororok.utils.Constants.*;
 import static com.sideproject.hororok.utils.GeometricUtils.*;
 
 @Service
@@ -45,9 +51,11 @@ import static com.sideproject.hororok.utils.GeometricUtils.*;
 @Transactional(readOnly = true)
 public class CafeService {
 
+    private final MenuRepository menuRepository;
     private final KeywordRepository keywordRepository;
     private final CafeImageRepository cafeImageRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewImageRepository reviewImageRepository;
     private final OperationHourRepository operationHourRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
@@ -138,6 +146,112 @@ public class CafeService {
                         PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT)));
 
         return CafeDetailTopResponse.of(findCafe, reviewCount, findKeywordDtos);
+    }
+
+    public CafeDetailBasicInfoResponse detailBasicInfo(final Long cafeId) {
+
+        Cafe findCafe = cafeRepository.getById(cafeId);
+        OpenStatus openStatus = getOpenStatusByCafeId(cafeId);
+        List<String> businessHours = getBusinessHoursByCafeId(cafeId);
+        List<String> closedDay = getCloseDayByCafeId(cafeId);
+        List<MenuDto> menus = MenuDto.fromList(menuRepository
+                .findByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_MENU_CNT)));
+        List<String> imageUrls = getDetailBasicInfoImageUrls(cafeId);
+        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtosByCafeId(cafeId);
+
+        return CafeDetailBasicInfoResponse
+                .of(findCafe, openStatus, businessHours, closedDay, menus,
+                        imageUrls, userChoiceKeywords, reviews);
+    }
+
+    public List<CafeDetailReviewDto> getCafeDetailReviewDtosByCafeId(final Long cafeId) {
+        List<Review> reviews = reviewRepository
+                .findByCafeIdOrderByCreatedDateDesc(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_REVIEW_CNT));
+        List<CafeDetailReviewDto> cafeDetailReviewDtos = new ArrayList<>();
+        for (Review review : reviews) {
+            List<KeywordDto> keywordDtos =
+                    KeywordDto.fromList(keywordRepository
+                            .findByReviewIdAndCategory(review.getId(), Category.MENU,
+                                    PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT)));
+            List<ReviewImageDto> images = ReviewImageDto.fromList(reviewImageRepository
+                    .findByCafeIdOrderByCreatedDateDesc(cafeId,
+                            PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT)));
+            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, images, keywordDtos));
+        }
+        return cafeDetailReviewDtos;
+    }
+
+    public List<KeywordCountDto> getUserChoiceKeywordCounts(Long cafeId) {
+        List<KeywordCountDto> allCafeKeywordCountDtos
+                = keywordRepository.findKeywordCountsByCafeId(cafeId);
+
+        if (allCafeKeywordCountDtos != null && allCafeKeywordCountDtos.size() > USER_CHOICE_KEYWORD_CNT) {
+            allCafeKeywordCountDtos = allCafeKeywordCountDtos.subList(0, USER_CHOICE_KEYWORD_CNT);
+        }
+
+        return allCafeKeywordCountDtos;
+    }
+
+    private List<String> getBusinessHoursByCafeId(final Long cafeId) {
+        List<OperationHour> businessHours = operationHourRepository.findBusinessHoursByCafeId(cafeId);
+        List<String> convertedBusinessHours = new ArrayList<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (OperationHour businessHour : businessHours) {
+            String input;
+            String date = FormatConverter.getKoreanDayOfWeek(businessHour.getDate());
+            String openingTime = businessHour.getOpeningTime().format(formatter);
+            String closingTime = businessHour.getClosingTime().format(formatter);
+
+            input = date + " " + openingTime + "~" + closingTime;
+            convertedBusinessHours.add(input);
+        }
+
+        return convertedBusinessHours;
+    }
+
+    private OpenStatus getOpenStatusByCafeId(final Long cafeId) {
+        Optional<OperationHour> findOperationHour =
+                operationHourRepository
+                        .findByCafeIdAndDateAndTime(cafeId, LocalDate.now().getDayOfWeek(), LocalTime.now());
+
+        if(findOperationHour.isEmpty()) return OpenStatus.CLOSE;
+        return OpenStatus.OPEN;
+    }
+
+    public List<String> getCloseDayByCafeId(Long cafeId) {
+
+        List<OperationHour> findDays = operationHourRepository.findClosedDayByCafeId(cafeId);
+        List<String> closeDays = new ArrayList<>();
+
+        if(findDays.isEmpty()) return closeDays;
+
+        for (OperationHour findDay : findDays) {
+            DayOfWeek date = findDay.getDate();
+            closeDays.add(FormatConverter.getKoreanDayOfWeek(date));
+        }
+
+        return closeDays;
+    }
+
+    private List<String> getDetailBasicInfoImageUrls(final Long cafeId) {
+
+        List<String> combinedImageUrls = new ArrayList<>();
+
+        List<String> cafeImageUrls = cafeImageRepository
+                        .findImageUrlsByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_IMAGE_MAX_CNT));
+
+        List<String> reviewImageUrls = reviewImageRepository
+                .findImageUrlsByCafeIdOrderByCreatedDateDesc(cafeId,
+                        PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT - cafeImageUrls.size()));
+
+        combinedImageUrls.addAll(cafeImageUrls);
+        combinedImageUrls.addAll(reviewImageUrls);
+
+        return combinedImageUrls;
+
     }
     
     public CafeDetail findCafeDetailByCafeId(Long cafeId){

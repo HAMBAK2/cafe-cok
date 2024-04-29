@@ -2,7 +2,10 @@ package com.sideproject.hororok.cafe.dto.response;
 
 
 import com.sideproject.hororok.cafe.domain.Cafe;
+import com.sideproject.hororok.cafe.dto.CafeImageDto;
+import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
+import com.sideproject.hororok.menu.dto.MenuDto;
 import lombok.Builder;
 import lombok.Getter;
 

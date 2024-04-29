@@ -1,5 +1,6 @@
 package com.sideproject.hororok.keword.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

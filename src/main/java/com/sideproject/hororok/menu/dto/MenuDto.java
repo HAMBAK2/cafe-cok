@@ -5,6 +5,9 @@ import com.sideproject.hororok.utils.FormatConverter;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 public class MenuDto {
@@ -22,4 +25,11 @@ public class MenuDto {
                 .imageUrl(menu.getImageUrl())
                 .build();
     }
+
+    public static List<MenuDto> fromList(List<Menu> menus) {
+        return menus.stream()
+                .map(menu -> MenuDto.from(menu))
+                .collect(Collectors.toList());
+    }
+
 }

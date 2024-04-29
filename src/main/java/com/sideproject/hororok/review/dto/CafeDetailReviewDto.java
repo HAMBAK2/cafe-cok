@@ -18,9 +18,10 @@ public class CafeDetailReviewDto {
     private Integer starRating;
     private String specialNote;
     private LocalDate createDate;
+    private String picture;
     private String nickname;
     private List<ReviewImageDto> images;
-    private List<KeywordDto> keywords;
+    private List<KeywordDto> recommendMenus;
 
 
     public static CafeDetailReviewDto of(
@@ -32,9 +33,10 @@ public class CafeDetailReviewDto {
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())
                 .createDate(review.getCreatedDate().toLocalDate())
+                .picture(review.getMember().getPicture())
                 .nickname(review.getMember().getNickname())
                 .images(images)
-                .keywords(keywords)
+                .recommendMenus(keywords)
                 .build();
     }
 }

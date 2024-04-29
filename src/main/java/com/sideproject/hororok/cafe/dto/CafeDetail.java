@@ -48,7 +48,7 @@ public class CafeDetail {
         this.menus = menus;
         this.starRating = cafe.getStarRating().doubleValue();
         this.closedDay = closedDay;
-        this.openStatus = openStatus.getDescription();
+        this.openStatus = openStatus.getValue();
         this.reviews = reviews;
         this.reviewImageUrls = reviewImageUrls;
         this.cafeKeywords = cafeKeywords;

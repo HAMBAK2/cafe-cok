@@ -33,6 +33,13 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     @Query("SELECT k " +
             "FROM Keyword k " +
             "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
+            "WHERE crk.review.id = :reviewId " +
+            "AND k.category = :category")
+    List<Keyword> findByReviewIdAndCategory(final Long reviewId, final Category category, final Pageable pageable);
+
+    @Query("SELECT k " +
+            "FROM Keyword k " +
+            "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.review.id = :reviewId")
     List<Keyword> findByReviewId(final Long reviewId);
 

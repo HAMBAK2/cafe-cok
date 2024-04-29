@@ -60,7 +60,7 @@ public class CafeDetailDto {
                 .menus(menus)
                 .starRating(cafe.getStarRating().doubleValue())
                 .closedDay(closedDay)
-                .openStatus(openStatus.getDescription())
+                .openStatus(openStatus.getValue())
                 .reviews(reviews)
                 .reviewImageUrls(reviewImageUrls)
                 .cafeKeywords(cafeKeywords)
