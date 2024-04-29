@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.sideproject.hororok.utils.Constants.RECOMMEND_MENU_MAX_CNT;
 
 
 @Service
@@ -100,7 +101,8 @@ public class ReviewService {
             List<ReviewImageDto> findImages
                     = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(review.getId()));
             List<KeywordDto> findKeywords
-                    = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
+                    = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU)
+                    .subList(0, RECOMMEND_MENU_MAX_CNT));
             return MyPageReviewDto.of(review, findImages, findKeywords);
         }).collect(Collectors.toList());
 
