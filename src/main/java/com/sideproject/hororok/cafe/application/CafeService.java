@@ -20,10 +20,12 @@ import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
+import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
+import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
+import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,7 @@ public class CafeService {
     private final KeywordService keywordService;
     private final CafeRepository cafeRepository;
     private final CafeImageService cafeImageService;
+    private final ReviewImageService reviewImageService;
     private final OperationHourService operationHourService;
     
     private void addReviewImageUrlsToCafeImageUrls(List<String> cafeImageUrls, List<String> reviewImageUrls){
@@ -104,7 +107,8 @@ public class CafeService {
             List<Review> reviews = cafe.getReviews();
             List<String> keywordNames = new ArrayList<>();
             for (Review review : reviews) {
-                List<CafeReviewKeyword> cafeReviewKeywords = review.getCafeReviewKeywords();
+
+                List<CafeReviewKeyword> cafeReviewKeywords = cafeReviewKeywordRepository.findByReviewId(review.getId());
                 keywordNames = cafeReviewKeywords.stream()
                         .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
                         .distinct()
@@ -130,8 +134,8 @@ public class CafeService {
         Cafe cafe =  cafeRepository.getById(cafeId);
         List<MenuDto> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<ReviewDetailDto> reviews = reviewService.findReviewByCafeId(cafeId);
-        List<String> reviewImageUrls = reviewService.getReviewImageUrlsByCafeId(cafeId);
+        List<CafeDetailReviewDto> reviews = reviewService.getCafeDetailReviewDtosByCafeId(cafeId);
+        List<String> reviewImageUrls = reviewImageService.getReviewImageUrlsByCafeId(cafeId);
 
         //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
         List<KeywordCount> KeywordCounts = keywordService.getUserChoiceKeywordCounts(cafeId);
@@ -141,9 +145,6 @@ public class CafeService {
         OpenStatus openStatus = operationHourService.getOpenStatus(cafeId);
         List<String> closedDay = operationHourService.getClosedDay(cafeId);
         List<String> businessHours = operationHourService.getBusinessHours(cafeId);
-
-        //유저들이 뽑은 키워드 내용 추가
-
 
         return new CafeDetail(
                 cafe, menus, openStatus, businessHours, closedDay,

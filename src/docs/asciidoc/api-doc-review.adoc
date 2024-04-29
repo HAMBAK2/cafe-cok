@@ -1,0 +1,60 @@
+= Plan API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 5. 리뷰
+
+=== 5-1. 리뷰 생성(POST) - 성공
+==== Request Header
+include::{snippets}/review/create/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/create/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/review/create/success/request-parts.adoc[]
+==== Request part(Request fields)
+===== 리뷰 요청 객체(request)에 대한 상세 명세
+include::{snippets}/review/create/success/request-part-request-fields.adoc[]
+==== Http Response
+include::{snippets}/review/create/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/create/success/response-fields.adoc[]
+
+=== 5-2. 리뷰 삭제(DELETE) - 성공
+==== Request Header
+include::{snippets}/review/delete/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/delete/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/review/delete/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/review/delete/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/delete/success/response-fields.adoc[]
+
+=== 5-3. 리뷰 상세(GET) - 성공
+==== Request Header
+include::{snippets}/review/detail/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/detail/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/review/detail/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/review/detail/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/detail/success/response-fields.adoc[]
+
+=== 5-4. 리뷰 수정(PATCH) - 성공
+==== Request Header
+include::{snippets}/review/edit/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/edit/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/review/edit/success/request-parts.adoc[]
+==== Request part(Request fields)
+===== 리뷰 요청 객체(request)에 대한 상세 명세
+include::{snippets}/review/edit/success/request-part-request-fields.adoc[]
+==== Http Response
+include::{snippets}/review/edit/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/edit/success/response-fields.adoc[]

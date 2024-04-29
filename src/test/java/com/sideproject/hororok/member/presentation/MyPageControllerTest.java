@@ -79,7 +79,7 @@ class MyPageControllerTest extends ControllerTest {
         MyPageProfileEditResponse response = 마이페이지_프로필_수정_응답();
 
         when(myPageService
-                .profileEdit(any(LoginMember.class), any(String.class), any(MultipartFile.class)))
+                .editProfile(any(LoginMember.class), any(String.class), any(MultipartFile.class)))
                 .thenReturn(response);
 
 
@@ -102,78 +102,6 @@ class MyPageControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("nickname").description("사용자 닉네임"),
                                 fieldWithPath("picture").description("사용자 프로필 사진 URL"))))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("마이페이지 계획 탭의 저장한 계획(여정) 나타내는 API - 성공")
-    public void test_saved_plan_success() throws Exception {
-
-        MyPagePlanResponse response = 마이페이지_계획_응답();
-
-        when(myPageService.savedPlan(any(LoginMember.class), any(PlanSortBy.class)))
-                .thenReturn(response);
-
-        mockMvc.perform(
-                        get("/api/myPage/saved/plan?sortBy="+PlanSortBy.RECENT.name())
-                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("myPage/saved/plan/success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        queryParameters(
-                                parameterWithName("sortBy")
-                                        .description("정렬 방식을 구분하는 필드\n\n" +
-                                                "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순")),
-                        responseFields(
-                                fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
-                                fieldWithPath("plans[].id").description("계획(여정)의 ID"),
-                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
-                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
-                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
-                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
-                                fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
-                                fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
-                        .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("마이페이지 계획 탭의 공유한 계획(여정)을 나타내는 API - 성공")
-    public void test_shared_plan_success() throws Exception {
-
-        MyPagePlanResponse response = 마이페이지_계획_응답();
-
-        when(myPageService.sharedPlan(any(LoginMember.class), any(PlanSortBy.class)))
-                .thenReturn(response);
-
-        mockMvc.perform(
-                        get("/api/myPage/shared/plan?sortBy="+PlanSortBy.RECENT.name())
-                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("myPage/shared/plan/success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        queryParameters(
-                                parameterWithName("sortBy")
-                                        .description("정렬 방식을 구분하는 필드\n\n" +
-                                                "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순")),
-                        responseFields(
-                                fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
-                                fieldWithPath("plans[].id").description("계획(여정)의 ID"),
-                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
-                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
-                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
-                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
-                                fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
-                                fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
     }
 
@@ -306,5 +234,43 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
                                         .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"))))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("마이페이지 리뷰 탭을 눌렀을 때 동작하는 기능")
+    public void test_my_page_reviews_success() throws Exception{
+
+        MyPageReviewResponse response = 마이페이지_리뷰_리스트_응답();
+        when(reviewService.getMyPageReviews(any(LoginMember.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/reviews")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/reviews/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(
+                                fieldWithPath("reviews").type(JsonFieldType.ARRAY).description("리뷰의 리스트"),
+                                fieldWithPath("reviews[].cafeId").description("카페 ID"),
+                                fieldWithPath("reviews[].cafeName").description("카페 이름"),
+                                fieldWithPath("reviews[].reviewId").description("리뷰 ID"),
+                                fieldWithPath("reviews[].starRating").description("리뷰 별점"),
+                                fieldWithPath("reviews[].content").description("리뷰 내용"),
+                                fieldWithPath("reviews[].specialNote").description("리뷰 특이사항"),
+                                fieldWithPath("reviews[].images").type(JsonFieldType.ARRAY).description("리뷰의 이미지 리스트"),
+                                fieldWithPath("reviews[].images[].id").description("리뷰 이미지 ID"),
+                                fieldWithPath("reviews[].images[].imageUrl").description("리뷰 이미지 URL"),
+                                fieldWithPath("reviews[].keywords").type(JsonFieldType.ARRAY).description("리뷰의 키워드 리스트"),
+                                fieldWithPath("reviews[].keywords[].id").description("리뷰 키워드 ID"),
+                                fieldWithPath("reviews[].keywords[].category").description("리뷰 키워드 카테고리"),
+                                fieldWithPath("reviews[].keywords[].name").description("리뷰 키워드 이름"))))
+                .andExpect(status().isOk());
+
     }
 }

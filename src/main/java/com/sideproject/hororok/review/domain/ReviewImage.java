@@ -20,10 +20,12 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class ReviewImage extends BaseEntity {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Lob
+    @Column(name = "image_url")
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,4 +37,8 @@ public class ReviewImage extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
+    public ReviewImage(final String imageUrl, final Review review) {
+        this.imageUrl = imageUrl;
+        this.review = review;
+    }
 }

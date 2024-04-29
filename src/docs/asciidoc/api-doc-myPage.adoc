@@ -25,32 +25,7 @@ include::{snippets}/bookmark/folders/success/http-response.adoc[]
 ==== Response fields
 include::{snippets}/bookmark/folders/success/response-fields.adoc[]
 
-=== 4-3. 마이페이지 계획 탭의 저장한 여정(GET) - 성공
-==== Request Header
-include::{snippets}/myPage/saved/plan/success/request-headers.adoc[]
-==== Http request
-include::{snippets}/myPage/saved/plan/success/http-request.adoc[]
-==== Query parameters
-include::{snippets}/myPage/saved/plan/success/query-parameters.adoc[]
-==== Http Response
-include::{snippets}/myPage/saved/plan/success/http-response.adoc[]
-==== Response Fields
-include::{snippets}/myPage/saved/plan/success/response-fields.adoc[]
-
-=== 4-4. 마이페이지 계획 탭의 공유한 여정(GET) - 성공
-==== Request Header
-include::{snippets}/myPage/shared/plan/success/request-headers.adoc[]
-==== Http request
-include::{snippets}/myPage/shared/plan/success/http-request.adoc[]
-==== Query parameters
-include::{snippets}/myPage/shared/plan/success/query-parameters.adoc[]
-==== Http Response
-include::{snippets}/myPage/shared/plan/success/http-response.adoc[]
-==== Response Fields
-include::{snippets}/myPage/shared/plan/success/response-fields.adoc[]
-
-
-=== 4-5. 저장한 여정의 전체 리스트(GET) - 성공
+=== 4-3. 저장한 여정의 전체 리스트(GET) - 성공
 ==== Request Header
 include::{snippets}/myPage/saved/plans/success/request-headers.adoc[]
 ==== Http request
@@ -62,7 +37,7 @@ include::{snippets}/myPage/saved/plans/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/saved/plans/success/response-fields.adoc[]
 
-=== 4-6. 공유한 여정의 전체 리스트(GET) - 성공
+=== 4-4. 공유한 여정의 전체 리스트(GET) - 성공
 ==== Request Header
 include::{snippets}/myPage/shared/plans/success/request-headers.adoc[]
 ==== Http request
@@ -99,5 +74,15 @@ include::{snippets}/myPage/profile/edit/success/query-parameters.adoc[]
 include::{snippets}/myPage/profile/edit/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/profile/edit/success/response-fields.adoc[]
+
+=== 4-9. 마이페이지 리뷰 탭 선택 시 - 성공
+==== Request Header
+include::{snippets}/myPage/reviews/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/reviews/success/http-request.adoc[]
+==== Http Response
+include::{snippets}/myPage/reviews/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/reviews/success/response-fields.adoc[]
 
 === link:api-docs.html[API 목록으로]

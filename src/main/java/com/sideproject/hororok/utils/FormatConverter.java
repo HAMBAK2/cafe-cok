@@ -1,8 +1,15 @@
 package com.sideproject.hororok.utils;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.*;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,6 +94,22 @@ public class FormatConverter {
             default:
                 throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
         }
+    }
+
+    public static Optional<File> convertFile(MultipartFile file) throws IOException {
+        File convertFile = new File(file.getOriginalFilename());
+        if(convertFile.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                fos.write(file.getBytes());
+            }
+            return Optional.of(convertFile);
+        }
+
+        return Optional.empty();
+    }
+
+    public static String generateKey(File file, String dirName) {
+        return dirName + "/" + file.getName() + UUID.randomUUID();
     }
 
 }

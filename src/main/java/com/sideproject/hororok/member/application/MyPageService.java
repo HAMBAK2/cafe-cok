@@ -1,7 +1,6 @@
 package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
@@ -21,6 +20,7 @@ import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
+import com.sideproject.hororok.utils.Constants;
 import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +35,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sideproject.hororok.utils.Constants.*;
 import static org.springframework.data.domain.Sort.*;
 
 @Service
@@ -52,12 +53,6 @@ public class MyPageService {
     private final PlanCafeService planCafeService;
     private final PlanKeywordService planKeywordService;
 
-    private static final Integer PLAN_MAX_PAGE_SIZE = 4;
-    private static final Integer PLAN_DEFAULT_PAGE = 1;
-    private static final String IMAGE_URL_PREFIX = "https:";
-    private static final String DEFAULT_IMAGE_URL
-            = "//kr.object.ncloudstorage.com/hororok-bucket/member/" +
-            "%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-04-20%20%EC%98%A4%ED%9B%84%2011.46.07.png";
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -69,48 +64,21 @@ public class MyPageService {
         return MyPageProfileResponse.of(findMember, findReviewCount);
     }
 
-    public MyPageProfileEditResponse profileEdit
+    @Transactional
+    public MyPageProfileEditResponse editProfile
             (final LoginMember loginMember, final String nickname, final MultipartFile file) throws IOException {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         if(nickname != null) findMember.changeNickname(nickname);
 
-        String picture = DEFAULT_IMAGE_URL;
         if(file != null) {
-            picture = s3Uploader.upload(file, "member").replace(IMAGE_URL_PREFIX, "");
+            if(findMember.getPicture() != null) s3Uploader.delete(findMember.getPicture());
+            String picture = s3Uploader.upload(file, MEMBER_IMAGE_DIR).replace(IMAGE_URL_PREFIX, "");
+            findMember.changePicture(picture);
         }
 
-        findMember.changePicture(picture);
         Member savedMember = memberRepository.save(findMember);
-
         return new MyPageProfileEditResponse(savedMember.getNickname(), savedMember.getPicture());
-    }
-
-    public MyPagePlanResponse savedPlan(final LoginMember loginMember, final PlanSortBy sortBy) {
-
-        List<MyPagePlanDto> plans = new ArrayList<>();
-        switch (sortBy){
-            case RECENT -> plans
-                    = getPlansByRecent(loginMember, PlanStatus.SAVED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
-            case UPCOMING -> plans
-                    = getPlansByUpcoming(loginMember, PlanStatus.SAVED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
-        }
-
-        return new MyPagePlanResponse(plans);
-    }
-
-    public MyPagePlanResponse sharedPlan(final LoginMember loginMember,
-                                         final PlanSortBy sortBy) {
-
-        List<MyPagePlanDto> plans = new ArrayList<>();
-        switch (sortBy){
-            case RECENT -> plans
-                    = getPlansByRecent(loginMember, PlanStatus.SHARED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
-            case UPCOMING -> plans
-                    = getPlansByUpcoming(loginMember, PlanStatus.SHARED, PLAN_DEFAULT_PAGE, PLAN_MAX_PAGE_SIZE);
-        }
-
-        return new MyPagePlanResponse(plans);
     }
 
     public MyPagePlansResponse savedPlans(final LoginMember loginMember, final PlanSortBy sortBy,

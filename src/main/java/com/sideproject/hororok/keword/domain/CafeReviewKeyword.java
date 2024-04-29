@@ -31,5 +31,12 @@ public class CafeReviewKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
+    protected CafeReviewKeyword() {
+    }
 
+    public CafeReviewKeyword(final Cafe cafe, final Review review, final Keyword keyword) {
+        this.cafe = cafe;
+        this.review = review;
+        this.keyword = keyword;
+    }
 }

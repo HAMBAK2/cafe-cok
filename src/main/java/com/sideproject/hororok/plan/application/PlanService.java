@@ -56,7 +56,7 @@ public class PlanService {
     public CreatePlanResponse plan(CreatePlanRequest request) {
 
         List<Cafe> filteredCafes = new ArrayList<>();
-        CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywordsByKeywordNames(request.getKeywords());
+        CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywords(request.getKeywords());
         if(categoryKeywords.getPurpose().isEmpty()) throw new NoSuchPlanKeywordException();
 
         Boolean isMismatch = isMismatchPlan(request, filteredCafes);

@@ -6,6 +6,7 @@ import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.member.application.MyPageService;
 import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
+import com.sideproject.hororok.review.application.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final ReviewService reviewService;
 
     @GetMapping("/profile")
     @Operation(summary = "마이페이지 상단의 사용자 프로필을 나타냄")
@@ -36,32 +38,12 @@ public class MyPageController {
     @PostMapping(value = "/profile/edit",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "프로필 수정")
-    public ResponseEntity<MyPageProfileEditResponse> profileEdit(
+    public ResponseEntity<MyPageProfileEditResponse> editProfile(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestParam("nickname") String nickname) throws IOException {
 
-        MyPageProfileEditResponse response = myPageService.profileEdit(loginMember, nickname, file);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/saved/plan")
-    @Operation(summary = "계획 탭의 저장된 계획을 나타내는 API")
-    public ResponseEntity<MyPagePlanResponse> savedPlan(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
-
-        MyPagePlanResponse response = myPageService.savedPlan(loginMember, sortBy);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/shared/plan")
-    @Operation(summary = "계획 탭의 공유된 계획을 나타내는 API")
-    public ResponseEntity<MyPagePlanResponse> sharedPlan(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
-
-        MyPagePlanResponse response = myPageService.sharedPlan(loginMember, sortBy);
+        MyPageProfileEditResponse response = myPageService.editProfile(loginMember, nickname, file);
         return ResponseEntity.ok(response);
     }
 
@@ -98,4 +80,11 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/reviews")
+    @Operation(summary = "마이페이지 리뷰탭을 눌렀을 때 동작")
+    public ResponseEntity<MyPageReviewResponse> reviews(@AuthenticationPrincipal LoginMember loginMember) {
+
+        MyPageReviewResponse response = reviewService.getMyPageReviews(loginMember);
+        return ResponseEntity.ok(response);
+    }
 }

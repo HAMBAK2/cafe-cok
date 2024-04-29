@@ -3,18 +3,21 @@ package com.sideproject.hororok.member.domain;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import com.sideproject.hororok.member.domain.enums.SocialType;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
+import com.sideproject.hororok.utils.Constants;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.sideproject.hororok.utils.Constants.*;
+
 @Getter
 @Table(name = "members")
 @Entity
 public class Member extends BaseEntity {
 
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-z0-9._-]+@[a-z]+[.]+[a-z]{2,3}$");
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +27,7 @@ public class Member extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "picture", nullable = false)
+    @Column(name = "picture")
     private String picture;
 
     @Column(name = "nickname")
@@ -40,13 +43,11 @@ public class Member extends BaseEntity {
 
     public Member(final String email,
                   final String nickname,
-                  final String picture,
                   final SocialType socialType) {
         validateEmail(email);
 
         this.email = email;
         this.nickname = nickname;
-        this.picture = picture;
         this.socialType = socialType;
     }
 

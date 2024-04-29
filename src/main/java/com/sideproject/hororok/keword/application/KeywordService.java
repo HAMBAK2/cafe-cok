@@ -39,14 +39,21 @@ public class KeywordService {
         return new CategoryKeywordsDto(keywords);
     }
 
-    public CategoryKeywordsDto getCategoryKeywordsByKeywordNames(List<String> keywordNames) {
+    public CategoryKeywordsDto getCategoryKeywords(final List<String> keywordNames) {
 
         List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
         return new CategoryKeywordsDto(keywords);
     }
 
-    public List<KeywordDto> getKeywordsByKeywordNames(List<String> keywordNames) {
-        List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
+
+    public CategoryKeywordsDto getCategoryKeywords(final Long reviewId) {
+
+        List<Keyword> keywords = keywordRepository.findByReviewId(reviewId);
+        return new CategoryKeywordsDto(keywords);
+    }
+
+    public List<KeywordDto> getKeywordDtosByReviewId(final Long reviewId) {
+        List<Keyword> keywords = keywordRepository.findByReviewId(reviewId);
         return KeywordDto.fromList(keywords);
     }
 
