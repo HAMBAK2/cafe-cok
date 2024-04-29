@@ -9,7 +9,7 @@
 ==== Request Header
 include::{snippets}/review/create/success/request-headers.adoc[]
 ==== Http request
-include::{snippets}/myPage/profile/success/http-request.adoc[]
+include::{snippets}/review/create/success/http-request.adoc[]
 ==== Request parts
 include::{snippets}/review/create/success/request-parts.adoc[]
 ==== Request part(Request fields)
@@ -19,3 +19,15 @@ include::{snippets}/review/create/success/request-part-request-fields.adoc[]
 include::{snippets}/review/create/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/review/create/success/response-fields.adoc[]
+
+=== 5-1. 리뷰 삭제(DELETE) - 성공
+==== Request Header
+include::{snippets}/review/delete/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/review/delete/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/review/delete/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/review/delete/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/delete/success/response-fields.adoc[]

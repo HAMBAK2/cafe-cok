@@ -2,21 +2,25 @@ package com.sideproject.hororok.review.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
+import com.sideproject.hororok.member.dto.response.MyPageProfileEditResponse;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
+import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_생성_요청;
-import static com.sideproject.hororok.common.fixtures.ReviewFixtures.리뷰_생성_응답;
+import static com.sideproject.hororok.common.fixtures.MemberFixtures.맴버_닉네임;
+import static com.sideproject.hororok.common.fixtures.MyPageFixtures.마이페이지_프로필_수정_응답;
+import static com.sideproject.hororok.common.fixtures.ReviewFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -27,6 +31,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,6 +84,31 @@ class ReviewControllerTest extends ControllerTest {
 
         verify(reviewService, times(1))
                 .createReview(any(ReviewCreateRequest.class), any(LoginMember.class), eq(files));
+    }
+
+    @Test
+    @DisplayName("리뷰 삭제 기능 - 성공")
+    public void test_review_delete_success() throws Exception{
+
+
+        ReviewDeleteResponse response = 리뷰_삭제_응답();
+        when(reviewService.delete(any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/api/review/{reviewId}/delete", 리뷰_ID)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andDo(print())
+                .andDo(document("review/delete/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(parameterWithName("reviewId").description("삭제할 리뷰의 ID")),
+                        responseFields(fieldWithPath("reviewId").description("삭제된 폴더 ID"))))
+                .andExpect(status().isOk());
+
+        verify(reviewService, times(1)).delete(any(Long.class));
     }
 
 

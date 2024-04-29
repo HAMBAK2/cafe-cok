@@ -6,6 +6,7 @@ import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
+import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -60,6 +61,10 @@ public class ReviewFixtures {
 
     public static ReviewCreateResponse 리뷰_생성_응답() {
         return new ReviewCreateResponse(리뷰_ID);
+    }
+
+    public static ReviewDeleteResponse 리뷰_삭제_응답() {
+        return new ReviewDeleteResponse(리뷰_ID);
     }
 
     public static Review setReviewId(Review review, final Long id) {
