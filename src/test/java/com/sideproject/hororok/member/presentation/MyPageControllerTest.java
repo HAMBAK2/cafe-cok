@@ -235,4 +235,42 @@ class MyPageControllerTest extends ControllerTest {
                                         .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"))))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("마이페이지 리뷰 탭을 눌렀을 때 동작하는 기능")
+    public void test_my_page_reviews_success() throws Exception{
+
+        MyPageReviewResponse response = 마이페이지_리뷰_리스트_응답();
+        when(reviewService.getMyPageReviews(any(LoginMember.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/reviews")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/reviews/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(
+                                fieldWithPath("reviews").type(JsonFieldType.ARRAY).description("리뷰의 리스트"),
+                                fieldWithPath("reviews[].cafeId").description("카페 ID"),
+                                fieldWithPath("reviews[].cafeName").description("카페 이름"),
+                                fieldWithPath("reviews[].reviewId").description("리뷰 ID"),
+                                fieldWithPath("reviews[].starRating").description("리뷰 별점"),
+                                fieldWithPath("reviews[].content").description("리뷰 내용"),
+                                fieldWithPath("reviews[].specialNote").description("리뷰 특이사항"),
+                                fieldWithPath("reviews[].images").type(JsonFieldType.ARRAY).description("리뷰의 이미지 리스트"),
+                                fieldWithPath("reviews[].images[].id").description("리뷰 이미지 ID"),
+                                fieldWithPath("reviews[].images[].imageUrl").description("리뷰 이미지 URL"),
+                                fieldWithPath("reviews[].keywords").type(JsonFieldType.ARRAY).description("리뷰의 키워드 리스트"),
+                                fieldWithPath("reviews[].keywords[].id").description("리뷰 키워드 ID"),
+                                fieldWithPath("reviews[].keywords[].category").description("리뷰 키워드 카테고리"),
+                                fieldWithPath("reviews[].keywords[].name").description("리뷰 키워드 이름"))))
+                .andExpect(status().isOk());
+
+    }
 }

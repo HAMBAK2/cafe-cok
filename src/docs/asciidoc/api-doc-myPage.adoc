@@ -75,4 +75,14 @@ include::{snippets}/myPage/profile/edit/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/profile/edit/success/response-fields.adoc[]
 
+=== 4-9. 마이페이지 리뷰 탭 선택 시 - 성공
+==== Request Header
+include::{snippets}/myPage/reviews/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/reviews/success/http-request.adoc[]
+==== Http Response
+include::{snippets}/myPage/reviews/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/reviews/success/response-fields.adoc[]
+
 === link:api-docs.html[API 목록으로]

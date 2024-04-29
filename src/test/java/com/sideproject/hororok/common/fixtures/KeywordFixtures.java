@@ -31,6 +31,10 @@ public class KeywordFixtures {
         return KeywordDto.from(키워드());
     }
 
+    public static List<KeywordDto> 키워드_DTO_리스트() {
+        return Arrays.asList(키워드_DTO());
+    }
+
     public static Keyword setId(Keyword keyword, final Long id) {
 
         try {

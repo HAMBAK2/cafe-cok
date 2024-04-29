@@ -44,6 +44,16 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
+
+    public Review(final String content, final String specialNote, final Integer starRating,
+                  final Cafe cafe, final Member member) {
+        this.content = content;
+        this.specialNote = specialNote;
+        this.starRating = starRating;
+        this.cafe = cafe;
+        this.member = member;
+    }
+
     public void changeContent(String content) {
         this.content = content;
     }

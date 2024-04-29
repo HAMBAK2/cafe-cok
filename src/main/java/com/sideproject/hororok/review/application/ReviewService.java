@@ -11,7 +11,6 @@ import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
-import com.sideproject.hororok.utils.S3.component.S3Uploader;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
@@ -54,17 +53,12 @@ public class ReviewService {
     @Transactional
     public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) {
 
-        Review review = new Review();
-        review.setContent(request.getContent());
-        review.setSpecialNote(request.getSpecialNote());
-        review.setStarRating(request.getStarRating());
+        Cafe findCafe = cafeRepository.getById(request.getCafeId());
+        findCafe.addReviewCountAndCalculateStarRating(request.getStarRating());
+        Member findMember = memberRepository.getById(userId);
 
-        Cafe cafe = cafeRepository.getById(request.getCafeId());
-        cafe.addReviewCountAndCalculateStarRating(review.getStarRating());
-        review.setCafe(cafe);
-
-        Member member = memberRepository.getById(userId);
-        review.setMember(member);
+        Review review =
+                new Review(request.getContent(), request.getSpecialNote(), request.getStarRating(), findCafe, findMember);
         Review savedReview = reviewRepository.save(review);
 
         cafeReviewKeywordService.saveByReviewAndKeywordNames(savedReview, request.getKeywords());
