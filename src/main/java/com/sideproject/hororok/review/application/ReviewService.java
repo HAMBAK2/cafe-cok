@@ -2,6 +2,7 @@ package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.keword.application.CafeReviewKeywordService;
+import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
@@ -14,14 +15,12 @@ import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
-import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.review.domain.*;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
-import com.sideproject.hororok.review.dto.ReviewDetailDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
@@ -48,6 +47,7 @@ public class ReviewService {
     private final ReviewImageRepository reviewImageRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
+    private final KeywordService keywordService;
     private final ReviewImageService reviewImageService;
     private final CafeReviewKeywordService cafeReviewKeywordService;
 
@@ -69,42 +69,16 @@ public class ReviewService {
         return new ReviewCreateResponse(savedReview.getId());
     }
 
-    public List<ReviewDetailDto> findReviewByCafeId(Long cafeId){
+    public List<ReviewDetailResponse> getReviewDetailResponses(Long cafeId){
 
         List<Review> reviews = reviewRepository.findByCafeId(cafeId);
-        List<ReviewDetailDto> reviewDetailDtos = new ArrayList<>();
+        List<ReviewDetailResponse> reviewDetailResponses = new ArrayList<>();
         for (Review review : reviews) {
-
-            List<CafeReviewKeyword> cafeReviewKeywords = cafeReviewKeywordRepository.findByReviewId(review.getId());
-            List<KeywordDto> keywords = cafeReviewKeywords.stream()
-                    .map(cafeReviewKeyword -> KeywordDto.from(cafeReviewKeyword.getKeyword()))
-                    .collect(Collectors.toList());
-            List<ReviewImage> reviewImages = reviewImageRepository.findByReviewId(review.getId());
-            List<ReviewImageDto> reviewImageDtos = reviewImages.stream()
-                    .map(ReviewImageDto::from)
-                    .collect(Collectors.toList());
-
-
-            reviewDetailDtos.add(ReviewDetailDto.of(review, reviewImageDtos, keywords));
+            CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywords(review.getId());
+            List<ReviewImageDto> images = reviewImageService.getReviewImageDtosByReviewId(review.getId());
+            reviewDetailResponses.add(ReviewDetailResponse.of(review, images, categoryKeywords));
         }
-
-        return reviewDetailDtos;
-    }
-
-    public List<ReviewImage> findReviewImagesByCafeId(Long cafeId) {
-        return reviewRepository.findReviewImagesByCafeId(cafeId);
-    }
-
-    
-    public List<String> getReviewImageUrlsByCafeId(Long cafeId) {
-
-        List<ReviewImage> reviewImagesByCafeId = findReviewImagesByCafeId(cafeId);
-        List<String> reviewImageUrls = new ArrayList<>();
-        for (ReviewImage reviewImage : reviewImagesByCafeId) {
-            reviewImageUrls.add(reviewImage.getImageUrl());
-        }
-
-        return reviewImageUrls;
+        return reviewDetailResponses;
     }
 
     public MyPageReviewResponse getMyPageReviews(final LoginMember loginMember) {

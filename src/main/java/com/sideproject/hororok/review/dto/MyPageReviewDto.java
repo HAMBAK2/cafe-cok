@@ -1,6 +1,5 @@
 package com.sideproject.hororok.review.dto;
 
-import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.domain.Review;
 import lombok.Builder;

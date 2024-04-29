@@ -22,7 +22,6 @@ public class ReviewDetailResponse {
     private List<ReviewImageDto> images;
     private CategoryKeywordsDto categoryKeywords;
 
-
     public static ReviewDetailResponse of(
             final Review review, final List<ReviewImageDto> images, final CategoryKeywordsDto categoryKeywords) {
 

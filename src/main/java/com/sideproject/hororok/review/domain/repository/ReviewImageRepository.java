@@ -20,5 +20,17 @@ public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> 
             "WHERE ri.id IN (:ids)")
     List<String> findImageUrlByIdIn(List<Long> ids);
 
+    @Query("SELECT ri.imageUrl FROM Review r " +
+            "JOIN r.cafe c " +
+            "JOIN ReviewImage ri ON r.id = ri.review.id " +
+            "WHERE c.id = :cafeId ")
+    List<String> findImageUrlByCafeId(final Long cafeId);
+
+    @Query("SELECT ri FROM Review r " +
+            "JOIN r.cafe c " +
+            "JOIN ReviewImage ri ON r.id = ri.review.id " +
+            "WHERE c.id = :cafeId ")
+    List<ReviewImage> findByCafeId(Long cafeId);
+
 
 }

@@ -2,7 +2,6 @@ package com.sideproject.hororok.review.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
-import com.sideproject.hororok.member.dto.response.MyPageProfileEditResponse;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
@@ -21,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.sideproject.hororok.common.fixtures.MemberFixtures.맴버_닉네임;
-import static com.sideproject.hororok.common.fixtures.MyPageFixtures.마이페이지_프로필_수정_응답;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,7 +31,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
