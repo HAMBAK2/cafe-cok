@@ -1,16 +1,14 @@
 package com.sideproject.hororok.keword.application;
 
-import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.keword.dto.KeywordCount;
+import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,15 +21,15 @@ public class KeywordService {
     private final Integer USER_CHOICE_KEYWORD_CNT = 6;
 
 
-    public List<KeywordCount> getUserChoiceKeywordCounts(Long cafeId) {
-        List<KeywordCount> allCafeKeywordCounts
+    public List<KeywordCountDto> getUserChoiceKeywordCounts(Long cafeId) {
+        List<KeywordCountDto> allCafeKeywordCountDtos
                 = keywordRepository.findKeywordCountsByCafeId(cafeId);
 
-        if (allCafeKeywordCounts != null && allCafeKeywordCounts.size() > USER_CHOICE_KEYWORD_CNT) {
-            allCafeKeywordCounts = allCafeKeywordCounts.subList(0, USER_CHOICE_KEYWORD_CNT);
+        if (allCafeKeywordCountDtos != null && allCafeKeywordCountDtos.size() > USER_CHOICE_KEYWORD_CNT) {
+            allCafeKeywordCountDtos = allCafeKeywordCountDtos.subList(0, USER_CHOICE_KEYWORD_CNT);
         }
 
-        return allCafeKeywordCounts;
+        return allCafeKeywordCountDtos;
     }
 
     public CategoryKeywordsDto getAllCategoryKeywords() {

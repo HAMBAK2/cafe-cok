@@ -14,7 +14,8 @@ public class Constants {
     public static final String URL_DECODER_DECODE_ENC = "UTF-8";
 
     public static final Integer RECOMMEND_MENU_MAX_CNT = 3;
-    
+
+    public static final Integer CAFE_DETAIL_TOP_KEYWORD_MAX_CNT = 3;
 
 
 }

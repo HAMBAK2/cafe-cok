@@ -45,6 +45,18 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{cafeId}/top")
+    @Operation(summary = "해당하는 카페의 상세 정보를 보여주는 기능")
+    public ResponseEntity<CafeDetailTopResponse> detailTop(
+            @Parameter(description = "카페의 ID")
+            @PathVariable Long cafeId){
+
+        CafeDetailTopResponse response = cafeService.detailTop(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+
+
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     

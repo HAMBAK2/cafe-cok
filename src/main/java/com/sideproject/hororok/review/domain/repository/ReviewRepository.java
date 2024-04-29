@@ -18,6 +18,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT COUNT (r) FROM Review r WHERE r.member.id = :memberId")
     Long countReviewsByMemberId(Long memberId);
 
+    @Query("SELECT COUNT (r) " +
+            "FROM Review r " +
+            "WHERE r.cafe.id = :cafeId")
+    Long countReviewByCafeId(final Long cafeId);
+
     default Review getById(Long reviewId) {
         return findById(reviewId)
                 .orElseThrow(NoSuchReviewException::new);

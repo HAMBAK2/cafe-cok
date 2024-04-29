@@ -4,17 +4,15 @@ import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
-import com.sideproject.hororok.cafe.dto.response.CafeFindAgainResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeFindBarResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeFindCategoryResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeHomeResponse;
+import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.keword.dto.KeywordCount;
+import com.sideproject.hororok.keword.dto.KeywordCountDto;
+import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.menu.application.MenuService;
 import com.sideproject.hororok.cafe.dto.*;
@@ -24,9 +22,11 @@ import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
+import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
-import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -37,6 +37,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sideproject.hororok.utils.Constants.CAFE_DETAIL_TOP_KEYWORD_MAX_CNT;
 import static com.sideproject.hororok.utils.GeometricUtils.*;
 
 @Service
@@ -46,6 +47,7 @@ public class CafeService {
 
     private final KeywordRepository keywordRepository;
     private final CafeImageRepository cafeImageRepository;
+    private final ReviewRepository reviewRepository;
     private final OperationHourRepository operationHourRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
@@ -128,6 +130,15 @@ public class CafeService {
                 .build();
     }
 
+    public CafeDetailTopResponse detailTop(final Long cafeId) {
+        Cafe findCafe = cafeRepository.getById(cafeId);
+        Long reviewCount = reviewRepository.countReviewByCafeId(cafeId);
+        List<KeywordDto> findKeywordDtos = KeywordDto.fromList(keywordRepository
+                .findKeywordsByCafeIdOrderByCountDesc(cafeId,
+                        PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT)));
+
+        return CafeDetailTopResponse.of(findCafe, reviewCount, findKeywordDtos);
+    }
     
     public CafeDetail findCafeDetailByCafeId(Long cafeId){
 
@@ -138,7 +149,7 @@ public class CafeService {
         List<String> reviewImageUrls = reviewImageService.getReviewImageUrlsByCafeId(cafeId);
 
         //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
-        List<KeywordCount> KeywordCounts = keywordService.getUserChoiceKeywordCounts(cafeId);
+        List<KeywordCountDto> keywordCountDtos = keywordService.getUserChoiceKeywordCounts(cafeId);
 
         addReviewImageUrlsToCafeImageUrls(cafeImageUrls, reviewImageUrls);
 
@@ -148,7 +159,7 @@ public class CafeService {
 
         return new CafeDetail(
                 cafe, menus, openStatus, businessHours, closedDay,
-                reviewImageUrls, reviews, KeywordCounts, cafeImageUrls);
+                reviewImageUrls, reviews, keywordCountDtos, cafeImageUrls);
     }
 
     
