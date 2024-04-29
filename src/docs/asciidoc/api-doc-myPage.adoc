@@ -1,4 +1,4 @@
-= Plan API
+= MyPage API
 :toc: left
 :toclevels: 2
 :source-highlighter: highlightjs

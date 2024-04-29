@@ -1,0 +1,16 @@
+= Cafe API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 6. 카페
+
+=== 6-1. 카페 상세정보 상단(GET) - 성공
+==== Http request
+include::{snippets}/cafe/detail/top/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/cafe/detail/top/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/cafe/detail/top/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/cafe/detail/top/success/response-fields.adoc[]
