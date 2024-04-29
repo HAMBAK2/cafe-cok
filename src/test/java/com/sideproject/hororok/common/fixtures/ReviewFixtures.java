@@ -4,12 +4,16 @@ import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.review.dto.ReviewImageDto;
+import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페;
+import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페_아이디;
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_이름_리스트;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 
 public class ReviewFixtures {
@@ -48,6 +52,14 @@ public class ReviewFixtures {
 
     public static List<ReviewImageDto> 리뷰_이미지_DTO_리스트() {
         return Arrays.asList(리뷰_이미지_DTO());
+    }
+
+    public static ReviewCreateRequest 리뷰_생성_요청() {
+        return new ReviewCreateRequest(카페_아이디, 리뷰_내용, 리뷰_특이사항, 키워드_이름_리스트,리뷰_별점);
+    }
+
+    public static ReviewCreateResponse 리뷰_생성_응답() {
+        return new ReviewCreateResponse(리뷰_ID);
     }
 
     public static Review setReviewId(Review review, final Long id) {

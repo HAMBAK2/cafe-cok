@@ -1,0 +1,21 @@
+= Plan API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 5. 리뷰
+
+=== 5-1. 리뷰 생성(POST) - 성공
+==== Request Header
+include::{snippets}/review/create/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/profile/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/review/create/success/request-parts.adoc[]
+==== Request part(Request fields)
+===== 리뷰 요청 객체(request)에 대한 상세 명세
+include::{snippets}/review/create/success/request-part-request-fields.adoc[]
+==== Http Response
+include::{snippets}/review/create/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/review/create/success/response-fields.adoc[]

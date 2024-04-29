@@ -14,6 +14,7 @@ import com.sideproject.hororok.member.presentation.MyPageController;
 import com.sideproject.hororok.plan.application.PlanService;
 import com.sideproject.hororok.plan.presentation.PlanController;
 import com.sideproject.hororok.review.application.ReviewService;
+import com.sideproject.hororok.review.presentation.ReviewController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         BookmarkFolderController.class,
         BookmarkController.class,
         PlanController.class,
-        MyPageController.class
+        MyPageController.class,
+        ReviewController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)

@@ -6,6 +6,7 @@ import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
+import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
@@ -33,16 +34,15 @@ public class ReviewController {
     @PostMapping(value = "/review/create",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "리뷰 작성 기능")
-    public ResponseEntity<Void> createReview(
+    public ResponseEntity<ReviewCreateResponse> createReview(
             @AuthenticationPrincipal LoginMember loginMember,
             @Parameter(description = "사진을 제외한 Review의 정보를 담은 객체")
             @RequestPart ReviewCreateRequest request,
             @Parameter(description = "사용자가 업로드한 이미지 파일들")
-            @RequestPart(value = "files", required = false) List<MultipartFile> files
-        ) throws IOException {
+            @RequestPart(value = "files", required = false) List<MultipartFile> files){
 
-        reviewService.createReview(request, loginMember.getId(), files);
-        return ResponseEntity.noContent().build();
+        ReviewCreateResponse response = reviewService.createReview(request, loginMember, files);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/review/{reviewId}/delete")

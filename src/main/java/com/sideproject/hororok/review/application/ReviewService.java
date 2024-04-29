@@ -8,6 +8,7 @@ import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
 import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
+import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
 import com.sideproject.hororok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditGetResponse;
 import com.sideproject.hororok.review.dto.response.ReviewEditPatchResponse;
@@ -51,11 +52,12 @@ public class ReviewService {
     private final CafeReviewKeywordService cafeReviewKeywordService;
 
     @Transactional
-    public void createReview(ReviewCreateRequest request, Long userId, List<MultipartFile> files) {
+    public ReviewCreateResponse createReview(
+            final ReviewCreateRequest request, final LoginMember loginMember, final List<MultipartFile> files) {
 
         Cafe findCafe = cafeRepository.getById(request.getCafeId());
         findCafe.addReviewCountAndCalculateStarRating(request.getStarRating());
-        Member findMember = memberRepository.getById(userId);
+        Member findMember = memberRepository.getById(loginMember.getId());
 
         Review review =
                 new Review(request.getContent(), request.getSpecialNote(), request.getStarRating(), findCafe, findMember);
@@ -63,6 +65,8 @@ public class ReviewService {
 
         cafeReviewKeywordService.saveByReviewAndKeywordNames(savedReview, request.getKeywords());
         reviewImageService.saveByReviewAndMultipartFiles(savedReview, files);
+
+        return new ReviewCreateResponse(savedReview.getId());
     }
 
     public List<ReviewDetailDto> findReviewByCafeId(Long cafeId){
