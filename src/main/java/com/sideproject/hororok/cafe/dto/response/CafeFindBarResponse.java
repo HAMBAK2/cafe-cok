@@ -5,6 +5,7 @@ import com.sideproject.hororok.cafe.dto.WithinRadiusCafeDto;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.menu.dto.MenuDto;
+import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +38,7 @@ public class CafeFindBarResponse {
     private final List<String> cafeImageUrls;
     private final List<String> reviewImageUrls;
     private final List<MenuDto> menus;
-    private final List<ReviewDetailResponse> reviews;
+    private final List<CafeDetailReviewDto> reviews;
     private final List<KeywordCount> cafeKeywords;
 
     public static CafeFindBarResponse notExistOf(List<WithinRadiusCafeDto> cafes,

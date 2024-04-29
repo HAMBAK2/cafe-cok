@@ -4,6 +4,7 @@ import com.sideproject.hororok.keword.dto.KeywordCount;
 import com.sideproject.hororok.menu.dto.MenuDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
+import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.*;
 
@@ -28,12 +29,12 @@ public class CafeDetail {
     private final List<String> cafeImageUrls;
     private final List<MenuDto> menus;
     private final List<String> reviewImageUrls;
-    private final List<ReviewDetailResponse> reviews;
+    private final List<CafeDetailReviewDto> reviews;
     private final List<KeywordCount> cafeKeywords;
 
     public CafeDetail(final Cafe cafe, final List<MenuDto> menus, final OpenStatus openStatus,
                       final List<String> businessHours, final List<String> closedDay,
-                      final List<String> reviewImageUrls, final List<ReviewDetailResponse> reviews,
+                      final List<String> reviewImageUrls, final List<CafeDetailReviewDto> reviews,
                       final List<KeywordCount> cafeKeywords, final List<String> cafeImageUrls) {
 
         this.id = cafe.getId();

@@ -7,6 +7,7 @@ import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
 import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
+import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
@@ -79,6 +80,17 @@ public class ReviewService {
             reviewDetailResponses.add(ReviewDetailResponse.of(review, images, categoryKeywords));
         }
         return reviewDetailResponses;
+    }
+
+    public List<CafeDetailReviewDto> getCafeDetailReviewDtosByCafeId(final Long cafeId) {
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId);
+        List<CafeDetailReviewDto> cafeDetailReviewDtos = new ArrayList<>();
+        for (Review review : reviews) {
+            List<KeywordDto> keywordDtos = keywordService.getKeywordDtosByReviewId(review.getId());
+            List<ReviewImageDto> images = reviewImageService.getReviewImageDtosByReviewId(review.getId());
+            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, images, keywordDtos));
+        }
+        return cafeDetailReviewDtos;
     }
 
     public MyPageReviewResponse getMyPageReviews(final LoginMember loginMember) {

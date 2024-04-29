@@ -24,6 +24,7 @@ import com.sideproject.hororok.review.application.ReviewImageService;
 import com.sideproject.hororok.review.domain.Review;
 import com.sideproject.hororok.review.application.ReviewService;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
+import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
 import com.sideproject.hororok.review.dto.response.ReviewDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -133,7 +134,7 @@ public class CafeService {
         Cafe cafe =  cafeRepository.getById(cafeId);
         List<MenuDto> menus = menuService.findByCafeId(cafeId);
         List<String> cafeImageUrls = cafeImageService.findCafeImageUrlsByCafeId(cafeId);
-        List<ReviewDetailResponse> reviews = reviewService.getReviewDetailResponses(cafeId);
+        List<CafeDetailReviewDto> reviews = reviewService.getCafeDetailReviewDtosByCafeId(cafeId);
         List<String> reviewImageUrls = reviewImageService.getReviewImageUrlsByCafeId(cafeId);
 
         //총 6개의 키워드를 뽑아내고 그 중 3개는 카페 키워드로 사용해야 함
