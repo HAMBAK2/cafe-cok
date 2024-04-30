@@ -47,6 +47,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafeId").description("카페 ID"),
                                 fieldWithPath("cafeName").description("카페 이름"),
                                 fieldWithPath("roadAddress").description("카페 도로명 주소"),
+                                fieldWithPath("latitude").description("카페 위도"),
+                                fieldWithPath("longitude").description("카페 경도"),
                                 fieldWithPath("starRating").description("카페 별점"),
                                 fieldWithPath("reviewCount").description("카페의 리뷰 개수"),
                                 fieldWithPath("keywords").type(JsonFieldType.ARRAY)

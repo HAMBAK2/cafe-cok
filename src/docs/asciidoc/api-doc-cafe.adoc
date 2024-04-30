@@ -14,3 +14,5 @@ include::{snippets}/cafe/detail/top/success/path-parameters.adoc[]
 include::{snippets}/cafe/detail/top/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/cafe/detail/top/success/response-fields.adoc[]
+
+=== link:api-docs.html[API 목록으로]

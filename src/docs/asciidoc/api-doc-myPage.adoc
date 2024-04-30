@@ -85,4 +85,14 @@ include::{snippets}/myPage/reviews/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/reviews/success/response-fields.adoc[]
 
+=== 4-10. 마이페이지 내 조합 선택 시 - 성공
+==== Request Header
+include::{snippets}/myPage/combination/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/combination/success/http-request.adoc[]
+==== Http Response
+include::{snippets}/myPage/combination/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/combination/success/response-fields.adoc[]
+
 === link:api-docs.html[API 목록으로]

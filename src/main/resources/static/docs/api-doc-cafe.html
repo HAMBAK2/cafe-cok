@@ -449,6 +449,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_6_카페">6. 카페</a>
 <ul class="sectlevel2">
 <li><a href="#_6_1_카페_상세정보_상단get_성공">6-1. 카페 상세정보 상단(GET) - 성공</a></li>
+<li><a href="#_api_목록으로">API 목록으로</a></li>
 </ul>
 </li>
 </ul>
@@ -502,12 +503,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 232
+Content-Length: 301
 
 {
   "cafeId" : 1,
   "cafeName" : "카페 이름",
   "roadAddress" : "OO시 OO구 OO동",
+  "latitude" : 97.02616257723552,
+  "longitude" : 77.20821885141424,
   "starRating" : 0.0,
   "reviewCount" : 2,
   "keywords" : [ {
@@ -551,6 +554,16 @@ Content-Length: 232
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 도로명 주소</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 경도</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>starRating</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 별점</p></td>
@@ -585,13 +598,17 @@ Content-Length: 232
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_api_목록으로"><a href="api-docs.html">API 목록으로</a></h3>
+
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-30 05:15:13 +0900
+Last updated 2024-04-30 15:25:13 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

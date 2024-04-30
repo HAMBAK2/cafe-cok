@@ -26,4 +26,13 @@ public class Combination {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "members_id")
     private Member member;
+
+    protected Combination() {
+    }
+
+    public Combination(final String name, final String icon, final Member member) {
+        this.name = name;
+        this.icon = icon;
+        this.member = member;
+    }
 }

@@ -58,3 +58,5 @@ include::{snippets}/review/edit/success/request-part-request-fields.adoc[]
 include::{snippets}/review/edit/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/review/edit/success/response-fields.adoc[]
+
+=== link:api-docs.html[API 목록으로]
