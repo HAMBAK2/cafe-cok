@@ -230,7 +230,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("similarCafes[].latitude").description("위도"),
                                 fieldWithPath("similarCafes[].starRating").description("별점"),
                                 fieldWithPath("similarCafes[].reviewCount").description("리뷰 수"),
-                                fieldWithPath("similarCafes[].image").description("카페 이미지 URL"),
+                                fieldWithPath("similarCafes[].imageUrl").description("카페 이미지 URL"),
                                 fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
                                         .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"))))
                 .andExpect(status().isOk());

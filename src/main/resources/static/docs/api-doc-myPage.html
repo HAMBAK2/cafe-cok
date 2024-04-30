@@ -750,7 +750,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 237
+Content-Length: 236
 
 {
   "page" : 1,
@@ -762,7 +762,7 @@ Content-Length: 237
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 30일 9시 0분"
+    "visitDateTime" : "5월 1일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -908,7 +908,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 237
+Content-Length: 236
 
 {
   "page" : 1,
@@ -920,7 +920,7 @@ Content-Length: 237
       "name" : "키워드 이름"
     },
     "location" : "위치 이름",
-    "visitDateTime" : "4월 30일 9시 0분"
+    "visitDateTime" : "5월 1일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1057,14 +1057,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 624
+Content-Length: 626
 
 {
   "planId" : 1,
   "matchType" : "SIMILAR",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "4월 30일 9시 0분",
+  "visitDateTime" : "5월 1일 9시 0분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -1078,11 +1078,11 @@ Content-Length: 624
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "longitude" : 66.70215171781972,
-    "latitude" : 15.995884818569703,
+    "longitude" : 76.03981619994468,
+    "latitude" : 11.967800514778485,
     "starRating" : 0.0,
     "reviewCount" : 0,
-    "image" : "//카페이미지"
+    "imageUrl" : "//카페이미지"
   } ]
 }</code></pre>
 </div>
@@ -1205,7 +1205,7 @@ Content-Length: 624
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].imageUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 이미지 URL</p></td>
 </tr>
@@ -1394,7 +1394,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 392
+Content-Length: 395
 
 {
   "reviews" : [ {
@@ -1405,7 +1405,7 @@ Content-Length: 392
     "content" : "리뷰 내용",
     "specialNote" : "리뷰 특이사항",
     "images" : [ {
-      "id" : 1,
+      "id" : null,
       "imageUrl" : "리뷰 이미지 URL"
     } ],
     "keywords" : [ {
@@ -1476,7 +1476,7 @@ Content-Length: 392
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 ID</p></td>
 </tr>
 <tr>

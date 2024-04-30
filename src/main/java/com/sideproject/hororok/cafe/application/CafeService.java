@@ -203,13 +203,12 @@ public class CafeService {
                 .findByCafeIdOrderByCreatedDateDesc(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_REVIEW_CNT));
         List<CafeDetailReviewDto> cafeDetailReviewDtos = new ArrayList<>();
         for (Review review : reviews) {
-            List<KeywordDto> keywordDtos =
-                    KeywordDto.fromList(keywordRepository
-                            .findByReviewIdAndCategory(review.getId(), Category.MENU,
-                                    PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT)));
+            List<String> recommendMenus = keywordRepository
+                            .findNameByReviewIdAndCategory(review.getId(), Category.MENU,
+                                    PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT));
             List<String> imageUrls = reviewImageRepository.findImageUrlsByCafeIdOrderByIdDesc(cafeId,
                             PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT));
-            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, imageUrls, keywordDtos));
+            cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, imageUrls, recommendMenus));
         }
         return cafeDetailReviewDtos;
     }

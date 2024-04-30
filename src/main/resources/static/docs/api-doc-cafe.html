@@ -503,16 +503,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 302
+Content-Length: 338
 
 {
   "cafeId" : 1,
   "cafeName" : "카페 이름",
   "roadAddress" : "OO시 OO구 OO동",
-  "latitude" : 15.995884818569703,
-  "longitude" : 66.70215171781972,
+  "latitude" : 11.967800514778485,
+  "longitude" : 76.03981619994468,
   "starRating" : 0.0,
   "reviewCount" : 2,
+  "imageUrl" : "//카페이미지",
   "keywords" : [ {
     "id" : 1,
     "category" : "PURPOSE",
@@ -572,6 +573,11 @@ Content-Length: 302
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviewCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페의 리뷰 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 대표 이미지 URL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>keywords</code></p></td>

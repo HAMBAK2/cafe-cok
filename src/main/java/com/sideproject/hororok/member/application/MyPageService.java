@@ -168,9 +168,6 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-
-
-
     private List<MyPagePlanDto> getPlansByRecent(final LoginMember loginMember,
                                                  final PlanStatus planStatus,
                                                  final Integer page, final Integer size) {
