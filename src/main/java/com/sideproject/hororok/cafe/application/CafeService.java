@@ -112,12 +112,13 @@ public class CafeService {
 
     public CafeDetailTopResponse detailTop(final Long cafeId) {
         Cafe findCafe = cafeRepository.getById(cafeId);
+        String imageUrl = cafeImageRepository.getOneImageUrlByCafeId(cafeId);
         Long reviewCount = reviewRepository.countReviewByCafeId(cafeId);
         List<KeywordDto> findKeywordDtos = KeywordDto.fromList(keywordRepository
                 .findKeywordsByCafeIdOrderByCountDesc(cafeId,
                         PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT)));
 
-        return CafeDetailTopResponse.of(findCafe, reviewCount, findKeywordDtos);
+        return CafeDetailTopResponse.of(findCafe, imageUrl, reviewCount, findKeywordDtos);
     }
 
     public CafeDetailBasicInfoResponse detailBasicInfo(final Long cafeId) {
