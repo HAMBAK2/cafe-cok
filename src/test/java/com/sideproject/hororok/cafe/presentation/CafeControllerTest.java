@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import java.math.BigDecimal;
+
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -17,6 +19,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -181,6 +184,43 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailImagesAll(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("특정 지점에서 카페를 재검색 하는 기능 - 성공")
+    public void test_cafe_find_again_success() throws Exception {
+
+        CafeFindAgainResponse response = 카페_지점_재검색_응답();
+
+        when(cafeService.findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/cafe/find/again")
+                                .param("latitude", 카페_위도.toString())
+                                .param("longitude", 카페_경도.toString())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/find/again/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("latitude").description("재검색 지점의 위도"),
+                                parameterWithName("longitude").description("재검색 지점의 경도")),
+                        responseFields(
+                                fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("반경(2km) 내 카페 리스트"),
+                                fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].name").description("카페 이름"),
+                                fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
+                                fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
+                                fieldWithPath("cafes[].latitude").description("카페 위도"),
+                                fieldWithPath("cafes[].longitude").description("카페 경도"),
+                                fieldWithPath("cafes[].starRating").description("카페 별점"),
+                                fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
+                                fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class));
     }
 
 

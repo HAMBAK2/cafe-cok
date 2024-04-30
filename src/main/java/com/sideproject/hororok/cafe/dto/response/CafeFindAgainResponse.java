@@ -11,12 +11,10 @@ import java.util.List;
 @Getter
 public class CafeFindAgainResponse {
 
-    private final boolean isExist;
     private final List<CafeDto> cafes;
 
     public static CafeFindAgainResponse from(List<CafeDto> cafes) {
         return CafeFindAgainResponse.builder()
-                .isExist(!cafes.isEmpty())
                 .cafes(cafes)
                 .build();
     }

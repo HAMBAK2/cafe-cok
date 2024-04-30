@@ -14,9 +14,9 @@ public class CafeDto {
     private String name;
     private String phoneNumber;
     private String roadAddress;
-    private BigDecimal longitude;
     private BigDecimal latitude;
-    private double starRating;
+    private BigDecimal longitude;
+    private Double starRating;
     private Long reviewCount;
     private String imageUrl;
 
