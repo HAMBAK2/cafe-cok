@@ -72,7 +72,7 @@ class BookmarkControllerTest extends ControllerTest {
         Long bookmarkId = 북마크_ID;
 
         mockMvc.perform(
-                        RestDocumentationRequestBuilders.delete("/api/bookmark/delete/{bookmarkId}", bookmarkId)
+                        RestDocumentationRequestBuilders.delete("/api/bookmark/{bookmarkId}/delete", bookmarkId)
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -84,7 +84,6 @@ class BookmarkControllerTest extends ControllerTest {
                                 headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
                         pathParameters(
                                 parameterWithName("bookmarkId").description("삭제할 북마크의 ID"))))
-
                 .andExpect(status().isNoContent());
 
 

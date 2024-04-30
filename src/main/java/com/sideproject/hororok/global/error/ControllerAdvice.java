@@ -6,11 +6,18 @@ import com.sideproject.hororok.cafe.exception.InvalidCafeException;
 import com.sideproject.hororok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
 import com.sideproject.hororok.bookmark.exception.NoSuchBookmarkException;
 import com.sideproject.hororok.bookmark.exception.NoSuchFolderException;
+import com.sideproject.hororok.cafe.exception.NoSuchCafeException;
+import com.sideproject.hororok.cafe.exception.NoSuchCafeImageException;
+import com.sideproject.hororok.cafe.exception.NoSuchCategoryException;
+import com.sideproject.hororok.combination.exception.NoSuchCombinationException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
+import com.sideproject.hororok.keword.exception.NoSuchKeywordException;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
 import com.sideproject.hororok.member.exception.NoSuchMemberException;
+import com.sideproject.hororok.plan.exception.NoSuchPlanException;
 import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
+import com.sideproject.hororok.review.exception.NoSuchReviewException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,14 +92,13 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchBookmarkException.class,
-            NoSuchFolderException.class,
-            NoSuchMemberException.class,
-            NoSuchTokenException.class,
-            NoSuchOAuthTokenException.class,
-            NoResourceFoundException.class,
-            NoSuchPlanKeywordException.class
-    })
+            NoSuchCafeException.class, NoSuchTokenException.class,
+            NoSuchFolderException.class, NoSuchFolderException.class,
+            NoSuchMemberException.class, NoSuchCategoryException.class,
+            NoSuchBookmarkException.class, NoResourceFoundException.class,
+            NoSuchCafeImageException.class, NoSuchOAuthTokenException.class,
+            NoSuchPlanKeywordException.class, NoSuchCombinationException.class,
+            NoSuchKeywordException.class, NoSuchPlanException.class, NoSuchReviewException.class})
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
