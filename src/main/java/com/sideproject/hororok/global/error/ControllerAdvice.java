@@ -34,8 +34,6 @@ public class ControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(ControllerAdvice.class);
     private static final String INVALID_DTO_FIELD_ERROR_MESSAGE_FORMAT = "%s 필드는 %s (전달된 값: %s)";
 
-
-
     @ExceptionHandler({
             InvalidMemberException.class,
             InvalidCafeException.class
@@ -45,11 +43,11 @@ public class ControllerAdvice {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
-//        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
-//        return ResponseEntity.badRequest().body(errorResponse);
-//    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
+        ErrorResponse errorResponse = new ErrorResponse("잘못된 형식의 Request Body 입니다.");
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleInvalidDtoField(final MethodArgumentNotValidException e) {

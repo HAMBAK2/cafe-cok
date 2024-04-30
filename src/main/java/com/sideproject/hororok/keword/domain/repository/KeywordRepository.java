@@ -74,5 +74,10 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
     List<Keyword> findByNameIn(List<String> keywordNames);
 
+    @Query("SELECT k " +
+            "FROM Keyword k " +
+                "JOIN PlanKeyword pk ON k.id = pk.keyword.id " +
+            "WHERE pk.id = :planId")
+    List<Keyword> findKeywordByPlanId(final Long planId);
 
 }
