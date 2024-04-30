@@ -58,7 +58,7 @@ include::{snippets}/cafe/detail/images/all/success/http-response.adoc[]
 include::{snippets}/cafe/detail/images/all/success/response-fields.adoc[]
 
 
-=== 6-5. 카페_이 지역에서 재검색 (GET) - 성공
+=== 6-6. 카페_이 지역에서 재검색 (GET) - 성공
 ==== Http request
 include::{snippets}/cafe/find/again/success/http-request.adoc[]
 ==== Query parameters
@@ -67,5 +67,15 @@ include::{snippets}/cafe/find/again/success/query-parameters.adoc[]
 include::{snippets}/cafe/find/again/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/cafe/find/again/success/response-fields.adoc[]
+
+=== 6-6. 카페_검색창 검색 (GET) - 성공
+==== Http request
+include::{snippets}/cafe/find/bar/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/cafe/find/bar/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/cafe/find/bar/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/cafe/find/bar/success/response-fields.adoc[]
 
 === link:api-docs.html[API 목록으로]

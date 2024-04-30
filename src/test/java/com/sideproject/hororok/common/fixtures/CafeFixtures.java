@@ -37,6 +37,10 @@ public class CafeFixtures {
     public static final Boolean 다음_페이지_존재_여부 = true;
 
 
+    public static CafeFindBarResponse 카페_검색창_검색_응답() {
+        return CafeFindBarResponse.from(카페_DTO_리스트());
+    }
+
     public static CafeFindAgainResponse 카페_지점_재검색_응답() {
         return CafeFindAgainResponse.from(카페_DTO_리스트());
     }

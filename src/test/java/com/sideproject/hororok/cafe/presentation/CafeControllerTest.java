@@ -194,12 +194,11 @@ class CafeControllerTest extends ControllerTest {
 
         when(cafeService.findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
 
-        mockMvc.perform(
-                        get("/api/cafe/find/again")
-                                .param("latitude", 카페_위도.toString())
-                                .param("longitude", 카페_경도.toString())
-                                .accept(MediaType.APPLICATION_JSON)
-                                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/cafe/find/again")
+                        .param("latitude", 카페_위도.toString())
+                        .param("longitude", 카페_경도.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("cafe/find/again/success",
                         preprocessRequest(prettyPrint()),
@@ -221,6 +220,43 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class));
+    }
+
+    @Test
+    @DisplayName("검색창에서 카페를 검색 하는 기능 - 성공")
+    public void test_cafe_find_bar_success() throws Exception {
+
+        CafeFindBarResponse response = 카페_검색창_검색_응답();
+
+        when(cafeService.findCafeByBar(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+
+        mockMvc.perform(get("/api/cafe/find/bar")
+                        .param("latitude", 카페_위도.toString())
+                        .param("longitude", 카페_경도.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/find/bar/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("latitude").description("검색한 위치의 위도"),
+                                parameterWithName("longitude").description("검색한 위치의 경도")),
+                        responseFields(
+                                fieldWithPath("cafes").type(JsonFieldType.ARRAY)
+                                        .description("검색한 위치의 카페와 반경 2km내의 카페 리스트 \n\n - 카페가 존재하면 리스트 상단"),
+                                fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].name").description("카페 이름"),
+                                fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
+                                fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
+                                fieldWithPath("cafes[].latitude").description("카페 위도"),
+                                fieldWithPath("cafes[].longitude").description("카페 경도"),
+                                fieldWithPath("cafes[].starRating").description("카페 별점"),
+                                fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
+                                fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).findCafeByBar(any(BigDecimal.class), any(BigDecimal.class));
     }
 
 
