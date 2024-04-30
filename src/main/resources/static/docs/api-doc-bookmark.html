@@ -698,7 +698,7 @@ Vary: Access-Control-Request-Headers</code></pre>
 <h4 id="_http_request_3">Http Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/bookmark/delete/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/bookmark/1/delete HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer JWT TOKEN
 Accept: application/json
@@ -709,7 +709,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_path_parameters">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/bookmark/delete/{bookmarkId}</caption>
+<caption class="title">Table 1. /api/bookmark/{bookmarkId}/delete</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">

@@ -30,7 +30,7 @@ public class BookmarkController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/{bookmarkId}")
+    @DeleteMapping("/{bookmarkId}/delete")
     @Operation(summary = "저장된 북마크 삭제 기능")
     public ResponseEntity<Void> deleteBookmark(
             @AuthenticationPrincipal LoginMember loginMember,
