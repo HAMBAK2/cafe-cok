@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.application;
 
+import com.amazonaws.services.s3.model.Tier;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
@@ -75,18 +76,23 @@ public class CafeService {
 
     public CafeFindBarResponse findCafeByBar(BigDecimal latitude, BigDecimal longitude) {
 
-        Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
-        if(findCafe.isEmpty()) {
-            List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
-            CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
-            return CafeFindBarResponse.notExistOf(withinRadiusCafes, categoryKeywordsDto);
+        List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+        CafeDto targetCafe = null;
+        for (CafeDto withinRadiusCafe : withinRadiusCafes) {
+            if(withinRadiusCafe.getLatitude().equals(latitude) && withinRadiusCafe.getLongitude().equals(longitude)) {
+                targetCafe = withinRadiusCafe;
+                break;
+            }
         }
 
-        return CafeFindBarResponse
-                .existFrom(detailTop(findCafe.get().getId()), detailBasicInfo(findCafe.get().getId()));
+        if(targetCafe != null) {
+            withinRadiusCafes.remove(targetCafe);
+            withinRadiusCafes.add(0, targetCafe);
+        }
+
+        return CafeFindBarResponse.from(withinRadiusCafes);
     }
 
-    
     public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
@@ -151,8 +157,6 @@ public class CafeService {
     }
 
     public CafeDetailImageResponse detailImages(final Long cafeId, final Long cursor) {
-
-        List<String> imageUrls = new ArrayList<>();
 
         if(cursor == null) return getDetailImagesWhenCursorIsNull(cafeId);
         if(cursor.equals(CURSOR_START_STR)) return getDetailImagesWhenFirstPage(cafeId);
@@ -251,7 +255,6 @@ public class CafeService {
             input = date + " " + openingTime + "~" + closingTime;
             convertedBusinessHours.add(input);
         }
-
         return convertedBusinessHours;
     }
 
@@ -294,7 +297,6 @@ public class CafeService {
         combinedImageUrls.addAll(reviewImageUrls);
 
         return combinedImageUrls;
-
     }
 
     public List<CafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
@@ -311,12 +313,6 @@ public class CafeService {
                 withinRadiusCafes.add(CafeDto.of(cafe, cafeImageUrl));
             }
         }
-
         return withinRadiusCafes;
     }
-
-
-
-
-
 }

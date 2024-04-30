@@ -73,7 +73,6 @@ public class CafeController {
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
-    
     public ResponseEntity<CafeFindAgainResponse> findAgain(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
