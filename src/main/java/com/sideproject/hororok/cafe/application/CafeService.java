@@ -5,7 +5,6 @@ import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
-import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -47,28 +45,25 @@ import static com.sideproject.hororok.utils.GeometricUtils.*;
 @Transactional(readOnly = true)
 public class CafeService {
 
+    private final CafeRepository cafeRepository;
     private final MenuRepository menuRepository;
+    private final ReviewRepository reviewRepository;
     private final KeywordRepository keywordRepository;
     private final CafeImageRepository cafeImageRepository;
-    private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final OperationHourRepository operationHourRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
-    private final KeywordService keywordService;
-    private final CafeRepository cafeRepository;
-    private final CafeImageService cafeImageService;
-
     public CafeHomeResponse home() {
-        CategoryKeywordsDto allCategoryKeywords = keywordService.getAllCategoryKeywords();
-        return new CafeHomeResponse(allCategoryKeywords);
+        List<Keyword> keywords = keywordRepository.findAll();
+        return new CafeHomeResponse(new CategoryKeywordsDto(keywords));
     }
 
     
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
-        CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
+        CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
 
         return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywordsDto);
     }
@@ -79,7 +74,7 @@ public class CafeService {
         Optional<Cafe> findCafe = cafeRepository.findByLatitudeAndLongitude(latitude, longitude);
         if(findCafe.isEmpty()) {
             List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
-            CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
+            CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
             return CafeFindBarResponse.notExistOf(withinRadiusCafes, categoryKeywordsDto);
         }
 
@@ -91,7 +86,7 @@ public class CafeService {
     public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
-        CategoryKeywordsDto categoryKeywordsDto = keywordService.getAllCategoryKeywords();
+        CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
 
         List<String> targetKeywordNames = request.getKeywords();
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
@@ -254,9 +249,7 @@ public class CafeService {
                             cafe.getLatitude(), cafe.getLongitude());
 
             if(isWithinRadius) {
-                String cafeImageUrl =
-                        cafeImageService.findOneImageUrlByCafeId(cafe.getId())
-                                .orElseThrow(() -> new NotFoundException("이미지를 찾을 수 없습니다."));
+                String cafeImageUrl = cafeImageRepository.getOneImageUrlByCafeId(cafe.getId());
                 withinRadiusCafes.add(CafeDto.of(cafe, cafeImageUrl));
             }
         }
