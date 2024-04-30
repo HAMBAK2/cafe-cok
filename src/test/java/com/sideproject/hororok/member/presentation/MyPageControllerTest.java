@@ -4,6 +4,7 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
+import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -206,8 +207,7 @@ class MyPageControllerTest extends ControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        pathParameters(
-                                parameterWithName("planId").description("선택한 계획(여정)의 ID")),
+                        pathParameters(parameterWithName("planId").description("선택한 계획(여정)의 ID")),
                         responseFields(
                                 fieldWithPath("planId").description("계획 ID"),
                                 fieldWithPath("matchType").description("계획하기 결과 타입(MATCH, SIMILAR, MISMATCH)"),
@@ -271,6 +271,35 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("reviews[].keywords[].category").description("리뷰 키워드 카테고리"),
                                 fieldWithPath("reviews[].keywords[].name").description("리뷰 키워드 이름"))))
                 .andExpect(status().isOk());
+    }
 
+    @Test
+    @DisplayName("마이페이지 내 조합 탭을 눌렀을 때 동작하는 기능")
+    public void test_my_page_combination_success() throws Exception {
+
+        MyPageCombinationResponse response = 마이페이지_내조합_응답();
+
+        when(myPageService.combination(any(LoginMember.class)))
+                .thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/combination")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/combination/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(
+                                fieldWithPath("combinations").type(JsonFieldType.ARRAY).description("조합의 리스트"),
+                                fieldWithPath("combinations[].id").description("조합 ID"),
+                                fieldWithPath("combinations[].name").description("조합 이름"),
+                                fieldWithPath("combinations[].icon").description("조합 아이콘"))))
+                .andExpect(status().isOk());
+
+        verify(myPageService, times(1)).combination(any(LoginMember.class));
     }
 }

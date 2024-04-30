@@ -52,14 +52,10 @@ class BookmarkControllerTest extends ControllerTest {
                 .andDo(document("bookmark/save-post",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")
-                        ),
+                        requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
                         requestFields(
                                 fieldWithPath("cafeId").description("저장하려는 카페 Id"),
-                                fieldWithPath("folderId").description("저장하려는 폴더 ID"))
-                        )
-                )
+                                fieldWithPath("folderId").description("저장하려는 폴더 ID"))))
                 .andExpect(status().isNoContent());
 
         verify(bookmarkService).save(bookmarkSaveRequestCaptor.capture());

@@ -3,6 +3,9 @@ package com.sideproject.hororok.member.application;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.dto.CafeDto;
+import com.sideproject.hororok.combination.domain.Combination;
+import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
+import com.sideproject.hororok.combination.dto.CombinationDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
@@ -35,7 +38,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 import static com.sideproject.hororok.utils.Constants.*;
 import static org.springframework.data.domain.Sort.*;
@@ -54,6 +58,7 @@ public class MyPageService {
     private final PlanCafeRepository planCafeRepository;
     private final CafeImageRepository cafeImageRepository;
     private final PlanKeywordRepository planKeywordRepository;
+    private final CombinationRepository combinationRepository;
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -121,13 +126,14 @@ public class MyPageService {
         return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
     }
 
-    public List<CafeDto> getCafeDtosByPlanIdAndMatchType(Long planId, PlanCafeMatchType matchType) {
-        List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanIdAndMatchType(planId, matchType);
-        return findPlanCafes.stream()
-                .map(planCafe -> CafeDto.of(
-                        planCafe.getCafe(),
-                        cafeImageRepository.findByCafeId(planCafe.getCafe().getId()).get(0).getImageUrl()))
-                .collect(Collectors.toList());
+
+    public MyPageCombinationResponse combination(final LoginMember loginMember) {
+
+        List<Combination> findCombination = combinationRepository.findByMemberId(loginMember.getId());
+        if(findCombination.isEmpty()) return MyPageCombinationResponse.builder().build();
+
+        List<CombinationDto> combinations = CombinationDto.fromList(findCombination);
+        return MyPageCombinationResponse.from(combinations);
     }
 
     private List<MyPagePlanDto> getPlansByRecent(final LoginMember loginMember,

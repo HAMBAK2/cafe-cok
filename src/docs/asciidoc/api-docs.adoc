@@ -7,4 +7,5 @@
 === link:api-doc-plan.html[3. 계획하기(Plan) API]
 === link:api-doc-myPage.html[4. 마이페이지(myPage) API]
 === link:api-doc-review.html[5. 리뷰(review) API]
-=== link:api-doc-cafe.html[5. 카페(Cafe) API]
+=== link:api-doc-cafe.html[6. 카페(Cafe) API]
+=== link:api-doc-combination.html[7. 조합(Combination) API]

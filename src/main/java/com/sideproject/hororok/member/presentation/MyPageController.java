@@ -87,4 +87,13 @@ public class MyPageController {
         MyPageReviewResponse response = reviewService.getMyPageReviews(loginMember);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/combination")
+    @Operation(summary = "마이 페이지 내 조합을 눌렀을 때 동작")
+    public ResponseEntity<MyPageCombinationResponse> combination(@AuthenticationPrincipal LoginMember loginMember) {
+
+        MyPageCombinationResponse response = myPageService.combination(loginMember);
+        return ResponseEntity.ok(response);
+    }
+
 }

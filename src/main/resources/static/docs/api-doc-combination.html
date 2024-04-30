@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>MyPage API</title>
+<title>Combination API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,23 +439,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>MyPage API</h1>
+<h1>Combination API</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_4_마이페이지">4. 마이페이지</a>
+<li><a href="#_7_조합">7. 조합</a>
 <ul class="sectlevel2">
-<li><a href="#_4_1_마이페이지_상단_프로필get_성공">4-1. 마이페이지 상단 프로필(GET) - 성공</a></li>
-<li><a href="#_4_2_마이페이지_저장_태그get_성공">4-2. 마이페이지 저장 태그(GET) - 성공</a></li>
-<li><a href="#_4_3_저장한_여정의_전체_리스트get_성공">4-3. 저장한 여정의 전체 리스트(GET) - 성공</a></li>
-<li><a href="#_4_4_공유한_여정의_전체_리스트get_성공">4-4. 공유한 여정의 전체 리스트(GET) - 성공</a></li>
-<li><a href="#_4_7_계획을_선택했을_때_계획의_상세_내용get_성공">4-7. 계획을 선택했을 때 계획의 상세 내용(GET) - 성공</a></li>
-<li><a href="#_4_8_마이페이지_프로필_수정_성공">4-8. 마이페이지 프로필 수정 - 성공</a></li>
-<li><a href="#_4_9_마이페이지_리뷰_탭_선택_시_성공">4-9. 마이페이지 리뷰 탭 선택 시 - 성공</a></li>
-<li><a href="#_4_10_마이페이지_내_조합_선택_시_성공">4-10. 마이페이지 내 조합 선택 시 - 성공</a></li>
+<li><a href="#_7_1_조합_생성post_성공">7-1. 조합 생성(POST) - 성공</a></li>
+<li><a href="#_7_2_조합_조회post_성공">7-2. 조합 조회(POST) - 성공</a></li>
+<li><a href="#_7_3_조합_조회patch_성공">7-3. 조합 조회(PATCH) - 성공</a></li>
 <li><a href="#_api_목록으로">API 목록으로</a></li>
 </ul>
 </li>
@@ -464,12 +459,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_4_마이페이지">4. 마이페이지</h2>
+<h2 id="_7_조합">7. 조합</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_4_1_마이페이지_상단_프로필get_성공">4-1. 마이페이지 상단 프로필(GET) - 성공</h3>
+<h3 id="_7_1_조합_생성post_성공">7-1. 조합 생성(POST) - 성공</h3>
 <div class="sect3">
-<h4 id="_request_header">Request Header</h4>
+<h4 id="_request_headers">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -493,35 +488,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_http_request">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/profile HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/combination/create HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_http_response">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 79
+Content-Length: 97
+Host: localhost:8080
 
 {
-  "nickname" : "cafe_cok_nickname",
-  "picture" : null,
-  "reviewCount" : 2
+  "name" : "조합 이름",
+  "icon" : "Icon_unicode1",
+  "keywords" : [ "키워드 이름" ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields">Response Fields</h4>
+<h4 id="_request_fields">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -537,28 +520,62 @@ Content-Length: 79
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합의 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>picture</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 사진 URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>icon</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합 아이콘 명칭</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviewCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keywords</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 이름 리스트</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_body">Response body</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "combinationId" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinationId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 조합 ID</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_2_마이페이지_저장_태그get_성공">4-2. 마이페이지 저장 태그(GET) - 성공</h3>
+<h3 id="_7_2_조합_조회post_성공">7-2. 조합 조회(POST) - 성공</h3>
 <div class="sect3">
-<h4 id="_request_header_2">Request header</h4>
+<h4 id="_request_headers_2">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -582,35 +599,51 @@ Content-Length: 79
 <h4 id="_http_request_2">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/bookmark/folders HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/combination/1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer JWT TOKEN
+Authorization: Bearer fake-token
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_http_response_2">Http response</h4>
+<h4 id="_path_parameters">Path parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/combination/{combinationId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회하려는 조합 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_body_2">Response body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 204
-
-{
-  "folderCount" : 1,
-  "folders" : [ {
-    "folderId" : 1,
-    "name" : "폴더_이름",
-    "color" : "폴더_색상",
-    "bookmarkCount" : 1,
-    "visible" : true,
-    "defaultFolder" : false
-  } ]
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "id" : 1,
+  "name" : "조합 이름",
+  "icon" : "Icon_unicode1",
+  "categoryKeywords" : {
+    "purpose" : [ "키워드 이름" ],
+    "menu" : [ ],
+    "theme" : [ ],
+    "facility" : [ ],
+    "atmosphere" : [ ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -632,502 +665,19 @@ Content-Length: 204
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folderCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].folderId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 이름</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>icon</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 색상</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].bookmarkCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 내 북마크 개수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].visible</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">폴더 지도 노출 여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>folders[].defaultFolder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">기본 폴더 여부</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_3_저장한_여정의_전체_리스트get_성공">4-3. 저장한 여정의 전체 리스트(GET) - 성공</h3>
-<div class="sect3">
-<h4 id="_request_header_3">Request Header</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer JWT 엑세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_request_3">Http request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/saved/plans?sortBy=RECENT&amp;page=1&amp;size=10 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer fake-token
-Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_query_parameters">Query parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방식을 구분하는 필드</p>
-<p class="tableblock">- RECENT: 최신 저장 순(Default)</p>
-<p class="tableblock">- UPCOMING: 다가오는 여정 순</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호를 지정(Default = 1)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지의 사이즈를 지정(Default = 10)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_response_3">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 237
-
-{
-  "page" : 1,
-  "plans" : [ {
-    "id" : 1,
-    "keyword" : {
-      "id" : 1,
-      "category" : "PURPOSE",
-      "name" : "키워드 이름"
-    },
-    "location" : "위치 이름",
-    "visitDateTime" : "4월 30일 9시 0분"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_3">Response Fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(어정) 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(여정)의 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(여정)의 대표 키워드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.category</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드의 카테고리</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드의 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].location</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자가 검색한 장소_필수X</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].visitDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자가 검색한 날짜와 시간_필수X</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_4_공유한_여정의_전체_리스트get_성공">4-4. 공유한 여정의 전체 리스트(GET) - 성공</h3>
-<div class="sect3">
-<h4 id="_request_header_4">Request Header</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer JWT 엑세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_request_4">Http request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/shared/plans?sortBy=RECENT&amp;page=1&amp;size=10 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer fake-token
-Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_query_parameters_2">Query parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 방식을 구분하는 필드</p>
-<p class="tableblock">- RECENT: 최신 저장 순(Default)</p>
-<p class="tableblock">- UPCOMING: 다가오는 여정 순</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호를 지정(Default = 1)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지의 사이즈를 지정(Default = 10)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_response_4">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 237
-
-{
-  "page" : 1,
-  "plans" : [ {
-    "id" : 1,
-    "keyword" : {
-      "id" : 1,
-      "category" : "PURPOSE",
-      "name" : "키워드 이름"
-    },
-    "location" : "위치 이름",
-    "visitDateTime" : "4월 30일 9시 0분"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_4">Response Fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(어정) 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(여정)의 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획(여정)의 대표 키워드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.category</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드의 카테고리</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].keyword.name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">키워드의 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].location</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자가 검색한 장소_필수X</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>plans[].visitDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자가 검색한 날짜와 시간_필수X</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_7_계획을_선택했을_때_계획의_상세_내용get_성공">4-7. 계획을 선택했을 때 계획의 상세 내용(GET) - 성공</h3>
-<div class="sect3">
-<h4 id="_request_header_5">Request Header</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer JWT 엑세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_request_5">Http request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/plan/1 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer fake-token
-Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_path_parameters">Path parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/myPage/plan/{planId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>planId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">선택한 계획(여정)의 ID</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_response_5">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 624
-
-{
-  "planId" : 1,
-  "matchType" : "SIMILAR",
-  "locationName" : "위치 이름",
-  "minutes" : 10,
-  "visitDateTime" : "4월 30일 9시 0분",
-  "categoryKeywords" : {
-    "purpose" : [ "키워드 이름" ],
-    "menu" : [ ],
-    "theme" : [ ],
-    "facility" : [ ],
-    "atmosphere" : [ ]
-  },
-  "matchCafes" : [ ],
-  "similarCafes" : [ {
-    "id" : 1,
-    "name" : "카페 이름",
-    "phoneNumber" : "010-1234-5678",
-    "roadAddress" : "OO시 OO구 OO동",
-    "longitude" : 16.926471559972615,
-    "latitude" : 60.97432709335206,
-    "starRating" : 0.0,
-    "reviewCount" : 0,
-    "image" : "//카페이미지"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_5">Response Fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>planId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchType</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">계획하기 결과 타입(MATCH, SIMILAR, MISMATCH)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>locationName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">검색한 위치 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>minutes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">도보 시간</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>visitDateTime</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">방문 날짜와 시간(월-일-시간-분</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합 아이콘</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>categoryKeywords</code></p></td>
@@ -1159,69 +709,14 @@ Content-Length: 624
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">분위기 카테고리 리스트(없으면 빈 리스트)</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카페 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].phoneNumber</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">전화번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].roadAddress</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">도로명 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].longitude</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].latitude</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].starRating</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">별점</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].reviewCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].image</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카페 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)</p></td>
-</tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_4_8_마이페이지_프로필_수정_성공">4-8. 마이페이지 프로필 수정 - 성공</h3>
+<h3 id="_7_3_조합_조회patch_성공">7-3. 조합 조회(PATCH) - 성공</h3>
 <div class="sect3">
-<h4 id="_request_header_6">Request Header</h4>
+<h4 id="_request_headers_3">Request headers</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1242,48 +737,28 @@ Content-Length: 624
 </table>
 </div>
 <div class="sect3">
-<h4 id="_http_request_6">Http request</h4>
+<h4 id="_http_request_3">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/myPage/profile/edit?nickname=cafe_cok_nickname HTTP/1.1
-Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/combination/1/edit HTTP/1.1
+Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
+Content-Length: 97
 Host: localhost:8080
 
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=file; filename=test.jpg
-Content-Type: image/jpeg
-
-Test file content
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+{
+  "name" : "조합 이름",
+  "icon" : "Icon_unicode1",
+  "keywords" : [ "키워드 이름" ]
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_request_parts">Request parts</h4>
+<h4 id="_path_parameters_2">Path parameters</h4>
 <table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Part</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 이미지(null으로 전달 시 기본 이미지 설정)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_query_parameters_3">Query parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /api/combination/{combinationId}/edit</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1296,32 +771,14 @@ Test file content
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">변경하려는 사용자의 닉네임(null 전달시 변경X)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinationId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정하려는 조합 ID</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_http_response_6">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 199
-
-{
-  "nickname" : "cafe_cok_nickname",
-  "picture" : "https://kr.object.ncloudstorage.com/hororok-bucket/member/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-04-20%20%EC%98%A4%ED%9B%84%2011.46.07.png"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_6">Response Fields</h4>
+<h4 id="_request_fields_2">Request fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1337,89 +794,35 @@ Content-Length: 199
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합의 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>picture</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>icon</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 사진 URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조합 아이콘 명칭</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_9_마이페이지_리뷰_탭_선택_시_성공">4-9. 마이페이지 리뷰 탭 선택 시 - 성공</h3>
-<div class="sect3">
-<h4 id="_request_header_7">Request Header</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer JWT 엑세스 토큰</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keywords</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">키워드 이름 리스트</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_http_request_7">Http request</h4>
+<h4 id="_response_body_3">Response body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/reviews HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer fake-token
-Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_http_response_7">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 392
-
-{
-  "reviews" : [ {
-    "cafeId" : 1,
-    "cafeName" : "카페 이름",
-    "reviewId" : 1,
-    "starRating" : 5,
-    "content" : "리뷰 내용",
-    "specialNote" : "리뷰 특이사항",
-    "images" : [ {
-      "id" : 1,
-      "imageUrl" : "리뷰 이미지 URL"
-    } ],
-    "keywords" : [ {
-      "id" : 1,
-      "category" : "PURPOSE",
-      "name" : "키워드 이름"
-    } ]
-  } ]
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "combinationId" : 1
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_fields_7">Response Fields</h4>
+<h4 id="_response_fields_3">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1435,170 +838,9 @@ Content-Length: 392
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].cafeId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinationId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].cafeName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카페 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].reviewId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].starRating</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 별점</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 내용</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].specialNote</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 특이사항</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 이미지 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images[].imageUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].keywords</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 키워드 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].keywords[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 키워드 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].keywords[].category</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 키워드 카테고리</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].keywords[].name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 키워드 이름</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_4_10_마이페이지_내_조합_선택_시_성공">4-10. 마이페이지 내 조합 선택 시 - 성공</h3>
-<div class="sect3">
-<h4 id="_request_header_8">Request Header</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bearer JWT 엑세스 토큰</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_http_request_8">Http request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/myPage/combination HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer fake-token
-Accept: application/json
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_http_response_8">Http Response</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json
-Content-Length: 105
-
-{
-  "combinations" : [ {
-    "id" : 1,
-    "name" : "조합 이름",
-    "icon" : "Icon_unicode1"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_fields_8">Response Fields</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinations</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조합의 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinations[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조합 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinations[].name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조합 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>combinations[].icon</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">조합 아이콘</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 조합 ID</p></td>
 </tr>
 </tbody>
 </table>
@@ -1614,7 +856,7 @@ Content-Length: 105
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-04-30 15:25:07 +0900
+Last updated 2024-04-30 17:40:46 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

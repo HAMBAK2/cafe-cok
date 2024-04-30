@@ -1,12 +1,16 @@
 package com.sideproject.hororok.common.fixtures;
 
+import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import com.sideproject.hororok.member.dto.response.*;
+import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.sideproject.hororok.common.fixtures.CombinationFixtures.조합_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_DTO_리스트;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.*;
@@ -45,7 +49,7 @@ public class MyPageFixtures {
         return new MyPageReviewResponse(마이페이지_리뷰_DTO_리스트());
     }
 
-
-
-
+    public static MyPageCombinationResponse 마이페이지_내조합_응답() {
+        return MyPageCombinationResponse.from(Arrays.asList(조합_DTO()));
+    }
 }
