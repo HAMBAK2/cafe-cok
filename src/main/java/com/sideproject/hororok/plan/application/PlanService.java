@@ -1,12 +1,18 @@
 package com.sideproject.hororok.plan.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
+import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
+import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
+import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.PlanCafe;
+import com.sideproject.hororok.plan.domain.PlanKeyword;
 import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.hororok.plan.domain.enums.PlanStatus;
 import com.sideproject.hororok.plan.domain.repository.PlanCafeRepository;
@@ -18,7 +24,6 @@ import com.sideproject.hororok.plan.dto.request.SavePlanRequest;
 import com.sideproject.hororok.plan.dto.request.SharePlanRequest;
 import com.sideproject.hororok.plan.dto.response.CreatePlanResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.keword.application.KeywordService;
 import com.sideproject.hororok.plan.dto.response.DeletePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SavePlanResponse;
 import com.sideproject.hororok.plan.dto.response.SharePlanResponse;
@@ -31,8 +36,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.sideproject.hororok.utils.Constants.NO_MEMBER_ID;
+import static com.sideproject.hororok.utils.GeometricUtils.calculateWalkingTime;
+import static com.sideproject.hororok.utils.GeometricUtils.isWithinRadius;
 
 @Service
 @RequiredArgsConstructor
@@ -42,21 +53,17 @@ public class PlanService {
     private final CafeRepository cafeRepository;
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
-    private final PlanKeywordRepository planKeywordRepository;
+    private final KeywordRepository keywordRepository;
     private final PlanCafeRepository planCafeRepository;
-
-    private final CafeService cafeService;
-    private final KeywordService keywordService;
-    private final PlanCafeService planCafeService;
-    private final PlanKeywordService planKeywordService;
-
-    private static final Long NO_MEMBER_ID = 1L;
+    private final CafeImageRepository cafeImageRepository;
+    private final PlanKeywordRepository planKeywordRepository;
+    private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     @Transactional
     public CreatePlanResponse plan(CreatePlanRequest request) {
 
         List<Cafe> filteredCafes = new ArrayList<>();
-        CategoryKeywordsDto categoryKeywords = keywordService.getCategoryKeywords(request.getKeywords());
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
         if(categoryKeywords.getPurpose().isEmpty()) throw new NoSuchPlanKeywordException();
 
         Boolean isMismatch = isMismatchPlan(request, filteredCafes);
@@ -116,34 +123,94 @@ public class PlanService {
 
     private Boolean isMismatchPlan(CreatePlanRequest request, List<Cafe> filteredCafes) {
 
-        List<Cafe> cafesByDateAndTimeRange = cafeService.getCafesByDateAndTimeRange(
+        List<Cafe> cafesByDateAndTimeRange = getCafesByDateAndTimeRange(
                 request.getDate(), request.getStartTime(), request.getEndTime());
+        List<Cafe> cafesByKeyword = getCafesByCafesAndKeywordNames(cafesByDateAndTimeRange, request.getKeywords());
+        List<Cafe> cafesByDistance =
+                getCafesByDistance(cafesByKeyword, request.getLatitude(), request.getLongitude(), request.getMinutes());
 
-        List<Cafe> cafesByKeyword =
-                cafeService.getCafesByCafesAndKeywordNames(cafesByDateAndTimeRange, request.getKeywords());
-
-        List<Cafe> cafesByDistance = cafeService.getCafesByDistance(
-                cafesByKeyword, request.getLatitude(), request.getLongitude(), request.getMinutes());
         if(cafesByDistance.isEmpty()) return true;
-
         filteredCafes.addAll(cafesByDistance);
         return false;
     }
 
+    private List<Cafe> getCafesByDistance(final List<Cafe> cafes, final BigDecimal latitude,
+                                          final BigDecimal longitude, final Integer withinMinutes) {
+
+        if(latitude == null) return cafes;
+        if(withinMinutes == null) return getFilteredCafesByWithinRadius(latitude, longitude, cafes);
+
+        List<Cafe> distanceFilteredCafe = cafes.stream()
+                .filter(cafe -> {double walkingTime = calculateWalkingTime(
+                        cafe.getLatitude(), cafe.getLongitude(), latitude, longitude);
+                    return walkingTime <= withinMinutes;})
+                .collect(Collectors.toList());
+
+        return distanceFilteredCafe;
+    }
+
+    private List<Cafe> getFilteredCafesByWithinRadius(
+            final BigDecimal latitude, final BigDecimal longitude, final List<Cafe> cafes) {
+
+        return cafes.stream()
+                .filter(cafe -> isWithinRadius(latitude, longitude, cafe.getLatitude(), cafe.getLongitude()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Cafe> getCafesByCafesAndKeywordNames(final List<Cafe> cafes, final List<String> keywordNames) {
+
+        List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
+        List<CafeReviewKeyword> findCafeReviewKeywords = cafeReviewKeywordRepository.findByKeywordIn(findKeywords);
+        List<Cafe> filteredCafesByKeyword = getCafesByCafeReviewKeywords(findCafeReviewKeywords);
+
+        if(!cafes.isEmpty()) return ListUtils.getEquals(cafes, filteredCafesByKeyword);
+        return getCafesByCafeReviewKeywords(findCafeReviewKeywords);
+    }
+
+    private List<Cafe> getCafesByCafeReviewKeywords(List<CafeReviewKeyword> cafeReviewKeywords) {
+
+        return cafeReviewKeywords .stream()
+                .map(cafeReviewKeyword -> cafeReviewKeyword.getCafe())
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<Cafe> getCafesByDateAndTimeRange(final LocalDate visitDate, final LocalTime startTime, final LocalTime endTime) {
+
+        if(visitDate == null) return Arrays.asList();
+        if(startTime == null) return cafeRepository.findByDate(visitDate.getDayOfWeek());
+        if(endTime == null) return cafeRepository.findByDateAndStartTime(visitDate.getDayOfWeek(), startTime);
+
+        return cafeRepository.findOpenHoursByDateAndTimeRange(visitDate.getDayOfWeek(), startTime, endTime);
+    }
+
     private Boolean isSimilarPlan(CreatePlanRequest request, List<Cafe> filteredCafes, List<Cafe> allMatchCafes) {
 
-        List<Cafe> cafesByKeywordAllMatch = cafeService.getCafesByKeywordAllMatch(filteredCafes, request.getKeywords());
+        List<Cafe> cafesByKeywordAllMatch = getCafesByKeywordAllMatch(filteredCafes, request.getKeywords());
         if(cafesByKeywordAllMatch.isEmpty()) return true;
-
         allMatchCafes.addAll(cafesByKeywordAllMatch);
+
         return false;
     }
+
+    private List<Cafe> getCafesByKeywordAllMatch(List<Cafe> cafes, List<String> keywords) {
+
+        List<Cafe> cafesByKeywordAllMatch = cafes.stream()
+                .filter(cafe -> keywords.stream()
+                        .anyMatch(keyword -> keywordRepository.findByCafeId(cafe.getId())
+                                .stream()
+                                .anyMatch(findKeyword -> findKeyword.getName().equals(keyword))))
+                .collect(Collectors.toList());
+
+        return cafesByKeywordAllMatch;
+    }
+
 
     private CreatePlanResponse createMisMatchPlan(CreatePlanRequest request, CategoryKeywordsDto categoryKeywords) {
 
         List<Cafe> recommendCafes = cafeRepository.findAllByOrderByStarRatingDescNameAsc();
         CreatePlanResponse response = new CreatePlanResponse(
-                MatchType.MISMATCH, request, categoryKeywords, cafeService.getCafeDtosByCafes(recommendCafes));
+                MatchType.MISMATCH, request, categoryKeywords, getCafeDtosByCafes(recommendCafes));
 
         return response;
     }
@@ -153,7 +220,7 @@ public class PlanService {
 
         CreatePlanResponse response =  new CreatePlanResponse(
                 MatchType.SIMILAR, request, categoryKeywords,
-                cafeService.getCafeDtosByCafes(filteredCafes));
+                getCafeDtosByCafes(filteredCafes));
 
         return createPlan(response, request);
     }
@@ -165,12 +232,18 @@ public class PlanService {
         orderByDistanceAndStarRating(allMatchCafes, request.getLatitude(), request.getLongitude());
         filteredCafes.removeAll(allMatchCafes);
 
-        CreatePlanResponse response = new CreatePlanResponse(
-                MatchType.MATCH, request, categoryKeywords,
-                cafeService.getCafeDtosByCafes(allMatchCafes),
-                cafeService.getCafeDtosByCafes(filteredCafes));
+        CreatePlanResponse response =
+                new CreatePlanResponse(MatchType.MATCH, request, categoryKeywords,
+                        getCafeDtosByCafes(allMatchCafes), getCafeDtosByCafes(filteredCafes));
 
         return createPlan(response, request);
+    }
+
+    private List<CafeDto> getCafeDtosByCafes(List<Cafe> cafes){
+
+        return cafes.stream()
+                .map(cafe -> CafeDto.of(cafe, cafeImageRepository.findByCafeId(cafe.getId()).get(0).getImageUrl()))
+                .collect(Collectors.toList());
     }
 
     private CreatePlanResponse createPlan(CreatePlanResponse response, CreatePlanRequest request) {
@@ -202,14 +275,37 @@ public class PlanService {
         response.setPlanId(savedPlan.getId());
 
         List<CafeDto> similarCafes = response.getSimilarCafes();
-        planCafeService.saveAll(savedPlan, similarCafes, PlanCafeMatchType.SIMILAR);
+        savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, similarCafes, PlanCafeMatchType.SIMILAR);
 
         List<CafeDto> matchCafes = response.getMatchCafes();
-        if(!matchCafes.isEmpty()) planCafeService.saveAll(savedPlan, matchCafes, PlanCafeMatchType.MATCH);
+        if(!matchCafes.isEmpty()) savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, matchCafes, PlanCafeMatchType.MATCH);
 
-        planKeywordService.saveAll(savedPlan, request.getKeywords());
+        savePlanKeywordAllByPlanAndKeywordNames(savedPlan, request.getKeywords());
 
         return response;
+    }
+
+    private void savePlanCafeAllByPlanAndCafeDtosAndMatchType
+            (final Plan plan, final List<CafeDto> cafeDtos, final PlanCafeMatchType matchType) {
+
+        List<Long> cafeIds = cafeDtos.stream()
+                .map(cafeDto -> cafeDto.getId())
+                .collect(Collectors.toList());
+        List<Cafe> findCafes = cafeRepository.findByIdIn(cafeIds);
+        List<PlanCafe> planCafes = findCafes.stream()
+                .map(findCafe -> new PlanCafe(plan, findCafe, matchType))
+                .collect(Collectors.toList());
+        planCafeRepository.saveAll(planCafes);
+    }
+
+    private void savePlanKeywordAllByPlanAndKeywordNames(final Plan plan, final List<String> keywordNames) {
+
+        List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
+        List<PlanKeyword> planKeywords = findKeywords.stream()
+                .map(keyword -> new PlanKeyword(plan, keyword))
+                .collect(Collectors.toList());
+
+        planKeywordRepository.saveAll(planKeywords);
     }
 
     private void orderByDistanceAndStarRating(List<Cafe> targetCafeList, BigDecimal latitude, BigDecimal longitude) {

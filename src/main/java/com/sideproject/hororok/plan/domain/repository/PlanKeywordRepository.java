@@ -20,5 +20,4 @@ public interface PlanKeywordRepository extends JpaRepository<PlanKeyword, Long> 
         return findFirstByPlanIdAndKeywordCategory(planId, category)
                 .orElseThrow(NoSuchPlanKeywordException::new);
     }
-
 }

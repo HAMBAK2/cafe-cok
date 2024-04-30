@@ -1,25 +1,27 @@
 package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
+import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
 import com.sideproject.hororok.combination.dto.CombinationDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
+import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import com.sideproject.hororok.member.dto.response.*;
-import com.sideproject.hororok.plan.application.PlanCafeService;
-import com.sideproject.hororok.plan.application.PlanKeywordService;
 import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.PlanCafe;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
 import com.sideproject.hororok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
 import com.sideproject.hororok.plan.domain.enums.PlanStatus;
+import com.sideproject.hororok.plan.domain.repository.PlanCafeRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.hororok.plan.domain.repository.PlanRepository;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import static com.sideproject.hororok.utils.Constants.*;
 import static org.springframework.data.domain.Sort.*;
 
@@ -51,12 +54,11 @@ public class MyPageService {
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
+    private final KeywordRepository keywordRepository;
+    private final PlanCafeRepository planCafeRepository;
+    private final CafeImageRepository cafeImageRepository;
     private final PlanKeywordRepository planKeywordRepository;
     private final CombinationRepository combinationRepository;
-
-    private final PlanCafeService planCafeService;
-    private final PlanKeywordService planKeywordService;
-
 
     public MyPageProfileResponse profile(final LoginMember loginMember) {
 
@@ -112,19 +114,18 @@ public class MyPageService {
     public MyPagePlanDetailResponse planDetail(Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
-        List<Keyword> findKeywords = planKeywordService.getKeywordsByPlanId(planId);
+        List<Keyword> findKeywords = keywordRepository.findKeywordByPlanId(planId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-        List<CafeDto> findSimilarCafes
-                = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
+        List<CafeDto> findSimilarCafes = getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
 
         if(findPlan.getMatchType().equals(MatchType.MATCH)) {
-            List<CafeDto> findMatchCafes
-                    = planCafeService.getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
+            List<CafeDto> findMatchCafes = getCafeDtosByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
             return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
         }
 
         return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
     }
+
 
     public MyPageCombinationResponse combination(final LoginMember loginMember) {
 
