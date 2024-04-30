@@ -37,6 +37,10 @@ public class MyPageFixtures {
         return Arrays.asList(마이페이지_리뷰_DTO());
     }
 
+    public static MyPagePlansAllResponse 저장된_계획_전체_리스트() {
+        return MyPagePlansAllResponse.from(Arrays.asList(마이페이지_계획_DTO()));
+    }
+
     public static MyPagePlansResponse 마이페이지_계획_리스트_응답() {
         return new MyPagePlansResponse(페이지_번호, Arrays.asList(마이페이지_계획_DTO()));
     }
@@ -52,4 +56,6 @@ public class MyPageFixtures {
     public static MyPageCombinationResponse 마이페이지_내조합_응답() {
         return MyPageCombinationResponse.from(Arrays.asList(조합_DTO()));
     }
+
+
 }
