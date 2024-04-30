@@ -131,7 +131,7 @@ class MyPageControllerTest extends ControllerTest {
                                 parameterWithName("sortBy")
                                         .description("정렬 방식을 구분하는 필드\n\n" +
                                                 "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순"),
-                                parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
+                                parameterWithName("page").description("페이지 번호를 지정(미지정시 전체 리슽트 탐색)"),
                                 parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
                         responseFields(
                                 fieldWithPath("page").description("페이지 번호"),
@@ -171,7 +171,7 @@ class MyPageControllerTest extends ControllerTest {
                                 parameterWithName("sortBy")
                                         .description("정렬 방식을 구분하는 필드\n\n" +
                                                 "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순"),
-                                parameterWithName("page").description("페이지 번호를 지정(Default = 1)"),
+                                parameterWithName("page").description("페이지 번호를 지정(미지정시 전체 리슽트 탐색)"),
                                 parameterWithName("size").description("페이지의 사이즈를 지정(Default = 10)")),
                         responseFields(
                                 fieldWithPath("page").description("페이지 번호"),

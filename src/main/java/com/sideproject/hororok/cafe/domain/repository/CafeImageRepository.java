@@ -26,6 +26,7 @@ public interface CafeImageRepository extends JpaRepository<CafeImage, Long> {
             "LIMIT 1")
     Optional<String> findOneImageUrlByCafeId(final Long cafeId);
 
+
     default String getOneImageUrlByCafeId(final Long cafeId) {
         return findOneImageUrlByCafeId(cafeId)
                 .orElseThrow(NoSuchCafeImageException::new);

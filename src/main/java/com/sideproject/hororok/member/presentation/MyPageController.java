@@ -52,7 +52,7 @@ public class MyPageController {
     public ResponseEntity<MyPagePlansResponse> savedPlans(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "-1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
         MyPagePlansResponse response = myPageService.savedPlans(loginMember, sortBy, page, size);
@@ -64,7 +64,7 @@ public class MyPageController {
     public ResponseEntity<MyPagePlansResponse> sharedPlans(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "-1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
         MyPagePlansResponse response = myPageService.sharedPlans(loginMember, sortBy, page, size);

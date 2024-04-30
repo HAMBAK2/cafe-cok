@@ -31,6 +31,8 @@ public class Constants {
     public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
 
+    public static final Integer ALL_LIST_REQUEST_PAGE_NUM = -1;
+
     public static final Long NO_MEMBER_ID = 1L;
 
 

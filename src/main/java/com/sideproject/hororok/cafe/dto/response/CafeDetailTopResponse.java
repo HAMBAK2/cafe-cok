@@ -23,9 +23,11 @@ public class CafeDetailTopResponse {
     private BigDecimal longitude;
     private Double starRating;
     private Long reviewCount;
+    private String imageUrl;
     private List<KeywordDto> keywords;
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final Long reviewCount, final List<KeywordDto> keywords) {
+    public static CafeDetailTopResponse of(final Cafe cafe, final String imageUrl,
+                                           final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
                 .cafeName(cafe.getName())
@@ -34,6 +36,7 @@ public class CafeDetailTopResponse {
                 .longitude(cafe.getLongitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(reviewCount)
+                .imageUrl(imageUrl)
                 .keywords(keywords)
                 .build();
     }

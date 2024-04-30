@@ -33,12 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -149,8 +147,11 @@ public class MyPageService {
                                                  final PlanStatus planStatus,
                                                  final Integer page, final Integer size) {
 
-        PageRequest pageRequest =
-                PageRequest.of(page-1, size, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
+        PageRequest pageRequest;
+        if(page == ALL_LIST_REQUEST_PAGE_NUM)
+            pageRequest = PageRequest.of(0, Integer.MAX_VALUE, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
+        else
+            pageRequest = PageRequest.of(page-1, size, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
 
         Page<Plan> findPlanPage = planRepository.findPageByMemberId(loginMember.getId(), pageRequest);
 
@@ -174,10 +175,17 @@ public class MyPageService {
                                                    final PlanStatus planStatus,
                                                    final Integer page, final Integer size) {
 
-        PageRequest pageRequest =
-                PageRequest.of(page-1, size, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
-                        .and(by(Direction.ASC, "visitStartTime"))
-                        .and(by(Direction.ASC, "id")));
+        PageRequest pageRequest;
+        if(page == ALL_LIST_REQUEST_PAGE_NUM)
+            pageRequest =
+                    PageRequest.of(0, Integer.MAX_VALUE, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
+                            .and(by(Direction.ASC, "visitStartTime"))
+                            .and(by(Direction.ASC, "id")));
+        else
+            pageRequest =
+                    PageRequest.of(page-1, size, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
+                            .and(by(Direction.ASC, "visitStartTime"))
+                            .and(by(Direction.ASC, "id")));
 
         Page<Plan> findPlanPage = planRepository.findPageByMemberIdAndUpcomingPlanCondition(
                 loginMember.getId(), LocalDate.now(), LocalTime.now(), pageRequest);
