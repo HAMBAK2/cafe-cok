@@ -70,7 +70,6 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     public ResponseEntity<CafeFindAgainResponse> findAgain(
