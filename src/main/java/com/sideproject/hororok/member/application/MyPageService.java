@@ -39,6 +39,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 import static com.sideproject.hororok.utils.Constants.*;
@@ -72,7 +73,7 @@ public class MyPageService {
 
     @Transactional
     public MyPageProfileEditResponse editProfile
-            (final LoginMember loginMember, final String nickname, final MultipartFile file) throws IOException {
+            (final LoginMember loginMember, final String nickname, final MultipartFile file) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         if(nickname != null) findMember.changeNickname(nickname);
@@ -126,6 +127,14 @@ public class MyPageService {
         return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
     }
 
+    public List<CafeDto> getCafeDtosByPlanIdAndMatchType(Long planId, PlanCafeMatchType matchType) {
+        List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanIdAndMatchType(planId, matchType);
+        return findPlanCafes.stream()
+                .map(planCafe -> CafeDto.of(
+                        planCafe.getCafe(),
+                        cafeImageRepository.findByCafeId(planCafe.getCafe().getId()).get(0).getImageUrl()))
+                .collect(Collectors.toList());
+    }
 
     public MyPageCombinationResponse combination(final LoginMember loginMember) {
 
