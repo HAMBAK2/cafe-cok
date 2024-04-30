@@ -1,9 +1,6 @@
 package com.sideproject.hororok.cafe.presentation;
 
-import com.sideproject.hororok.cafe.dto.response.CafeDetailBasicInfoResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeDetailImageResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeDetailMenuResponse;
-import com.sideproject.hororok.cafe.dto.response.CafeDetailTopResponse;
+import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -160,6 +157,30 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailImages(any(Long.class), any(Long.class));
+    }
+
+    @Test
+    @DisplayName("카페 상세정보 사진 탭 호출 전체 이미지 - 성공")
+    public void test_cafe_detail_images_all_success() throws Exception {
+
+        CafeDetailImageAllResponse response = 카페_상세_사진_전체_응답();
+
+        when(cafeService.detailImagesAll(any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/images/all", 카페_아이디)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/detail/images/all/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
+                        responseFields(fieldWithPath("imageUrls")
+                                .type(JsonFieldType.ARRAY).description("이미지 URL 리스트(전체)"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).detailImagesAll(any(Long.class));
     }
 
 

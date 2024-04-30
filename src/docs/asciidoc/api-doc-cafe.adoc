@@ -35,7 +35,7 @@ include::{snippets}/cafe/detail/menus/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/cafe/detail/menus/success/response-fields.adoc[]
 
-=== 6-3. 카페 상세정보 사진 탭_페이징(GET) - 성공
+=== 6-4. 카페 상세정보 사진_페이징(GET) - 성공
 ==== Http request
 include::{snippets}/cafe/detail/images/success/http-request.adoc[]
 ==== Path parameters
@@ -46,5 +46,16 @@ include::{snippets}/cafe/detail/images/success/query-parameters.adoc[]
 include::{snippets}/cafe/detail/images/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/cafe/detail/images/success/response-fields.adoc[]
+
+=== 6-5. 카페 상세정보 사진_전체 리스트(GET) - 성공
+==== Http request
+include::{snippets}/cafe/detail/images/all/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/cafe/detail/images/all/success/path-parameters.adoc[]
+==== Http Response
+include::{snippets}/cafe/detail/images/all/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/cafe/detail/images/all/success/response-fields.adoc[]
+
 
 === link:api-docs.html[API 목록으로]
