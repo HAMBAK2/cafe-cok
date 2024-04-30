@@ -30,13 +30,7 @@ public class CafeReviewKeywordService {
     }
 
 
-    public void changeByReviewAndKeywordNames(final Review review, final List<String> keywordNames) {
-        List<String> findKeywordNames = keywordRepository.findNamesByReviewId(review.getId());
-        if(!ListUtils.areListEqual(findKeywordNames, keywordNames)) {
-            cafeReviewKeywordRepository.deleteByReviewId(review.getId());
-            saveByReviewAndKeywordNames(review, findKeywordNames);
-        }
-    }
+
 
 
 }

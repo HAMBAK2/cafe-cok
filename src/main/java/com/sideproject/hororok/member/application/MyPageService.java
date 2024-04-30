@@ -12,8 +12,6 @@ import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import com.sideproject.hororok.member.dto.response.*;
-import com.sideproject.hororok.plan.application.PlanCafeService;
-import com.sideproject.hororok.plan.application.PlanKeywordService;
 import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.domain.PlanCafe;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
