@@ -24,15 +24,6 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-    @GetMapping
-    @Operation(summary = "홈 화면에 보여줄 정보를 제공")
-    
-    public ResponseEntity<CafeHomeResponse> home() {
-
-        CafeHomeResponse response = cafeService.home();
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "해당하는 카페의 상세 정보 상단")
     public ResponseEntity<CafeDetailTopResponse> detailTop(

@@ -13,13 +13,11 @@ public class CafeFindAgainResponse {
 
     private final boolean isExist;
     private final List<CafeDto> cafes;
-    private final CategoryKeywordsDto categoryKeywords;
 
-    public static CafeFindAgainResponse of(List<CafeDto> cafes, CategoryKeywordsDto categoryKeywords) {
+    public static CafeFindAgainResponse from(List<CafeDto> cafes) {
         return CafeFindAgainResponse.builder()
                 .isExist(!cafes.isEmpty())
                 .cafes(cafes)
-                .categoryKeywords(categoryKeywords)
                 .build();
     }
 }

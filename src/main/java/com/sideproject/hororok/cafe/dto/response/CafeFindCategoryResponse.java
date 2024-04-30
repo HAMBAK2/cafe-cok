@@ -12,13 +12,10 @@ import java.util.List;
 public class CafeFindCategoryResponse {
 
     private final List<CafeDto> cafes;
-    private final CategoryKeywordsDto categoryKeywords;
 
-    public static CafeFindCategoryResponse of(final List<CafeDto> cafes,
-                                              final CategoryKeywordsDto categoryKeywords) {
+    public static CafeFindCategoryResponse from(final List<CafeDto> cafes) {
         return CafeFindCategoryResponse.builder()
                 .cafes(cafes)
-                .categoryKeywords(categoryKeywords)
                 .build();
     }
 }

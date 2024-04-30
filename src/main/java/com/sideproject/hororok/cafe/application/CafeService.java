@@ -1,17 +1,14 @@
 package com.sideproject.hororok.cafe.application;
 
-import com.amazonaws.services.s3.model.Tier;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
-import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
-import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.keword.dto.KeywordCountDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.menu.domain.repository.MenuRepository;
@@ -61,17 +58,10 @@ public class CafeService {
     private static final Boolean HAS_NEXT_PAGE = true;
     private static final Boolean NO_NEXT_PAGE = false;
 
-    public CafeHomeResponse home() {
-        List<Keyword> keywords = keywordRepository.findAll();
-        return new CafeHomeResponse(new CategoryKeywordsDto(keywords));
-    }
-
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
-        CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
-
-        return CafeFindAgainResponse.of(withinRadiusCafes, categoryKeywordsDto);
+        return CafeFindAgainResponse.from(withinRadiusCafes);
     }
 
     public CafeFindBarResponse findCafeByBar(BigDecimal latitude, BigDecimal longitude) {
@@ -89,23 +79,20 @@ public class CafeService {
             withinRadiusCafes.remove(targetCafe);
             withinRadiusCafes.add(0, targetCafe);
         }
-
         return CafeFindBarResponse.from(withinRadiusCafes);
     }
 
     public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
-        CategoryKeywordsDto categoryKeywordsDto = new CategoryKeywordsDto(keywordRepository.findAll());
-
         List<String> targetKeywordNames = request.getKeywords();
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
+
         for (CafeDto withinRadiusCafe : withinRadiusCafes) {
             Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
             List<Review> reviews = cafe.getReviews();
             List<String> keywordNames = new ArrayList<>();
             for (Review review : reviews) {
-
                 List<CafeReviewKeyword> cafeReviewKeywords = cafeReviewKeywordRepository.findByReviewId(review.getId());
                 keywordNames = cafeReviewKeywords.stream()
                         .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
@@ -113,13 +100,11 @@ public class CafeService {
                         .collect(Collectors.toList());
             }
 
-            boolean allMatch = targetKeywordNames.stream()
-                    .allMatch(keywordNames::contains);
-
+            boolean allMatch = targetKeywordNames.stream().allMatch(keywordNames::contains);
             if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
         }
 
-        return CafeFindCategoryResponse.of(filteredWithinRadiusCafes, categoryKeywordsDto);
+        return CafeFindCategoryResponse.from(filteredWithinRadiusCafes);
     }
 
     public CafeDetailTopResponse detailTop(final Long cafeId) {
