@@ -25,4 +25,11 @@ public class CombinationKeyword {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
+    protected CombinationKeyword() {
+    }
+
+    public CombinationKeyword(final Combination combination, final Keyword keyword) {
+        this.combination = combination;
+        this.keyword = keyword;
+    }
 }
