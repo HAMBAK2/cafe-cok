@@ -6,6 +6,7 @@ import com.sideproject.hororok.cafe.domain.CafeImage;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailBasicInfoResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailMenuResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailTopResponse;
 
 import java.lang.reflect.Field;
@@ -35,6 +36,10 @@ public class CafeFixtures {
 
     public static final String 카페_이미지_URL = "//카페이미지";
 
+
+    public static CafeDetailMenuResponse 카페_상세_메뉴_응답() {
+        return CafeDetailMenuResponse.from(메뉴_DTO_리스트());
+    }
 
     public static CafeDetailBasicInfoResponse 카페_상세_기본_정보_응답() {
         return CafeDetailBasicInfoResponse

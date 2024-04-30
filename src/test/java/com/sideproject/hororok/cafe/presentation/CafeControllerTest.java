@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.presentation;
 
 import com.sideproject.hororok.cafe.dto.response.CafeDetailBasicInfoResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailMenuResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailTopResponse;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -30,9 +31,7 @@ class CafeControllerTest extends ControllerTest {
 
         CafeDetailTopResponse response = 카페_상세_상단_응답();
 
-        when(cafeService
-                .detailTop(any(Long.class)))
-                .thenReturn(response);
+        when(cafeService.detailTop(any(Long.class))).thenReturn(response);
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/top", 카페_아이디)
@@ -106,6 +105,33 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailBasicInfo(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("카페 상세정보 메뉴 탭 호출 - 성공")
+    public void test_cafe_detail_menus_success() throws Exception {
+
+        CafeDetailMenuResponse response = 카페_상세_메뉴_응답();
+
+        when(cafeService.detailMenus(any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/menus", 카페_아이디)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/detail/menus/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
+                        responseFields(
+                                fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페 ID"),
+                                fieldWithPath("menus[].name").description("메뉴 이름"),
+                                fieldWithPath("menus[].price").description("메뉴 가격"),
+                                fieldWithPath("menus[].imageUrl").description("메뉴 이미지 URL"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).detailMenus(any(Long.class));
     }
 
 
