@@ -29,5 +29,18 @@ include::{snippets}/combination/detail/success/response-body.adoc[]
 ==== Response fields
 include::{snippets}/combination/detail/success/response-fields.adoc[]
 
+=== 7-3. 조합 조회(PATCH) - 성공
+==== Request headers
+include::{snippets}/combination/edit/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/combination/edit/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/combination/edit/success/path-parameters.adoc[]
+==== Request fields
+include::{snippets}/combination/edit/success/request-fields.adoc[]
+==== Response body
+include::{snippets}/combination/edit/success/response-body.adoc[]
+==== Response fields
+include::{snippets}/combination/edit/success/response-fields.adoc[]
 
 === link:api-docs.html[API 목록으로]

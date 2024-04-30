@@ -37,8 +37,8 @@ class CombinationControllerTest extends ControllerTest {
     @DisplayName("조합 생성 - 성공")
     public void test_combination_create_success() throws Exception{
 
-        CombinationRequest request = 조합_생성_요청();
-        CombinationIdResponse response = 조합_생성_응답();
+        CombinationRequest request = 조합_생성_수정_요청();
+        CombinationIdResponse response = 조합_생성_수정_응답();
 
         when(combinationService
                 .create(any(CombinationRequest.class), any(LoginMember.class)))
@@ -95,6 +95,37 @@ class CombinationControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(combinationService, times(1)).detail(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("조합 수정 - 성공")
+    public void test_combination_edit_success() throws Exception{
+
+        CombinationRequest request = 조합_생성_수정_요청();
+        CombinationIdResponse response = 조합_생성_수정_응답();
+
+        when(combinationService.edit(any(CombinationRequest.class), any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.patch("/api/combination/{combinationId}/edit", 조합_ID)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("combination/edit/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        pathParameters(parameterWithName("combinationId").description("수정하려는 조합 ID")),
+                        requestFields(
+                                fieldWithPath("name").description("조합의 이름"),
+                                fieldWithPath("icon").description("조합 아이콘 명칭"),
+                                fieldWithPath("keywords").type(JsonFieldType.ARRAY).description("키워드 이름 리스트")),
+                        responseFields(fieldWithPath("combinationId").description("생성된 조합 ID"))))
+                .andExpect(status().isOk());
+
+        verify(combinationService, times(1)).edit(any(CombinationRequest.class), any(Long.class));
     }
 
 }

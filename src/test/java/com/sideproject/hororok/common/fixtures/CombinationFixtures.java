@@ -29,7 +29,7 @@ public class CombinationFixtures {
         return CombinationDto.from(조합());
     }
 
-    public static CombinationRequest 조합_생성_요청() {
+    public static CombinationRequest 조합_생성_수정_요청() {
         return new CombinationRequest(조합_이름, 조합_아이콘, 키워드_이름_리스트);
     }
 
@@ -37,7 +37,7 @@ public class CombinationFixtures {
         return CombinationDetailResponse.of(조합(), 카테고리_키워드_DTO());
     }
 
-    public static CombinationIdResponse 조합_생성_응답() {
+    public static CombinationIdResponse 조합_생성_수정_응답() {
         return CombinationIdResponse.of(조합_ID);
     }
 
