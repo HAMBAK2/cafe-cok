@@ -7,8 +7,10 @@ import com.sideproject.hororok.combination.domain.repository.CombinationKeywordR
 import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
 import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
 import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
+import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +27,8 @@ import java.util.stream.Collectors;
 public class CombinationService {
 
     private final MemberRepository memberRepository;
-    private final CombinationRepository combinationRepository;
     private final KeywordRepository keywordRepository;
+    private final CombinationRepository combinationRepository;
     private final CombinationKeywordRepository combinationKeywordRepository;
 
     @Transactional
@@ -42,5 +45,14 @@ public class CombinationService {
 
         combinationKeywordRepository.saveAll(combinationKeywords);
         return CombinationCreateResponse.of(savedCombination.getId());
+    }
+
+    public CombinationDetailResponse detail(final Long combinationId) {
+
+        Combination findCombination = combinationRepository.getById(combinationId);
+        List<Keyword> findKeywords = keywordRepository.findByCombinationId(combinationId);
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
+
+        return CombinationDetailResponse.of(findCombination, categoryKeywords);
     }
 }

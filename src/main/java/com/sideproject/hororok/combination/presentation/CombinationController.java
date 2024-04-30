@@ -5,14 +5,13 @@ import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.combination.application.CombinationService;
 import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
 import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +27,15 @@ public class CombinationController {
             @AuthenticationPrincipal LoginMember loginMember, @RequestBody CombinationCreateRequest request) {
 
         CombinationCreateResponse response = combinationService.create(request, loginMember);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{combinationId}")
+    @Operation(summary = "조합을 선택했을 때 보여주는 기능")
+    public ResponseEntity<CombinationDetailResponse> detail(
+            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long combinationId) {
+
+        CombinationDetailResponse response = combinationService.detail(combinationId);
         return ResponseEntity.ok(response);
     }
 }
