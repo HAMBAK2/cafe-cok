@@ -149,7 +149,7 @@ class PlanControllerTest extends ControllerTest {
                                 fieldWithPath("recommendCafes[].latitude").description("위도"),
                                 fieldWithPath("recommendCafes[].starRating").description("별점"),
                                 fieldWithPath("recommendCafes[].reviewCount").description("리뷰 수"),
-                                fieldWithPath("recommendCafes[].image").description("카페 이미지 URL"),
+                                fieldWithPath("recommendCafes[].imageUrl").description("카페 이미지 URL"),
                                 fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
                                         .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 추천 카페와 동일)"),
                                 fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)

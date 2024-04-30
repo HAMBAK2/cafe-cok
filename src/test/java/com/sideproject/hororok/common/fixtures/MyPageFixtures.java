@@ -1,18 +1,14 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
 import com.sideproject.hororok.member.dto.response.*;
-import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.sideproject.hororok.common.fixtures.CombinationFixtures.조합_DTO;
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_DTO;
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_DTO_리스트;
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.*;
 import static com.sideproject.hororok.common.fixtures.PlanFixtures.계획;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.*;
@@ -26,7 +22,7 @@ public class MyPageFixtures {
     }
 
     public static MyPagePlanDto 마이페이지_계획_DTO() {
-        return MyPagePlanDto.of(계획(), 키워드_DTO());
+        return MyPagePlanDto.of(계획(), 키워드_이름);
     }
 
     public static MyPageReviewDto 마이페이지_리뷰_DTO() {
@@ -35,6 +31,13 @@ public class MyPageFixtures {
 
     public static List<MyPageReviewDto> 마이페이지_리뷰_DTO_리스트() {
         return Arrays.asList(마이페이지_리뷰_DTO());
+    }
+
+    public static MyPagePlansAllResponse 공유된_계획_전체_리스트() {
+        return MyPagePlansAllResponse.from(Arrays.asList(마이페이지_계획_DTO()));
+    }
+    public static MyPagePlansAllResponse 저장된_계획_전체_리스트() {
+        return MyPagePlansAllResponse.from(Arrays.asList(마이페이지_계획_DTO()));
     }
 
     public static MyPagePlansResponse 마이페이지_계획_리스트_응답() {
@@ -52,4 +55,6 @@ public class MyPageFixtures {
     public static MyPageCombinationResponse 마이페이지_내조합_응답() {
         return MyPageCombinationResponse.from(Arrays.asList(조합_DTO()));
     }
+
+
 }

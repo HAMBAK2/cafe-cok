@@ -16,14 +16,14 @@ public class MyPagePlanDto {
     @NotNull
     private final Long id;
     @NotNull
-    private final KeywordDto keyword;
+    private final String keywordName;
     private final String location;
     private final String visitDateTime;
 
-    public static MyPagePlanDto of(final Plan plan, final KeywordDto keyword) {
+    public static MyPagePlanDto of(final Plan plan, final String keywordName) {
         return MyPagePlanDto.builder()
                 .id(plan.getId())
-                .keyword(keyword)
+                .keywordName(keywordName)
                 .location(plan.getLocationName())
                 .visitDateTime(convertLocalDateLocalTimeToString(plan.getVisitDate(), plan.getVisitStartTime()))
                 .build();
