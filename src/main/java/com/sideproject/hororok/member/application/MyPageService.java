@@ -148,7 +148,7 @@ public class MyPageService {
                                                  final Integer page, final Integer size) {
 
         PageRequest pageRequest;
-        if(page == ALL_LIST_REQUEST_PAGE_NUM)
+        if(page == null)
             pageRequest = PageRequest.of(0, Integer.MAX_VALUE, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
         else
             pageRequest = PageRequest.of(page-1, size, by(Direction.DESC, PlanSortBy.RECENT.getValue()));
@@ -176,7 +176,7 @@ public class MyPageService {
                                                    final Integer page, final Integer size) {
 
         PageRequest pageRequest;
-        if(page == ALL_LIST_REQUEST_PAGE_NUM)
+        if(page == null)
             pageRequest =
                     PageRequest.of(0, Integer.MAX_VALUE, by(Direction.ASC, PlanSortBy.UPCOMING.getValue())
                             .and(by(Direction.ASC, "visitStartTime"))

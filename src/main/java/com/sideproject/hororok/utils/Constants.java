@@ -26,14 +26,16 @@ public class Constants {
     public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT = 3;
 
     public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT = 5;
-    public static final Integer CAFE_DETAIL_IMAGE_REVIEW_IMG_CNT = 5;
+
+    public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
 
     public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
 
-    public static final Integer ALL_LIST_REQUEST_PAGE_NUM = -1;
 
     public static final Long NO_MEMBER_ID = 1L;
+
+    public static final Long CURSOR_START_STR = 0L;
 
 
 }

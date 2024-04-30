@@ -62,10 +62,11 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/images")
     @Operation(summary = "카페 상세 정보의 사진 탭")
-    public ResponseEntity<CafeDetailImageResponse> detailImage(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailImageResponse> detailImages(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
+            @RequestParam(required = false) Long cursor) {
 
-        CafeDetailImageResponse response = cafeService.detailImages(cafeId);
+        CafeDetailImageResponse response = cafeService.detailImages(cafeId, cursor);
         return ResponseEntity.ok(response);
     }
 
