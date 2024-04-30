@@ -112,7 +112,7 @@ public class MyPageController {
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
-        MyPagePlansAllResponse response = myPageService.savedPlansAll(loginMember, sortBy);
+        MyPagePlansAllResponse response = myPageService.sharedPlansAll(loginMember, sortBy);
         return ResponseEntity.ok(response);
     }
 }

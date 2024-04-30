@@ -137,10 +137,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("page").description("페이지 번호"),
                                 fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
                                 fieldWithPath("plans[].id").description("계획(여정)의 ID"),
-                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
-                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
-                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
-                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
+                                fieldWithPath("plans[].keywordName").description("계획(여정)의 대표 키워드"),
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
@@ -177,10 +174,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("page").description("페이지 번호"),
                                 fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
                                 fieldWithPath("plans[].id").description("계획(여정)의 ID"),
-                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
-                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
-                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
-                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
+                                fieldWithPath("plans[].keywordName").description("계획(여정)의 대표 키워드"),
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
@@ -327,14 +321,43 @@ class MyPageControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
                                 fieldWithPath("plans[].id").description("계획(여정)의 ID"),
-                                fieldWithPath("plans[].keyword").type(JsonFieldType.OBJECT).description("계획(여정)의 대표 키워드"),
-                                fieldWithPath("plans[].keyword.id").description("키워드 ID"),
-                                fieldWithPath("plans[].keyword.category").description("키워드의 카테고리"),
-                                fieldWithPath("plans[].keyword.name").description("키워드의 이름"),
+                                fieldWithPath("plans[].keywordName").description("계획(여정)의 대표 키워드"),
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
 
         verify(myPageService, times(1)).savedPlansAll(any(LoginMember.class), any(PlanSortBy.class));
+    }
+
+    @Test
+    @DisplayName("저장된 계획의 전체 리스트 - 성공")
+    public void test_my_page_shared_plan_all_success() throws Exception {
+
+        MyPagePlansAllResponse response = 공유된_계획_전체_리스트();
+
+        when(myPageService.sharedPlansAll(any(LoginMember.class), any(PlanSortBy.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        get("/api/myPage/shared/plans/all?sortBy="+PlanSortBy.RECENT.name())
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("myPage/shared/plans/all/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        queryParameters(parameterWithName("sortBy").description("정렬 방식을 구분하는 필드\n\n" +
+                                "- RECENT: 최신 저장 순(Default)\n\n" + "- UPCOMING: 다가오는 여정 순")),
+                        responseFields(
+                                fieldWithPath("plans").type(JsonFieldType.ARRAY).description("계획(어정) 리스트"),
+                                fieldWithPath("plans[].id").description("계획(여정)의 ID"),
+                                fieldWithPath("plans[].keywordName").description("계획(여정)의 대표 키워드"),
+                                fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
+                                fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
+                .andExpect(status().isOk());
+
+        verify(myPageService, times(1)).sharedPlansAll(any(LoginMember.class), any(PlanSortBy.class));
     }
 }

@@ -107,4 +107,16 @@ include::{snippets}/myPage/saved/plans/all/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/saved/plans/all/success/response-fields.adoc[]
 
+=== 4-12. 공유된 계획의 전체 리스트 - 성공
+==== Request Header
+include::{snippets}/myPage/shared/plans/all/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/shared/plans/all/success/http-request.adoc[]
+==== Query Parameters
+include::{snippets}/myPage/shared/plans/all/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/myPage/shared/plans/all/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/myPage/shared/plans/all/success/response-fields.adoc[]
+
 === link:api-docs.html[API 목록으로]

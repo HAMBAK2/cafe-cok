@@ -183,12 +183,12 @@ public class MyPageService {
             if(planStatus.equals(PlanStatus.SAVED) && !plan.getIsSaved()) continue;
             if(planStatus.equals(PlanStatus.SHARED) && !plan.getIsShared()) continue;
             if(!plan.getIsSaved()) continue;
-            KeywordDto findKeywordDto = KeywordDto
-                    .from(planKeywordRepository
-                            .getFirstByPlanIdAndKeywordCategory(plan.getId(), Category.PURPOSE)
-                            .getKeyword());
 
-            plans.add(MyPagePlanDto.of(plan, findKeywordDto));
+            Keyword keyword = planKeywordRepository
+                    .getFirstByPlanIdAndKeywordCategory(plan.getId(), Category.PURPOSE)
+                    .getKeyword();
+
+            plans.add(MyPagePlanDto.of(plan, keyword.getName()));
         }
 
         return plans;
@@ -216,12 +216,11 @@ public class MyPageService {
             if(planStatus.equals(PlanStatus.SAVED) && !plan.getIsSaved()) continue;
             if(planStatus.equals(PlanStatus.SHARED) && !plan.getIsShared()) continue;
 
-            KeywordDto findKeywordDto = KeywordDto
-                    .from(planKeywordRepository
-                            .getFirstByPlanIdAndKeywordCategory(plan.getId(), Category.PURPOSE)
-                            .getKeyword());
+            Keyword keyword = planKeywordRepository
+                    .getFirstByPlanIdAndKeywordCategory(plan.getId(), Category.PURPOSE)
+                    .getKeyword();
 
-            plans.add(MyPagePlanDto.of(plan, findKeywordDto));
+            plans.add(MyPagePlanDto.of(plan, keyword.getName()));
         }
 
         return plans;
