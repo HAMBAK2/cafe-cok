@@ -1,8 +1,8 @@
 package com.sideproject.hororok.combination.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
-import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.request.CombinationRequest;
+import com.sideproject.hororok.combination.dto.response.CombinationIdResponse;
 import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -37,11 +37,11 @@ class CombinationControllerTest extends ControllerTest {
     @DisplayName("조합 생성 - 성공")
     public void test_combination_create_success() throws Exception{
 
-        CombinationCreateRequest request = 조합_생성_요청();
-        CombinationCreateResponse response = 조합_생성_응답();
+        CombinationRequest request = 조합_생성_요청();
+        CombinationIdResponse response = 조합_생성_응답();
 
         when(combinationService
-                .create(any(CombinationCreateRequest.class), any(LoginMember.class)))
+                .create(any(CombinationRequest.class), any(LoginMember.class)))
                 .thenReturn(response);
 
         mockMvc.perform(post("/api/combination/create")
@@ -61,7 +61,7 @@ class CombinationControllerTest extends ControllerTest {
                         responseFields(fieldWithPath("combinationId").description("생성된 조합 ID"))))
                 .andExpect(status().isOk());
 
-        verify(combinationService, times(1)).create(any(CombinationCreateRequest.class), any(LoginMember.class));
+        verify(combinationService, times(1)).create(any(CombinationRequest.class), any(LoginMember.class));
     }
 
     @Test

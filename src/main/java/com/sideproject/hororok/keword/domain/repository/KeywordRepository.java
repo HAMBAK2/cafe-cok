@@ -80,4 +80,9 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
             "WHERE ck.combination.id = :combinationId")
     List<Keyword> findByCombinationId(final Long combinationId);
 
+    @Query("SELECT k.name " +
+            "FROM Keyword k " +
+            "JOIN CombinationKeyword ck ON k.id = ck.keyword.id " +
+            "WHERE ck.combination.id = :combinationId")
+    List<String> findNamesByCombinationId(final Long combinationId);
 }

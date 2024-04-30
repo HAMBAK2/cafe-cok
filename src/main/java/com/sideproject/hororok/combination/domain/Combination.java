@@ -35,4 +35,12 @@ public class Combination {
         this.icon = icon;
         this.member = member;
     }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public void setIcon(final String icon) {
+        this.icon = icon;
+    }
 }

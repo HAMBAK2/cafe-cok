@@ -3,8 +3,8 @@ package com.sideproject.hororok.combination.presentation;
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.hororok.combination.application.CombinationService;
-import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
-import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.request.CombinationRequest;
+import com.sideproject.hororok.combination.dto.response.CombinationIdResponse;
 import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,10 +23,10 @@ public class CombinationController {
 
     @PostMapping("/create")
     @Operation(summary = "조합을 생성하는 기능")
-    public ResponseEntity<CombinationCreateResponse> create(
-            @AuthenticationPrincipal LoginMember loginMember, @RequestBody CombinationCreateRequest request) {
+    public ResponseEntity<CombinationIdResponse> create(
+            @AuthenticationPrincipal LoginMember loginMember, @RequestBody CombinationRequest request) {
 
-        CombinationCreateResponse response = combinationService.create(request, loginMember);
+        CombinationIdResponse response = combinationService.create(request, loginMember);
         return ResponseEntity.ok(response);
     }
 
@@ -38,4 +38,15 @@ public class CombinationController {
         CombinationDetailResponse response = combinationService.detail(combinationId);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{combinationId}/edit")
+    @Operation(summary = "조합 수정 기능")
+    public ResponseEntity<CombinationIdResponse> edit(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @PathVariable Long combinationId, @RequestBody CombinationRequest request) {
+
+        CombinationIdResponse response = combinationService.edit(request, combinationId);
+        return ResponseEntity.ok(response);
+    }
+
 }

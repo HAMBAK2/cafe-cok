@@ -2,12 +2,11 @@ package com.sideproject.hororok.common.fixtures;
 
 import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.combination.dto.CombinationDto;
-import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
-import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.request.CombinationRequest;
+import com.sideproject.hororok.combination.dto.response.CombinationIdResponse;
 import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.카테고리_키워드_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_이름_리스트;
@@ -30,16 +29,16 @@ public class CombinationFixtures {
         return CombinationDto.from(조합());
     }
 
-    public static CombinationCreateRequest 조합_생성_요청() {
-        return new CombinationCreateRequest(조합_이름, 조합_아이콘, 키워드_이름_리스트);
+    public static CombinationRequest 조합_생성_요청() {
+        return new CombinationRequest(조합_이름, 조합_아이콘, 키워드_이름_리스트);
     }
 
     public static CombinationDetailResponse 조합_조회_응답() {
         return CombinationDetailResponse.of(조합(), 카테고리_키워드_DTO());
     }
 
-    public static CombinationCreateResponse 조합_생성_응답() {
-        return CombinationCreateResponse.of(조합_ID);
+    public static CombinationIdResponse 조합_생성_응답() {
+        return CombinationIdResponse.of(조합_ID);
     }
 
     public static Combination setCombinationId(Combination combination, final Long id) {

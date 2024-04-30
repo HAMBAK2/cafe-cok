@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CombinationCreateResponse {
+public class CombinationIdResponse {
 
     private Long combinationId;
 
-    public static CombinationCreateResponse of(final Long combinationId) {
-        return CombinationCreateResponse.builder()
+    public static CombinationIdResponse of(final Long combinationId) {
+        return CombinationIdResponse.builder()
                 .combinationId(combinationId)
                 .build();
     }
