@@ -57,7 +57,7 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<String> findNamesByReviewId(final Long reviewId);
 
 
-    @Query("SELECT NEW com.sideproject.hororok.keword.dto.KeywordCountDto(k.id, k.name, COUNT(crk)) " +
+    @Query("SELECT NEW com.sideproject.hororok.keword.dto.KeywordCountDto(k.name, COUNT(crk)) " +
             "FROM Keyword k " +
             "JOIN k.cafeReviewKeywords crk " +
             "WHERE crk.cafe.id = :cafeId " +
