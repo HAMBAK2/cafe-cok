@@ -48,11 +48,11 @@ public class MyPageController {
     }
 
     @GetMapping("/saved/plans")
-    @Operation(summary = "저장된 계획의 전체 리스트를 나타내는 API")
+    @Operation(summary = "저장된 계획의 리스트를 나타내는 API")
     public ResponseEntity<MyPagePlansResponse> savedPlans(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
         MyPagePlansResponse response = myPageService.savedPlans(loginMember, sortBy, page, size);
@@ -60,14 +60,34 @@ public class MyPageController {
     }
 
     @GetMapping("/shared/plans")
-    @Operation(summary = "공유된 계획의 전체 리스트ㅡ 나타내는 API")
+    @Operation(summary = "공유된 계획의 리스트를 나타내는 API")
     public ResponseEntity<MyPagePlansResponse> sharedPlans(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-            @RequestParam(required = false) Integer page,
+            @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
         MyPagePlansResponse response = myPageService.sharedPlans(loginMember, sortBy, page, size);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/saved/plans/all")
+    @Operation(summary = "저장된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlansAllResponse> savedPlansAll(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
+
+        MyPagePlansAllResponse response = myPageService.savedPlansAll(loginMember, sortBy);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/shared/plans/all")
+    @Operation(summary = "저장된 계획의 전체 리스트를 나타내는 API")
+    public ResponseEntity<MyPagePlansAllResponse> sharedPlansAll(
+            @AuthenticationPrincipal LoginMember loginMember,
+            @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
+
+        MyPagePlansAllResponse response = myPageService.savedPlansAll(loginMember, sortBy);
         return ResponseEntity.ok(response);
     }
 

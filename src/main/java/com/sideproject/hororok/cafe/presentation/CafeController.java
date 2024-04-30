@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.presentation;
 
+import com.amazonaws.Response;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
@@ -61,6 +62,13 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{cafeId}/images/all")
+    @Operation(summary = "카페 상세 정보의 사진의 전체 리스트")
+    public ResponseEntity<CafeDetailImageAllResponse> detailImagesAll(@Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailImageAllResponse response = cafeService.detailImagesAll(cafeId);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")

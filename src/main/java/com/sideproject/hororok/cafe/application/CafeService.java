@@ -143,12 +143,11 @@ public class CafeService {
 
     public CafeDetailImageResponse detailImages(final Long cafeId, final Long cursor) {
 
-        if(cursor == null) return getDetailImagesWhenCursorIsNull(cafeId);
-        if(cursor.equals(CURSOR_START_STR)) return getDetailImagesWhenFirstPage(cafeId);
+        if(cursor == null) return getDetailImagesWhenFirstPage(cafeId);
         return getDetailImagesWhenNotFirstPage(cafeId, cursor);
     }
 
-    private CafeDetailImageResponse getDetailImagesWhenCursorIsNull(final Long cafeId) {
+    public CafeDetailImageAllResponse detailImagesAll(final Long cafeId) {
 
         List<String> imageUrls = new ArrayList<>();
         List<String> cafeImageUrls = cafeImageRepository
@@ -158,8 +157,9 @@ public class CafeService {
         imageUrls.addAll(cafeImageUrls);
         imageUrls.addAll(reviewImageUrls);
 
-        return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        return CafeDetailImageAllResponse.from(imageUrls);
     }
+
     private CafeDetailImageResponse getDetailImagesWhenFirstPage(final Long cafeId) {
 
         List<String> imageUrls = new ArrayList<>();
