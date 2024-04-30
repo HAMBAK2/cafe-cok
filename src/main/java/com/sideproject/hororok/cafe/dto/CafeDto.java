@@ -18,7 +18,7 @@ public class CafeDto {
     private BigDecimal latitude;
     private double starRating;
     private Long reviewCount;
-    private String image;
+    private String imageUrl;
 
     public static CafeDto of(Cafe cafe, String imageUrl) {
         return CafeDto.builder()
@@ -30,7 +30,7 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(cafe.getReviewCount())
-                .image(imageUrl)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

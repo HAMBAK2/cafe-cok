@@ -1,6 +1,7 @@
 package com.sideproject.hororok.utils;
 
 
+import com.sideproject.hororok.review.domain.ReviewImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -94,22 +95,6 @@ public class FormatConverter {
             default:
                 throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
         }
-    }
-
-    public static Optional<File> convertFile(MultipartFile file) throws IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
-        }
-
-        return Optional.empty();
-    }
-
-    public static String generateKey(File file, String dirName) {
-        return dirName + "/" + file.getName() + UUID.randomUUID();
     }
 
 }

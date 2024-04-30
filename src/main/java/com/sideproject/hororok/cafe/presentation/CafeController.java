@@ -24,15 +24,6 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-    @GetMapping
-    @Operation(summary = "홈 화면에 보여줄 정보를 제공")
-    
-    public ResponseEntity<CafeHomeResponse> home() {
-
-        CafeHomeResponse response = cafeService.home();
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "해당하는 카페의 상세 정보 상단")
     public ResponseEntity<CafeDetailTopResponse> detailTop(
@@ -62,17 +53,17 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/images")
     @Operation(summary = "카페 상세 정보의 사진 탭")
-    public ResponseEntity<CafeDetailImageResponse> detailImage(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailImageResponse> detailImages(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
+            @RequestParam(required = false) Long cursor) {
 
-        CafeDetailImageResponse response = cafeService.detailImages(cafeId);
+        CafeDetailImageResponse response = cafeService.detailImages(cafeId, cursor);
         return ResponseEntity.ok(response);
     }
 
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
-    
     public ResponseEntity<CafeFindAgainResponse> findAgain(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
             @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
