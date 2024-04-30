@@ -1,5 +1,6 @@
 package com.sideproject.hororok.cafe.presentation;
 
+import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -257,6 +259,43 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).findCafeByBar(any(BigDecimal.class), any(BigDecimal.class));
+    }
+
+    @Test
+    @DisplayName("선택한 키워드와 현재 위치를 기준으로 검색 - 성공")
+    public void test_cafe_find_keyword_success() throws Exception {
+
+        CafeFindCategoryRequest request = 카페_카테고리_검색_요청();
+        CafeFindCategoryResponse response = 카페_카테고리_검색_응답();
+
+        when(cafeService.findCafeByKeyword(any(CafeFindCategoryRequest.class))).thenReturn(response);
+
+        mockMvc.perform(post("/api/cafe/find/keyword")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("cafe/find/keyword/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("latitude").description("검색 위치 위도"),
+                                fieldWithPath("longitude").description("검색 위치 경도"),
+                                fieldWithPath("keywords").type(JsonFieldType.ARRAY).description("사용자가 선택한 키워드 이름 리스트")),
+                        responseFields(
+                                fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("선택한 키워드와 위치 기반의 카페 리스트"),
+                                fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].name").description("카페 이름"),
+                                fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
+                                fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
+                                fieldWithPath("cafes[].latitude").description("카페 위도"),
+                                fieldWithPath("cafes[].longitude").description("카페 경도"),
+                                fieldWithPath("cafes[].starRating").description("카페 별점"),
+                                fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
+                                fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).findCafeByKeyword(any(CafeFindCategoryRequest.class));
     }
 
 

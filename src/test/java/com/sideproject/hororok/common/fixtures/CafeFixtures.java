@@ -5,6 +5,7 @@ import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.CafeImage;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.cafe.dto.CafeDto;
+import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 
 import java.lang.reflect.Field;
@@ -13,8 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_DTO_리스트;
-import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_카운트_DTO;
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MenuFixtures.메뉴_DTO_리스트;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.*;
 
@@ -36,6 +36,14 @@ public class CafeFixtures {
     public static final Long 커서 = 1L;
     public static final Boolean 다음_페이지_존재_여부 = true;
 
+
+    public static CafeFindCategoryResponse 카페_카테고리_검색_응답() {
+        return CafeFindCategoryResponse.from(카페_DTO_리스트());
+    }
+
+    public static CafeFindCategoryRequest 카페_카테고리_검색_요청() {
+        return new CafeFindCategoryRequest(카페_위도, 카페_경도, 키워드_이름_리스트);
+    }
 
     public static CafeFindBarResponse 카페_검색창_검색_응답() {
         return CafeFindBarResponse.from(카페_DTO_리스트());
