@@ -6,6 +6,7 @@ import com.sideproject.hororok.cafe.domain.CafeImage;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailBasicInfoResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailImageResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailMenuResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailTopResponse;
 
@@ -35,7 +36,13 @@ public class CafeFixtures {
     public static List<String> 휴무일_리스트 = Arrays.asList("휴무일");
 
     public static final String 카페_이미지_URL = "//카페이미지";
+    public static final Long 커서 = 1L;
+    public static final Boolean 다음_페이지_존재_여부 = true;
 
+
+    public static CafeDetailImageResponse 카페_상세_사진_페이징_응답() {
+        return CafeDetailImageResponse.of(Arrays.asList(카페_이미지_URL), 커서, 다음_페이지_존재_여부);
+    }
 
     public static CafeDetailMenuResponse 카페_상세_메뉴_응답() {
         return CafeDetailMenuResponse.from(메뉴_DTO_리스트());

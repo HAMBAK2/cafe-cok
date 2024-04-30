@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.presentation;
 
 import com.sideproject.hororok.cafe.dto.response.CafeDetailBasicInfoResponse;
+import com.sideproject.hororok.cafe.dto.response.CafeDetailImageResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailMenuResponse;
 import com.sideproject.hororok.cafe.dto.response.CafeDetailTopResponse;
 import com.sideproject.hororok.common.annotation.ControllerTest;
@@ -18,8 +19,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -132,6 +132,34 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailMenus(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("카페 상세정보 사진 탭 호출(페이징) - 성공")
+    public void test_cafe_detail_images_success() throws Exception {
+
+        CafeDetailImageResponse response = 카페_상세_사진_페이징_응답();
+
+        when(cafeService.detailImages(any(Long.class), any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/images", 카페_아이디)
+                                .param("cursor", 커서.toString())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/detail/images/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
+                        queryParameters(parameterWithName("cursor").description("페이징을 위한 커서 정보(null 전달 시 첫 번째 페이지 조회)")),
+                        responseFields(
+                                fieldWithPath("imageUrls").type(JsonFieldType.ARRAY).description("이미지 URL 리스트(최대 8개)"),
+                                fieldWithPath("cursor").description("페이징 시 사용되는 커서 정보"),
+                                fieldWithPath("hasNextPage").description("다음 페이지 존재 여부"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).detailImages(any(Long.class), any(Long.class));
     }
 
 
