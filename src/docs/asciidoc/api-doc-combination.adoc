@@ -17,4 +17,17 @@ include::{snippets}/combination/create/success/response-body.adoc[]
 ==== Response fields
 include::{snippets}/combination/create/success/response-fields.adoc[]
 
+=== 7-2. 조합 조회(POST) - 성공
+==== Request headers
+include::{snippets}/combination/detail/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/combination/detail/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/combination/detail/success/path-parameters.adoc[]
+==== Response body
+include::{snippets}/combination/detail/success/response-body.adoc[]
+==== Response fields
+include::{snippets}/combination/detail/success/response-fields.adoc[]
+
+
 === link:api-docs.html[API 목록으로]

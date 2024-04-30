@@ -207,8 +207,7 @@ class MyPageControllerTest extends ControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        pathParameters(
-                                parameterWithName("planId").description("선택한 계획(여정)의 ID")),
+                        pathParameters(parameterWithName("planId").description("선택한 계획(여정)의 ID")),
                         responseFields(
                                 fieldWithPath("planId").description("계획 ID"),
                                 fieldWithPath("matchType").description("계획하기 결과 타입(MATCH, SIMILAR, MISMATCH)"),

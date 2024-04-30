@@ -4,10 +4,12 @@ import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.combination.dto.CombinationDto;
 import com.sideproject.hororok.combination.dto.request.CombinationCreateRequest;
 import com.sideproject.hororok.combination.dto.response.CombinationCreateResponse;
+import com.sideproject.hororok.combination.dto.response.CombinationDetailResponse;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+import static com.sideproject.hororok.common.fixtures.KeywordFixtures.카테고리_키워드_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.키워드_이름_리스트;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 
@@ -30,6 +32,10 @@ public class CombinationFixtures {
 
     public static CombinationCreateRequest 조합_생성_요청() {
         return new CombinationCreateRequest(조합_이름, 조합_아이콘, 키워드_이름_리스트);
+    }
+
+    public static CombinationDetailResponse 조합_조회_응답() {
+        return CombinationDetailResponse.of(조합(), 카테고리_키워드_DTO());
     }
 
     public static CombinationCreateResponse 조합_생성_응답() {
