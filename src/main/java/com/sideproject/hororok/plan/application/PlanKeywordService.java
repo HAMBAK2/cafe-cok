@@ -27,12 +27,4 @@ public class PlanKeywordService {
 
         planKeywordRepository.saveAll(planKeywords);
     }
-
-    public List<Keyword> getKeywordsByPlanId(Long planId) {
-        List<PlanKeyword> findPlanKeywords = planKeywordRepository.findByPlanId(planId);
-        return findPlanKeywords.stream()
-                .map(findPlanKeyword -> findPlanKeyword.getKeyword())
-                .collect(Collectors.toList());
-    }
-
 }

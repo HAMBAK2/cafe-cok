@@ -16,11 +16,6 @@ public class KeywordService {
 
     private final KeywordRepository keywordRepository;
 
-    public CategoryKeywordsDto getAllCategoryKeywords() {
-        List<Keyword> keywords = keywordRepository.findAll();
-        return new CategoryKeywordsDto(keywords);
-    }
-
     public CategoryKeywordsDto getCategoryKeywords(final List<String> keywordNames) {
 
         List<Keyword> keywords = keywordRepository.findByNameIn(keywordNames);
