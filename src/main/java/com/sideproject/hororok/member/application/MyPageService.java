@@ -2,6 +2,9 @@ package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.cafe.dto.CafeDto;
+import com.sideproject.hororok.combination.domain.Combination;
+import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
+import com.sideproject.hororok.combination.dto.CombinationDto;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
@@ -33,6 +36,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.sideproject.hororok.utils.Constants.*;
 import static org.springframework.data.domain.Sort.*;
@@ -48,6 +52,7 @@ public class MyPageService {
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
     private final PlanKeywordRepository planKeywordRepository;
+    private final CombinationRepository combinationRepository;
 
     private final PlanCafeService planCafeService;
     private final PlanKeywordService planKeywordService;
@@ -119,6 +124,15 @@ public class MyPageService {
         }
 
         return MyPagePlanDetailResponse.of(findPlan, categoryKeywords, findSimilarCafes);
+    }
+
+    public MyPageCombinationResponse combination(final LoginMember loginMember) {
+
+        List<Combination> findCombination = combinationRepository.findByMemberId(loginMember.getId());
+        if(findCombination.isEmpty()) return MyPageCombinationResponse.builder().build();
+
+        List<CombinationDto> combinations = CombinationDto.fromList(findCombination);
+        return MyPageCombinationResponse.from(combinations);
     }
 
     private List<MyPagePlanDto> getPlansByRecent(final LoginMember loginMember,

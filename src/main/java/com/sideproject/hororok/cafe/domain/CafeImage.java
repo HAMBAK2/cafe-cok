@@ -1,6 +1,5 @@
 package com.sideproject.hororok.cafe.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sideproject.hororok.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
