@@ -126,6 +126,4 @@ public class CafeController {
         CafeFindCategoryResponse response = cafeService.findCafeByKeyword(request);
         return ResponseEntity.ok(response);
     }
-
-
 }
