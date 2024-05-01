@@ -1,6 +1,5 @@
 package com.sideproject.hororok.cafe.presentation;
 
-import com.amazonaws.Response;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
@@ -53,12 +52,12 @@ public class CafeController {
     }
 
     @GetMapping("/{cafeId}/images")
-    @Operation(summary = "카페 상세 정보의 사진 탭")
-    public ResponseEntity<CafeDetailImageResponse> detailImages(
+    @Operation(summary = "카페 상세 정보의 사진 탭(페이징)")
+    public ResponseEntity<CafeDetailImagePageResponse> detailImages(
             @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
             @RequestParam(required = false) Long cursor) {
 
-        CafeDetailImageResponse response = cafeService.detailImages(cafeId, cursor);
+        CafeDetailImagePageResponse response = cafeService.detailImages(cafeId, cursor);
         return ResponseEntity.ok(response);
     }
 
@@ -67,6 +66,25 @@ public class CafeController {
     public ResponseEntity<CafeDetailImageAllResponse> detailImagesAll(@Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
 
         CafeDetailImageAllResponse response = cafeService.detailImagesAll(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/reviews")
+    @Operation(summary = "카페 상세 정보의 리뷰 탭(페이징)")
+    public ResponseEntity<CafeDetailReviewPageResponse> detailReviews(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
+            @RequestParam(required = false) Long cursor) {
+
+        CafeDetailReviewPageResponse response = cafeService.detailReviews(cafeId, cursor);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/reviews/all")
+    @Operation(summary = "카페 상세 정보의 리뷰 탭(전체 리스트)")
+    public ResponseEntity<CafeDetailReviewAllResponse> detailReviewsAll(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailReviewAllResponse response = cafeService.detailReviewsAll(cafeId);
         return ResponseEntity.ok(response);
     }
 

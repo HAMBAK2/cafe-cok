@@ -57,6 +57,11 @@ public class CafeService {
 
     private static final Boolean HAS_NEXT_PAGE = true;
     private static final Boolean NO_NEXT_PAGE = false;
+    private static final Long NO_CURSOR = null;
+    public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
+    public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
+    public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
+    public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
 
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
@@ -128,7 +133,7 @@ public class CafeService {
                 .findByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_MENU_CNT)));
         List<String> imageUrls = getImageUrlsByCafeIdAndReviewImageCnt(cafeId, CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
-        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtosByCafeId(cafeId);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtos(cafeId, CAFE_DETAIL_BASIC_REVIEW_CNT);
 
         return CafeDetailBasicInfoResponse
                 .of(findCafe, openStatus, businessHours, closedDay, menus,
@@ -141,10 +146,47 @@ public class CafeService {
         return CafeDetailMenuResponse.from(menuDtos);
     }
 
-    public CafeDetailImageResponse detailImages(final Long cafeId, final Long cursor) {
+    public CafeDetailImagePageResponse detailImages(final Long cafeId, final Long cursor) {
 
         if(cursor == null) return getDetailImagesWhenFirstPage(cafeId);
         return getDetailImagesWhenNotFirstPage(cafeId, cursor);
+    }
+
+    private CafeDetailImagePageResponse getDetailImagesWhenFirstPage(final Long cafeId) {
+
+        List<String> imageUrls = new ArrayList<>();
+
+        List<String> cafeImageUrls = cafeImageRepository
+                .findImageUrlsByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_IMAGE_MAX_CNT));
+        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_SIZE - cafeImageUrls.size());
+        Page<ReviewImage> findReviewImagePage = reviewImageRepository.findPageByCafeIdOrderByIdDesc(cafeId, pageable);
+
+        if(!findReviewImagePage.hasContent()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
+
+        List<ReviewImage> reviewImages = findReviewImagePage.getContent();
+        for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
+        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
+
+        Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
+        return CafeDetailImagePageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
+    }
+
+    private CafeDetailImagePageResponse getDetailImagesWhenNotFirstPage(final Long cafeId, final Long cursor) {
+
+        List<String> imageUrls = new ArrayList<>();
+
+        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_SIZE);
+        Page<ReviewImage> findReviewImagePage = reviewImageRepository
+                .findPageByCafeIdOrderByIdDesc(cafeId, pageable, cursor);
+
+        if(!findReviewImagePage.hasContent()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
+
+        List<ReviewImage> reviewImages = findReviewImagePage.getContent();
+        for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
+        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
+
+        Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
+        return CafeDetailImagePageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
     }
 
     public CafeDetailImageAllResponse detailImagesAll(final Long cafeId) {
@@ -160,60 +202,64 @@ public class CafeService {
         return CafeDetailImageAllResponse.from(imageUrls);
     }
 
-    private CafeDetailImageResponse getDetailImagesWhenFirstPage(final Long cafeId) {
+    public CafeDetailReviewPageResponse detailReviews(final Long cafeId, final Long cursor) {
 
-        List<String> imageUrls = new ArrayList<>();
+        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
+        List<CafeDetailReviewDto> reviews;
+        if(cursor == NO_CURSOR) reviews = getCafeDetailReviewDtos(cafeId, CAFE_DETAIL_REVIEW_CNT);
+        else reviews = getCafeDetailReviewDtos(cafeId, CAFE_DETAIL_REVIEW_CNT, cursor);
 
-        List<String> cafeImageUrls = cafeImageRepository
-                .findImageUrlsByCafeId(cafeId, PageRequest.of(0, CAFE_DETAIL_IMAGE_MAX_CNT));
-        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_SIZE - cafeImageUrls.size());
-        Page<ReviewImage> findReviewImagePage = reviewImageRepository.findPageByCafeIdOrderByIdDesc(cafeId, pageable);
 
-        if(!findReviewImagePage.hasContent()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        if(reviews.size() == CAFE_DETAIL_REVIEW_CNT) {
+            Long newCursor = reviews.get(reviews.size() - 1).getId();;
+            return CafeDetailReviewPageResponse.of(userChoiceKeywords, reviews, newCursor, HAS_NEXT_PAGE);
+        }
 
-        List<ReviewImage> reviewImages = findReviewImagePage.getContent();
-        for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
-        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
-
-        Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
-        return CafeDetailImageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
+        return CafeDetailReviewPageResponse.of(userChoiceKeywords, reviews);
     }
 
-    private CafeDetailImageResponse getDetailImagesWhenNotFirstPage(final Long cafeId, final Long cursor) {
+    public CafeDetailReviewAllResponse detailReviewsAll(final Long cafeId) {
 
-        List<String> imageUrls = new ArrayList<>();
+        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtos(cafeId, ALL_LIST_CNT);;
 
-        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_SIZE);
-        Page<ReviewImage> findReviewImagePage = reviewImageRepository
-                .findPageByCafeIdOrderByIdDesc(cafeId, pageable, cursor);
-
-        if(!findReviewImagePage.hasContent()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
-
-        List<ReviewImage> reviewImages = findReviewImagePage.getContent();
-        for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
-        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
-
-        Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
-        return CafeDetailImageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
+        return CafeDetailReviewAllResponse.of(userChoiceKeywords, reviews);
     }
 
+    private List<CafeDetailReviewDto> getCafeDetailReviewDtos(final Long cafeId, final Integer reviewCnt) {
 
-    public List<CafeDetailReviewDto> getCafeDetailReviewDtosByCafeId(final Long cafeId) {
-        List<Review> reviews = reviewRepository
-                .findByCafeIdOrderByCreatedDateDesc(cafeId, PageRequest.of(0, CAFE_DETAIL_BASIC_REVIEW_CNT));
+        Pageable pageable = PageRequest.of(0, reviewCnt);
+        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        return convertReviewsToCafeDetailReviewDtos(cafeId, reviews);
+    }
+
+    private List<CafeDetailReviewDto> getCafeDetailReviewDtos
+            (final Long cafeId, final Integer reviewCnt, Long cursor) {
+
+        Pageable pageable = PageRequest.of(0, reviewCnt);
+        List<Review> reviews;
+        if(cursor == NO_CURSOR) reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        else reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable, cursor).getContent();
+
+        if(reviews.size() < pageable.getPageSize()) return convertReviewsToCafeDetailReviewDtos(cafeId, reviews);
+        return convertReviewsToCafeDetailReviewDtos(cafeId, reviews);
+    }
+
+    private List<CafeDetailReviewDto> convertReviewsToCafeDetailReviewDtos(final Long cafeId, final List<Review> reviews) {
         List<CafeDetailReviewDto> cafeDetailReviewDtos = new ArrayList<>();
         for (Review review : reviews) {
             List<String> recommendMenus = keywordRepository
-                            .findNameByReviewIdAndCategory(review.getId(), Category.MENU,
-                                    PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT));
+                    .findNameByReviewIdAndCategory(review.getId(), Category.MENU,
+                            PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT));
             List<String> imageUrls = reviewImageRepository.findImageUrlsByCafeIdOrderByIdDesc(cafeId,
-                            PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT));
+                    PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT));
             cafeDetailReviewDtos.add(CafeDetailReviewDto.of(review, imageUrls, recommendMenus));
         }
         return cafeDetailReviewDtos;
     }
 
-    public List<KeywordCountDto> getUserChoiceKeywordCounts(Long cafeId) {
+
+    private List<KeywordCountDto> getUserChoiceKeywordCounts(Long cafeId) {
         List<KeywordCountDto> allCafeKeywordCountDtos
                 = keywordRepository.findKeywordCountsByCafeId(cafeId);
 

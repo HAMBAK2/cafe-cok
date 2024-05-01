@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class CafeDetailReviewDto {
 
+    private Long id;
     private String content;
     private Integer starRating;
     private String specialNote;
@@ -22,11 +23,11 @@ public class CafeDetailReviewDto {
     private List<String> imageUrls;
     private List<String> recommendMenus;
 
-
     public static CafeDetailReviewDto of(
             final Review review, final List<String> imageUrls, final List<String> recommendMenus) {
 
         return CafeDetailReviewDto.builder()
+                .id(review.getId())
                 .starRating(review.getStarRating())
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())

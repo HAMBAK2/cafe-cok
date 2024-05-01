@@ -7,21 +7,21 @@ import java.util.List;
 
 @Getter
 @Builder
-public class CafeDetailImageResponse {
+public class CafeDetailImagePageResponse {
 
     private List<String> imageUrls;
     private Long cursor;
     private Boolean hasNextPage;
 
-    public static CafeDetailImageResponse of(final List<String> imageUrls, final Boolean hasNextPage) {
-        return CafeDetailImageResponse.builder()
+    public static CafeDetailImagePageResponse of(final List<String> imageUrls, final Boolean hasNextPage) {
+        return CafeDetailImagePageResponse.builder()
                 .imageUrls(imageUrls)
                 .hasNextPage(hasNextPage)
                 .build();
     }
 
-    public static CafeDetailImageResponse of(final List<String> imageUrls, final Long cursor, final Boolean hasNextPage) {
-        return CafeDetailImageResponse.builder()
+    public static CafeDetailImagePageResponse of(final List<String> imageUrls, final Long cursor, final Boolean hasNextPage) {
+        return CafeDetailImagePageResponse.builder()
                 .imageUrls(imageUrls)
                 .cursor(cursor)
                 .hasNextPage(hasNextPage)
