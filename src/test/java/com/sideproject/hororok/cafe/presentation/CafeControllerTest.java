@@ -96,6 +96,7 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("userChoiceKeywords[].name").description("키워드 이름"),
                                 fieldWithPath("userChoiceKeywords[].count").description("키워드 선택 횟수"),
                                 fieldWithPath("reviews").type(JsonFieldType.ARRAY).description("카페 리뷰 리스(최대 2개)"),
+                                fieldWithPath("reviews[].id").description("리뷰 id"),
                                 fieldWithPath("reviews[].content").description("리뷰 내용"),
                                 fieldWithPath("reviews[].starRating").description("리뷰 별점"),
                                 fieldWithPath("reviews[].specialNote").description("리뷰 특이사항"),

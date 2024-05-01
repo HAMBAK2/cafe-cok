@@ -52,7 +52,7 @@ public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> 
                 "JOIN r.cafe c " +
             "WHERE c.id = :cafeId " +
                 "AND  ri.id < :id " +
-            "ORDER BY ri.createdDate DESC, ri.id DESC")
+            "ORDER BY ri.id DESC")
     Page<ReviewImage> findPageByCafeIdOrderByIdDesc(
             final Long cafeId, final Pageable pageable, final Long id);
 

@@ -53,7 +53,7 @@ public class CafeController {
     }
 
     @GetMapping("/{cafeId}/images")
-    @Operation(summary = "카페 상세 정보의 사진 탭")
+    @Operation(summary = "카페 상세 정보의 사진 탭(페이징)")
     public ResponseEntity<CafeDetailImageResponse> detailImages(
             @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
             @RequestParam(required = false) Long cursor) {
@@ -67,6 +67,16 @@ public class CafeController {
     public ResponseEntity<CafeDetailImageAllResponse> detailImagesAll(@Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
 
         CafeDetailImageAllResponse response = cafeService.detailImagesAll(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/reviews")
+    @Operation(summary = "카페 상세 정보의 리뷰 탭(페이징)")
+    public ResponseEntity<CafeDetailReviewPageResponse> detailReviews(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
+            @RequestParam(required = false) Long cursor) {
+
+        CafeDetailReviewPageResponse response = cafeService.detailReviews(cafeId, cursor);
         return ResponseEntity.ok(response);
     }
 

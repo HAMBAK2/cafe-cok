@@ -29,13 +29,8 @@ public class Constants {
 
     public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
 
-    public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
-    public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
-
-
     public static final Long NO_MEMBER_ID = 1L;
 
-    public static final Long CURSOR_START_STR = 0L;
 
 
 }
