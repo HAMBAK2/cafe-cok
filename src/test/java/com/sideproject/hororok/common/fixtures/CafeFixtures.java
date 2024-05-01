@@ -55,9 +55,13 @@ public class CafeFixtures {
         return CafeDetailImageAllResponse.from(Arrays.asList(카페_이미지_URL));
     }
 
-    public static CafeDetailReviewPageResponse 리뷰_상세_리뷰_페이징_응답() {
+    public static CafeDetailReviewPageResponse 카페_상세_리뷰_페이징_응답() {
         return CafeDetailReviewPageResponse
                 .of(Arrays.asList(키워드_카운트_DTO()), Arrays.asList(카페_상세_리뷰_DTO()), 커서, 다음_페이지_존재_여부);
+    }
+
+    public static CafeDetailReviewAllResponse 카페_상세_리뷰_전체_응답() {
+        return CafeDetailReviewAllResponse.of(Arrays.asList(키워드_카운트_DTO()),Arrays.asList(카페_상세_리뷰_DTO()));
     }
 
     public static CafeDetailImagePageResponse 카페_상세_사진_페이징_응답() {
