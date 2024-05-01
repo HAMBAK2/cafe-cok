@@ -88,5 +88,17 @@ include::{snippets}/cafe/find/keyword/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/cafe/find/keyword/success/response-fields.adoc[]
 
+=== 6-9. 카페 상세정보 리뷰_페이징(GET) - 성공
+==== Http request
+include::{snippets}/cafe/detail/reviews/success/http-request.adoc[]
+==== Path parameters
+include::{snippets}/cafe/detail/reviews/success/path-parameters.adoc[]
+==== Query parameters
+include::{snippets}/cafe/detail/reviews/success/query-parameters.adoc[]
+==== Http Response
+include::{snippets}/cafe/detail/reviews/success/http-response.adoc[]
+==== Response Fields
+include::{snippets}/cafe/detail/reviews/success/response-fields.adoc[]
+
 
 === link:api-docs.html[API 목록으로]

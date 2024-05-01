@@ -1,8 +1,6 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.cafe.domain.Cafe;
-import com.sideproject.hororok.cafe.domain.CafeImage;
 import com.sideproject.hororok.cafe.domain.enums.OpenStatus;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
@@ -57,8 +55,13 @@ public class CafeFixtures {
         return CafeDetailImageAllResponse.from(Arrays.asList(카페_이미지_URL));
     }
 
-    public static CafeDetailImageResponse 카페_상세_사진_페이징_응답() {
-        return CafeDetailImageResponse.of(Arrays.asList(카페_이미지_URL), 커서, 다음_페이지_존재_여부);
+    public static CafeDetailReviewPageResponse 리뷰_상세_리뷰_페이징_응답() {
+        return CafeDetailReviewPageResponse
+                .of(Arrays.asList(키워드_카운트_DTO()), Arrays.asList(카페_상세_리뷰_DTO()), 커서, 다음_페이지_존재_여부);
+    }
+
+    public static CafeDetailImagePageResponse 카페_상세_사진_페이징_응답() {
+        return CafeDetailImagePageResponse.of(Arrays.asList(카페_이미지_URL), 커서, 다음_페이지_존재_여부);
     }
 
     public static CafeDetailMenuResponse 카페_상세_메뉴_응답() {

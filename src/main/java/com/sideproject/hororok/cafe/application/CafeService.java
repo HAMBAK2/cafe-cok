@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -147,13 +146,13 @@ public class CafeService {
         return CafeDetailMenuResponse.from(menuDtos);
     }
 
-    public CafeDetailImageResponse detailImages(final Long cafeId, final Long cursor) {
+    public CafeDetailImagePageResponse detailImages(final Long cafeId, final Long cursor) {
 
         if(cursor == null) return getDetailImagesWhenFirstPage(cafeId);
         return getDetailImagesWhenNotFirstPage(cafeId, cursor);
     }
 
-    private CafeDetailImageResponse getDetailImagesWhenFirstPage(final Long cafeId) {
+    private CafeDetailImagePageResponse getDetailImagesWhenFirstPage(final Long cafeId) {
 
         List<String> imageUrls = new ArrayList<>();
 
@@ -162,17 +161,17 @@ public class CafeService {
         Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_SIZE - cafeImageUrls.size());
         Page<ReviewImage> findReviewImagePage = reviewImageRepository.findPageByCafeIdOrderByIdDesc(cafeId, pageable);
 
-        if(!findReviewImagePage.hasContent()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        if(!findReviewImagePage.hasContent()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
 
         List<ReviewImage> reviewImages = findReviewImagePage.getContent();
         for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
-        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
 
         Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
-        return CafeDetailImageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
+        return CafeDetailImagePageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
     }
 
-    private CafeDetailImageResponse getDetailImagesWhenNotFirstPage(final Long cafeId, final Long cursor) {
+    private CafeDetailImagePageResponse getDetailImagesWhenNotFirstPage(final Long cafeId, final Long cursor) {
 
         List<String> imageUrls = new ArrayList<>();
 
@@ -180,14 +179,14 @@ public class CafeService {
         Page<ReviewImage> findReviewImagePage = reviewImageRepository
                 .findPageByCafeIdOrderByIdDesc(cafeId, pageable, cursor);
 
-        if(!findReviewImagePage.hasContent()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        if(!findReviewImagePage.hasContent()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
 
         List<ReviewImage> reviewImages = findReviewImagePage.getContent();
         for (ReviewImage reviewImage : reviewImages) imageUrls.add(reviewImage.getImageUrl());
-        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImageResponse.of(imageUrls, NO_NEXT_PAGE);
+        if(reviewImages.size() < pageable.getPageSize()) return CafeDetailImagePageResponse.of(imageUrls, NO_NEXT_PAGE);
 
         Long newCursor = reviewImages.get(reviewImages.size() - 1).getId();
-        return CafeDetailImageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
+        return CafeDetailImagePageResponse.of(imageUrls, newCursor, HAS_NEXT_PAGE);
     }
 
     public CafeDetailImageAllResponse detailImagesAll(final Long cafeId) {

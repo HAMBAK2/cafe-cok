@@ -141,7 +141,7 @@ class CafeControllerTest extends ControllerTest {
     @DisplayName("카페 상세정보 사진 탭 호출(페이징) - 성공")
     public void test_cafe_detail_images_success() throws Exception {
 
-        CafeDetailImageResponse response = 카페_상세_사진_페이징_응답();
+        CafeDetailImagePageResponse response = 카페_상세_사진_페이징_응답();
 
         when(cafeService.detailImages(any(Long.class), any(Long.class))).thenReturn(response);
 
@@ -187,6 +187,46 @@ class CafeControllerTest extends ControllerTest {
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailImagesAll(any(Long.class));
+    }
+
+    @Test
+    @DisplayName("카페 상세정보 리뷰 탭 호출(페이징) - 성공")
+    public void test_cafe_detail_reviews_success() throws Exception {
+
+        CafeDetailReviewPageResponse response = 리뷰_상세_리뷰_페이징_응답();
+
+        when(cafeService.detailReviews(any(Long.class), any(Long.class))).thenReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/reviews", 카페_아이디)
+                                .param("cursor", 커서.toString())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("cafe/detail/reviews/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
+                        queryParameters(parameterWithName("cursor").description("페이징을 위한 커서 정보(null 전달 시 첫 번째 페이지 조회)")),
+                        responseFields(
+                                fieldWithPath("userChoiceKeywords").type(JsonFieldType.ARRAY).description("사용자가 선택한 키워드 리스"),
+                                fieldWithPath("userChoiceKeywords[].name").description("키워드 이름"),
+                                fieldWithPath("userChoiceKeywords[].count").description("키워드 선택 횟수"),
+                                fieldWithPath("reviews").type(JsonFieldType.ARRAY).description("카페 리뷰 리스(최대 2개)"),
+                                fieldWithPath("reviews[].id").description("리뷰 id"),
+                                fieldWithPath("reviews[].content").description("리뷰 내용"),
+                                fieldWithPath("reviews[].starRating").description("리뷰 별점"),
+                                fieldWithPath("reviews[].specialNote").description("리뷰 특이사항"),
+                                fieldWithPath("reviews[].createDate").description("리뷰 작성일자"),
+                                fieldWithPath("reviews[].picture").description("리뷰 작성자 프로필 이미지 경로"),
+                                fieldWithPath("reviews[].nickname").description("리뷰 작성자 닉네임"),
+                                fieldWithPath("reviews[].imageUrls").type(JsonFieldType.ARRAY).description("리뷰 이미지 리스트(최대 5개)"),
+                                fieldWithPath("reviews[].recommendMenus").type(JsonFieldType.ARRAY).description("추천 메뉴 리스트(최대3개)"),
+                                fieldWithPath("cursor").description("페이징 시 사용되는 커서 정보"),
+                                fieldWithPath("hasNextPage").description("다음 페이지 존재 여부"))))
+                .andExpect(status().isOk());
+
+        verify(cafeService, times(1)).detailReviews(any(Long.class), any(Long.class));
     }
 
     @Test

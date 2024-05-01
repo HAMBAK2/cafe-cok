@@ -13,8 +13,8 @@ public class CafeDetailReviewPageResponse {
 
     private List<KeywordCountDto> userChoiceKeywords;
     private List<CafeDetailReviewDto> reviews;
-    private Boolean hasNextPage;
     private Long cursor;
+    private Boolean hasNextPage;
 
     public static CafeDetailReviewPageResponse of(
             final List<KeywordCountDto> userChoiceKeywords, final List<CafeDetailReviewDto> reviews){
