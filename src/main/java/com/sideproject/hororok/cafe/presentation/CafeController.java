@@ -79,6 +79,15 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{cafeId}/reviews/all")
+    @Operation(summary = "카페 상세 정보의 리뷰 탭(전체 리스트)")
+    public ResponseEntity<CafeDetailReviewAllResponse> detailReviewsAll(
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+
+        CafeDetailReviewAllResponse response = cafeService.detailReviewsAll(cafeId);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     public ResponseEntity<CafeFindAgainResponse> findAgain(

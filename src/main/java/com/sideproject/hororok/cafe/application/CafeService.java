@@ -61,7 +61,7 @@ public class CafeService {
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
     public static final Integer CAFE_DETAIL_BASIC_MENU_CNT = 2;
     public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
-    public static final Integer CAFE_DETAIL_REVIEW_ALL_CNT = Integer.MAX_VALUE;
+    public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
 
     public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
 
@@ -216,6 +216,14 @@ public class CafeService {
         }
 
         return CafeDetailReviewPageResponse.of(userChoiceKeywords, reviews);
+    }
+
+    public CafeDetailReviewAllResponse detailReviewsAll(final Long cafeId) {
+
+        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtos(cafeId, ALL_LIST_CNT);;
+
+        return CafeDetailReviewAllResponse.of(userChoiceKeywords, reviews);
     }
 
     private List<CafeDetailReviewDto> getCafeDetailReviewDtos(final Long cafeId, final Integer reviewCnt) {
