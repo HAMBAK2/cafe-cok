@@ -12,6 +12,7 @@ import com.sideproject.hororok.cafe.exception.NoSuchCategoryException;
 import com.sideproject.hororok.combination.exception.NoSuchCombinationException;
 import com.sideproject.hororok.global.error.dto.ErrorReportRequest;
 import com.sideproject.hororok.global.error.dto.ErrorResponse;
+import com.sideproject.hororok.global.error.exception.MissingRequiredValueException;
 import com.sideproject.hororok.keword.exception.NoSuchKeywordException;
 import com.sideproject.hororok.member.exception.InvalidMemberException;
 import com.sideproject.hororok.member.exception.NoSuchMemberException;
@@ -43,12 +44,14 @@ public class ControllerAdvice {
 
     @ExceptionHandler({
             InvalidMemberException.class,
-            InvalidCafeException.class
+            InvalidCafeException.class,
+            MissingRequiredValueException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
+
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequestBody() {
@@ -127,9 +130,4 @@ public class ControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse("예상하지 못한 서버 에러가 발생했습니다.");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
-
-
-
-
-
 }

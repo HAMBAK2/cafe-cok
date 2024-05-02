@@ -1,6 +1,7 @@
 package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
+import com.sideproject.hororok.global.error.exception.MissingRequiredValueException;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
@@ -51,6 +52,8 @@ public class ReviewService {
     private final ReviewImageRepository reviewImageRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
+    private static final String KEYWORD = "keyword";
+
     @Transactional
     public ReviewCreateResponse createReview(
             final ReviewCreateRequest request, final LoginMember loginMember, final List<MultipartFile> files) {
@@ -63,8 +66,10 @@ public class ReviewService {
                 new Review(request.getContent(), request.getSpecialNote(), request.getStarRating(), findCafe, findMember);
         Review savedReview = reviewRepository.save(review);
 
-        saveByReviewAndKeywordNames(savedReview, request.getKeywords());
-        saveByReviewAndMultipartFiles(savedReview, files);
+        if(request.getKeywords() == null) {
+            throw new MissingRequiredValueException(KEYWORD);
+        } else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
+        if(files != null) saveByReviewAndMultipartFiles(savedReview, files);
 
         return new ReviewCreateResponse(savedReview.getId());
     }
@@ -119,10 +124,6 @@ public class ReviewService {
         }
     }
 
-
-
-
-
     @Transactional
     public ReviewEditResponse edit(final ReviewEditRequest request, final List<MultipartFile> files, final Long reviewId) {
 
@@ -133,7 +134,8 @@ public class ReviewService {
         if(request.getStarRating() != null) findReview.changeStarRating(request.getStarRating());
         if(request.getDeletedImageIds() != null) deleteByIds(request.getDeletedImageIds());
         if(files != null) saveByReviewAndMultipartFiles(findReview, files);
-        if(request.getKeywords() != null) changeByReviewAndKeywordNames(findReview, request.getKeywords());
+        if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
+        else changeByReviewAndKeywordNames(findReview, request.getKeywords());
 
         return new ReviewEditResponse(reviewId);
     }
@@ -141,6 +143,7 @@ public class ReviewService {
     private void saveByReviewAndMultipartFiles(final Review review, final List<MultipartFile> files) {
 
         List<ReviewImage> reviewImages = saveImagesObjectStorage(review, files);
+        if(reviewImages.isEmpty()) return;
         for (ReviewImage reviewImage : reviewImages) reviewImageRepository.save(reviewImage);
     }
 
@@ -155,6 +158,9 @@ public class ReviewService {
     private List<ReviewImage> saveImagesObjectStorage(final Review review, final List<MultipartFile> files) {
 
         List<ReviewImage> reviewImages = new ArrayList<>();
+
+        if(files.isEmpty()) return reviewImages;
+
         for (MultipartFile file : files) {
             ReviewImage reviewImage =
                     new ReviewImage(s3Uploader.upload(file, REVIEW_IMAGE_DIR)
