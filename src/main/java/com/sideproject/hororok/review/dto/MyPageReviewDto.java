@@ -5,6 +5,7 @@ import com.sideproject.hororok.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -17,6 +18,7 @@ public class MyPageReviewDto {
     private Integer starRating;
     private String content;
     private String specialNote;
+    private LocalDate createdDate;
     private List<ReviewImageDto> images;
     private List<KeywordDto> keywords;
 
@@ -31,8 +33,10 @@ public class MyPageReviewDto {
                 .starRating(review.getStarRating())
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())
+                .createdDate(review.getCreatedDate().toLocalDate())
                 .images(images)
                 .keywords(keywords)
                 .build();
     }
+
 }

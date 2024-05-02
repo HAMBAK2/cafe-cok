@@ -4,7 +4,6 @@ import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.member.dto.response.*;
 import com.sideproject.hororok.plan.domain.enums.PlanSortBy;
-import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -14,8 +13,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.마이페이지_계획_상세_응답;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.맴버_닉네임;
@@ -257,6 +254,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("reviews[].starRating").description("리뷰 별점"),
                                 fieldWithPath("reviews[].content").description("리뷰 내용"),
                                 fieldWithPath("reviews[].specialNote").description("리뷰 특이사항"),
+                                fieldWithPath("reviews[].createdDate").description("리뷰 생성 일자"),
                                 fieldWithPath("reviews[].images").type(JsonFieldType.ARRAY).description("리뷰의 이미지 리스트"),
                                 fieldWithPath("reviews[].images[].id").description("리뷰 이미지 ID"),
                                 fieldWithPath("reviews[].images[].imageUrl").description("리뷰 이미지 URL"),
