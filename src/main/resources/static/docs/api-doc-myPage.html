@@ -610,8 +610,8 @@ Content-Length: 204
     "name" : "폴더_이름",
     "color" : "폴더_색상",
     "bookmarkCount" : 1,
-    "defaultFolder" : false,
-    "visible" : true
+    "visible" : true,
+    "defaultFolder" : false
   } ]
 }</code></pre>
 </div>
@@ -1021,7 +1021,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 627
+Content-Length: 624
 
 {
   "planId" : 1,
@@ -1042,8 +1042,8 @@ Content-Length: 627
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 155.29479605741187,
-    "longitude" : 35.046704506867734,
+    "latitude" : 90.99247690845927,
+    "longitude" : 32.2910451620435,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1358,7 +1358,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 395
+Content-Length: 429
 
 {
   "reviews" : [ {
@@ -1368,6 +1368,7 @@ Content-Length: 395
     "starRating" : 5,
     "content" : "리뷰 내용",
     "specialNote" : "리뷰 특이사항",
+    "createdDate" : "2024-05-02",
     "images" : [ {
       "id" : null,
       "imageUrl" : "리뷰 이미지 URL"
@@ -1432,6 +1433,11 @@ Content-Length: 395
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].specialNote</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 특이사항</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 생성 일자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images</code></p></td>
