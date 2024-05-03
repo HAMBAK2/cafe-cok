@@ -59,9 +59,6 @@ public class Cafe extends BaseEntity {
     private List<Review> reviews = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "cafe")
-    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
-
     protected Cafe(){}
 
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
