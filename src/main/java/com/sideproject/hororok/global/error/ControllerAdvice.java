@@ -32,6 +32,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import javax.naming.NoPermissionException;
@@ -46,10 +47,16 @@ public class ControllerAdvice {
     @ExceptionHandler({
             InvalidMemberException.class,
             InvalidCafeException.class,
-            MissingRequiredValueException.class
+            MissingRequiredValueException.class,
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestPart(final MissingServletRequestPartException e) {
+        ErrorResponse errorResponse = new ErrorResponse("요청 파트 중 <" + e.getRequestPartName() + "> 파트가 존재하지 않습니다.");
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
@@ -121,6 +128,8 @@ public class ControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.internalServerError().body(errorResponse);
     }
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,

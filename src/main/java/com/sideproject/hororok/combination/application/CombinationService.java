@@ -43,7 +43,6 @@ public class CombinationService {
     }
 
 
-
     public CombinationDetailResponse detail(final Long combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
@@ -62,10 +61,11 @@ public class CombinationService {
 
         Combination savedCombination = combinationRepository.save(findCombination);
         List<String> findKeywords = keywordRepository.findNamesByCombinationId(combinationId);
-        if(!ListUtils.areListEqual(request.getKeywords(), findKeywords)) {
-            combinationKeywordRepository.deleteByCombinationId(combinationId);
-            saveCombinationKeywordsByCombinationAndKeywordNames(savedCombination, request.getKeywords());
-        }
+        if(ListUtils.areListEqual(request.getKeywords(), findKeywords))
+            return CombinationIdResponse.of(savedCombination.getId());
+
+        combinationKeywordRepository.deleteByCombinationId(combinationId);
+        saveCombinationKeywordsByCombinationAndKeywordNames(savedCombination, request.getKeywords());
 
         return CombinationIdResponse.of(savedCombination.getId());
     }

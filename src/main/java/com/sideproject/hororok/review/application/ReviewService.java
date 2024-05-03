@@ -99,8 +99,11 @@ public class ReviewService {
             List<ReviewImageDto> findImages
                     = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(review.getId()));
             List<KeywordDto> findKeywords
-                    = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU)
-                    .subList(0, RECOMMEND_MENU_MAX_CNT));
+                    = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
+
+            if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
+                findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
+
             return MyPageReviewDto.of(review, findImages, findKeywords);
         }).collect(Collectors.toList());
 

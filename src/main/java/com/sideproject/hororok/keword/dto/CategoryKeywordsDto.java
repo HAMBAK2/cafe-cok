@@ -2,12 +2,14 @@ package com.sideproject.hororok.keword.dto;
 
 import com.sideproject.hororok.cafe.exception.NoSuchCategoryException;
 import com.sideproject.hororok.keword.domain.Keyword;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
 public class CategoryKeywordsDto {
 
     private List<String> purpose = new ArrayList<>();

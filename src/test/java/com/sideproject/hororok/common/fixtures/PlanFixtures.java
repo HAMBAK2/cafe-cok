@@ -38,11 +38,17 @@ public class PlanFixtures {
         return plan;
     }
 
+    public static Plan 저장_공유_X_계획() {
+        Plan plan = new Plan(사용자(), 위치_이름, 날짜, 시작_시간, 끝_시간, 도보_시간, MatchType.SIMILAR, false, false);
+        setId(plan, 계획_ID);
+        return plan;
+    }
+
     public static PlanDto 계획_DTO() {
         return PlanDto.of(계획(), 키워드_DTO());
     }
 
-        public static CreatePlanRequest 계획_요청() {
+    public static CreatePlanRequest 계획_요청() {
         return new CreatePlanRequest(
                 위치_이름, 계획_위도, 계획_경도, 도보_시간, 날짜, 시작_시간, 끝_시간, 키워드_이름_리스트);
     }
