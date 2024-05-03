@@ -23,8 +23,18 @@ public class KeywordFixtures {
         return new CategoryKeywordsDto(키워드_리스트);
     }
 
+    public static CategoryKeywordsDto 카테고리_키워드_DTO_목적_X() {
+        return new CategoryKeywordsDto(Arrays.asList(키워드_목적_X()));
+    }
+
     public static Keyword 키워드() {
         Keyword keyword = new Keyword(키워드_이름, Category.PURPOSE);
+        setId(keyword, 키워드_ID);
+        return keyword;
+    }
+
+    public static Keyword 키워드_목적_X() {
+        Keyword keyword = new Keyword(키워드_이름, Category.MENU);
         setId(keyword, 키워드_ID);
         return keyword;
     }
