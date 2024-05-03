@@ -95,7 +95,7 @@ public class CafeService {
 
         for (CafeDto withinRadiusCafe : withinRadiusCafes) {
             Cafe cafe = cafeRepository.findById(withinRadiusCafe.getId()).get();
-            List<Review> reviews = cafe.getReviews();
+            List<Review> reviews = reviewRepository.findByCafeId(cafe.getId());
             List<String> keywordNames = new ArrayList<>();
             for (Review review : reviews) {
                 List<CafeReviewKeyword> cafeReviewKeywords = cafeReviewKeywordRepository.findByReviewId(review.getId());
