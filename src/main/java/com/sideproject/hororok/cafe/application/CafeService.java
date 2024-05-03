@@ -329,14 +329,14 @@ public class CafeService {
         return combinedImageUrls;
     }
 
-    public List<CafeDto> findWithinRadiusCafes(BigDecimal latitude, BigDecimal longitude) {
+    public List<CafeDto> findWithinRadiusCafes(final BigDecimal latitude, final BigDecimal longitude) {
         List<Cafe> cafes = cafeRepository.findAll();
         List<CafeDto> withinRadiusCafes = new ArrayList<>();
 
         for (Cafe cafe : cafes) {
             boolean isWithinRadius = isWithinRadius(
                             latitude, longitude,
-                            cafe.getLatitude(), cafe.getLongitude());
+                            cafe.getLatitude(), cafe.getLongitude(), MAX_RADIUS);
 
             if(isWithinRadius) {
                 String cafeImageUrl = cafeImageRepository.getOneImageUrlByCafeId(cafe.getId());

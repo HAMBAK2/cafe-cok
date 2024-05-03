@@ -1,8 +1,6 @@
 package com.sideproject.hororok.plan.dto.response;
 
 import com.sideproject.hororok.cafe.dto.CafeDto;
-import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.plan.domain.Plan;
 import com.sideproject.hororok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
@@ -54,7 +52,7 @@ public class CreatePlanResponse {
         this.visitDateTime = convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime());
         this.categoryKeywords = categoryKeywords;
 
-        if(matchType.getValue().equals(MatchType.SIMILAR)) {
+        if(matchType.equals(MatchType.SIMILAR)) {
             this.similarCafes = cafes;
             return;
         }
