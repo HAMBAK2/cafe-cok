@@ -19,6 +19,7 @@ import com.sideproject.hororok.member.exception.NoSuchMemberException;
 import com.sideproject.hororok.plan.exception.NoSuchPlanException;
 import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
 import com.sideproject.hororok.review.exception.NoSuchReviewException;
+import com.sideproject.hororok.utils.tmap.exception.TmapException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,8 +115,8 @@ public class ControllerAdvice {
     }
 
 
-    @ExceptionHandler(OAuthException.class)
-    public ResponseEntity<ErrorResponse> handleOAuthException(final RuntimeException e) {
+    @ExceptionHandler({OAuthException.class, TmapException.class})
+    public ResponseEntity<ErrorResponse> handleRestClientException(final RuntimeException e) {
         log.error(e.getMessage(), e);
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.internalServerError().body(errorResponse);

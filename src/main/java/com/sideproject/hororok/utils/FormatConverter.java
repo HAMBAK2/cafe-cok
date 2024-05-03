@@ -1,20 +1,31 @@
 package com.sideproject.hororok.utils;
 
 
-import com.sideproject.hororok.review.domain.ReviewImage;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.time.*;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormatConverter {
+
+    public static String encodeUtf8(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UTF-8 인코딩을 지원하지 않습니다.", e);
+        }
+    }
+
+    public static String convertToDecimal(int integerValue, int numberOfDigits) {
+        String integerString = String.valueOf(integerValue);
+        String integerPart = integerString.substring(0, numberOfDigits); // 정수부 추출
+        String decimalPart = integerString.substring(numberOfDigits); // 소수부 추출
+        String result = integerPart + "." + decimalPart;
+        return result;
+    }
 
     public static String priceConvert(Integer price) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
