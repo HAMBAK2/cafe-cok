@@ -59,7 +59,7 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
     @Query("SELECT NEW com.sideproject.hororok.keword.dto.KeywordCountDto(k.name, COUNT(crk)) " +
             "FROM Keyword k " +
-            "JOIN k.cafeReviewKeywords crk " +
+                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.cafe.id = :cafeId " +
             "GROUP BY k.id " +
             "ORDER BY COUNT(crk) DESC")
@@ -67,14 +67,14 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
     @Query("SELECT k " +
             "FROM Keyword k " +
-            "JOIN k.cafeReviewKeywords crk " +
+                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.cafe.id = :cafeId " +
             "GROUP BY k.id " +
             "ORDER BY COUNT(crk) DESC")
     List<Keyword> findKeywordsByCafeIdOrderByCountDesc(@Param("cafeId") Long cafeId, Pageable pageable);
 
     @Query("SELECT k FROM Keyword k " +
-            "JOIN k.cafeReviewKeywords crk " +
+                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.cafe.id = :cafeId")
     List<Keyword> findByCafeId(@Param("cafeId") Long cafeId);
 

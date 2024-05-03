@@ -28,10 +28,6 @@ public class Keyword extends BaseEntity {
     @Column(name = "category", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "keyword")
-    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
-
-
     protected Keyword() {
     }
 
