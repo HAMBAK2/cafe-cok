@@ -36,7 +36,6 @@ public class Review extends BaseEntity {
     @Column(name = "star_rating")
     private Integer starRating;
 
-    @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
