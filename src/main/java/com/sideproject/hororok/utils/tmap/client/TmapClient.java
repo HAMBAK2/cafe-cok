@@ -41,14 +41,27 @@ public class TmapClient {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public TmapApiResponse requestTmapApi(
+    public Integer getWalkingTimeUsingTmap(
             final Integer startX, final Integer startY, final Integer endX, final Integer endY) {
 
         HttpHeaders headers = generateTmapHeader();
         String body = generateTmapBody(startX, startY, endX, endY);
         HttpEntity<String> request = new HttpEntity<>(body, headers);
 
-        return fetchTmapApi(request);
+        return fetchTmapApi(request).getFeatures().get(0).getProperties().getTotalTime();
+    }
+
+    /*TODO: 네이버 MAP API가 도입되면 제거할 메서드*/
+    public Integer getWalkingTimeUsingTmap(
+            final String startX, final String startY, final String endX, final String endY) {
+
+        HttpHeaders headers = generateTmapHeader();
+        String body = generateTmapBody(startX, startY, endX, endY);
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
+
+        int totalTime = fetchTmapApi(request).getFeatures().get(0).getProperties().getTotalTime();
+
+        return convertSecondsToMinutes(totalTime);
     }
 
     private TmapApiResponse fetchTmapApi(final HttpEntity<String> request) {
@@ -73,11 +86,10 @@ public class TmapClient {
        Map<String, Object> bodyMap = new HashMap<>();
        bodyMap.put("startX", convertToDecimal(startX, X_NUM_DIGITS));
        bodyMap.put("startY", convertToDecimal(startY, Y_NUM_DIGITS));
-       bodyMap.put("speed", properties.getSpeed());
        bodyMap.put("endX", convertToDecimal(endX, X_NUM_DIGITS));
        bodyMap.put("endY", convertToDecimal(endY, Y_NUM_DIGITS));
-       bodyMap.put("startName", encodeUtf8(START_NAME));
-       bodyMap.put("endName", encodeUtf8(END_NAME));
+       bodyMap.put("startName", START_NAME);
+       bodyMap.put("endName", END_NAME);
 
        try {
            return objectMapper.writeValueAsString(bodyMap);
@@ -85,5 +97,24 @@ public class TmapClient {
            throw new RuntimeException("Failed to convert body to JSON string", e);
        }
    }
+
+   /*TODO: 네이버 MAP API가 도입되면 제거할 메서드*/
+    private String generateTmapBody(
+            final String startX, final String startY, final String endX, final String endY) {
+
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("startX", startX);
+        bodyMap.put("startY", startY);
+        bodyMap.put("endX", endX);
+        bodyMap.put("endY", endY);
+        bodyMap.put("startName", START_NAME);
+        bodyMap.put("endName", END_NAME);
+
+        try {
+            return objectMapper.writeValueAsString(bodyMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert body to JSON string", e);
+        }
+    }
 
 }

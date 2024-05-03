@@ -10,9 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.sideproject.hororok.utils.FormatConverter.convertStringToLocalDate;
-import static com.sideproject.hororok.utils.FormatConverter.convertStringToLocalTime;
-
 @Getter
 public class CreatePlanRequest {
 

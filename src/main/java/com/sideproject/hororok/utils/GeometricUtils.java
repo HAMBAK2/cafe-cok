@@ -2,12 +2,15 @@ package com.sideproject.hororok.utils;
 
 import java.math.BigDecimal;
 
+
 public class GeometricUtils {
 
     private static final double WALK_SPEED = 5;
-    private static final BigDecimal MAX_RADIUS = BigDecimal.valueOf(2000);
 
-    public static boolean isWithinRadius(BigDecimal latitude, BigDecimal longitude, BigDecimal targetLatitude, BigDecimal targetLongitude) {
+    public static boolean isWithinRadius(
+            final BigDecimal latitude, final BigDecimal longitude,
+            final BigDecimal targetLatitude, final BigDecimal targetLongitude,
+            final Double radius) {
         double R = 6371.0; // 지구 반지름 (단위: km)
         double lat1 = Math.toRadians(latitude.doubleValue());
         double lon1 = Math.toRadians(longitude.doubleValue());
@@ -21,11 +24,14 @@ public class GeometricUtils {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // 거리 계산 결과를 미터 단위로 변환
 
-        return distance <= MAX_RADIUS.doubleValue();
+        return distance <= radius;
     }
 
-    public static double calculateWalkingTime(BigDecimal lat1, BigDecimal lon1, BigDecimal lat2, BigDecimal lon2) {
-        return (calculateDistance(lat1, lon1, lat2, lon2) * 1000  / WALK_SPEED) / 60;
+    public static double calculateDistanceInMeter(final Integer minutes) {
+        double walkingSpeedMeterPerHour = WALK_SPEED * 1000.0;
+        double hours = (double) minutes / 60.0;
+        double distanceInMeter = walkingSpeedMeterPerHour * hours;
+        return distanceInMeter;
     }
 
 

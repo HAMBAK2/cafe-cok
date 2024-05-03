@@ -1,5 +1,6 @@
 package com.sideproject.hororok.utils;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public class Constants {
@@ -30,6 +31,9 @@ public class Constants {
     public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
 
     public static final Long NO_MEMBER_ID = 1L;
+
+    public static final Double MAX_RADIUS = Double.valueOf(2000);
+    public static final Integer MAX_RADIUS_TIME = 30;
 
 
 

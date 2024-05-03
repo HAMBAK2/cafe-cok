@@ -31,6 +31,7 @@ import com.sideproject.hororok.plan.exception.NoSuchPlanKeywordException;
 import com.sideproject.hororok.utils.ListUtils;
 import com.sideproject.hororok.utils.GeometricUtils;
 import com.sideproject.hororok.plan.domain.enums.MatchType;
+import com.sideproject.hororok.utils.tmap.client.TmapClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,14 +42,16 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sideproject.hororok.utils.Constants.NO_MEMBER_ID;
-import static com.sideproject.hororok.utils.GeometricUtils.calculateWalkingTime;
-import static com.sideproject.hororok.utils.GeometricUtils.isWithinRadius;
+import static com.sideproject.hororok.utils.Constants.*;
+import static com.sideproject.hororok.utils.GeometricUtils.*;
+
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PlanService {
+
+    private final TmapClient tmapClient;
 
     private final CafeRepository cafeRepository;
     private final PlanRepository planRepository;
@@ -138,22 +141,30 @@ public class PlanService {
                                           final BigDecimal longitude, final Integer withinMinutes) {
 
         if(latitude == null) return cafes;
-        if(withinMinutes == null) return getFilteredCafesByWithinRadius(latitude, longitude, cafes);
+        if(withinMinutes == null) return getFilteredCafesByWithinRadius(latitude, longitude, MAX_RADIUS_TIME, cafes);
 
-        List<Cafe> distanceFilteredCafe = cafes.stream()
-                .filter(cafe -> {double walkingTime = calculateWalkingTime(
-                        cafe.getLatitude(), cafe.getLongitude(), latitude, longitude);
-                    return walkingTime <= withinMinutes;})
+        List<Cafe> withinRadiusCafes = getFilteredCafesByWithinRadius(latitude, longitude, withinMinutes, cafes);
+
+        List<Cafe> distanceFilteredCafe = withinRadiusCafes.stream()
+                .filter(cafe -> {
+                    int walkingTimeUsingTmap = tmapClient.getWalkingTimeUsingTmap(
+                            longitude.toString(), latitude.toString(),
+                            cafe.getLongitude().toString(), cafe.getLatitude().toString());
+                    return walkingTimeUsingTmap <= withinMinutes;
+                })
                 .collect(Collectors.toList());
 
         return distanceFilteredCafe;
     }
 
     private List<Cafe> getFilteredCafesByWithinRadius(
-            final BigDecimal latitude, final BigDecimal longitude, final List<Cafe> cafes) {
+            final BigDecimal latitude, final BigDecimal longitude,
+            final Integer withinMinutes, final List<Cafe> cafes) {
 
         return cafes.stream()
-                .filter(cafe -> isWithinRadius(latitude, longitude, cafe.getLatitude(), cafe.getLongitude()))
+                .filter(cafe ->
+                        isWithinRadius(latitude, longitude, cafe.getLatitude(),
+                                cafe.getLongitude(), calculateDistanceInMeter(withinMinutes)))
                 .collect(Collectors.toList());
     }
 
@@ -197,11 +208,10 @@ public class PlanService {
 
         List<Cafe> cafesByKeywordAllMatch = cafes.stream()
                 .filter(cafe -> keywords.stream()
-                        .anyMatch(keyword -> keywordRepository.findByCafeId(cafe.getId())
+                        .allMatch(keyword -> keywordRepository.findByCafeId(cafe.getId())
                                 .stream()
                                 .anyMatch(findKeyword -> findKeyword.getName().equals(keyword))))
                 .collect(Collectors.toList());
-
         return cafesByKeywordAllMatch;
     }
 
