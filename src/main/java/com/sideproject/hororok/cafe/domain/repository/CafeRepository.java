@@ -19,9 +19,6 @@ public interface CafeRepository extends JpaRepository<Cafe, Long> {
                 .orElseThrow(NoSuchCafeException::new);
     }
 
-    Optional<Cafe> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude);
-
-    
     List<Cafe> findAllByOrderByStarRatingDescNameAsc();
 
     List<Cafe> findByIdIn(List<Long> ids);

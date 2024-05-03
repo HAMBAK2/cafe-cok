@@ -32,9 +32,9 @@ class ReviewRepositoryTest extends RepositoryTest {
     public void test_get_review_by_review_id() {
 
         Cafe cafe = 카페();
-        Member member = 사용자();
-
         Cafe savedCafe = cafeRepository.save(cafe);
+
+        Member member = 사용자();
         Member savedMember = memberRepository.save(member);
 
         Review review = new Review("콘텐츠", "특이사항", 3, savedCafe, savedMember);
