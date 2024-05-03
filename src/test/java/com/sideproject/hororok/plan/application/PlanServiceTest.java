@@ -26,7 +26,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 
@@ -35,7 +34,6 @@ import static com.sideproject.hororok.common.fixtures.LoginMemberFixtures.로그
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 import static com.sideproject.hororok.common.fixtures.PlanFixtures.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class PlanServiceTest extends ServiceTest {
