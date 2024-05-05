@@ -14,6 +14,7 @@ import java.util.List;
 public class CafeDetailTopResponse {
 
     private Long cafeId;
+    private Long bookmarkId;
     private String cafeName;
     private String roadAddress;
     private BigDecimal latitude;
@@ -27,6 +28,22 @@ public class CafeDetailTopResponse {
                                            final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
+                .cafeName(cafe.getName())
+                .roadAddress(cafe.getRoadAddress())
+                .latitude(cafe.getLatitude())
+                .longitude(cafe.getLongitude())
+                .starRating(cafe.getStarRating().doubleValue())
+                .reviewCount(reviewCount)
+                .imageUrl(imageUrl)
+                .keywords(keywords)
+                .build();
+    }
+
+    public static CafeDetailTopResponse of(final Cafe cafe, final Long bookmarkId, final String imageUrl,
+                                           final Long reviewCount, final List<KeywordDto> keywords) {
+        return CafeDetailTopResponse.builder()
+                .cafeId(cafe.getId())
+                .bookmarkId(bookmarkId)
                 .cafeName(cafe.getName())
                 .roadAddress(cafe.getRoadAddress())
                 .latitude(cafe.getLatitude())

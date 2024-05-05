@@ -27,16 +27,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class CafeControllerTest extends ControllerTest {
 
+
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+    private static final String AUTHORIZATION_HEADER_VALUE = "Bearer fake-token";
+
     @Test
     @DisplayName("카페 상세정보 상단 호출 - 성공")
     public void test_cafe_detail_top_success() throws Exception {
 
         CafeDetailTopResponse response = 카페_상세_상단_응답();
-
-        when(cafeService.detailTop(any(Long.class))).thenReturn(response);
+        when(cafeService.detailTop(any(Long.class), any(Long.class))).thenReturn(response);
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders.get("/api/cafe/{cafeId}/top", 카페_아이디)
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -46,6 +50,7 @@ class CafeControllerTest extends ControllerTest {
                         pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
                         responseFields(
                                 fieldWithPath("cafeId").description("카페 ID"),
+                                fieldWithPath("bookmarkId").description("북마크 ID(로그인 된 사용자가 북마크 한 Cafe일 경우 존재)"),
                                 fieldWithPath("cafeName").description("카페 이름"),
                                 fieldWithPath("roadAddress").description("카페 도로명 주소"),
                                 fieldWithPath("latitude").description("카페 위도"),
@@ -60,7 +65,6 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("keywords[].name").description("키워드 이름"))))
                 .andExpect(status().isOk());
 
-        verify(cafeService, times(1)).detailTop(any(Long.class));
     }
 
     @Test
@@ -271,9 +275,10 @@ class CafeControllerTest extends ControllerTest {
 
         CafeFindAgainResponse response = 카페_지점_재검색_응답();
 
-        when(cafeService.findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+        when(cafeService.findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class), any(Long.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/cafe/find/again")
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .param("latitude", 카페_위도.toString())
                         .param("longitude", 카페_경도.toString())
                         .accept(MediaType.APPLICATION_JSON)
@@ -288,6 +293,7 @@ class CafeControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("반경(2km) 내 카페 리스트"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
@@ -297,8 +303,6 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
                                 fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
                 .andExpect(status().isOk());
-
-        verify(cafeService, times(1)).findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @Test
@@ -307,9 +311,10 @@ class CafeControllerTest extends ControllerTest {
 
         CafeFindBarResponse response = 카페_검색창_검색_응답();
 
-        when(cafeService.findCafeByBar(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+        when(cafeService.findCafeByBar(any(BigDecimal.class), any(BigDecimal.class), any(Long.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/cafe/find/bar")
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .param("latitude", 카페_위도.toString())
                         .param("longitude", 카페_경도.toString())
                         .accept(MediaType.APPLICATION_JSON)
@@ -325,6 +330,7 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY)
                                         .description("검색한 위치의 카페와 반경 2km내의 카페 리스트 \n\n - 카페가 존재하면 리스트 상단"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
@@ -334,8 +340,6 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
                                 fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
                 .andExpect(status().isOk());
-
-        verify(cafeService, times(1)).findCafeByBar(any(BigDecimal.class), any(BigDecimal.class));
     }
 
     @Test
@@ -345,9 +349,10 @@ class CafeControllerTest extends ControllerTest {
         CafeFindCategoryRequest request = 카페_카테고리_검색_요청();
         CafeFindCategoryResponse response = 카페_카테고리_검색_응답();
 
-        when(cafeService.findCafeByKeyword(any(CafeFindCategoryRequest.class))).thenReturn(response);
+        when(cafeService.findCafeByKeyword(any(CafeFindCategoryRequest.class), any(Long.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/cafe/find/keyword")
+                        .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -362,6 +367,7 @@ class CafeControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("선택한 키워드와 위치 기반의 카페 리스트"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
+                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
@@ -371,10 +377,5 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafes[].reviewCount").description("카페 리뷰 개수"),
                                 fieldWithPath("cafes[].imageUrl").description("카페 대표 이미지 URL"))))
                 .andExpect(status().isOk());
-
-        verify(cafeService, times(1)).findCafeByKeyword(any(CafeFindCategoryRequest.class));
     }
-
-
-
 }

@@ -38,6 +38,4 @@ public class BookmarkController {
         BookmarkIdResponse response = bookmarkService.delete(bookmarkId);
         return ResponseEntity.ok(response);
     }
-
-
 }
