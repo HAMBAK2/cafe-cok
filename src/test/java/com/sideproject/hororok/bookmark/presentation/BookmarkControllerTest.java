@@ -1,5 +1,6 @@
 package com.sideproject.hororok.bookmark.presentation;
 
+import com.sideproject.hororok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.hororok.common.annotation.ControllerTest;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkSaveRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -9,8 +10,7 @@ import org.mockito.Captor;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_ID;
-import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_저장_요청;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
@@ -41,6 +41,9 @@ class BookmarkControllerTest extends ControllerTest {
     public void test_save_bookmark_post() throws Exception {
 
         BookmarkSaveRequest request = 북마크_저장_요청();
+        BookmarkIdResponse response = 북마크_ID_응답();
+
+        when(bookmarkService.save(any(BookmarkSaveRequest.class))).thenReturn(response);
 
         mockMvc.perform(
                         post("/api/bookmark/save")
@@ -53,10 +56,11 @@ class BookmarkControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(fieldWithPath("bookmarkId").description("저장한 북마크 ID")),
                         requestFields(
                                 fieldWithPath("cafeId").description("저장하려는 카페 Id"),
                                 fieldWithPath("folderId").description("저장하려는 폴더 ID"))))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         verify(bookmarkService).save(bookmarkSaveRequestCaptor.capture());
         BookmarkSaveRequest capturedRequest = bookmarkSaveRequestCaptor.getValue();
@@ -70,6 +74,9 @@ class BookmarkControllerTest extends ControllerTest {
     public void test_delete_bookmark_success() throws Exception {
 
         Long bookmarkId = 북마크_ID;
+        BookmarkIdResponse response = 북마크_ID_응답();
+
+        when(bookmarkService.delete(any(Long.class))).thenReturn(response);
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders.delete("/api/bookmark/{bookmarkId}/delete", bookmarkId)
@@ -80,11 +87,10 @@ class BookmarkControllerTest extends ControllerTest {
                 .andDo(document("bookmark/delete/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        pathParameters(
-                                parameterWithName("bookmarkId").description("삭제할 북마크의 ID"))))
-                .andExpect(status().isNoContent());
+                        requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        responseFields(fieldWithPath("bookmarkId").description("삭제한 북마크 ID")),
+                        pathParameters(parameterWithName("bookmarkId").description("삭제할 북마크의 ID"))))
+                .andExpect(status().isOk());
 
 
         verify(bookmarkService).delete(bookmarkIdCaptor.capture());

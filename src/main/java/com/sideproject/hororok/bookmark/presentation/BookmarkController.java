@@ -2,10 +2,9 @@ package com.sideproject.hororok.bookmark.presentation;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.presentation.AuthenticationPrincipal;
-import com.sideproject.hororok.bookmark.application.BookmarkFolderService;
 import com.sideproject.hororok.bookmark.application.BookmarkService;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkSaveRequest;
-import com.sideproject.hororok.bookmark.dto.response.BookmarkFoldersResponse;
+import com.sideproject.hororok.bookmark.dto.response.BookmarkIdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +21,22 @@ public class BookmarkController {
 
     @PostMapping("/save")
     @Operation(summary = "저장버튼 클릭 -> 폴더 선택 후 저장 완료 시 동작하는 기능")
-    public ResponseEntity<Void> saveBookmark(
+    public ResponseEntity<BookmarkIdResponse> saveBookmark(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestBody BookmarkSaveRequest request) {
 
-        bookmarkService.save(request);
-        return ResponseEntity.noContent().build();
+        BookmarkIdResponse response = bookmarkService.save(request);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{bookmarkId}/delete")
     @Operation(summary = "저장된 북마크 삭제 기능")
-    public ResponseEntity<Void> deleteBookmark(
+    public ResponseEntity<BookmarkIdResponse> deleteBookmark(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long bookmarkId) {
 
-        bookmarkService.delete(bookmarkId);
-        return ResponseEntity.noContent().build();
+        BookmarkIdResponse response = bookmarkService.delete(bookmarkId);
+        return ResponseEntity.ok(response);
     }
 
 
