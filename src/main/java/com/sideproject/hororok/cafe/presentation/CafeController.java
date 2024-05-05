@@ -1,5 +1,12 @@
 package com.sideproject.hororok.cafe.presentation;
 
+import com.sideproject.hororok.auth.application.AuthService;
+import com.sideproject.hororok.auth.application.AuthTokenCreator;
+import com.sideproject.hororok.auth.application.TokenProvider;
+import com.sideproject.hororok.auth.exception.EmptyAuthorizationHeaderException;
+import com.sideproject.hororok.auth.exception.InvalidTokenException;
+import com.sideproject.hororok.auth.presentation.AuthenticationPrincipalArgumentResolver;
+import com.sideproject.hororok.auth.presentation.AuthorizationExtractor;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
@@ -9,11 +16,18 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.sideproject.hororok.utils.Constants.NO_MEMBER_ID;
 
 
 @RestController
@@ -23,13 +37,15 @@ import java.math.BigDecimal;
 public class CafeController {
 
     private final CafeService cafeService;
+    private final AuthService authService;
 
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "해당하는 카페의 상세 정보 상단")
     public ResponseEntity<CafeDetailTopResponse> detailTop(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId){
+            @Parameter(description = "카페의 ID") @PathVariable Long cafeId, HttpServletRequest servletRequest){
 
-        CafeDetailTopResponse response = cafeService.detailTop(cafeId);
+        Long memberId = getMemberId(servletRequest);
+        CafeDetailTopResponse response = cafeService.detailTop(cafeId, memberId);
         return ResponseEntity.ok(response);
     }
 
@@ -92,9 +108,11 @@ public class CafeController {
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
     public ResponseEntity<CafeFindAgainResponse> findAgain(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
-            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
+            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude,
+            HttpServletRequest servletRequest) {
 
-        CafeFindAgainResponse response = cafeService.findCafeByAgain(latitude, longitude);
+        Long memberId = getMemberId(servletRequest);
+        CafeFindAgainResponse response = cafeService.findCafeByAgain(latitude, longitude, memberId);
         return ResponseEntity.ok(response);
     }
 
@@ -111,9 +129,11 @@ public class CafeController {
     
     public ResponseEntity<CafeFindBarResponse> findBar(
             @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
-            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude) {
+            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude,
+            HttpServletRequest servletRequest) {
 
-        CafeFindBarResponse response = cafeService.findCafeByBar(latitude, longitude);
+        Long memberId = getMemberId(servletRequest);
+        CafeFindBarResponse response = cafeService.findCafeByBar(latitude, longitude, memberId);
         return ResponseEntity.ok(response);
     }
 
@@ -121,9 +141,21 @@ public class CafeController {
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
     
     public ResponseEntity<CafeFindCategoryResponse> findKeyword(
-            @RequestBody CafeFindCategoryRequest request) {
+            @RequestBody CafeFindCategoryRequest request, HttpServletRequest servletRequest) {
 
-        CafeFindCategoryResponse response = cafeService.findCafeByKeyword(request);
+        Long memberId = getMemberId(servletRequest);
+        CafeFindCategoryResponse response = cafeService.findCafeByKeyword(request, memberId);
         return ResponseEntity.ok(response);
+    }
+
+    private Long getMemberId(final HttpServletRequest request) {
+
+        try {
+            String accessToken = AuthorizationExtractor.extract(request);
+            Long memberId = authService.extractMemberId(accessToken);
+            return memberId;
+        } catch (final InvalidTokenException | EmptyAuthorizationHeaderException  e) {
+            return null;
+        }
     }
 }

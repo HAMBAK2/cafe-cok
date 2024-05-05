@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 public class CafeDto {
 
     private Long id;
+    private Long bookmarkId;
     private String name;
     private String phoneNumber;
     private String roadAddress;
@@ -20,7 +21,7 @@ public class CafeDto {
     private Long reviewCount;
     private String imageUrl;
 
-    public static CafeDto of(Cafe cafe, String imageUrl) {
+    public static CafeDto of(final Cafe cafe, final String imageUrl) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -33,4 +34,9 @@ public class CafeDto {
                 .imageUrl(imageUrl)
                 .build();
     }
+
+    public void setBookmarkId(final Long bookmarkId) {
+        this.bookmarkId = bookmarkId;
+    }
+
 }

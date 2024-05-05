@@ -1,5 +1,7 @@
 package com.sideproject.hororok.cafe.application;
 
+import com.sideproject.hororok.bookmark.domain.Bookmark;
+import com.sideproject.hororok.bookmark.domain.BookmarkRepository;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
@@ -50,10 +52,13 @@ public class CafeService {
     private final MenuRepository menuRepository;
     private final ReviewRepository reviewRepository;
     private final KeywordRepository keywordRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final CafeImageRepository cafeImageRepository;
     private final ReviewImageRepository reviewImageRepository;
     private final OperationHourRepository operationHourRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
+
+
 
     private static final Boolean HAS_NEXT_PAGE = true;
     private static final Boolean NO_NEXT_PAGE = false;
@@ -63,13 +68,15 @@ public class CafeService {
     public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
     public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
 
-    public CafeFindAgainResponse findCafeByAgain(BigDecimal latitude, BigDecimal longitude) {
+    public CafeFindAgainResponse findCafeByAgain(
+            final BigDecimal latitude, final BigDecimal longitude, final Long memberId) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
+        if(memberId != null) setCafeDtosBookmarkId(withinRadiusCafes, memberId);
         return CafeFindAgainResponse.from(withinRadiusCafes);
     }
 
-    public CafeFindBarResponse findCafeByBar(BigDecimal latitude, BigDecimal longitude) {
+    public CafeFindBarResponse findCafeByBar(final BigDecimal latitude, final BigDecimal longitude, final Long memberId) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(latitude, longitude);
         CafeDto targetCafe = null;
@@ -84,10 +91,12 @@ public class CafeService {
             withinRadiusCafes.remove(targetCafe);
             withinRadiusCafes.add(0, targetCafe);
         }
+        if(memberId != null) setCafeDtosBookmarkId(withinRadiusCafes, memberId);
+
         return CafeFindBarResponse.from(withinRadiusCafes);
     }
 
-    public CafeFindCategoryResponse findCafeByKeyword(CafeFindCategoryRequest request) {
+    public CafeFindCategoryResponse findCafeByKeyword(final CafeFindCategoryRequest request, final Long memberId) {
 
         List<CafeDto> withinRadiusCafes = findWithinRadiusCafes(request.getLatitude(), request.getLongitude());
         List<String> targetKeywordNames = request.getKeywords();
@@ -108,17 +117,25 @@ public class CafeService {
             boolean allMatch = targetKeywordNames.stream().allMatch(keywordNames::contains);
             if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
         }
+        if(memberId != null) setCafeDtosBookmarkId(withinRadiusCafes, memberId);
 
         return CafeFindCategoryResponse.from(filteredWithinRadiusCafes);
     }
 
-    public CafeDetailTopResponse detailTop(final Long cafeId) {
+    public CafeDetailTopResponse detailTop(final Long cafeId, final Long memberId) {
+
         Cafe findCafe = cafeRepository.getById(cafeId);
         String imageUrl = cafeImageRepository.getOneImageUrlByCafeId(cafeId);
         Long reviewCount = reviewRepository.countReviewByCafeId(cafeId);
         List<KeywordDto> findKeywordDtos = KeywordDto.fromList(
                 keywordRepository.findKeywordsByCafeIdOrderByCountDesc(
                         cafeId, PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT)));
+
+        if(memberId != null) {
+            Optional<Bookmark> findOptionalBookmark = bookmarkRepository.findByCafeIdAndMemberId(cafeId, memberId);
+            if(findOptionalBookmark.isPresent()) return CafeDetailTopResponse.of(
+                    findCafe, findOptionalBookmark.get().getId(), imageUrl, reviewCount, findKeywordDtos);
+        }
 
         return CafeDetailTopResponse.of(findCafe, imageUrl, reviewCount, findKeywordDtos);
     }
@@ -329,7 +346,7 @@ public class CafeService {
         return combinedImageUrls;
     }
 
-    public List<CafeDto> findWithinRadiusCafes(final BigDecimal latitude, final BigDecimal longitude) {
+    private List<CafeDto> findWithinRadiusCafes(final BigDecimal latitude, final BigDecimal longitude) {
         List<Cafe> cafes = cafeRepository.findAll();
         List<CafeDto> withinRadiusCafes = new ArrayList<>();
 
@@ -344,5 +361,15 @@ public class CafeService {
             }
         }
         return withinRadiusCafes;
+    }
+
+    private List<CafeDto> setCafeDtosBookmarkId(final List<CafeDto> cafes, final Long memberId) {
+
+        for (CafeDto cafe : cafes) {
+            Optional<Bookmark> findOptional = bookmarkRepository.findByCafeIdAndMemberId(cafe.getId(), memberId);
+            if(findOptional.isPresent()) cafe.setBookmarkId(findOptional.get().getId());
+        }
+
+        return cafes;
     }
 }
