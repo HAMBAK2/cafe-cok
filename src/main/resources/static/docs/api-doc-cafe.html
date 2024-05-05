@@ -476,6 +476,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/1/top HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer fake-token
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -512,14 +513,15 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 338
+Content-Length: 359
 
 {
   "cafeId" : 1,
+  "bookmarkId" : 1,
   "cafeName" : "카페 이름",
   "roadAddress" : "OO시 OO구 OO동",
-  "latitude" : 154.6728492910206,
-  "longitude" : 62.956130916462286,
+  "latitude" : 55.505168560595614,
+  "longitude" : 46.976837456447136,
   "starRating" : 0.0,
   "reviewCount" : 2,
   "imageUrl" : "//카페이미지",
@@ -552,6 +554,11 @@ Content-Length: 338
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafeId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID(로그인 된 사용자가 북마크 한 Cafe일 경우 존재)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafeName</code></p></td>
@@ -1116,8 +1123,9 @@ Content-Length: 43
 <h4 id="_http_request_6">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=62.956130916462286&amp;longitude=154.6728492910206 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=46.976837456447136&amp;longitude=55.505168560595614 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer fake-token
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1157,16 +1165,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 305
+Content-Length: 328
 
 {
   "cafes" : [ {
     "id" : 1,
+    "bookmarkId" : 1,
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 154.6728492910206,
-    "longitude" : 62.956130916462286,
+    "latitude" : 55.505168560595614,
+    "longitude" : 46.976837456447136,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1200,6 +1209,11 @@ Content-Length: 305
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].name</code></p></td>
@@ -1251,8 +1265,9 @@ Content-Length: 305
 <h4 id="_http_request_7">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=62.956130916462286&amp;longitude=154.6728492910206 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=46.976837456447136&amp;longitude=55.505168560595614 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer fake-token
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1292,16 +1307,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 305
+Content-Length: 328
 
 {
   "cafes" : [ {
     "id" : 1,
+    "bookmarkId" : 1,
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 154.6728492910206,
-    "longitude" : 62.956130916462286,
+    "latitude" : 55.505168560595614,
+    "longitude" : 46.976837456447136,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1336,6 +1352,11 @@ Content-Length: 305
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].name</code></p></td>
@@ -1389,13 +1410,14 @@ Content-Length: 305
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/cafe/find/keyword HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer fake-token
 Accept: application/json
-Content-Length: 111
+Content-Length: 112
 Host: localhost:8080
 
 {
-  "latitude" : 62.956130916462286,
-  "longitude" : 154.6728492910206,
+  "latitude" : 46.976837456447136,
+  "longitude" : 55.505168560595614,
   "keywords" : [ "키워드 이름" ]
 }</code></pre>
 </div>
@@ -1444,16 +1466,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 305
+Content-Length: 328
 
 {
   "cafes" : [ {
     "id" : 1,
+    "bookmarkId" : 1,
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 154.6728492910206,
-    "longitude" : 62.956130916462286,
+    "latitude" : 55.505168560595614,
+    "longitude" : 46.976837456447136,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1487,6 +1510,11 @@ Content-Length: 305
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafes[].name</code></p></td>

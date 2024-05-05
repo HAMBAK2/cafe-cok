@@ -87,7 +87,9 @@ public class CafeFixtures {
     }
 
     public static CafeDto 카페_DTO() {
-        return CafeDto.of(카페(), 카페_이미지_URL);
+        CafeDto cafeDto = CafeDto.of(카페(), 카페_이미지_URL);
+        cafeDto.setBookmarkId(북마크_ID);
+        return cafeDto;
     }
 
     public static List<CafeDto> 카페_DTO_리스트() {

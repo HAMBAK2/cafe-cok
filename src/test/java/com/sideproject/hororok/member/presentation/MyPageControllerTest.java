@@ -181,7 +181,6 @@ class MyPageControllerTest extends ControllerTest {
     @DisplayName("마이페이지 계획텝에서 하나의 계획(여정)을 선택했을 때 동작 - 성공")
     public void test_my_page_detail_success() throws Exception{
 
-
         MyPagePlanDetailResponse response = 마이페이지_계획_상세_응답();
 
         when(myPageService.planDetail(any(Long.class)))
@@ -214,6 +213,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)
                                         .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트)"),
                                 fieldWithPath("similarCafes[].id").description("카페 ID"),
+                                fieldWithPath("similarCafes[].bookmarkId").description("북마크 ID(사용자가 북마크한 카페인 경우에만 존재)"),
                                 fieldWithPath("similarCafes[].name").description("카페 이름"),
                                 fieldWithPath("similarCafes[].phoneNumber").description("전화번호"),
                                 fieldWithPath("similarCafes[].roadAddress").description("도로명 주소"),
