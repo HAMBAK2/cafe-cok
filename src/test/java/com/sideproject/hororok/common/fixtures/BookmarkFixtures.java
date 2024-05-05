@@ -1,5 +1,6 @@
 package com.sideproject.hororok.common.fixtures;
 
+import com.sideproject.hororok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.bookmark.domain.Bookmark;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
@@ -42,6 +43,10 @@ public class BookmarkFixtures {
 
     public static BookmarkSaveRequest 북마크_저장_요청() {
         return new BookmarkSaveRequest(카페_아이디, 일반_폴더_ID);
+    }
+
+    public static BookmarkIdResponse 북마크_ID_응답() {
+        return BookmarkIdResponse.of(북마크_ID);
     }
 
     public static Bookmark setId(Bookmark bookmark, final Long id) {

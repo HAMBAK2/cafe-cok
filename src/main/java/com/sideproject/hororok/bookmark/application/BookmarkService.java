@@ -1,8 +1,8 @@
 package com.sideproject.hororok.bookmark.application;
 
+import com.sideproject.hororok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
-import com.sideproject.hororok.cafe.exception.NoSuchCafeException;
 import com.sideproject.hororok.bookmark.domain.Bookmark;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolderRepository;
@@ -10,7 +10,6 @@ import com.sideproject.hororok.bookmark.domain.BookmarkRepository;
 import com.sideproject.hororok.bookmark.dto.BookmarkDto;
 import com.sideproject.hororok.bookmark.dto.request.BookmarkSaveRequest;
 import com.sideproject.hororok.bookmark.dto.response.BookmarksResponse;
-import com.sideproject.hororok.bookmark.exception.NoSuchFolderException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,20 +50,20 @@ public class BookmarkService {
     }
 
     @Transactional
-    public void save(BookmarkSaveRequest request) {
+    public BookmarkIdResponse save(BookmarkSaveRequest request) {
 
-        Cafe findCafe = cafeRepository.findById(request.getCafeId())
-                .orElseThrow(() -> new NoSuchCafeException());
+        Cafe findCafe = cafeRepository.getById(request.getCafeId());
+        BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
 
-        BookmarkFolder findFolder = bookmarkFolderRepository.findById(request.getFolderId())
-                .orElseThrow(() -> new NoSuchFolderException());
-
-        bookmarkRepository.save(new Bookmark(findCafe, findFolder));
+        Bookmark savedBookmark = bookmarkRepository.save(new Bookmark(findCafe, findFolder));
+        return BookmarkIdResponse.of(savedBookmark.getId());
     }
 
     @Transactional
-    public void delete(Long bookmarkId) {
+    public BookmarkIdResponse delete(final Long bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);
+
+        return BookmarkIdResponse.of(bookmarkId);
 
     }
 
