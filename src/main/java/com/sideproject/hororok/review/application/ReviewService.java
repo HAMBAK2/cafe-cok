@@ -123,7 +123,7 @@ public class ReviewService {
         List<String> findKeywordNames = keywordRepository.findNamesByReviewId(review.getId());
         if(!ListUtils.areListEqual(findKeywordNames, keywordNames)) {
             cafeReviewKeywordRepository.deleteByReviewId(review.getId());
-            saveByReviewAndKeywordNames(review, findKeywordNames);
+            saveByReviewAndKeywordNames(review, keywordNames);
         }
     }
 
