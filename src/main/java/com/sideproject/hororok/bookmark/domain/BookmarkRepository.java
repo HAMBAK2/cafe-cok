@@ -18,6 +18,6 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
             "FROM Bookmark b JOIN BookmarkFolder bf ON b.bookmarkFolder.id = bf.id " +
             "WHERE b.cafe.id = :cafeId " +
                 "AND bf.member.id = :memberId")
-    Optional<Bookmark> findByCafeIdAndMemberId(final Long cafeId, final Long memberId);
+    List<Bookmark> findByCafeIdAndMemberId(final Long cafeId, final Long memberId);
 
 }

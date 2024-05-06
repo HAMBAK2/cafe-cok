@@ -50,7 +50,9 @@ class CafeControllerTest extends ControllerTest {
                         pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
                         responseFields(
                                 fieldWithPath("cafeId").description("카페 ID"),
-                                fieldWithPath("bookmarkId").description("북마크 ID(로그인 된 사용자가 북마크 한 Cafe일 경우 존재)"),
+                                fieldWithPath("bookmarks").type(JsonFieldType.ARRAY).description("북마크 리스트(존재하지 않을 경우 빈 리스트)"),
+                                fieldWithPath("bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("bookmarks[].folderId").description("폴더 ID"),
                                 fieldWithPath("cafeName").description("카페 이름"),
                                 fieldWithPath("roadAddress").description("카페 도로명 주소"),
                                 fieldWithPath("latitude").description("카페 위도"),
@@ -293,7 +295,9 @@ class CafeControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("반경(2km) 내 카페 리스트"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
-                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
+                                fieldWithPath("cafes[].bookmarks").description("북마크 리스트(존재하지 않을 경우 빈 리스트)"),
+                                fieldWithPath("cafes[].bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("cafes[].bookmarks[].folderId").description("폴더 ID"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
@@ -330,7 +334,9 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY)
                                         .description("검색한 위치의 카페와 반경 2km내의 카페 리스트 \n\n - 카페가 존재하면 리스트 상단"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
-                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
+                                fieldWithPath("cafes[].bookmarks").description("북마크 리스트(존재하지 않을 경우 빈 리스트)"),
+                                fieldWithPath("cafes[].bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("cafes[].bookmarks[].folderId").description("폴더 ID"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),
@@ -367,7 +373,9 @@ class CafeControllerTest extends ControllerTest {
                         responseFields(
                                 fieldWithPath("cafes").type(JsonFieldType.ARRAY).description("선택한 키워드와 위치 기반의 카페 리스트"),
                                 fieldWithPath("cafes[].id").description("카페 ID"),
-                                fieldWithPath("cafes[].bookmarkId").description("북마크 ID(해당 카페에 대하여 사용자가 북마크 했다면 존재)"),
+                                fieldWithPath("cafes[].bookmarks").description("북마크 리스트(존재하지 않을 경우 빈 리스트)"),
+                                fieldWithPath("cafes[].bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("cafes[].bookmarks[].folderId").description("폴더 ID"),
                                 fieldWithPath("cafes[].name").description("카페 이름"),
                                 fieldWithPath("cafes[].phoneNumber").description("카페 전화번호"),
                                 fieldWithPath("cafes[].roadAddress").description("카페 도로명 주소"),

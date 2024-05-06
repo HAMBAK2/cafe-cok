@@ -213,7 +213,9 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)
                                         .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트)"),
                                 fieldWithPath("similarCafes[].id").description("카페 ID"),
-                                fieldWithPath("similarCafes[].bookmarkId").description("북마크 ID(사용자가 북마크한 카페인 경우에만 존재)"),
+                                fieldWithPath("similarCafes[].bookmarks").type(JsonFieldType.ARRAY).description("북마크 리스트"),
+                                fieldWithPath("similarCafes[].bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("similarCafes[].bookmarks[].folderId").description("북마크 폴더  ID"),
                                 fieldWithPath("similarCafes[].name").description("카페 이름"),
                                 fieldWithPath("similarCafes[].phoneNumber").description("전화번호"),
                                 fieldWithPath("similarCafes[].roadAddress").description("도로명 주소"),

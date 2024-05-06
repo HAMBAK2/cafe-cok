@@ -142,7 +142,9 @@ class PlanControllerTest extends ControllerTest {
                                 fieldWithPath("recommendCafes").type(JsonFieldType.ARRAY)
                                         .description("추천 카페(결과 티입이 MISMATCH 경우 존재, 아닌 경우 빈 리스트)"),
                                 fieldWithPath("recommendCafes[].id").description("카페 ID"),
-                                fieldWithPath("recommendCafes[].bookmarkId").description("북마크 ID(사용자가 북마크한 카페인 경우에만 존재)"),
+                                fieldWithPath("recommendCafes[].bookmarks").type(JsonFieldType.ARRAY).description("북마크 리스트"),
+                                fieldWithPath("recommendCafes[].bookmarks[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("recommendCafes[].bookmarks[].folderId").description("북마크 폴더  ID"),
                                 fieldWithPath("recommendCafes[].name").description("카페 이름"),
                                 fieldWithPath("recommendCafes[].phoneNumber").description("전화번호"),
                                 fieldWithPath("recommendCafes[].roadAddress").description("도로명 주소"),

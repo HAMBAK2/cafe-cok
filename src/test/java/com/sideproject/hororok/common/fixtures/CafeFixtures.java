@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_ID;
+import static com.sideproject.hororok.common.fixtures.BookmarkFixtures.북마크_카페_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MenuFixtures.메뉴_DTO_리스트;
 import static com.sideproject.hororok.common.fixtures.ReviewFixtures.*;
@@ -88,7 +89,7 @@ public class CafeFixtures {
 
     public static CafeDto 카페_DTO() {
         CafeDto cafeDto = CafeDto.of(카페(), 카페_이미지_URL);
-        cafeDto.setBookmarkId(북마크_ID);
+        cafeDto.setBookmarks(Arrays.asList(북마크_카페_DTO()));
         return cafeDto;
     }
 
@@ -97,7 +98,7 @@ public class CafeFixtures {
     }
 
     public static CafeDetailTopResponse 카페_상세_상단_응답() {
-        return CafeDetailTopResponse.of(카페(), 북마크_ID, 카페_이미지_URL, 리뷰_개수, 키워드_DTO_리스트());
+        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_카페_DTO()), 카페_이미지_URL, 리뷰_개수, 키워드_DTO_리스트());
     }
 
 

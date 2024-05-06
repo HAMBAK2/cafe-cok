@@ -1,6 +1,7 @@
 package com.sideproject.hororok.cafe.dto.response;
 
 
+import com.sideproject.hororok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.List;
 public class CafeDetailTopResponse {
 
     private Long cafeId;
-    private Long bookmarkId;
+    private List<BookmarkCafeDto> bookmarks;
     private String cafeName;
     private String roadAddress;
     private BigDecimal latitude;
@@ -39,11 +40,11 @@ public class CafeDetailTopResponse {
                 .build();
     }
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final Long bookmarkId, final String imageUrl,
+    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final String imageUrl,
                                            final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
-                .bookmarkId(bookmarkId)
+                .bookmarks(bookmarks)
                 .cafeName(cafe.getName())
                 .roadAddress(cafe.getRoadAddress())
                 .latitude(cafe.getLatitude())

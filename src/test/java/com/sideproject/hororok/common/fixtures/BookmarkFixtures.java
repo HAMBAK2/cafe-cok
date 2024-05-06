@@ -1,5 +1,6 @@
 package com.sideproject.hororok.common.fixtures;
 
+import com.sideproject.hororok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.hororok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.hororok.cafe.domain.Cafe;
 import com.sideproject.hororok.bookmark.domain.Bookmark;
@@ -32,6 +33,10 @@ public class BookmarkFixtures {
 
     public static BookmarkDto 북마크_DTO(final Bookmark bookmark) {
         return BookmarkDto.from(bookmark);
+    }
+
+    public static BookmarkCafeDto 북마크_카페_DTO(){
+        return BookmarkCafeDto.from(북마크());
     }
 
     public static BookmarksResponse 북마크_리스트_응답() {

@@ -1,17 +1,20 @@
 package com.sideproject.hororok.cafe.dto;
 
+import com.sideproject.hororok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.hororok.cafe.domain.Cafe;
+import jdk.dynalink.linker.LinkerServices;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Builder
 public class CafeDto {
 
     private Long id;
-    private Long bookmarkId;
+    private List<BookmarkCafeDto> bookmarks;
     private String name;
     private String phoneNumber;
     private String roadAddress;
@@ -35,8 +38,8 @@ public class CafeDto {
                 .build();
     }
 
-    public void setBookmarkId(final Long bookmarkId) {
-        this.bookmarkId = bookmarkId;
+    public void setBookmarks(final List<BookmarkCafeDto> bookmarks) {
+        this.bookmarks = bookmarks;
     }
 
 }
