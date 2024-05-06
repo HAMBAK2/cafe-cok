@@ -19,7 +19,7 @@ public class BookmarkCafeDto {
     public static BookmarkCafeDto from(final Bookmark bookmark) {
         return BookmarkCafeDto.builder()
                 .bookmarkId(bookmark.getId())
-                .folderId(bookmark.getId())
+                .folderId(bookmark.getBookmarkFolder().getId())
                 .build();
     }
 
