@@ -2,6 +2,7 @@ package com.sideproject.hororok.cafe.application;
 
 import com.sideproject.hororok.bookmark.domain.Bookmark;
 import com.sideproject.hororok.bookmark.domain.BookmarkRepository;
+import com.sideproject.hororok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.hororok.cafe.domain.OperationHour;
 import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.OperationHourRepository;
@@ -132,9 +133,8 @@ public class CafeService {
                         cafeId, PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT)));
 
         if(memberId != null) {
-            Optional<Bookmark> findOptionalBookmark = bookmarkRepository.findByCafeIdAndMemberId(cafeId, memberId);
-            if(findOptionalBookmark.isPresent()) return CafeDetailTopResponse.of(
-                    findCafe, findOptionalBookmark.get().getId(), imageUrl, reviewCount, findKeywordDtos);
+            List<Bookmark> findBookmarks = bookmarkRepository.findByCafeIdAndMemberId(cafeId, memberId);
+            return CafeDetailTopResponse.of(findCafe, BookmarkCafeDto.fromList(findBookmarks), imageUrl, reviewCount, findKeywordDtos);
         }
 
         return CafeDetailTopResponse.of(findCafe, imageUrl, reviewCount, findKeywordDtos);
@@ -366,10 +366,9 @@ public class CafeService {
     private List<CafeDto> setCafeDtosBookmarkId(final List<CafeDto> cafes, final Long memberId) {
 
         for (CafeDto cafe : cafes) {
-            Optional<Bookmark> findOptional = bookmarkRepository.findByCafeIdAndMemberId(cafe.getId(), memberId);
-            if(findOptional.isPresent()) cafe.setBookmarkId(findOptional.get().getId());
+            List<Bookmark> bookmarks = bookmarkRepository.findByCafeIdAndMemberId(cafe.getId(), memberId);
+            cafe.setBookmarks(BookmarkCafeDto.fromList(bookmarks));
         }
-
         return cafes;
     }
 }
