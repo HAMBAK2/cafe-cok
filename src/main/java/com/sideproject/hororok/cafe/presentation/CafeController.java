@@ -10,6 +10,7 @@ import com.sideproject.hororok.auth.presentation.AuthorizationExtractor;
 import com.sideproject.hororok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.hororok.cafe.dto.response.*;
 import com.sideproject.hororok.cafe.application.CafeService;
+import com.sideproject.hororok.member.exception.NoSuchMemberException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -154,7 +155,8 @@ public class CafeController {
             String accessToken = AuthorizationExtractor.extract(request);
             Long memberId = authService.extractMemberId(accessToken);
             return memberId;
-        } catch (final InvalidTokenException | EmptyAuthorizationHeaderException  e) {
+        } catch (final InvalidTokenException | EmptyAuthorizationHeaderException |
+                       NoSuchMemberException e) {
             return null;
         }
     }
