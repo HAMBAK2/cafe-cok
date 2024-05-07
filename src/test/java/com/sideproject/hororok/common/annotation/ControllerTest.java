@@ -2,6 +2,8 @@ package com.sideproject.hororok.common.annotation;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sideproject.hororok.admin.application.AdminService;
+import com.sideproject.hororok.admin.presentation.AdminController;
 import com.sideproject.hororok.auth.application.AuthService;
 import com.sideproject.hororok.auth.application.OAuthClient;
 import com.sideproject.hororok.auth.presentation.AuthController;
@@ -41,7 +43,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
         MyPageController.class,
         ReviewController.class,
         CafeController.class,
-        CombinationController.class
+        CombinationController.class,
+        AdminController.class
 })
 @ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
@@ -80,6 +83,9 @@ public abstract class ControllerTest {
 
     @MockBean
     public CombinationService combinationService;
+
+    @MockBean
+    public AdminService adminService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
