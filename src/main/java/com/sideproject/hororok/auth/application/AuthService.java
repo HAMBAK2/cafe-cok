@@ -3,6 +3,9 @@ package com.sideproject.hororok.auth.application;
 import com.sideproject.hororok.auth.domain.AuthToken;
 import com.sideproject.hororok.auth.domain.OAuthToken;
 import com.sideproject.hororok.auth.domain.OAuthTokenRepository;
+import com.sideproject.hororok.auth.domain.redis.AuthRefreshToken;
+import com.sideproject.hororok.auth.domain.redis.AuthRefreshTokenRepository;
+import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.dto.OAuthMember;
 import com.sideproject.hororok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
@@ -25,6 +28,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
+    private final AuthRefreshTokenRepository authRefreshTokenRepository;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
     private final String BASIC_FOLDER_COLOR = "#FE8282";
@@ -51,6 +55,16 @@ public class AuthService {
         Long memberId = tokenCreator.extractPayload(accessToken);
         Member findMember = memberRepository.getById(memberId);
         return findMember.getId();
+    }
+
+    @Transactional
+    public void logout(final LoginMember loginMember) {
+
+        OAuthToken findOAuthToken = oAuthTokenRepository.getByMemberId(loginMember.getId());
+        oAuthTokenRepository.delete(findOAuthToken);
+
+        AuthRefreshToken findAuthRefreshToken = authRefreshTokenRepository.getById(loginMember.getId());
+        authRefreshTokenRepository.delete(findAuthRefreshToken);
     }
 
     private Member findMember(final OAuthMember oAuthMember) {

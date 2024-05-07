@@ -3,6 +3,7 @@ package com.sideproject.hororok.auth.presentation;
 
 import com.sideproject.hororok.auth.application.AuthService;
 import com.sideproject.hororok.auth.application.OAuthClient;
+import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.auth.dto.OAuthMember;
 import com.sideproject.hororok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,4 +91,17 @@ public class AuthController {
         AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "로그아웃 성공")})
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal LoginMember loginMember) {
+
+        authService.logout(loginMember);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
