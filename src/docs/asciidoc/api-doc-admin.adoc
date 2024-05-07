@@ -1,0 +1,20 @@
+= Bookmark API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 0. 관리자 페이지
+=== 0-1. 카페 저장(Post) - 성공
+==== Http request
+include::{snippets}/admin/cafe/save/success/http-request.adoc[]
+==== Request parts
+include::{snippets}/admin/cafe/save/success/request-parts.adoc[]
+==== Request part request fields
+include::{snippets}/admin/cafe/save/success/request-part-request-fields.adoc[]
+==== Http response
+include::{snippets}/admin/cafe/save/success/http-response.adoc[]
+==== Response fields
+include::{snippets}/admin/cafe/save/success/response-fields.adoc[]
+
+=== link:api-docs.html[API 목록으로]
+
