@@ -30,7 +30,7 @@ public class OAuthToken extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void change(final String refreshToken) {
+    public void changeRefreshToken(final String refreshToken) {
         if(!Objects.isNull(refreshToken)) {
             this.refreshToken = refreshToken;
         }
