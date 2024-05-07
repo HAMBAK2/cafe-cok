@@ -26,12 +26,15 @@ public class AuthTokenCreator implements TokenCreator{
     }
 
     private AuthRefreshToken createRefreshToken(final Long memberId) {
-        Optional<AuthRefreshToken> authRefreshToken = authRefreshTokenRepository.findById(memberId);
-        if (authRefreshToken.isPresent()) {
-            return authRefreshToken.get();
+        Optional<AuthRefreshToken> optionalAuthRefreshToken = authRefreshTokenRepository.findById(memberId);
+        String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
+
+        if (optionalAuthRefreshToken.isPresent()) {
+            AuthRefreshToken findAuthRefreshToken = optionalAuthRefreshToken.get();
+            findAuthRefreshToken.changeRefreshToken(refreshToken);
+            return authRefreshTokenRepository.save(findAuthRefreshToken);
         }
 
-        String refreshToken = tokenProvider.createRefreshToken(String.valueOf(memberId));
         return authRefreshTokenRepository.save(new AuthRefreshToken(String.valueOf(memberId), refreshToken));
     }
 
@@ -42,7 +45,7 @@ public class AuthTokenCreator implements TokenCreator{
         Long memberId = Long.valueOf(tokenProvider.getPayload(refreshToken));
 
         String accessTokenForRenew = tokenProvider.createAccessToken(String.valueOf(memberId));
-        String refreshTokenForRenew = authRefreshTokenRepository.findById(memberId).get().getRefreshToken();
+        String refreshTokenForRenew = authRefreshTokenRepository.getById(memberId).getRefreshToken();
 
         AuthToken renewalAuthToken = new AuthToken(accessTokenForRenew, refreshTokenForRenew);
         renewalAuthToken.validateHasSameRefreshToken(refreshToken);

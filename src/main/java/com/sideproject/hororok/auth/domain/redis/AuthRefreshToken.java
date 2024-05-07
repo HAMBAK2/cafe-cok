@@ -17,4 +17,8 @@ public class AuthRefreshToken {
         this.memberId = memberId;
         this.refreshToken = refreshToken;
     }
+
+    public void changeRefreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

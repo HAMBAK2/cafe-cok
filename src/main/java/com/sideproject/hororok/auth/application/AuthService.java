@@ -36,10 +36,8 @@ public class AuthService {
     public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final OAuthMember oAuthMember) {
         Member foundMember = findMember(oAuthMember);
 
-        OAuthToken oAuthToken = getOAuthToken(oAuthMember, foundMember);
-        oAuthToken.change(oAuthToken.getRefreshToken());
-
-        AuthToken authToken = tokenCreator.createAuthToken(foundMember.getId());
+        OAuthToken savedOAuthToken = saveOAuthToken(oAuthMember, foundMember);
+        AuthToken authToken = tokenCreator.createAuthToken(savedOAuthToken.getMember().getId());
         return new AccessAndRefreshTokenResponse(authToken.getAccessToken(), authToken.getRefreshToken());
     }
 
@@ -73,10 +71,12 @@ public class AuthService {
         return savedMember;
     }
 
-    private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
+    private OAuthToken saveOAuthToken(final OAuthMember oAuthMember, final Member member) {
         Long memberId = member.getId();
         if (oAuthTokenRepository.existsByMemberId(memberId)) {
-            return oAuthTokenRepository.getByMemberId(memberId);
+            OAuthToken findOAuthToken = oAuthTokenRepository.getByMemberId(memberId);
+            findOAuthToken.changeRefreshToken(oAuthMember.getRefreshToken());
+            return oAuthTokenRepository.save(findOAuthToken);
         }
 
         return oAuthTokenRepository.save(new OAuthToken(member, oAuthMember.getRefreshToken()));
