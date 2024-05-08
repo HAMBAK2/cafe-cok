@@ -43,17 +43,20 @@ public class Cafe extends BaseEntity {
 
     @Column(name = "longitude", nullable = false,
             precision = 17, scale = 14)
-    private BigDecimal longitude; //경도
+    private BigDecimal longitude;
 
     @Column(name = "latitude", nullable = false,
             precision = 17, scale = 14)
-    private BigDecimal latitude; //위도
+    private BigDecimal latitude;
 
     @Column(name = "star_rating", precision = 2, scale = 1)
     private BigDecimal starRating;
 
     @Column(name = "review_count")
     private Long reviewCount;
+
+    @Column(name = "main_image")
+    private String mainImage;
 
     protected Cafe(){}
 
@@ -68,6 +71,20 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
+    }
+
+    public Cafe(final String name, final String phoneNumber, final String roadAddress,
+                final BigDecimal longitude, final BigDecimal latitude, final String mainImage) {
+        validatePhoneNumber(phoneNumber);
+
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.starRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+        this.mainImage = mainImage;
     }
 
     private void validatePhoneNumber(final String phoneNumber) {
