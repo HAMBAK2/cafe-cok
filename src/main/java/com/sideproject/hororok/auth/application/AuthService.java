@@ -12,11 +12,28 @@ import com.sideproject.hororok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.hororok.auth.dto.response.AccessTokenResponse;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolder;
 import com.sideproject.hororok.bookmark.domain.BookmarkFolderRepository;
+import com.sideproject.hororok.bookmark.domain.BookmarkRepository;
+import com.sideproject.hororok.combination.domain.Combination;
+import com.sideproject.hororok.combination.domain.repository.CombinationKeywordRepository;
+import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
+import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.member.domain.Member;
+import com.sideproject.hororok.member.domain.WithdrawnMember;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
+import com.sideproject.hororok.member.domain.repository.WithdrawnMemberRepository;
+import com.sideproject.hororok.plan.domain.Plan;
+import com.sideproject.hororok.plan.domain.repository.PlanCafeRepository;
+import com.sideproject.hororok.plan.domain.repository.PlanKeywordRepository;
+import com.sideproject.hororok.plan.domain.repository.PlanRepository;
+import com.sideproject.hororok.review.domain.Review;
+import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
+import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.PriorityQueue;
 
 
 @Service
@@ -26,9 +43,19 @@ public class AuthService {
 
     private final TokenCreator tokenCreator;
     private final MemberRepository memberRepository;
+    private final WithdrawnMemberRepository withdrawnMemberRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewImageRepository reviewImageRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
-    private final BookmarkFolderRepository bookmarkFolderRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
+    private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
+    private final PlanRepository planRepository;
+    private final PlanCafeRepository planCafeRepository;
+    private final PlanKeywordRepository planKeywordRepository;
+    private final CombinationRepository combinationRepository;
+    private final CombinationKeywordRepository combinationKeywordRepository;
+    private final BookmarkRepository bookmarkRepository;
+    private final BookmarkFolderRepository bookmarkFolderRepository;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
     private final String BASIC_FOLDER_COLOR = "#FE8282";
@@ -65,6 +92,47 @@ public class AuthService {
 
         AuthRefreshToken findAuthRefreshToken = authRefreshTokenRepository.getById(loginMember.getId());
         authRefreshTokenRepository.delete(findAuthRefreshToken);
+    }
+
+    @Transactional
+    public void withdrawal(final LoginMember loginMember) {
+
+        //북마크 관련 정보 삭제
+        List<BookmarkFolder> findBookmarkFolders = bookmarkFolderRepository.findByMemberId(loginMember.getId());
+        for (BookmarkFolder findBookmarkFolder : findBookmarkFolders) {
+            bookmarkRepository.deleteByBookmarkFolderId(findBookmarkFolder.getId());
+            bookmarkFolderRepository.deleteById(findBookmarkFolder.getId());
+        }
+
+        //조합관련 정보 삭제
+        List<Combination> findCombinations = combinationRepository.findByMemberId(loginMember.getId());
+        for (Combination findCombination : findCombinations) {
+            combinationKeywordRepository.deleteByCombinationId(findCombination.getId());
+            combinationRepository.deleteById(findCombination.getId());
+        }
+
+        //계획 관련 정보 삭제
+        List<Plan> findPlans = planRepository.findByMemberId(loginMember.getId());
+        for (Plan findPlan : findPlans) {
+            planCafeRepository.deleteByPlanId(findPlan.getId());
+            planKeywordRepository.deleteByPlanId(findPlan.getId());
+            planRepository.deleteById(findPlan.getId());
+        }
+
+        //리뷰 관련 정보 삭제
+        List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
+        for (Review findReview : findReviews) {
+            cafeReviewKeywordRepository.deleteByReviewId(findReview.getId());
+            reviewImageRepository.deleteByReviewId(findReview.getId());
+            reviewRepository.deleteById(findReview.getId());
+        }
+
+        //로그아웃 처리 후 탈퇴한 사용자 정보 테이블에 정보 추가 및 기존 정보 삭제
+        logout(loginMember);
+        Member findMember = memberRepository.getById(loginMember.getId());
+        WithdrawnMember withdrawnMember = new WithdrawnMember(findMember);
+        withdrawnMemberRepository.save(withdrawnMember);
+        memberRepository.deleteById(findMember.getId());
     }
 
     private Member findMember(final OAuthMember oAuthMember) {

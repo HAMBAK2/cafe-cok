@@ -13,11 +13,9 @@ import java.util.regex.Pattern;
 import static com.sideproject.hororok.utils.Constants.*;
 
 @Getter
-@Table(name = "members")
 @Entity
+@Table(name = "members")
 public class Member extends BaseEntity {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

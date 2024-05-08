@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 
+    List<Plan> findByMemberId(final Long memberId);
 
     Page<Plan> findPageByMemberId(Long memberId, Pageable pageable);
 
