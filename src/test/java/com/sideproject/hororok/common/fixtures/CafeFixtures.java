@@ -81,14 +81,13 @@ public class CafeFixtures {
     }
 
     public static Cafe 카페() {
-        Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도);
-        setId(cafe, 카페_아이디);
-
+        Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도, 카페_이미지_URL);
+        setCafeId(cafe, 카페_아이디);
         return cafe;
     }
 
     public static CafeDto 카페_DTO() {
-        CafeDto cafeDto = CafeDto.of(카페(), 카페_이미지_URL);
+        CafeDto cafeDto = CafeDto.from(카페());
         cafeDto.setBookmarks(Arrays.asList(북마크_카페_DTO()));
         return cafeDto;
     }
@@ -111,7 +110,7 @@ public class CafeFixtures {
         return BigDecimal.valueOf(shifted);
     }
 
-    public static Cafe setId(Cafe cafe, final Long id) {
+    public static Cafe setCafeId(Cafe cafe, final Long id) {
 
         try {
             Field idField = Cafe.class.getDeclaredField("id");

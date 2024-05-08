@@ -1,7 +1,6 @@
 package com.sideproject.hororok.member.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.dto.CafeDto;
 import com.sideproject.hororok.combination.domain.Combination;
 import com.sideproject.hororok.combination.domain.repository.CombinationRepository;
@@ -10,7 +9,6 @@ import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.member.dto.MyPagePlanDto;
@@ -55,7 +53,6 @@ public class MyPageService {
     private final ReviewRepository reviewRepository;
     private final KeywordRepository keywordRepository;
     private final PlanCafeRepository planCafeRepository;
-    private final CafeImageRepository cafeImageRepository;
     private final PlanKeywordRepository planKeywordRepository;
     private final CombinationRepository combinationRepository;
 
@@ -162,9 +159,7 @@ public class MyPageService {
     private List<CafeDto> getCafeDtosByPlanIdAndMatchType(Long planId, PlanCafeMatchType matchType) {
         List<PlanCafe> findPlanCafes = planCafeRepository.findByPlanIdAndMatchType(planId, matchType);
         return findPlanCafes.stream()
-                .map(planCafe -> CafeDto.of(
-                        planCafe.getCafe(),
-                        cafeImageRepository.findByCafeId(planCafe.getCafe().getId()).get(0).getImageUrl()))
+                .map(planCafe -> CafeDto.from(planCafe.getCafe()))
                 .collect(Collectors.toList());
     }
 

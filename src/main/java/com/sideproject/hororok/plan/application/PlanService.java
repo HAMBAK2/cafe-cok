@@ -1,7 +1,6 @@
 package com.sideproject.hororok.plan.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
@@ -58,7 +57,6 @@ public class PlanService {
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
     private final PlanCafeRepository planCafeRepository;
-    private final CafeImageRepository cafeImageRepository;
     private final PlanKeywordRepository planKeywordRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
@@ -252,7 +250,7 @@ public class PlanService {
     private List<CafeDto> getCafeDtosByCafes(List<Cafe> cafes){
 
         return cafes.stream()
-                .map(cafe -> CafeDto.of(cafe, cafeImageRepository.findByCafeId(cafe.getId()).get(0).getImageUrl()))
+                .map(cafe -> CafeDto.from(cafe))
                 .collect(Collectors.toList());
     }
 

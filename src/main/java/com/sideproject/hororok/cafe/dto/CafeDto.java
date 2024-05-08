@@ -24,7 +24,7 @@ public class CafeDto {
     private Long reviewCount;
     private String imageUrl;
 
-    public static CafeDto of(final Cafe cafe, final String imageUrl) {
+    public static CafeDto from(final Cafe cafe) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -34,7 +34,7 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(cafe.getReviewCount())
-                .imageUrl(imageUrl)
+                .imageUrl(cafe.getMainImage())
                 .build();
     }
 
