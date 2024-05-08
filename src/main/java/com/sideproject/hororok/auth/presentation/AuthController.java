@@ -104,4 +104,16 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping("/withdrawal")
+    @Operation(summary = "회원탈퇴")
+    @ApiResponses( value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "로그아웃 성공")})
+    public ResponseEntity<Void> withdrawal(@AuthenticationPrincipal LoginMember loginMember) {
+
+        authService.withdrawal(loginMember);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
