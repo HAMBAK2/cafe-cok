@@ -475,15 +475,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/plan HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Content-Length: 244
+Content-Length: 245
 Host: localhost:8080
 
 {
   "locationName" : "위치 이름",
-  "latitude" : 20.425001837103693,
-  "longitude" : 56.94042225659102,
+  "latitude" : 48.477553603316174,
+  "longitude" : 26.859620476118025,
   "minutes" : 10,
-  "date" : "2024-05-08",
+  "date" : "2024-05-09",
   "startTime" : "09:00:00",
   "endTime" : "11:00:00",
   "keywords" : [ "키워드 이름" ]
@@ -559,14 +559,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 728
+Content-Length: 729
 
 {
   "planId" : 1,
   "matchType" : "MISMATCH",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "5월 8일 9시 0분",
+  "visitDateTime" : "5월 9일 9시 0분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -583,8 +583,8 @@ Content-Length: 728
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 162.4208840261855,
-    "longitude" : 52.90160207294781,
+    "latitude" : 83.38580518024848,
+    "longitude" : 4.0678368690757525,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"

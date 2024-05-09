@@ -2,6 +2,7 @@ package com.sideproject.hororok.keword.domain.repository;
 
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
+import com.sideproject.hororok.review.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ public interface CafeReviewKeywordRepository extends JpaRepository<CafeReviewKey
 
     List<CafeReviewKeyword> findByKeywordIn(List<Keyword> keywords);
 
-    List<CafeReviewKeyword> findByReviewId(Long reviewId);
+    List<CafeReviewKeyword> findByReviewIn(List<Review> reviews);
 
     void deleteByReviewId(Long reviewId);
 

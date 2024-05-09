@@ -2,12 +2,15 @@ package com.sideproject.hororok.review.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
 import com.sideproject.hororok.global.error.exception.MissingRequiredValueException;
+import com.sideproject.hororok.image.domain.Image;
+import com.sideproject.hororok.image.domain.enums.ImageType;
+import com.sideproject.hororok.image.domain.repository.ImageRepository;
+import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.keword.domain.CafeReviewKeyword;
 import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.keword.domain.enums.Category;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.dto.response.MyPageReviewResponse;
-import com.sideproject.hororok.review.domain.repository.ReviewImageRepository;
 import com.sideproject.hororok.review.dto.MyPageReviewDto;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
@@ -23,7 +26,6 @@ import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.review.domain.*;
 import com.sideproject.hororok.review.domain.repository.ReviewRepository;
 import com.sideproject.hororok.member.domain.Member;
-import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.utils.ListUtils;
 import com.sideproject.hororok.utils.S3.component.S3Uploader;
@@ -46,10 +48,10 @@ public class ReviewService {
     private final S3Uploader s3Uploader;
 
     private final CafeRepository cafeRepository;
+    private final ImageRepository imageRepository;
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
-    private final ReviewImageRepository reviewImageRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private static final String KEYWORD = "keyword";
@@ -77,7 +79,7 @@ public class ReviewService {
     @Transactional
     public ReviewDeleteResponse delete(final Long reviewId) {
 
-        reviewImageRepository.deleteByReviewId(reviewId);
+        imageRepository.deleteByReviewId(reviewId);
         cafeReviewKeywordRepository.deleteByReviewId(reviewId);
         reviewRepository.deleteById(reviewId);
         return new ReviewDeleteResponse(reviewId);
@@ -85,8 +87,8 @@ public class ReviewService {
 
     public ReviewDetailResponse detail(final Long reviewId) {
         Review findReview = reviewRepository.getById(reviewId);
-        List<ReviewImageDto> reviewImages
-                = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(reviewId));
+        List<ImageDto> reviewImages
+                = ImageDto.fromList(imageRepository.findByReviewId(reviewId));
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
 
         return ReviewDetailResponse.of(findReview, reviewImages, CategoryKeywords);
@@ -96,8 +98,8 @@ public class ReviewService {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
-            List<ReviewImageDto> findImages
-                    = ReviewImageDto.fromList(reviewImageRepository.findByReviewId(review.getId()));
+            List<ImageDto> findImages
+                    = ImageDto.fromList(imageRepository.findByReviewId(review.getId()));
             List<KeywordDto> findKeywords
                     = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
 
@@ -145,29 +147,29 @@ public class ReviewService {
 
     private void saveByReviewAndMultipartFiles(final Review review, final List<MultipartFile> files) {
 
-        List<ReviewImage> reviewImages = saveImagesObjectStorage(review, files);
+        List<Image> reviewImages = saveImagesObjectStorage(review, files);
         if(reviewImages.isEmpty()) return;
-        for (ReviewImage reviewImage : reviewImages) reviewImageRepository.save(reviewImage);
+        for (Image reviewImage : reviewImages) imageRepository.save(reviewImage);
     }
 
     @Transactional
     public void deleteByIds(List<Long> ids) {
 
-        List<String> findImageUrls = reviewImageRepository.findImageUrlByIdIn(ids);
+        List<String> findImageUrls = imageRepository.findImageUrlByIdIn(ids);
         for (String imageUrl : findImageUrls) s3Uploader.delete(imageUrl);
-        reviewImageRepository.deleteAllByIdIn(ids);
+        imageRepository.deleteAllByIdIn(ids);
     }
 
-    private List<ReviewImage> saveImagesObjectStorage(final Review review, final List<MultipartFile> files) {
+    private List<Image> saveImagesObjectStorage(final Review review, final List<MultipartFile> files) {
 
-        List<ReviewImage> reviewImages = new ArrayList<>();
+        List<Image> reviewImages = new ArrayList<>();
 
         if(files.isEmpty()) return reviewImages;
 
         for (MultipartFile file : files) {
-            ReviewImage reviewImage =
-                    new ReviewImage(s3Uploader.upload(file, REVIEW_IMAGE_DIR)
-                            .replace(IMAGE_URL_PREFIX, ""), review);
+            Image reviewImage =
+                    new Image(ImageType.REVIEW_IMAGE,
+                            s3Uploader.upload(file, REVIEW_IMAGE_DIR).replace(IMAGE_URL_PREFIX, ""), review);
             reviewImages.add(reviewImage);
         }
         return reviewImages;

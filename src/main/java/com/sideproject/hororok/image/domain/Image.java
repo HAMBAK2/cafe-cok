@@ -36,4 +36,12 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "reviews_id")
     private Review review;
 
+    protected Image() {
+    }
+
+    public Image(final ImageType imageType, final String imageUrl, final Review review) {
+        this.imageType = imageType;
+        this.imageUrl = imageUrl;
+        this.review = review;
+    }
 }

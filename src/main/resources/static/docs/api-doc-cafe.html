@@ -513,7 +513,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 405
+Content-Length: 406
 
 {
   "cafeId" : 1,
@@ -523,8 +523,8 @@ Content-Length: 405
   } ],
   "cafeName" : "카페 이름",
   "roadAddress" : "OO시 OO구 OO동",
-  "latitude" : 162.4208840261855,
-  "longitude" : 52.90160207294781,
+  "latitude" : 83.38580518024848,
+  "longitude" : 4.0678368690757525,
   "starRating" : 0.0,
   "reviewCount" : 2,
   "imageUrl" : "//카페이미지",
@@ -700,7 +700,7 @@ Content-Length: 797
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-08",
+    "createDate" : "2024-05-09",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ "리뷰 이미지 URL" ],
@@ -1136,7 +1136,7 @@ Content-Length: 43
 <h4 id="_http_request_6">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=52.90160207294781&amp;longitude=162.4208840261855 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=4.0678368690757525&amp;longitude=83.38580518024848 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
@@ -1178,7 +1178,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 380
+Content-Length: 381
 
 {
   "cafes" : [ {
@@ -1190,8 +1190,8 @@ Content-Length: 380
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 162.4208840261855,
-    "longitude" : 52.90160207294781,
+    "latitude" : 83.38580518024848,
+    "longitude" : 4.0678368690757525,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1291,7 +1291,7 @@ Content-Length: 380
 <h4 id="_http_request_7">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=52.90160207294781&amp;longitude=162.4208840261855 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=4.0678368690757525&amp;longitude=83.38580518024848 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
@@ -1333,7 +1333,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 380
+Content-Length: 381
 
 {
   "cafes" : [ {
@@ -1345,8 +1345,8 @@ Content-Length: 380
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 162.4208840261855,
-    "longitude" : 52.90160207294781,
+    "latitude" : 83.38580518024848,
+    "longitude" : 4.0678368690757525,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1451,12 +1451,12 @@ Content-Length: 380
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
-Content-Length: 110
+Content-Length: 111
 Host: localhost:8080
 
 {
-  "latitude" : 52.90160207294781,
-  "longitude" : 162.4208840261855,
+  "latitude" : 4.0678368690757525,
+  "longitude" : 83.38580518024848,
   "keywords" : [ "키워드 이름" ]
 }</code></pre>
 </div>
@@ -1505,7 +1505,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 380
+Content-Length: 381
 
 {
   "cafes" : [ {
@@ -1517,8 +1517,8 @@ Content-Length: 380
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 162.4208840261855,
-    "longitude" : 52.90160207294781,
+    "latitude" : 83.38580518024848,
+    "longitude" : 4.0678368690757525,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : "//카페이미지"
@@ -1689,7 +1689,7 @@ Content-Length: 470
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-08",
+    "createDate" : "2024-05-09",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ "리뷰 이미지 URL" ],
@@ -1852,7 +1852,7 @@ Content-Length: 430
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-08",
+    "createDate" : "2024-05-09",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ "리뷰 이미지 URL" ],
