@@ -1,12 +1,11 @@
 package com.sideproject.hororok.plan.application;
 
 import com.sideproject.hororok.auth.dto.LoginMember;
-import com.sideproject.hororok.cafe.domain.repository.CafeImageRepository;
 import com.sideproject.hororok.cafe.domain.repository.CafeRepository;
 import com.sideproject.hororok.common.annotation.ServiceTest;
+import com.sideproject.hororok.image.domain.repository.ImageRepository;
 import com.sideproject.hororok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.hororok.keword.domain.repository.KeywordRepository;
-import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.member.domain.Member;
 import com.sideproject.hororok.member.domain.repository.MemberRepository;
 import com.sideproject.hororok.plan.domain.Plan;
@@ -40,9 +39,6 @@ class PlanServiceTest extends ServiceTest {
 
 
     @Mock
-    private CafeRepository cafeRepository;
-
-    @Mock
     private PlanRepository planRepository;
 
     @Mock
@@ -55,13 +51,8 @@ class PlanServiceTest extends ServiceTest {
     private PlanCafeRepository planCafeRepository;
 
     @Mock
-    private CafeImageRepository cafeImageRepository;
-
-    @Mock
     private PlanKeywordRepository planKeywordRepository;
 
-    @Mock
-    private CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     @InjectMocks
     private PlanService planService;

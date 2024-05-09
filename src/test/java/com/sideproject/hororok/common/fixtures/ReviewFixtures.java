@@ -1,10 +1,7 @@
 package com.sideproject.hororok.common.fixtures;
 
-import com.sideproject.hororok.keword.domain.Keyword;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.review.dto.CafeDetailReviewDto;
-import com.sideproject.hororok.review.dto.ReviewImageDto;
 import com.sideproject.hororok.review.dto.request.ReviewCreateRequest;
 import com.sideproject.hororok.review.dto.request.ReviewEditRequest;
 import com.sideproject.hororok.review.dto.response.ReviewCreateResponse;
@@ -15,10 +12,10 @@ import com.sideproject.hororok.review.dto.response.ReviewEditResponse;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페;
 import static com.sideproject.hororok.common.fixtures.CafeFixtures.카페_아이디;
+import static com.sideproject.hororok.common.fixtures.ImageFixtures.리뷰_이미지_DTO;
 import static com.sideproject.hororok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.hororok.common.fixtures.MemberFixtures.사용자;
 
@@ -45,27 +42,11 @@ public class ReviewFixtures {
         return review;
     }
 
-    public static ReviewImage 리뷰_이미지() {
-        ReviewImage reviewImage = new ReviewImage(리뷰_이미지_URL, 리뷰());
-        return reviewImage;
-    }
 
     public static CafeDetailReviewDto 카페_상세_리뷰_DTO() {
         return CafeDetailReviewDto.of(리뷰(), Arrays.asList(리뷰_이미지_URL), Arrays.asList(추천_메뉴));
     }
 
-
-    public static List<ReviewImage> 리뷰_이미지_리스트() {
-        return Arrays.asList(리뷰_이미지());
-    }
-
-    public static ReviewImageDto 리뷰_이미지_DTO() {
-        return ReviewImageDto.from(리뷰_이미지());
-    }
-
-    public static List<ReviewImageDto> 리뷰_이미지_DTO_리스트() {
-        return Arrays.asList(리뷰_이미지_DTO());
-    }
 
     public static ReviewCreateRequest 리뷰_생성_요청() {
         return new ReviewCreateRequest(카페_아이디, 리뷰_내용, 리뷰_특이사항, 키워드_이름_리스트,리뷰_별점);
@@ -88,7 +69,7 @@ public class ReviewFixtures {
     }
 
     public static ReviewDetailResponse 리뷰_상세_응답() {
-        return ReviewDetailResponse.of(리뷰(), 리뷰_이미지_DTO_리스트(), 카테고리_키워드_DTO());
+        return ReviewDetailResponse.of(리뷰(), Arrays.asList(리뷰_이미지_DTO()), 카테고리_키워드_DTO());
     }
 
     public static Review setReviewId(Review review, final Long id) {

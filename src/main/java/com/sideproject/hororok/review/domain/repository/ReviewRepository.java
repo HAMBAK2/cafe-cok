@@ -1,7 +1,6 @@
 package com.sideproject.hororok.review.domain.repository;
 
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.domain.ReviewImage;
 import com.sideproject.hororok.review.exception.NoSuchReviewException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

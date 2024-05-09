@@ -1,9 +1,9 @@
 package com.sideproject.hororok.review.dto.response;
 
 
+import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.hororok.review.domain.Review;
-import com.sideproject.hororok.review.dto.ReviewImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,11 +19,11 @@ public class ReviewDetailResponse {
     private Integer starRating;
     private String content;
     private String specialNote;
-    private List<ReviewImageDto> images;
+    private List<ImageDto> images;
     private CategoryKeywordsDto categoryKeywords;
 
     public static ReviewDetailResponse of(
-            final Review review, final List<ReviewImageDto> images, final CategoryKeywordsDto categoryKeywords) {
+            final Review review, final List<ImageDto> images, final CategoryKeywordsDto categoryKeywords) {
 
         return ReviewDetailResponse.builder()
                 .cafeId(review.getCafe().getId())

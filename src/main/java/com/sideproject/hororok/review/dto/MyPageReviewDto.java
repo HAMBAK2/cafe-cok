@@ -1,5 +1,6 @@
 package com.sideproject.hororok.review.dto;
 
+import com.sideproject.hororok.image.dto.ImageDto;
 import com.sideproject.hororok.keword.dto.KeywordDto;
 import com.sideproject.hororok.review.domain.Review;
 import lombok.Builder;
@@ -19,12 +20,12 @@ public class MyPageReviewDto {
     private String content;
     private String specialNote;
     private LocalDate createdDate;
-    private List<ReviewImageDto> images;
+    private List<ImageDto> images;
     private List<KeywordDto> keywords;
 
 
     public static MyPageReviewDto of(
-            final Review review, final List<ReviewImageDto> images, final List<KeywordDto> keywords) {
+            final Review review, final List<ImageDto> images, final List<KeywordDto> keywords) {
 
         return MyPageReviewDto.builder()
                 .cafeId(review.getCafe().getId())
