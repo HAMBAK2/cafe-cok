@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.side-project.hororok' is invalid and this project uses 'com.sideproject.hororok' instead.
+* The original package name 'com.side-project.cafe_cok' is invalid and this project uses 'com.sideproject.cafe_cok' instead.
 
 # Getting Started
 
