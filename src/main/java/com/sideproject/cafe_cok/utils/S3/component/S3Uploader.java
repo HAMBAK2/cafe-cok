@@ -30,6 +30,9 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.cloud-front.domain}")
+    private String cloudFrontDomain;
+
     public String upload(MultipartFile multipartFile, String dirName) {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
@@ -51,7 +54,7 @@ public class S3Uploader {
 
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3Client.getUrl(bucket, fileName).toString();
+        return cloudFrontDomain + amazonS3Client.getUrl(bucket, fileName).getPath();
     }
 
     private void removeNewFile(File targetFile) {
