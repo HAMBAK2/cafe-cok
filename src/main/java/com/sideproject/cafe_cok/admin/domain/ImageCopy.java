@@ -1,4 +1,4 @@
-package com.sideproject.cafe_cok.image.domain;
+package com.sideproject.cafe_cok.admin.domain;
 
 
 import com.sideproject.cafe_cok.admin.domain.CafeCopy;

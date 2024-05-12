@@ -26,8 +26,6 @@ import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.GeometricUtils;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
-import com.sideproject.cafe_cok.cafe.dto.response.*;
-import com.sideproject.cafe_cok.cafe.dto.*;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.RequiredArgsConstructor;

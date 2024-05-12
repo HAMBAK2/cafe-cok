@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,6 +34,16 @@ public class AdminCafeSaveRequest {
         this.mapy = mapy;
         this.telephone = telephone;
         this.menus = menus;
+    }
+
+    public AdminCafeSaveRequest(final String name, final String roadAddress,
+                                final Integer mapx, final Integer mapy, final String telephone) {
+        this.name = name;
+        this.roadAddress = roadAddress;
+        this.mapx = mapx;
+        this.mapy = mapy;
+        this.telephone = telephone;
+        this.menus = new ArrayList<>();
     }
 
     public CafeCopy toEntity(final String mainImage) {

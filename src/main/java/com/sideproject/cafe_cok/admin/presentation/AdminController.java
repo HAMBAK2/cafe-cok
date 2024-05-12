@@ -38,17 +38,4 @@ public class AdminController {
         AdminCafeSaveResponse response = adminService.saveCafe(request, mainImage, otherImages);
         return ResponseEntity.ok(response);
     }
-
-
-    @PostMapping(value = "/cafe/save/test",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "카페를 저장하는 기능 테스트")
-    public ResponseEntity<AdminCafeSaveResponse> saveCafeTest(
-            @RequestPart AdminCafeSaveTestRequest request,
-            @RequestPart(value = "mainImage") MultipartFile mainImage,
-            @RequestPart(value = "otherImages", required = false) List<MultipartFile> otherImages) {
-
-        AdminCafeSaveResponse response = adminService.saveCafeTest(request, mainImage, otherImages);
-        return ResponseEntity.ok(response);
-    }
 }
