@@ -1,9 +1,15 @@
 package com.sideproject.cafe_cok.utils;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+
 import java.text.NumberFormat;
 import java.time.*;
 
 public class FormatConverter {
+
+    private static final String COUNTRY_CODE_KOREA = "KR";
 
     public static Integer convertSecondsToMinutes(final Integer seconds) {
         return seconds / 60;
@@ -61,6 +67,18 @@ public class FormatConverter {
                 return "일";
             default:
                 throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
+        }
+    }
+
+    public static String convertFormatPhoneNumber(final String phoneNumber) {
+
+        try {
+            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+            Phonenumber.PhoneNumber parsedPhoneNumber = phoneNumberUtil.parse(phoneNumber, COUNTRY_CODE_KOREA);
+            return phoneNumberUtil.format(parsedPhoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL);
+        } catch (NumberParseException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

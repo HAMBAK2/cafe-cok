@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.admin.dto.request;
 
 import com.sideproject.cafe_cok.admin.domain.CafeCopy;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -30,7 +31,12 @@ public class AdminCafeSaveRequest {
     }
 
     public CafeCopy toEntity(final String mainImage) {
-        return new CafeCopy(name, telephone, roadAddress, mapx, mapy, mainImage);
+        return new CafeCopy(
+                name,
+                FormatConverter.convertFormatPhoneNumber(telephone),
+                roadAddress,
+                mapx,
+                mapy,
+                mainImage);
     }
-
 }
