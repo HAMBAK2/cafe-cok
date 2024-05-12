@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
@@ -63,13 +64,17 @@ class AdminControllerTest extends ControllerTest {
                         requestParts(
                                 partWithName("request").description("파일을 제외한 리뷰 요청 객체"),
                                 partWithName("mainImage").description("카페 대표 이미지(필수)"),
-                                partWithName("otherImages").description("메인 이미지를 제외한 나머지 이미지")),
+                                partWithName("otherImages").description("메인 이미지를 제외한 나머지 카페 이미지")),
                         requestPartFields("request",
                                 fieldWithPath("name").description("카페 이름(필수)"),
                                 fieldWithPath("roadAddress").description("카페 주소(필수)"),
                                 fieldWithPath("mapx").description("카페 경도(필수)"),
                                 fieldWithPath("mapy").description("카페 위도(필수)"),
-                                fieldWithPath("telephone").description("카페 전화번호")),
+                                fieldWithPath("telephone").description("카페 전화번호"),
+                                fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페의 메뉴에 관한 정보"),
+                                fieldWithPath("menus[].name").description("메뉴 이름(메뉴가 존재한다면 필수)"),
+                                fieldWithPath("menus[].price").description("메뉴 가격(메뉴가 존재한다면 필수)"),
+                                fieldWithPath("menus[].image").description("메뉴 이미지(필수X)")),
                         responseFields(
                                 fieldWithPath("id").description("카페 ID"),
                                 fieldWithPath("name").description("카페 이름"),

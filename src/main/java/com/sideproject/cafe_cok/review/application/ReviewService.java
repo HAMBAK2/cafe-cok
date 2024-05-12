@@ -28,7 +28,6 @@ import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.review.domain.*;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;

@@ -83,6 +83,7 @@ public class Cafe extends BaseEntity {
     }
 
     private void validatePhoneNumber(final String phoneNumber) {
+        if(phoneNumber == null || phoneNumber.isEmpty()) return;
         Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
         if(!matcher.matches()) {
             throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");

@@ -474,7 +474,7 @@ Host: localhost:8080
 Content-Disposition: form-data; name=request
 Content-Type: application/json
 
-{"name":"카페 이름","roadAddress":"OO시 OO구 OO동","mapx":123456789,"mapy":123456789,"telephone":"010-1234-5678"}
+{"name":"카페 이름","roadAddress":"OO시 OO구 OO동","mapx":123456789,"mapy":123456789,"telephone":"010-1234-5678","menus":[{"name":"메뉴 이름","price":10000,"image":"Base64로 인코딩된 이미지 정보"}]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=mainImage; filename=mainImage.jpg
 Content-Type: image/jpeg
@@ -513,7 +513,7 @@ Test file content
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>otherImages</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지를 제외한 나머지 이미지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지를 제외한 나머지 카페 이미지</p></td>
 </tr>
 </tbody>
 </table>
@@ -558,6 +558,26 @@ Test file content
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>telephone</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 전화번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>menus</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페의 메뉴에 관한 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>menus[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메뉴 이름(메뉴가 존재한다면 필수)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>menus[].price</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메뉴 가격(메뉴가 존재한다면 필수)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>menus[].image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메뉴 이미지(필수X)</p></td>
 </tr>
 </tbody>
 </table>

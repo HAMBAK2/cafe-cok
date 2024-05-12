@@ -1,9 +1,10 @@
-package com.sideproject.cafe_cok.image.domain;
+package com.sideproject.cafe_cok.admin.domain;
 
 
-import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.admin.domain.CafeCopy;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,8 +14,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
-@Table(name = "images")
-public class Image extends BaseEntity {
+@Table(name = "images_copy")
+public class ImageCopy extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -29,25 +30,25 @@ public class Image extends BaseEntity {
     private String imageUrl;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "cafes_id")
-    private Cafe cafe;
+    @JoinColumn(name = "cafes_copy_id")
+    private CafeCopy cafeCopy;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "reviews_id")
     private Review review;
 
-    protected Image() {
+    protected ImageCopy() {
     }
 
-    public Image(final ImageType imageType, final String imageUrl, final Review review) {
+    public ImageCopy(final ImageType imageType, final String imageUrl, final Review review) {
         this.imageType = imageType;
         this.imageUrl = imageUrl;
         this.review = review;
     }
 
-    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe) {
+    public ImageCopy(final ImageType imageType, final String imageUrl, final CafeCopy cafeCopy) {
         this.imageType = imageType;
         this.imageUrl = imageUrl;
-        this.cafe = cafe;
+        this.cafeCopy = cafeCopy;
     }
 }
