@@ -3,9 +3,14 @@ package com.sideproject.cafe_cok.utils;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import jakarta.xml.bind.DatatypeConverter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.*;
+import java.util.UUID;
 
 public class FormatConverter {
 
@@ -72,6 +77,8 @@ public class FormatConverter {
 
     public static String convertFormatPhoneNumber(final String phoneNumber) {
 
+        if(phoneNumber == null || phoneNumber.isEmpty()) return phoneNumber;
+
         try {
             PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
             Phonenumber.PhoneNumber parsedPhoneNumber = phoneNumberUtil.parse(phoneNumber, COUNTRY_CODE_KOREA);
@@ -80,6 +87,24 @@ public class FormatConverter {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static File convertBase64StringToFile(final String base64String) {
+
+        String[] splitedString = base64String.split(",");
+
+        String extension = splitedString[0].split(";")[0].split("/")[1];
+        byte[] imageData = DatatypeConverter.parseBase64Binary(splitedString[1]);
+        String filename = UUID.randomUUID().toString() + "." + extension;
+        File file = new File(filename);
+        try(FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(imageData);
+            System.out.println("Image file saved as " + filename);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
     }
 
 }
