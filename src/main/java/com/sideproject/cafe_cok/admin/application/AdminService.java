@@ -66,7 +66,7 @@ public class AdminService {
                 String imageUrl = null;
                 if (menu.getImage() != null) {
                     File convertedFile = convertBase64StringToFile(menu.getImage());
-                    imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
+                    imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, "");
                 }
 
                 MenuCopy menuCopy = menu.toEntity(imageUrl, savedCafeCopy);
