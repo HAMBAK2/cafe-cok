@@ -31,6 +31,8 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     List<Image> findByReviewId(final Long reviewId);
 
+    List<Image> findByReviewIdAndImageType(final Long reviewId, final ImageType imageType);
+
     void deleteByReviewId(final Long reviewId);
 
     @Query("SELECT i.imageUrl " +

@@ -90,7 +90,7 @@ public class ReviewService {
     public ReviewDetailResponse detail(final Long reviewId) {
         Review findReview = reviewRepository.getById(reviewId);
         List<ImageDto> reviewImages
-                = ImageDto.fromList(imageRepository.findByReviewId(reviewId));
+                = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW_THUMBNAIL));
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
 
         return ReviewDetailResponse.of(findReview, reviewImages, CategoryKeywords);
