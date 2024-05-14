@@ -2,8 +2,6 @@ package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
-import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveTestRequest;
-import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

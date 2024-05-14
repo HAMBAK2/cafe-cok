@@ -1,7 +1,5 @@
 package com.sideproject.cafe_cok.admin.dto.request;
 
-import com.sideproject.cafe_cok.admin.domain.CafeCopy;
-import com.sideproject.cafe_cok.admin.domain.MenuCopy;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import jakarta.validation.constraints.NotNull;
