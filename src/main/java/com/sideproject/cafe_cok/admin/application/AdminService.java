@@ -53,11 +53,11 @@ public class AdminService {
         String mainImageUrl = s3Uploader.upload(mainImage, CAFE_MAIN_ORIGIN_IMAGE_DIR);
         Cafe cafe = request.toEntity(mainImageUrl);
         Cafe savedCafe = cafeRepository.save(cafe);
-        images.add(new Image(ImageType.CAFE_MEDIUM,
+        images.add(new Image(ImageType.CAFE_MAIN_MEDIUM,
                 changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR),
                 savedCafe));
 
-        images.add(new Image(ImageType.CAFE_THUMBNAIL,
+        images.add(new Image(ImageType.CAFE_MAIN_THUMBNAIL,
                 changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_THUMBNAIL_DIR),
                 savedCafe) );
 
