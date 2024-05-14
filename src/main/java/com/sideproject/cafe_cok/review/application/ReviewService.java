@@ -24,6 +24,7 @@ import com.sideproject.cafe_cok.review.dto.response.ReviewDeleteResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewDetailResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewEditResponse;
 import com.sideproject.cafe_cok.utils.Constants;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
@@ -38,6 +39,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sideproject.cafe_cok.utils.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +90,7 @@ public class ReviewService {
     public ReviewDetailResponse detail(final Long reviewId) {
         Review findReview = reviewRepository.getById(reviewId);
         List<ImageDto> reviewImages
-                = ImageDto.fromList(imageRepository.findByReviewId(reviewId));
+                = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW_THUMBNAIL));
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
 
         return ReviewDetailResponse.of(findReview, reviewImages, CategoryKeywords);
@@ -98,12 +101,12 @@ public class ReviewService {
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
             List<ImageDto> findImages
-                    = ImageDto.fromList(imageRepository.findByReviewId(review.getId()));
+                    = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW_THUMBNAIL));
             List<KeywordDto> findKeywords
                     = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
 
-            if(findKeywords.size() > Constants.RECOMMEND_MENU_MAX_CNT)
-                findKeywords = findKeywords.subList(0, Constants.RECOMMEND_MENU_MAX_CNT);
+            if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
+                findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
 
             return MyPageReviewDto.of(review, findImages, findKeywords);
         }).collect(Collectors.toList());
@@ -148,7 +151,7 @@ public class ReviewService {
 
         List<Image> reviewImages = saveImagesObjectStorage(review, files);
         if(reviewImages.isEmpty()) return;
-        for (Image reviewImage : reviewImages) imageRepository.save(reviewImage);
+        imageRepository.saveAll(reviewImages);
     }
 
     @Transactional
@@ -167,9 +170,11 @@ public class ReviewService {
         if(files.isEmpty()) return reviewImages;
 
         for (MultipartFile file : files) {
-            String imageUrl = s3Uploader.upload(file, Constants.REVIEW_IMAGE_DIR);
-            Image reviewImage = new Image(ImageType.REVIEW_ORIGIN, imageUrl, cafe, review);
-            reviewImages.add(reviewImage);
+            String imageUrl = s3Uploader.upload(file, REVIEW_ORIGIN_IMAGE_DIR);
+            reviewImages.add(new Image(ImageType.REVIEW_ORIGIN, imageUrl, cafe, review));
+            reviewImages.add(new Image(ImageType.REVIEW_THUMBNAIL,
+                    FormatConverter.changePath(imageUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR),
+                    cafe, review));
         }
         return reviewImages;
     }

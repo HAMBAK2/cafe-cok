@@ -79,7 +79,7 @@ public class MyPageService {
 
         if(file != null) {
             if(findMember.getPicture() != null) s3Uploader.delete(findMember.getPicture());
-            String picture = s3Uploader.upload(file, Constants.MEMBER_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, "");
+            String picture = s3Uploader.upload(file, Constants.MEMBER_ORIGIN_IMAGE_DIR);
             findMember.changePicture(picture);
         }
 

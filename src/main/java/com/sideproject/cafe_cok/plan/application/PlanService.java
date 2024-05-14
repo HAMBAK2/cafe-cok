@@ -3,6 +3,9 @@ package com.sideproject.cafe_cok.plan.application;
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
@@ -51,6 +54,7 @@ public class PlanService {
     private final TmapClient tmapClient;
 
     private final CafeRepository cafeRepository;
+    private final ImageRepository imageRepository;
     private final PlanRepository planRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
@@ -247,9 +251,13 @@ public class PlanService {
 
     private List<CafeDto> getCafeDtosByCafes(List<Cafe> cafes){
 
-        return cafes.stream()
-                .map(cafe -> CafeDto.from(cafe))
-                .collect(Collectors.toList());
+        List<CafeDto> cafeDtos = new ArrayList<>();
+        for (Cafe cafe : cafes) {
+            Image findImage = imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN_THUMBNAIL);
+            cafeDtos.add(CafeDto.of(cafe, findImage.getImageUrl()));
+        }
+
+        return cafeDtos;
     }
 
     private CreatePlanResponse createPlan(CreatePlanResponse response, CreatePlanRequest request) {

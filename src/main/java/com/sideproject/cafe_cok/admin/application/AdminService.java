@@ -1,25 +1,16 @@
 package com.sideproject.cafe_cok.admin.application;
 
 
-import com.sideproject.cafe_cok.admin.domain.CafeCopy;
-import com.sideproject.cafe_cok.admin.domain.MenuCopy;
-import com.sideproject.cafe_cok.admin.domain.repository.MenuCopyRepository;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
-import com.sideproject.cafe_cok.admin.domain.repository.CafeCopyRepository;
-import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveTestRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
-import com.sideproject.cafe_cok.admin.domain.ImageCopy;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.admin.domain.repository.ImageCopyRepository;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
-import com.sideproject.cafe_cok.utils.Constants;
-import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,12 +31,10 @@ public class AdminService {
 
     private final CafeRepository cafeRepository;
     private final MenuRepository menuRepository;
-    private final MenuCopyRepository menuCopyRepository;
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
 
-    /* TODO: 클라이언트 단에서 Naver Map API로 변경하면 COPY 테이블이 아닌 실제 테이블에 적용해야 함 */
     @Transactional
     public AdminCafeSaveResponse saveCafe(final AdminCafeSaveRequest request,
                                           final MultipartFile mainImage, final List<MultipartFile> otherImages) {
@@ -67,6 +56,7 @@ public class AdminService {
         if(otherImages != null) {
             for (MultipartFile otherImage : otherImages) {
                 String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
+                images.add(new Image(ImageType.CAFE_ORIGIN, otherImageUrl, savedCafe));
                 images.add(new Image(ImageType.CAFE_THUMBNAIL,
                         changePath(mainImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR),
                         savedCafe));
@@ -86,15 +76,15 @@ public class AdminService {
         for (AdminMenuSaveRequest menu : menus) {
             String imageUrl = null;
             if (menu.getImage() != null) {
+
                 File convertedFile = convertBase64StringToFile(menu.getImage());
                 imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
+                Menu menuEntity = menu.toEntity(imageUrl, cafe);
+                menuRepository.save(menuEntity);
                 menuThumbnailImages.add(new Image(ImageType.MENU_THUMBNAIL,
                         changePath(imageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR),
-                        cafe));
+                        cafe, menuEntity));
             }
-
-            Menu menuEntity = menu.toEntity(imageUrl, cafe);
-            menuRepository.save(menuEntity);
         }
 
         return menuThumbnailImages;

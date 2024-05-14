@@ -24,6 +24,14 @@ public class MenuDto {
                 .build();
     }
 
+    public static MenuDto of(final Menu menu, final String imageUrl) {
+        return MenuDto.builder()
+                .name(menu.getName())
+                .price(FormatConverter.priceConvert(menu.getPrice()))
+                .imageUrl(imageUrl)
+                .build();
+    }
+
     public static List<MenuDto> fromList(List<Menu> menus) {
         return menus.stream()
                 .map(menu -> MenuDto.from(menu))

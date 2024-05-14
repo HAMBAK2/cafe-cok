@@ -30,6 +30,7 @@ public class TmapClient {
     private static final Integer Y_NUM_DIGITS = 2;
     private static final String START_NAME = "start";
     private static final String END_NAME = "end";
+    private static final String NEAR_ERROR_CODE = "1007";
 
 
 
@@ -48,7 +49,12 @@ public class TmapClient {
         String body = generateTmapBody(startX, startY, endX, endY);
         HttpEntity<String> request = new HttpEntity<>(body, headers);
 
-        return fetchTmapApi(request).getFeatures().get(0).getProperties().getTotalTime();
+        TmapApiResponse tmapApiResponse = fetchTmapApi(request);
+        int totalTime = 0;
+        if(tmapApiResponse.getFeatures() == null) return totalTime;
+
+        totalTime = tmapApiResponse.getFeatures().get(0).getProperties().getTotalTime();
+        return convertSecondsToMinutes(totalTime);
     }
 
     /*TODO: 네이버 MAP API가 도입되면 제거할 메서드*/
@@ -59,8 +65,11 @@ public class TmapClient {
         String body = generateTmapBody(startX, startY, endX, endY);
         HttpEntity<String> request = new HttpEntity<>(body, headers);
 
-        int totalTime = fetchTmapApi(request).getFeatures().get(0).getProperties().getTotalTime();
+        TmapApiResponse tmapApiResponse = fetchTmapApi(request);
+        int totalTime = 0;
+        if(tmapApiResponse.getFeatures() == null) return totalTime;
 
+        totalTime = tmapApiResponse.getFeatures().get(0).getProperties().getTotalTime();
         return convertSecondsToMinutes(totalTime);
     }
 
@@ -68,6 +77,9 @@ public class TmapClient {
         try {
             return restTemplate.postForObject(properties.getBaseUri(), request, TmapApiResponse.class);
         } catch (final RestClientException e) {
+            if(e.getMessage().contains(NEAR_ERROR_CODE)) {
+                return new TmapApiResponse();
+            }
             throw new TmapException(e);
         }
     }
