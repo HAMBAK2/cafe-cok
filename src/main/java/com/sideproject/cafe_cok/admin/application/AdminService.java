@@ -16,6 +16,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.admin.domain.repository.ImageCopyRepository;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
+import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.FormatConverter;
@@ -38,6 +39,7 @@ import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 public class AdminService {
 
     private final CafeRepository cafeRepository;
+    private final MenuRepository menuRepository;
     private final MenuCopyRepository menuCopyRepository;
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
@@ -58,37 +60,43 @@ public class AdminService {
                 savedCafe));
 
         images.add(new Image(ImageType.CAFE_MAIN_THUMBNAIL,
-                changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_THUMBNAIL_DIR),
+                changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR),
                 savedCafe) );
 
         //카페의 대표이미지와 나머지 이미지가 존재할 경우 나머지 이미지도 S3에 저장
-//        if(otherImages != null) {
-//            for (MultipartFile otherImage : otherImages) {
-//                String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
-//                ImageCopy imageCopy = new ImageCopy(ImageType.CAFE_THUMBNAIL, otherImageUrl, savedCafe);
-//                imageCopyRepository.save(imageCopy);
-//            }
-//        }
+        if(otherImages != null) {
+            for (MultipartFile otherImage : otherImages) {
+                String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
+                images.add(new Image(ImageType.CAFE_THUMBNAIL,
+                        changePath(mainImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR),
+                        savedCafe));
+            }
+        }
 
         //메뉴 정보가 존재한다면 메뉴 저장
-//        List<AdminMenuSaveRequest> menus = request.getMenus();
-//        if(!menus.isEmpty()) { saveMenu(menus, savedCafe); }
-
+        List<AdminMenuSaveRequest> menus = request.getMenus();
+        if(!menus.isEmpty()) { images.addAll(saveMenu(menus, savedCafe)); }
 
         imageRepository.saveAll(images);
-
         return AdminCafeSaveResponse.of(savedCafe);
     }
 
-    private void saveMenu(final List<AdminMenuSaveRequest> menus, final CafeCopy cafeCopy) {
+    private List<Image> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
+        List<Image> menuThumbnailImages = new ArrayList<>();
         for (AdminMenuSaveRequest menu : menus) {
             String imageUrl = null;
             if (menu.getImage() != null) {
                 File convertedFile = convertBase64StringToFile(menu.getImage());
                 imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
+                menuThumbnailImages.add(new Image(ImageType.MENU_THUMBNAIL,
+                        changePath(imageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR),
+                        cafe));
             }
-            MenuCopy menuCopy = menu.toEntity(imageUrl, cafeCopy);
-            menuCopyRepository.save(menuCopy);
+
+            Menu menuEntity = menu.toEntity(imageUrl, cafe);
+            menuRepository.save(menuEntity);
         }
+
+        return menuThumbnailImages;
     }
 }
