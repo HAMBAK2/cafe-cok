@@ -107,4 +107,9 @@ public class FormatConverter {
         return file;
     }
 
+    public static String changePath(String originPath, final String originDirName, final String newDirName) {
+
+        return originPath.replace(originDirName, newDirName);
+    }
+
 }

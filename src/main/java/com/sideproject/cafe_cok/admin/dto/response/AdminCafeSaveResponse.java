@@ -1,6 +1,6 @@
 package com.sideproject.cafe_cok.admin.dto.response;
 
-import com.sideproject.cafe_cok.admin.domain.CafeCopy;
+import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,15 +16,15 @@ public class AdminCafeSaveResponse {
     private String telephone;
     private String mainImage;
 
-    public static AdminCafeSaveResponse of(final CafeCopy cafeCopy) {
+    public static AdminCafeSaveResponse of(final Cafe cafe) {
         return AdminCafeSaveResponse.builder()
-                .id(cafeCopy.getId())
-                .name(cafeCopy.getName())
-                .roadAddress(cafeCopy.getRoadAddress())
-                .mapx(cafeCopy.getMapx())
-                .mapy(cafeCopy.getMapy())
-                .telephone(cafeCopy.getPhoneNumber())
-                .mainImage(cafeCopy.getMainImage())
+                .id(cafe.getId())
+                .name(cafe.getName())
+                .roadAddress(cafe.getRoadAddress())
+                .mapx(cafe.getMapx())
+                .mapy(cafe.getMapy())
+                .telephone(cafe.getPhoneNumber())
+                .mainImage(cafe.getMainImage())
                 .build();
     }
 }

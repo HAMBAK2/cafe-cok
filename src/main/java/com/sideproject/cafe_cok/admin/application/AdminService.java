@@ -10,10 +10,15 @@ import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveTestRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.admin.domain.ImageCopy;
+import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.admin.domain.repository.ImageCopyRepository;
+import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.utils.Constants;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.sideproject.cafe_cok.utils.Constants.*;
 import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 
 @Service
@@ -30,50 +37,58 @@ import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 @Transactional(readOnly = true)
 public class AdminService {
 
-    private final CafeCopyRepository cafeCopyRepository;
+    private final CafeRepository cafeRepository;
     private final MenuCopyRepository menuCopyRepository;
-    private final ImageCopyRepository imageCopyRepository;
+    private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
-    private final String CAFE_ORIGIN_IMAGE_DIR = "cafe";
-    private final String MENU_ORIGIN_IMAGE_DIR = "menu";
 
+    /* TODO: 클라이언트 단에서 Naver Map API로 변경하면 COPY 테이블이 아닌 실제 테이블에 적용해야 함 */
     @Transactional
     public AdminCafeSaveResponse saveCafe(final AdminCafeSaveRequest request,
                                           final MultipartFile mainImage, final List<MultipartFile> otherImages) {
 
-        //카페 메인 이미지 저장 후 카페 저장
-        String mainImageUrl = s3Uploader.upload(mainImage, CAFE_ORIGIN_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, "");
-        CafeCopy cafeCopy = request.toEntity(mainImageUrl);
-        CafeCopy savedCafeCopy = cafeCopyRepository.save(cafeCopy);
+        List<Image> images = new ArrayList<>();
+        //카페 저장
+        String mainImageUrl = s3Uploader.upload(mainImage, CAFE_MAIN_ORIGIN_IMAGE_DIR);
+        Cafe cafe = request.toEntity(mainImageUrl);
+        Cafe savedCafe = cafeRepository.save(cafe);
+        images.add(new Image(ImageType.CAFE_MEDIUM,
+                changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR),
+                savedCafe));
 
-        //카페의 나머지 이미지가 존재할 경우 나머지 이미지도 S3에 저장
-        if(!otherImages.isEmpty()) {
-            for (MultipartFile otherImage : otherImages) {
-                String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, "");
-                ImageCopy imageCopy = new ImageCopy(ImageType.CAFE_IMAGE, otherImageUrl, savedCafeCopy);
-                imageCopyRepository.save(imageCopy);
-            }
-        }
+        images.add(new Image(ImageType.CAFE_THUMBNAIL,
+                changePath(mainImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_THUMBNAIL_DIR),
+                savedCafe) );
+
+        //카페의 대표이미지와 나머지 이미지가 존재할 경우 나머지 이미지도 S3에 저장
+//        if(otherImages != null) {
+//            for (MultipartFile otherImage : otherImages) {
+//                String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
+//                ImageCopy imageCopy = new ImageCopy(ImageType.CAFE_THUMBNAIL, otherImageUrl, savedCafe);
+//                imageCopyRepository.save(imageCopy);
+//            }
+//        }
 
         //메뉴 정보가 존재한다면 메뉴 저장
-        List<AdminMenuSaveRequest> menus = request.getMenus();
-        if(!menus.isEmpty()) {
+//        List<AdminMenuSaveRequest> menus = request.getMenus();
+//        if(!menus.isEmpty()) { saveMenu(menus, savedCafe); }
 
-            for (AdminMenuSaveRequest menu : menus) {
 
-                //메뉴의 이미지가 있는 경우 - 메뉴 이미지를 S3에 저장하고 url 할당
-                String imageUrl = null;
-                if (menu.getImage() != null) {
-                    File convertedFile = convertBase64StringToFile(menu.getImage());
-                    imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, "");
-                }
+        imageRepository.saveAll(images);
 
-                MenuCopy menuCopy = menu.toEntity(imageUrl, savedCafeCopy);
-                menuCopyRepository.save(menuCopy);
+        return AdminCafeSaveResponse.of(savedCafe);
+    }
+
+    private void saveMenu(final List<AdminMenuSaveRequest> menus, final CafeCopy cafeCopy) {
+        for (AdminMenuSaveRequest menu : menus) {
+            String imageUrl = null;
+            if (menu.getImage() != null) {
+                File convertedFile = convertBase64StringToFile(menu.getImage());
+                imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
             }
+            MenuCopy menuCopy = menu.toEntity(imageUrl, cafeCopy);
+            menuCopyRepository.save(menuCopy);
         }
-
-        return AdminCafeSaveResponse.of(savedCafeCopy);
     }
 }

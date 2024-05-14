@@ -4,6 +4,7 @@ package com.sideproject.cafe_cok.image.domain;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
+import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,13 +37,11 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "reviews_id")
     private Review review;
 
-    protected Image() {
-    }
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "menus_id")
+    private Menu menu;
 
-    public Image(final ImageType imageType, final String imageUrl, final Review review) {
-        this.imageType = imageType;
-        this.imageUrl = imageUrl;
-        this.review = review;
+    protected Image() {
     }
 
     public Image(final ImageType imageType, final String imageUrl, final Cafe cafe) {
@@ -50,4 +49,20 @@ public class Image extends BaseEntity {
         this.imageUrl = imageUrl;
         this.cafe = cafe;
     }
+
+    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe, final Review review) {
+        this.imageType = imageType;
+        this.imageUrl = imageUrl;
+        this.cafe = cafe;
+        this.review = review;
+    }
+
+    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe, final Menu menu) {
+        this.imageType = imageType;
+        this.imageUrl = imageUrl;
+        this.cafe = cafe;
+        this.menu = menu;
+    }
+
+
 }

@@ -45,7 +45,6 @@ public class AdminCafeSaveTestRequest {
                 FormatConverter.convertFormatPhoneNumber(telephone),
                 roadAddress,
                 mapx,
-                mapy,
-                mainImage);
+                mapy);
     }
 }

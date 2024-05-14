@@ -169,7 +169,7 @@ public class CafeService {
         List<String> imageUrls = new ArrayList<>();
 
         List<String> cafeImageUrls = imageRepository
-                .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_IMAGE,
+                .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                         PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
         cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
         Pageable pageable = PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_SIZE - cafeImageUrls.size());
@@ -207,7 +207,7 @@ public class CafeService {
 
         List<String> imageUrls = new ArrayList<>();
         List<String> cafeImageUrls = imageRepository
-                .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_IMAGE,
+                .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                         PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
         cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
         List<String> reviewImageUrls = imageRepository.findImageUrlByCafeId(cafeId);
@@ -333,7 +333,7 @@ public class CafeService {
         List<String> combinedImageUrls = new ArrayList<>();
 
         List<String> cafeImageUrls = imageRepository
-                        .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_IMAGE,
+                        .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                                 PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
         cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
         List<String> reviewImageUrls = imageRepository.findImageUrlsByCafeIdOrderByIdDesc(
