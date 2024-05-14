@@ -76,15 +76,15 @@ public class AdminService {
         for (AdminMenuSaveRequest menu : menus) {
             String imageUrl = null;
             if (menu.getImage() != null) {
+
                 File convertedFile = convertBase64StringToFile(menu.getImage());
                 imageUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
+                Menu menuEntity = menu.toEntity(imageUrl, cafe);
+                menuRepository.save(menuEntity);
                 menuThumbnailImages.add(new Image(ImageType.MENU_THUMBNAIL,
                         changePath(imageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR),
-                        cafe));
+                        cafe, menuEntity));
             }
-
-            Menu menuEntity = menu.toEntity(imageUrl, cafe);
-            menuRepository.save(menuEntity);
         }
 
         return menuThumbnailImages;

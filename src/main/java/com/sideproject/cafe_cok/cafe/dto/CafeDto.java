@@ -37,6 +37,20 @@ public class CafeDto {
                 .build();
     }
 
+    public static CafeDto of(final Cafe cafe, final String imageUrl) {
+        return CafeDto.builder()
+                .id(cafe.getId())
+                .name(cafe.getName())
+                .phoneNumber(cafe.getPhoneNumber())
+                .roadAddress(cafe.getRoadAddress())
+                .longitude(cafe.getLongitude())
+                .latitude(cafe.getLatitude())
+                .starRating(cafe.getStarRating().doubleValue())
+                .reviewCount(cafe.getReviewCount())
+                .imageUrl(imageUrl)
+                .build();
+    }
+
     public void setBookmarks(final List<BookmarkCafeDto> bookmarks) {
         this.bookmarks = bookmarks;
     }
