@@ -36,11 +36,11 @@ public class Cafe extends BaseEntity {
     @Column(name = "road_address")
     private String roadAddress;
 
-    @Column(name = "longitude", nullable = false,
+    @Column(name = "longitude",
             precision = 17, scale = 14)
     private BigDecimal longitude;
 
-    @Column(name = "latitude", nullable = false,
+    @Column(name = "latitude",
             precision = 17, scale = 14)
     private BigDecimal latitude;
 
@@ -49,6 +49,12 @@ public class Cafe extends BaseEntity {
 
     @Column(name = "review_count")
     private Long reviewCount;
+
+    @Column(name = "mapx")
+    private Integer mapx;
+
+    @Column(name = "mapy")
+    private Integer mapy;
 
     @Column(name = "main_image")
     private String mainImage;
@@ -69,6 +75,19 @@ public class Cafe extends BaseEntity {
     }
 
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
+                final Integer mapx, final Integer mapy) {
+        validatePhoneNumber(phoneNumber);
+
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.mapx = mapx;
+        this.mapy = mapy;
+        this.starRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+    }
+
+    public Cafe(final String name, final String phoneNumber, final String roadAddress,
                 final BigDecimal longitude, final BigDecimal latitude, final String mainImage) {
         validatePhoneNumber(phoneNumber);
 
@@ -77,6 +96,20 @@ public class Cafe extends BaseEntity {
         this.roadAddress = roadAddress;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.starRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+        this.mainImage = mainImage;
+    }
+
+    public Cafe(final String name, final String phoneNumber, final String roadAddress,
+                final Integer mapx, final Integer mapy, final String mainImage) {
+        validatePhoneNumber(phoneNumber);
+
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.mapx = mapx;
+        this.mapy = mapy;
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
         this.mainImage = mainImage;

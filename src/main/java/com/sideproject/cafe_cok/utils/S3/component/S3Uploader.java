@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.utils.S3.component;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.sideproject.cafe_cok.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,10 +44,12 @@ public class S3Uploader {
     }
 
     public String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName() + UUID.randomUUID();
+        int lastIndex = uploadFile.getName().lastIndexOf(".");
+        String extension = uploadFile.getName().substring(lastIndex + 1);
+        String fileName = dirName + "/" + UUID.randomUUID() + "." + extension;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
-        return uploadImageUrl;
+        return uploadImageUrl.replace(Constants.IMAGE_URL_PREFIX, "");
     }
 
     private String putS3(File uploadFile, String fileName) {

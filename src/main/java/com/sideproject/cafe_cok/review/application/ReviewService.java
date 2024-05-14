@@ -162,13 +162,13 @@ public class ReviewService {
     private List<Image> saveImagesObjectStorage(final Review review, final List<MultipartFile> files) {
 
         List<Image> reviewImages = new ArrayList<>();
+        Cafe cafe = review.getCafe();
 
         if(files.isEmpty()) return reviewImages;
 
         for (MultipartFile file : files) {
-            Image reviewImage =
-                    new Image(ImageType.REVIEW_IMAGE,
-                            s3Uploader.upload(file, Constants.REVIEW_IMAGE_DIR).replace(Constants.IMAGE_URL_PREFIX, ""), review);
+            String imageUrl = s3Uploader.upload(file, Constants.REVIEW_IMAGE_DIR);
+            Image reviewImage = new Image(ImageType.REVIEW_ORIGIN, imageUrl, cafe, review);
             reviewImages.add(reviewImage);
         }
         return reviewImages;

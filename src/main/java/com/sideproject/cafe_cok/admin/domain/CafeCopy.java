@@ -46,14 +46,11 @@ public class CafeCopy extends BaseEntity {
     @Column(name = "review_count")
     private Long reviewCount;
 
-    @Column(name = "main_image")
-    private String mainImage;
-
     protected CafeCopy() {
     }
 
     public CafeCopy(final String name, final String phoneNumber, final String roadAddress,
-                    final Integer mapx, final Integer mapy, final String mainImage) {
+                    final Integer mapx, final Integer mapy) {
         validatePhoneNumber(phoneNumber);
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -62,7 +59,6 @@ public class CafeCopy extends BaseEntity {
         this.mapy = mapy;
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
-        this.mainImage = mainImage;
     }
 
     private void validatePhoneNumber(final String phoneNumber) {
