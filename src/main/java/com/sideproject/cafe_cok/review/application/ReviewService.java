@@ -101,7 +101,7 @@ public class ReviewService {
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
             List<ImageDto> findImages
-                    = ImageDto.fromList(imageRepository.findByReviewId(review.getId()));
+                    = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW_THUMBNAIL));
             List<KeywordDto> findKeywords
                     = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
 
