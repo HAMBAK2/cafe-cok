@@ -33,7 +33,6 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(cafe.getReviewCount())
-                .imageUrl(cafe.getMainImage())
                 .build();
     }
 

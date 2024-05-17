@@ -95,7 +95,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페 메뉴리스트(2개)"),
                                 fieldWithPath("menus[].name").description("메뉴 이름"),
                                 fieldWithPath("menus[].price").description("메뉴 가격"),
-                                fieldWithPath("menus[].imageUrl").description("메뉴 이미지 URL"),
+                                fieldWithPath("menus[].originImage").description("원본 이미지 URL"),
+                                fieldWithPath("menus[].thumbnailImage").description("썸네일 이미지 URL"),
                                 fieldWithPath("imageUrls").type(JsonFieldType.ARRAY)
                                         .description("전체 이미지 URL 리스트(최대6개)\n\n - 카페 이미지(최대 3개) \n\n - 나머지 리뷰 이미지"),
                                 fieldWithPath("userChoiceKeywords").type(JsonFieldType.ARRAY).description("사용자가 선택한 키워드 리스"),
@@ -137,7 +138,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페 ID"),
                                 fieldWithPath("menus[].name").description("메뉴 이름"),
                                 fieldWithPath("menus[].price").description("메뉴 가격"),
-                                fieldWithPath("menus[].imageUrl").description("메뉴 이미지 URL"))))
+                                fieldWithPath("menus[].originImage").description("원본 이미지 URL"),
+                                fieldWithPath("menus[].thumbnailImage").description("썸네일 이미지 URL"))))
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailMenus(any(Long.class));

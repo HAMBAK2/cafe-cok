@@ -26,10 +26,6 @@ public class Menu extends BaseEntity {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    @Lob
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
@@ -37,10 +33,9 @@ public class Menu extends BaseEntity {
     protected Menu() {
     }
 
-    public Menu(final String name, final Integer price, final String imageUrl, final Cafe cafe) {
+    public Menu(final String name, final Integer price, final Cafe cafe) {
         this.name = name;
         this.price = price;
-        this.imageUrl = imageUrl;
         this.cafe = cafe;
     }
 }

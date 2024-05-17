@@ -15,17 +15,18 @@ public class MenuFixtures {
     public static final Long 메뉴_ID = 1L;
     public static final String 메뉴_이름 = "메뉴이름";
     public static final Integer 메뉴_가격 = 10000;
-    public static final String 메뉴_이미지_URL = "//메뉴 이미지 경로";
+    public static final String 메뉴_원본_이미지_URL = "//메뉴 원본 이미지 경로";
+    public static final String 메뉴_썸네일_이미지_URL = "//메뉴 썸네일 이미지 경로";
 
 
     public static Menu 메뉴() {
-        Menu menu = new Menu(메뉴_이름, 메뉴_가격, 메뉴_이미지_URL, 카페());
+        Menu menu = new Menu(메뉴_이름, 메뉴_가격, 카페());
         setMenuId(menu, 메뉴_ID);
         return menu;
     }
 
     public static MenuDto 메뉴_DTO() {
-        return MenuDto.from(메뉴());
+        return MenuDto.of(메뉴(), 메뉴_원본_이미지_URL, 메뉴_썸네일_이미지_URL);
     }
 
     public static List<MenuDto> 메뉴_DTO_리스트() {

@@ -143,8 +143,9 @@ public class CafeService {
         List<Menu> findMenus = menuRepository.findByCafeId(cafeId);
         List<MenuDto> menus = new ArrayList<>();
         for (Menu findMenu : findMenus) {
-            Image findImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
-            menus.add(MenuDto.of(findMenu, findImage.getImageUrl()));
+            Image findOriginImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_ORIGIN);
+            Image findThumbnailImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
+            menus.add(MenuDto.of(findMenu, findOriginImage.getImageUrl(), findThumbnailImage.getImageUrl()));
         }
         List<String> imageUrls = getImageUrlsByCafeIdAndReviewImageCnt(cafeId, Constants.CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
@@ -160,8 +161,9 @@ public class CafeService {
         List<Menu> findMenus = menuRepository.findByCafeId(cafeId);
         List<MenuDto> menuDtos = new ArrayList<>();
         for (Menu findMenu : findMenus) {
-            Image findImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
-            menuDtos.add(MenuDto.of(findMenu, findImage.getImageUrl()));
+            Image findOriginImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_ORIGIN);
+            Image findThumbnailImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
+            menuDtos.add(MenuDto.of(findMenu, findOriginImage.getImageUrl(), findThumbnailImage.getImageUrl()));
         }
 
         return CafeDetailMenuResponse.from(menuDtos);
@@ -177,10 +179,11 @@ public class CafeService {
 
         List<String> imageUrls = new ArrayList<>();
 
+        Image findCafeMainOriginImage = imageRepository.getImageByCafeIdAndImageType(cafeId, ImageType.CAFE_MAIN_ORIGIN);
         List<String> cafeImageUrls = imageRepository
                 .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                         PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
-        cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
+        cafeImageUrls.add(0, findCafeMainOriginImage.getImageUrl());
         Pageable pageable = PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_SIZE - cafeImageUrls.size());
         Page<Image> findReviewImagePage = imageRepository
                 .findPageByCafeIdAndImageTypeOrderByIdDesc(cafeId, ImageType.REVIEW_THUMBNAIL, pageable);
@@ -217,10 +220,12 @@ public class CafeService {
     public CafeDetailImageAllResponse detailImagesAll(final Long cafeId) {
 
         List<String> imageUrls = new ArrayList<>();
+
+        Image findCafeMainOriginImage = imageRepository.getImageByCafeIdAndImageType(cafeId, ImageType.CAFE_MAIN_ORIGIN);
         List<String> cafeImageUrls = imageRepository
                 .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                         PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
-        cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
+        cafeImageUrls.add(0, findCafeMainOriginImage.getImageUrl());
         List<String> reviewImageUrls = imageRepository.findImageUrlByCafeIdAndImageType(cafeId, ImageType.REVIEW_THUMBNAIL);
 
         imageUrls.addAll(cafeImageUrls);
@@ -344,10 +349,11 @@ public class CafeService {
 
         List<String> combinedImageUrls = new ArrayList<>();
 
+        Image findCafeMainOriginImage = imageRepository.getImageByCafeIdAndImageType(cafeId, ImageType.CAFE_MAIN_ORIGIN);
         List<String> cafeImageUrls = imageRepository
                         .findImageUrlsByCafeIdAndImageType(cafeId, ImageType.CAFE_THUMBNAIL,
                                 PageRequest.of(0, Constants.CAFE_DETAIL_IMAGE_MAX_CNT));
-        cafeImageUrls.add(0, cafeRepository.getById(cafeId).getMainImage());
+        cafeImageUrls.add(0, findCafeMainOriginImage.getImageUrl());
         List<String> reviewImageUrls = imageRepository.findImageUrlsByCafeIdAndImageTypeOrderByIdDescOrderByIdDesc(
                 cafeId, ImageType.REVIEW_THUMBNAIL,
                 PageRequest.of(0, reviewImageCnt - cafeImageUrls.size()));

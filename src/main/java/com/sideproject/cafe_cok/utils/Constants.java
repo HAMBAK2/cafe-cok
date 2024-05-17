@@ -1,7 +1,12 @@
 package com.sideproject.cafe_cok.utils;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+
+import static java.time.DayOfWeek.*;
 
 public class Constants {
 
@@ -18,7 +23,8 @@ public class Constants {
     public static final String IMAGE_URL_PREFIX = "https:";
     public static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-z0-9._-]+@[a-z]+[.]+[a-z]{2,3}$");
 
-
+    public static final List<DayOfWeek> operationDays =
+            Arrays.asList(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
 
     public static final String DECODED_URL_SPLIT_STR = "com/";
     public static final String URL_DECODER_DECODE_ENC = "UTF-8";

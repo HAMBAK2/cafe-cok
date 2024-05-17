@@ -56,9 +56,6 @@ public class Cafe extends BaseEntity {
     @Column(name = "mapy")
     private Integer mapy;
 
-    @Column(name = "main_image")
-    private String mainImage;
-
     protected Cafe(){}
 
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
@@ -87,34 +84,6 @@ public class Cafe extends BaseEntity {
         this.reviewCount = 0L;
     }
 
-    public Cafe(final String name, final String phoneNumber, final String roadAddress,
-                final BigDecimal longitude, final BigDecimal latitude, final String mainImage) {
-        validatePhoneNumber(phoneNumber);
-
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.roadAddress = roadAddress;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.starRating = BigDecimal.ZERO;
-        this.reviewCount = 0L;
-        this.mainImage = mainImage;
-    }
-
-    public Cafe(final String name, final String phoneNumber, final String roadAddress,
-                final Integer mapx, final Integer mapy, final String mainImage) {
-        validatePhoneNumber(phoneNumber);
-
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.roadAddress = roadAddress;
-        this.mapx = mapx;
-        this.mapy = mapy;
-        this.starRating = BigDecimal.ZERO;
-        this.reviewCount = 0L;
-        this.mainImage = mainImage;
-    }
-
     private void validatePhoneNumber(final String phoneNumber) {
         if(phoneNumber == null || phoneNumber.isEmpty()) return;
         Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
@@ -122,7 +91,6 @@ public class Cafe extends BaseEntity {
             throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
         }
     }
-
 
     public void addReviewCountAndCalculateStarRating(Integer starRating) {
         BigDecimal totalScore = this.starRating.multiply(BigDecimal.valueOf(this.reviewCount));

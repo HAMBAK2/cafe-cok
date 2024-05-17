@@ -21,19 +21,21 @@ public class AdminCafeSaveRequest {
     private Integer mapy;
     private String telephone;
     private List<AdminMenuSaveRequest> menus;
+    private List<List<String>> hours;
 
     protected AdminCafeSaveRequest() {
     }
 
     public AdminCafeSaveRequest(final String name, final String roadAddress,
-                                    final Integer mapx, final Integer mapy,
-                                    final String telephone, final List<AdminMenuSaveRequest> menus) {
+                                final Integer mapx, final Integer mapy, final String telephone,
+                                final List<AdminMenuSaveRequest> menus, final List<List<String>> hours) {
         this.name = name;
         this.roadAddress = roadAddress;
         this.mapx = mapx;
         this.mapy = mapy;
         this.telephone = telephone;
         this.menus = menus;
+        this.hours = hours;
     }
 
     public AdminCafeSaveRequest(final String name, final String roadAddress,
@@ -46,13 +48,12 @@ public class AdminCafeSaveRequest {
         this.menus = new ArrayList<>();
     }
 
-    public Cafe toEntity(final String mainImage) {
+    public Cafe toEntity() {
         return new Cafe(
                 name,
                 FormatConverter.convertFormatPhoneNumber(telephone),
                 roadAddress,
                 mapx,
-                mapy,
-                mainImage);
+                mapy);
     }
 }

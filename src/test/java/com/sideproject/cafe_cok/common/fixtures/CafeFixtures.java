@@ -80,7 +80,7 @@ public class CafeFixtures {
     }
 
     public static Cafe 카페() {
-        Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도, 카페_이미지_URL);
+        Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도);
         setCafeId(cafe, 카페_아이디);
         return cafe;
     }
