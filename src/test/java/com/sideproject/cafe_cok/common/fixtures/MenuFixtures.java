@@ -19,7 +19,7 @@ public class MenuFixtures {
 
 
     public static Menu 메뉴() {
-        Menu menu = new Menu(메뉴_이름, 메뉴_가격, 메뉴_이미지_URL, 카페());
+        Menu menu = new Menu(메뉴_이름, 메뉴_가격, 카페());
         setMenuId(menu, 메뉴_ID);
         return menu;
     }

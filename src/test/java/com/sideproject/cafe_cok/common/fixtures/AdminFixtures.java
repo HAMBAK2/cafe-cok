@@ -3,10 +3,19 @@ package com.sideproject.cafe_cok.common.fixtures;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
+import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
+import com.sideproject.cafe_cok.menu.dto.MenuDto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.*;
+import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.*;
+import static com.sideproject.cafe_cok.common.fixtures.MenuFixtures.메뉴;
 
 public class AdminFixtures {
 
@@ -19,12 +28,37 @@ public class AdminFixtures {
     public static final Integer Y_좌표 = 123456789;
 
     public static AdminCafeSaveRequest 카페_저장_요청() {
-        return new AdminCafeSaveRequest(카페_이름, 카페_도로명_주소, X_좌표, Y_좌표, 카페_전화번호, Arrays.asList(메뉴_저장_요청()));
+        return new AdminCafeSaveRequest(카페_이름, 카페_도로명_주소, X_좌표, Y_좌표, 카페_전화번호,
+                Arrays.asList(메뉴_저장_요청()), 카페_운영_시간());
     }
 
+    public static List<List<String>> 카페_운영_시간() {
+        List<List<String>> hours = new ArrayList<>();
+        hours.add(new ArrayList<>());
+        return hours;
+    }
 
     public static AdminCafeSaveResponse 카페_저장_응답() {
-        return AdminCafeSaveResponse.of(카페());
+        return AdminCafeSaveResponse.of(
+                카페(), 카페_메인_이미지_DTO(), 카페_나머지_이미지_DTO_리스트(), 카페_메뉴_DTO_리스트(), 카페_운영_시간());
+    }
+
+    public static CafeMainImageDto 카페_메인_이미지_DTO() {
+        return CafeMainImageDto.from(카페_메인_이미지_리스트());
+    }
+
+    public static List<CafeOtherImageDto> 카페_나머지_이미지_DTO_리스트() {
+        List<Image> images = new ArrayList<>();
+        images.add(이미지(ImageType.CAFE_ORIGIN, 카페()));
+        images.add(이미지(ImageType.CAFE_THUMBNAIL, 카페()));
+        return Arrays.asList(CafeOtherImageDto.from(images));
+    }
+
+    public static List<MenuDto> 카페_메뉴_DTO_리스트() {
+        return Arrays.asList(MenuDto.of(메뉴(),
+                이미지(ImageType.MENU_ORIGIN, 카페(), 메뉴()),
+                이미지(ImageType.MENU_THUMBNAIL, 카페(), 메뉴())));
+
     }
 
     public static AdminMenuSaveRequest 메뉴_저장_요청() {

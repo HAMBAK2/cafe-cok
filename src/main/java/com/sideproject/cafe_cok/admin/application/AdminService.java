@@ -8,15 +8,16 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
-import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
+import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuDto;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,11 +58,11 @@ public class AdminService {
         Cafe cafe = request.toEntity();
         Cafe savedCafe = cafeRepository.save(cafe);
         CafeMainImageDto mainImageDto = saveCafeMainImages(mainImage, savedCafe);
-        List<ImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe, mainImageDto.getOrigin());
+        List<CafeOtherImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe, mainImageDto.getOrigin());
         List<MenuDto> menuDtos = saveMenu(request.getMenus(), savedCafe);
-        OperationHourDto operationHourDto = saveOperationHours(savedCafe, request.getHours());
+        List<List<String>> operationHours = saveOperationHours(savedCafe, request.getHours());
 
-        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuDtos, operationHourDto);
+        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuDtos, operationHours);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {
@@ -76,10 +77,10 @@ public class AdminService {
         return CafeMainImageDto.from(savedImages);
     }
 
-    private List<ImageDto> saveCafeOtherImages(final List<MultipartFile> otherImages, final Cafe cafe,
-                                               final ImageDto cafeMainOriginImage) {
+    private List<CafeOtherImageDto> saveCafeOtherImages(final List<MultipartFile> otherImages, final Cafe cafe,
+                                                        final ImageDto cafeMainOriginImage) {
 
-        List<ImageDto> imageDtos = new ArrayList<>();
+        List<CafeOtherImageDto> cafeOtherImageDtos = new ArrayList<>();
         if(otherImages != null) {
             for (MultipartFile otherImage : otherImages) {
                 String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
@@ -88,11 +89,11 @@ public class AdminService {
                         changePath(cafeMainOriginImage.getImageUrl(), CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR),
                         cafe);
                 List<Image> savedImages = imageRepository.saveAll(Arrays.asList(cafeOriginImage, cafeThumbnailImage));
-                imageDtos.addAll(ImageDto.fromList(savedImages));
+                cafeOtherImageDtos.add(CafeOtherImageDto.from(savedImages));
             }
         }
 
-        return imageDtos;
+        return cafeOtherImageDtos;
     }
 
     private List<MenuDto> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
@@ -119,11 +120,11 @@ public class AdminService {
         return menuDtos;
     }
 
-    private OperationHourDto saveOperationHours(final Cafe cafe, List<List<String>> hours) {
+    private List<List<String>> saveOperationHours(final Cafe cafe, List<List<String>> hours) {
 
         List<OperationHour> operationHours = new ArrayList<>();
 
-        if(allOperatingHoursEmpty(hours)) return OperationHourDto.empty();
+        if(allOperatingHoursEmpty(hours)) return createEmptyOperationHours();
 
         for (int i = 0; i < hours.size(); i++) {
             List<String> hour = hours.get(i);
@@ -141,11 +142,17 @@ public class AdminService {
         }
 
         List<OperationHour> savedOperationHours = operationHourRepository.saveAll(operationHours);
-        return OperationHourDto.from(savedOperationHours);
+        return FormatConverter.convertOperationHoursToListString(savedOperationHours);
     }
 
     private boolean allOperatingHoursEmpty(final List<List<String>> hours) {
         for (List<String> hour : hours) if(!hour.get(START_TIME_IDX).isEmpty()) return false;
         return true;
+    }
+
+    private List<List<String>> createEmptyOperationHours() {
+        List<List<String>> emptyHours = new ArrayList<>();
+        for(int i = 0; i < 7; i++) emptyHours.add(Arrays.asList("", ""));
+        return emptyHours;
     }
 }

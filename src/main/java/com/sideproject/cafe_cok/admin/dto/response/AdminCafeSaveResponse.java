@@ -1,9 +1,8 @@
 package com.sideproject.cafe_cok.admin.dto.response;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
-import com.sideproject.cafe_cok.image.dto.ImageDto;
+import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
 import com.sideproject.cafe_cok.menu.dto.MenuDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,13 +20,13 @@ public class AdminCafeSaveResponse {
     private Integer mapy;
     private String telephone;
     private CafeMainImageDto mainImage;
-    private List<ImageDto> otherImages;
+    private List<CafeOtherImageDto> otherImages;
     private List<MenuDto> menus;
-    private OperationHourDto hours;
+    private List<List<String>> hours;
 
     public static AdminCafeSaveResponse of(final Cafe cafe, final CafeMainImageDto mainImage,
-                                           final List<ImageDto> otherImages, final List<MenuDto> menus,
-                                           final OperationHourDto hours) {
+                                           final List<CafeOtherImageDto> otherImages, final List<MenuDto> menus,
+                                           final List<List<String>> hours) {
         return AdminCafeSaveResponse.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
