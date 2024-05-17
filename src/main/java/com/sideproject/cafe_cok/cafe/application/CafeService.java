@@ -120,7 +120,8 @@ public class CafeService {
     public CafeDetailTopResponse detailTop(final Long cafeId, final Long memberId) {
 
         Cafe findCafe = cafeRepository.getById(cafeId);
-        String imageUrl = imageRepository.getImageByCafeAndImageType(findCafe, ImageType.CAFE_MAIN_MEDIUM).getImageUrl();
+        String originImage = imageRepository.getImageByCafeAndImageType(findCafe, ImageType.CAFE_MAIN_ORIGIN).getImageUrl();
+        String thumbnailImage = imageRepository.getImageByCafeAndImageType(findCafe, ImageType.CAFE_MAIN_MEDIUM).getImageUrl();
         Long reviewCount = reviewRepository.countReviewByCafeId(cafeId);
         List<KeywordDto> findKeywordDtos = KeywordDto.fromList(
                 keywordRepository.findKeywordsByCafeIdOrderByCountDesc(
@@ -128,10 +129,12 @@ public class CafeService {
 
         if(memberId != null) {
             List<Bookmark> findBookmarks = bookmarkRepository.findByCafeIdAndMemberId(cafeId, memberId);
-            return CafeDetailTopResponse.of(findCafe, BookmarkCafeDto.fromList(findBookmarks), imageUrl, reviewCount, findKeywordDtos);
+            return CafeDetailTopResponse
+                    .of(findCafe, BookmarkCafeDto.fromList(findBookmarks), originImage,
+                    thumbnailImage, reviewCount, findKeywordDtos);
         }
 
-        return CafeDetailTopResponse.of(findCafe, imageUrl, reviewCount, findKeywordDtos);
+        return CafeDetailTopResponse.of(findCafe, originImage, thumbnailImage, reviewCount, findKeywordDtos);
     }
 
     public CafeDetailBasicInfoResponse detailBasicInfo(final Long cafeId) {

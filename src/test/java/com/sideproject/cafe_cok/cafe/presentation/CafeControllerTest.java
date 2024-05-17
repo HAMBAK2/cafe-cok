@@ -59,7 +59,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("longitude").description("카페 경도"),
                                 fieldWithPath("starRating").description("카페 별점"),
                                 fieldWithPath("reviewCount").description("카페의 리뷰 개수"),
-                                fieldWithPath("imageUrl").description("카페 대표 이미지 URL"),
+                                fieldWithPath("originImage").description("카페 대표 이미지 원본 URL"),
+                                fieldWithPath("thumbnailImage").description("카페 대표 이미지 썸네일 URL"),
                                 fieldWithPath("keywords").type(JsonFieldType.ARRAY)
                                         .description("선택된 키워드 리스트\n\n" + "- 선택된 키워드 순 내림차순, 최대 3개 제공"),
                                 fieldWithPath("keywords[].id").description("키워드 ID"),

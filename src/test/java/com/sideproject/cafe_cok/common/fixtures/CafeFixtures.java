@@ -32,6 +32,8 @@ public class CafeFixtures {
     public static List<String> 휴무일_리스트 = Arrays.asList("휴무일");
 
     public static final String 카페_이미지_URL = "//카페이미지";
+    public static final String 카페_대표_썸네일_이미지_URL = "//카페 대표 이미지 썸네일 URL";
+    public static final String 카페_대표_원본_이미지_URL = "//카페 대표 이미지 원본 URL";
     public static final Long 커서 = 1L;
     public static final Boolean 다음_페이지_존재_여부 = true;
 
@@ -96,10 +98,9 @@ public class CafeFixtures {
     }
 
     public static CafeDetailTopResponse 카페_상세_상단_응답() {
-        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_카페_DTO()), 카페_이미지_URL, 리뷰_개수, 키워드_DTO_리스트());
+        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_카페_DTO()),
+                카페_대표_원본_이미지_URL, 카페_대표_썸네일_이미지_URL, 리뷰_개수, 키워드_DTO_리스트());
     }
-
-
 
     public static BigDecimal getRandomBigDecimal(int min, int max) {
         Random random = new Random();

@@ -22,10 +22,11 @@ public class CafeDetailTopResponse {
     private BigDecimal longitude;
     private Double starRating;
     private Long reviewCount;
-    private String imageUrl;
+    private String originImage;
+    private String thumbnailImage;
     private List<KeywordDto> keywords;
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final String imageUrl,
+    public static CafeDetailTopResponse of(final Cafe cafe, final String originImage, final String thumbnailImage,
                                            final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
@@ -34,14 +35,15 @@ public class CafeDetailTopResponse {
                 .latitude(cafe.getLatitude())
                 .longitude(cafe.getLongitude())
                 .starRating(cafe.getStarRating().doubleValue())
+                .originImage(originImage)
+                .thumbnailImage(thumbnailImage)
                 .reviewCount(reviewCount)
-                .imageUrl(imageUrl)
                 .keywords(keywords)
                 .build();
     }
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final String imageUrl,
-                                           final Long reviewCount, final List<KeywordDto> keywords) {
+    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final String originImage,
+                                           final String thumbnailImage, final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
                 .bookmarks(bookmarks)
@@ -51,7 +53,8 @@ public class CafeDetailTopResponse {
                 .longitude(cafe.getLongitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(reviewCount)
-                .imageUrl(imageUrl)
+                .originImage(originImage)
+                .thumbnailImage(thumbnailImage)
                 .keywords(keywords)
                 .build();
     }
