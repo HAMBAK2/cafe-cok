@@ -17,6 +17,7 @@ import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuDto;
+import com.sideproject.cafe_cok.menu.dto.response.CafeSaveMenuResponse;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -59,10 +60,10 @@ public class AdminService {
         Cafe savedCafe = cafeRepository.save(cafe);
         CafeMainImageDto mainImageDto = saveCafeMainImages(mainImage, savedCafe);
         List<CafeOtherImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe, mainImageDto.getOrigin());
-        List<MenuDto> menuDtos = saveMenu(request.getMenus(), savedCafe);
+        List<CafeSaveMenuResponse> menuResponses = saveMenu(request.getMenus(), savedCafe);
         List<List<String>> operationHours = saveOperationHours(savedCafe, request.getHours());
 
-        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuDtos, operationHours);
+        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuResponses, operationHours);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {
@@ -96,8 +97,8 @@ public class AdminService {
         return cafeOtherImageDtos;
     }
 
-    private List<MenuDto> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
-        List<MenuDto> menuDtos = new ArrayList<>();
+    private List<CafeSaveMenuResponse> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
+        List<CafeSaveMenuResponse> menuDtos = new ArrayList<>();
 
         if(menus.isEmpty()) return menuDtos;
 
@@ -113,7 +114,7 @@ public class AdminService {
                         cafe, savedMenu);
 
                 imageRepository.saveAll(Arrays.asList(originImage, thumbnailImage));
-                menuDtos.add(MenuDto.of(savedMenu, originImage, thumbnailImage));
+                menuDtos.add(CafeSaveMenuResponse.of(savedMenu, originImage, thumbnailImage));
             }
         }
 

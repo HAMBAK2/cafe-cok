@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
 import com.sideproject.cafe_cok.menu.dto.MenuDto;
+import com.sideproject.cafe_cok.menu.dto.response.CafeSaveMenuResponse;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,11 +22,12 @@ public class AdminCafeSaveResponse {
     private String telephone;
     private CafeMainImageDto mainImage;
     private List<CafeOtherImageDto> otherImages;
-    private List<MenuDto> menus;
+    private List<CafeSaveMenuResponse> menus;
     private List<List<String>> hours;
 
     public static AdminCafeSaveResponse of(final Cafe cafe, final CafeMainImageDto mainImage,
-                                           final List<CafeOtherImageDto> otherImages, final List<MenuDto> menus,
+                                           final List<CafeOtherImageDto> otherImages,
+                                           final List<CafeSaveMenuResponse> menus,
                                            final List<List<String>> hours) {
         return AdminCafeSaveResponse.builder()
                 .id(cafe.getId())

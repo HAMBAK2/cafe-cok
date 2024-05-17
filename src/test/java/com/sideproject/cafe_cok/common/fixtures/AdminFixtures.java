@@ -7,7 +7,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
-import com.sideproject.cafe_cok.menu.dto.MenuDto;
+import com.sideproject.cafe_cok.menu.dto.response.CafeSaveMenuResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +40,7 @@ public class AdminFixtures {
 
     public static AdminCafeSaveResponse 카페_저장_응답() {
         return AdminCafeSaveResponse.of(
-                카페(), 카페_메인_이미지_DTO(), 카페_나머지_이미지_DTO_리스트(), 카페_메뉴_DTO_리스트(), 카페_운영_시간());
+                카페(), 카페_메인_이미지_DTO(), 카페_나머지_이미지_DTO_리스트(), 카페_메뉴_응답_리스트(), 카페_운영_시간());
     }
 
     public static CafeMainImageDto 카페_메인_이미지_DTO() {
@@ -54,8 +54,8 @@ public class AdminFixtures {
         return Arrays.asList(CafeOtherImageDto.from(images));
     }
 
-    public static List<MenuDto> 카페_메뉴_DTO_리스트() {
-        return Arrays.asList(MenuDto.of(메뉴(),
+    public static List<CafeSaveMenuResponse> 카페_메뉴_응답_리스트() {
+        return Arrays.asList(CafeSaveMenuResponse.of(메뉴(),
                 이미지(ImageType.MENU_ORIGIN, 카페(), 메뉴()),
                 이미지(ImageType.MENU_THUMBNAIL, 카페(), 메뉴())));
 

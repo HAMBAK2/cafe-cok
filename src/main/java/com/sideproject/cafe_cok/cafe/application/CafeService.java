@@ -145,7 +145,7 @@ public class CafeService {
         for (Menu findMenu : findMenus) {
             Image findOriginImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_ORIGIN);
             Image findThumbnailImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
-            menus.add(MenuDto.of(findMenu, findOriginImage, findThumbnailImage));
+            menus.add(MenuDto.of(findMenu, findOriginImage.getImageUrl(), findThumbnailImage.getImageUrl()));
         }
         List<String> imageUrls = getImageUrlsByCafeIdAndReviewImageCnt(cafeId, Constants.CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
@@ -163,7 +163,7 @@ public class CafeService {
         for (Menu findMenu : findMenus) {
             Image findOriginImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_ORIGIN);
             Image findThumbnailImage = imageRepository.getImageByMenuAndImageType(findMenu, ImageType.MENU_THUMBNAIL);
-            menuDtos.add(MenuDto.of(findMenu, findOriginImage, findThumbnailImage));
+            menuDtos.add(MenuDto.of(findMenu, findOriginImage.getImageUrl(), findThumbnailImage.getImageUrl()));
         }
 
         return CafeDetailMenuResponse.from(menuDtos);
