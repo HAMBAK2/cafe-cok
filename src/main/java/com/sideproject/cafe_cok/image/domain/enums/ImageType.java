@@ -2,7 +2,8 @@ package com.sideproject.cafe_cok.image.domain.enums;
 
 public enum ImageType {
 
-    CAFE_MAIN_MEDIUM("카페_메인_원본_이미지"),
+    CAFE_MAIN_ORIGIN("카페_메인_원본_이미지"),
+    CAFE_MAIN_MEDIUM("카페_메인_중간_이미지"),
     CAFE_MAIN_THUMBNAIL("카페_메인_썸네일_이미지"),
     CAFE_THUMBNAIL("카페_썸네일_이미지"),
     CAFE_ORIGIN("카페_원본_이미지"),

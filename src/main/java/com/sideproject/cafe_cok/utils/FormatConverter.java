@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.utils;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import jakarta.xml.bind.DatatypeConverter;
 
 import java.io.File;
@@ -10,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FormatConverter {
@@ -110,6 +113,27 @@ public class FormatConverter {
     public static String changePath(String originPath, final String originDirName, final String newDirName) {
 
         return originPath.replace(originDirName, newDirName);
+    }
+
+    public static List<List<String>> convertOperationHoursToListString(final List<OperationHour> operationHours){
+        List<List<String>> hours = new ArrayList<>();
+
+        for (OperationHour operationHour : operationHours) {
+            List<String> innerList = new ArrayList<>();
+            LocalTime openingTime = operationHour.getOpeningTime();
+            LocalTime closingTime = operationHour.getClosingTime();
+
+            if(openingTime.equals(LocalTime.of(0, 0))
+                    && closingTime.equals(LocalTime.of(0, 0))) {
+                innerList.add("");
+                innerList.add("");
+            } else {
+                innerList.add(openingTime.toString());
+                innerList.add(closingTime.toString());
+            }
+            hours.add(innerList);
+        }
+        return hours;
     }
 
 }

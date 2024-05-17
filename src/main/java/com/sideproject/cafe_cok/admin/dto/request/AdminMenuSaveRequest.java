@@ -24,8 +24,8 @@ public class AdminMenuSaveRequest {
         this.image = image;
     }
 
-    public Menu toEntity(final String imageUrl, final Cafe cafe) {
-        return new Menu(this.name, this.price, imageUrl, cafe);
+    public Menu toEntity(final Cafe cafe) {
+        return new Menu(this.name, this.price, cafe);
     }
 
 }

@@ -38,4 +38,15 @@ public class OperationHour extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
+    protected OperationHour() {
+    }
+
+    public OperationHour(final DayOfWeek date, final LocalTime openingTime, final LocalTime closingTime,
+                         final boolean isClosed, final Cafe cafe) {
+        this.date = date;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.isClosed = isClosed;
+        this.cafe = cafe;
+    }
 }

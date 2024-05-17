@@ -27,6 +27,13 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
                 .orElseThrow(NoSuchImageException::new);
     }
 
+    Optional<Image> findImageByCafeIdAndImageType(final Long cafeId, final ImageType imageType);
+
+    default Image getImageByCafeIdAndImageType(final Long cafeId, final ImageType imageType) {
+        return findImageByCafeIdAndImageType(cafeId, imageType)
+                .orElseThrow(NoSuchImageException::new);
+    }
+
     void deleteAllByIdIn(final List<Long> ids);
 
     List<Image> findByReviewId(final Long reviewId);

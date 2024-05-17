@@ -1,10 +1,13 @@
 package com.sideproject.cafe_cok.menu.dto;
 
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,23 +15,27 @@ import java.util.stream.Collectors;
 @Builder
 public class MenuDto {
 
+    private final Long id;
     private final String name;
     private final String price;
-    private final String imageUrl;
+    private final ImageDto originImage;
+    private final ImageDto thumbnailImage;
 
     public static MenuDto from(Menu menu) {
         return MenuDto.builder()
+                .id(menu.getId())
                 .name(menu.getName())
                 .price(FormatConverter.priceConvert(menu.getPrice()))
-                .imageUrl(menu.getImageUrl())
                 .build();
     }
 
-    public static MenuDto of(final Menu menu, final String imageUrl) {
+    public static MenuDto of(final Menu menu, final Image originImage, final Image thumbnailImage) {
         return MenuDto.builder()
+                .id(menu.getId())
                 .name(menu.getName())
                 .price(FormatConverter.priceConvert(menu.getPrice()))
-                .imageUrl(imageUrl)
+                .originImage(ImageDto.from(originImage))
+                .thumbnailImage(ImageDto.from(thumbnailImage))
                 .build();
     }
 
