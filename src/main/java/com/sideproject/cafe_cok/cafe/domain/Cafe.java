@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.cafe.domain;
 
 import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
+    private static final Integer X_NUM_DIGITS = 3;
+    private static final Integer Y_NUM_DIGITS = 2;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -80,6 +83,8 @@ public class Cafe extends BaseEntity {
         this.roadAddress = roadAddress;
         this.mapx = mapx;
         this.mapy = mapy;
+        this.latitude = FormatConverter.convertToDecimal(mapy, Y_NUM_DIGITS);
+        this.longitude = FormatConverter.convertToDecimal(mapx, X_NUM_DIGITS);
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
     }

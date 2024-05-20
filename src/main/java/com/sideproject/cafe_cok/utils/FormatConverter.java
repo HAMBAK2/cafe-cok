@@ -9,6 +9,7 @@ import jakarta.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.*;
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ public class FormatConverter {
         return seconds / 60;
     }
 
-    public static String convertToDecimal(int integerValue, int numberOfDigits) {
+    public static BigDecimal convertToDecimal(int integerValue, int numberOfDigits) {
         String integerString = String.valueOf(integerValue);
         String integerPart = integerString.substring(0, numberOfDigits); // 정수부 추출
         String decimalPart = integerString.substring(numberOfDigits); // 소수부 추출
         String result = integerPart + "." + decimalPart;
-        return result;
+        return new BigDecimal(result);
     }
 
     public static String priceConvert(Integer price) {

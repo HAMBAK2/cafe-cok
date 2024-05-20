@@ -42,22 +42,7 @@ public class TmapClient {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public Integer getWalkingTimeUsingTmap(
-            final Integer startX, final Integer startY, final Integer endX, final Integer endY) {
 
-        HttpHeaders headers = generateTmapHeader();
-        String body = generateTmapBody(startX, startY, endX, endY);
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
-
-        TmapApiResponse tmapApiResponse = fetchTmapApi(request);
-        int totalTime = 0;
-        if(tmapApiResponse.getFeatures() == null) return totalTime;
-
-        totalTime = tmapApiResponse.getFeatures().get(0).getProperties().getTotalTime();
-        return convertSecondsToMinutes(totalTime);
-    }
-
-    /*TODO: 네이버 MAP API가 도입되면 제거할 메서드*/
     public Integer getWalkingTimeUsingTmap(
             final String startX, final String startY, final String endX, final String endY) {
 
@@ -92,25 +77,6 @@ public class TmapClient {
         return headers;
     }
 
-   private String generateTmapBody(
-           final Integer startX, final Integer startY, final Integer endX, final Integer endY) {
-
-       Map<String, Object> bodyMap = new HashMap<>();
-       bodyMap.put("startX", convertToDecimal(startX, X_NUM_DIGITS));
-       bodyMap.put("startY", convertToDecimal(startY, Y_NUM_DIGITS));
-       bodyMap.put("endX", convertToDecimal(endX, X_NUM_DIGITS));
-       bodyMap.put("endY", convertToDecimal(endY, Y_NUM_DIGITS));
-       bodyMap.put("startName", START_NAME);
-       bodyMap.put("endName", END_NAME);
-
-       try {
-           return objectMapper.writeValueAsString(bodyMap);
-       } catch (JsonProcessingException e) {
-           throw new RuntimeException("Failed to convert body to JSON string", e);
-       }
-   }
-
-   /*TODO: 네이버 MAP API가 도입되면 제거할 메서드*/
     private String generateTmapBody(
             final String startX, final String startY, final String endX, final String endY) {
 
