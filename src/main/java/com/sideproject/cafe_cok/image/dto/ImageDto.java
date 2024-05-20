@@ -12,12 +12,14 @@ import java.util.stream.Collectors;
 public class ImageDto {
 
     private final Long id;
-    private final String imageUrl;
+    private final String origin;
+    private final String thumbnail;
 
     public static ImageDto from(final Image image) {
         return ImageDto.builder()
                 .id(image.getId())
-                .imageUrl(image.getImageUrl())
+                .origin(image.getOrigin())
+                .thumbnail(image.getThumbnail())
                 .build();
     }
 

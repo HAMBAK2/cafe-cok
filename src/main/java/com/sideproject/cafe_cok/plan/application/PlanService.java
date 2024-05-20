@@ -253,8 +253,8 @@ public class PlanService {
 
         List<CafeDto> cafeDtos = new ArrayList<>();
         for (Cafe cafe : cafes) {
-            Image findImage = imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN_THUMBNAIL);
-            cafeDtos.add(CafeDto.of(cafe, findImage.getImageUrl()));
+            Image findImage = imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN);
+            cafeDtos.add(CafeDto.of(cafe, findImage.getThumbnail()));
         }
 
         return cafeDtos;

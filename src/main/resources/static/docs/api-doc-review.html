@@ -788,7 +788,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 386
+Content-Length: 436
 
 {
   "cafeId" : 1,
@@ -799,7 +799,8 @@ Content-Length: 386
   "specialNote" : "리뷰 특이사항",
   "images" : [ {
     "id" : null,
-    "imageUrl" : "이미지 URL"
+    "origin" : "원본_이미지_URL",
+    "thumbnail" : "썸네일_이미지_URL"
   } ],
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
@@ -869,9 +870,14 @@ Content-Length: 386
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>images[].imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>images[].origin</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 원본 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>images[].thumbnail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 썸네일 이미지 URL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>categoryKeywords</code></p></td>

@@ -760,7 +760,7 @@ Content-Length: 172
     "id" : 1,
     "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 17일 9시 0분"
+    "visitDateTime" : "5월 21일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -899,7 +899,7 @@ Content-Length: 172
     "id" : 1,
     "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 17일 9시 0분"
+    "visitDateTime" : "5월 21일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1021,14 +1021,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 688
+Content-Length: 687
 
 {
   "planId" : 1,
   "matchType" : "SIMILAR",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "5월 17일 9시 0분",
+  "visitDateTime" : "5월 21일 9시 0분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -1046,8 +1046,8 @@ Content-Length: 688
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 146.44162908104965,
-    "longitude" : 67.22079428426181,
+    "latitude" : 36.06992504432357,
+    "longitude" : 64.58417499841272,
     "starRating" : 0.0,
     "reviewCount" : 0,
     "imageUrl" : null
@@ -1377,7 +1377,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 422
+Content-Length: 464
 
 {
   "reviews" : [ {
@@ -1387,10 +1387,10 @@ Content-Length: 422
     "starRating" : 5,
     "content" : "리뷰 내용",
     "specialNote" : "리뷰 특이사항",
-    "createdDate" : "2024-05-17",
-    "images" : [ {
-      "id" : null,
-      "imageUrl" : "이미지 URL"
+    "createdDate" : "2024-05-21",
+    "imageUrls" : [ {
+      "originUrl" : "원본_이미지_URL",
+      "thumbnailUrl" : "썸네일_이미지_URL"
     } ],
     "keywords" : [ {
       "id" : 1,
@@ -1459,19 +1459,19 @@ Content-Length: 422
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 생성 일자</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].imageUrls</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 이미지 리스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].imageUrls[].originUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 원본 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].images[].imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].imageUrls[].thumbnailUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 이미지 URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 썸네일 이미지 URL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviews[].keywords</code></p></td>
@@ -1667,7 +1667,7 @@ Content-Length: 158
     "id" : 1,
     "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 17일 9시 0분"
+    "visitDateTime" : "5월 21일 9시 0분"
   } ]
 }</code></pre>
 </div>
@@ -1792,7 +1792,7 @@ Content-Length: 158
     "id" : 1,
     "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 17일 9시 0분"
+    "visitDateTime" : "5월 21일 9시 0분"
   } ]
 }</code></pre>
 </div>

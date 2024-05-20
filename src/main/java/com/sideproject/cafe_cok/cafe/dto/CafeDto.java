@@ -2,6 +2,8 @@ package com.sideproject.cafe_cok.cafe.dto;
 
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.dto.ImageDto;
 import lombok.Builder;
 import lombok.Getter;
 

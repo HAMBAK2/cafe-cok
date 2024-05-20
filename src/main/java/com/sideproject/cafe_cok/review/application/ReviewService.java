@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
+import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
@@ -90,7 +91,7 @@ public class ReviewService {
     public ReviewDetailResponse detail(final Long reviewId) {
         Review findReview = reviewRepository.getById(reviewId);
         List<ImageDto> reviewImages
-                = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW_THUMBNAIL));
+                = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW));
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
 
         return ReviewDetailResponse.of(findReview, reviewImages, CategoryKeywords);
@@ -100,8 +101,8 @@ public class ReviewService {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
-            List<ImageDto> findImages
-                    = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW_THUMBNAIL));
+            List<ImageUrlDto> findImages
+                    = ImageUrlDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW));
             List<KeywordDto> findKeywords
                     = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
 
@@ -157,8 +158,11 @@ public class ReviewService {
     @Transactional
     public void deleteByIds(List<Long> ids) {
 
-        List<String> findImageUrls = imageRepository.findImageUrlByIdIn(ids);
-        for (String imageUrl : findImageUrls) s3Uploader.delete(imageUrl);
+        List<Image> findImages = imageRepository.findImageByIdIn(ids);
+        for (Image findImage : findImages) {
+            s3Uploader.delete(findImage.getOrigin());
+            s3Uploader.delete(findImage.getThumbnail());
+        }
         imageRepository.deleteAllByIdIn(ids);
     }
 
@@ -171,8 +175,7 @@ public class ReviewService {
 
         for (MultipartFile file : files) {
             String imageUrl = s3Uploader.upload(file, REVIEW_ORIGIN_IMAGE_DIR);
-            reviewImages.add(new Image(ImageType.REVIEW_ORIGIN, imageUrl, cafe, review));
-            reviewImages.add(new Image(ImageType.REVIEW_THUMBNAIL,
+            reviewImages.add(new Image(ImageType.REVIEW, imageUrl,
                     FormatConverter.changePath(imageUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR),
                     cafe, review));
         }

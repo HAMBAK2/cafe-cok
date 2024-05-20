@@ -13,11 +13,9 @@ import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
-import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
-import com.sideproject.cafe_cok.menu.dto.MenuDto;
-import com.sideproject.cafe_cok.menu.dto.response.CafeSaveMenuResponse;
+import com.sideproject.cafe_cok.menu.dto.CafeSaveMenuDto;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -59,46 +57,46 @@ public class AdminService {
         Cafe cafe = request.toEntity();
         Cafe savedCafe = cafeRepository.save(cafe);
         CafeMainImageDto mainImageDto = saveCafeMainImages(mainImage, savedCafe);
-        List<CafeOtherImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe, mainImageDto.getOrigin());
-        List<CafeSaveMenuResponse> menuResponses = saveMenu(request.getMenus(), savedCafe);
+        List<CafeOtherImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe);
+        List<CafeSaveMenuDto> menuDtos = saveMenu(request.getMenus(), savedCafe);
         List<List<String>> operationHours = saveOperationHours(savedCafe, request.getHours());
 
-        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuResponses, operationHours);
+        return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuDtos, operationHours);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {
         String cafeMainOriginImageUrl = s3Uploader.upload(mainImage, CAFE_MAIN_ORIGIN_IMAGE_DIR);
-        Image cafeMainOriginImage = new Image(ImageType.CAFE_MAIN_ORIGIN, cafeMainOriginImageUrl, cafe);
-        Image cafeMainMediumImage = new Image(ImageType.CAFE_MAIN_MEDIUM,
-                changePath(cafeMainOriginImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR), cafe);
-        Image cafeMainThumbnailImage = new Image(ImageType.CAFE_MAIN_THUMBNAIL,
-                changePath(cafeMainOriginImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR), cafe);
+        Image cafeMainImage = new Image(
+                ImageType.CAFE_MAIN
+                , cafeMainOriginImageUrl
+                , changePath(cafeMainOriginImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR)
+                , changePath(cafeMainOriginImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR)
+                , cafe);
 
-        List<Image> savedImages = imageRepository.saveAll(Arrays.asList(cafeMainOriginImage, cafeMainMediumImage, cafeMainThumbnailImage));
-        return CafeMainImageDto.from(savedImages);
+        Image savedImage = imageRepository.save(cafeMainImage);
+        return CafeMainImageDto.from(savedImage);
     }
 
-    private List<CafeOtherImageDto> saveCafeOtherImages(final List<MultipartFile> otherImages, final Cafe cafe,
-                                                        final ImageDto cafeMainOriginImage) {
+    private List<CafeOtherImageDto> saveCafeOtherImages(final List<MultipartFile> otherImages, final Cafe cafe) {
 
         List<CafeOtherImageDto> cafeOtherImageDtos = new ArrayList<>();
         if(otherImages != null) {
             for (MultipartFile otherImage : otherImages) {
-                String otherImageUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
-                Image cafeOriginImage = new Image(ImageType.CAFE_ORIGIN, otherImageUrl, cafe);
-                Image cafeThumbnailImage = new Image(ImageType.CAFE_THUMBNAIL,
-                        changePath(cafeMainOriginImage.getImageUrl(), CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR),
-                        cafe);
-                List<Image> savedImages = imageRepository.saveAll(Arrays.asList(cafeOriginImage, cafeThumbnailImage));
-                cafeOtherImageDtos.add(CafeOtherImageDto.from(savedImages));
+                String otherImageOriginUrl = s3Uploader.upload(otherImage, CAFE_ORIGIN_IMAGE_DIR);
+                Image cafeImage = new Image(ImageType.CAFE
+                        , otherImageOriginUrl
+                        , changePath(otherImageOriginUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR)
+                        , cafe);
+                Image savedImage = imageRepository.save(cafeImage);
+                cafeOtherImageDtos.add(CafeOtherImageDto.from(savedImage));
             }
         }
 
         return cafeOtherImageDtos;
     }
 
-    private List<CafeSaveMenuResponse> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
-        List<CafeSaveMenuResponse> menuDtos = new ArrayList<>();
+    private List<CafeSaveMenuDto> saveMenu(final List<AdminMenuSaveRequest> menus, final Cafe cafe) {
+        List<CafeSaveMenuDto> menuDtos = new ArrayList<>();
 
         if(menus.isEmpty()) return menuDtos;
 
@@ -108,16 +106,15 @@ public class AdminService {
                 File convertedFile = convertBase64StringToFile(menu.getImage());
                 String originMenuUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
                 Menu savedMenu = menuRepository.save(menu.toEntity(cafe));
-                Image originImage = new Image(ImageType.MENU_ORIGIN, originMenuUrl, cafe, savedMenu);
-                Image thumbnailImage = new Image(ImageType.MENU_THUMBNAIL,
-                        changePath(originMenuUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR),
-                        cafe, savedMenu);
-
-                imageRepository.saveAll(Arrays.asList(originImage, thumbnailImage));
-                menuDtos.add(CafeSaveMenuResponse.of(savedMenu, originImage, thumbnailImage));
+                Image menuImage = new Image(ImageType.MENU
+                        , originMenuUrl
+                        , changePath(originMenuUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR)
+                        , cafe
+                        , savedMenu);
+                Image saveMenuImage = imageRepository.save(menuImage);
+                menuDtos.add(CafeSaveMenuDto.of(savedMenu, saveMenuImage));
             }
         }
-
         return menuDtos;
     }
 

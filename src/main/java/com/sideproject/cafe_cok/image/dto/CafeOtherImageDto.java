@@ -10,16 +10,16 @@ import java.util.List;
 @Builder
 public class CafeOtherImageDto {
 
-    private final ImageDto origin;
-    private final ImageDto thumbnail;
+    private final Long id;
+    private final String origin;
+    private final String thumbnail;
 
-    private static final Integer CAFE_ORIGIN_IDX = 0;
-    private static final Integer CAFE_THUMBNAIL_IDX = 1;
-
-    public static CafeOtherImageDto from(final List<Image> images) {
-        return CafeOtherImageDto.builder()
-                .origin(ImageDto.from(images.get(CAFE_ORIGIN_IDX)))
-                .thumbnail(ImageDto.from(images.get(CAFE_THUMBNAIL_IDX)))
+    public static CafeOtherImageDto from(final Image image) {
+        return CafeOtherImageDto
+                .builder()
+                .id(image.getId())
+                .origin(image.getOrigin())
+                .thumbnail(image.getThumbnail())
                 .build();
     }
 }
