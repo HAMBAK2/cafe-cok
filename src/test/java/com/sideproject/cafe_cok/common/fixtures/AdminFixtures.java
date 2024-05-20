@@ -7,7 +7,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
-import com.sideproject.cafe_cok.menu.dto.response.CafeSaveMenuResponse;
+import com.sideproject.cafe_cok.menu.dto.CafeSaveMenuDto;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,8 +54,8 @@ public class AdminFixtures {
         return Arrays.asList(CafeOtherImageDto.from(images));
     }
 
-    public static List<CafeSaveMenuResponse> 카페_메뉴_응답_리스트() {
-        return Arrays.asList(CafeSaveMenuResponse.of(메뉴(),
+    public static List<CafeSaveMenuDto> 카페_메뉴_응답_리스트() {
+        return Arrays.asList(CafeSaveMenuDto.of(메뉴(),
                 이미지(ImageType.MENU_ORIGIN, 카페(), 메뉴()),
                 이미지(ImageType.MENU_THUMBNAIL, 카페(), 메뉴())));
 

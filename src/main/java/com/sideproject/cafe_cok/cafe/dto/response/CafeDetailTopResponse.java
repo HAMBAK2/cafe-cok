@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.cafe.dto.response;
 
 
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
@@ -22,11 +23,11 @@ public class CafeDetailTopResponse {
     private BigDecimal longitude;
     private Double starRating;
     private Long reviewCount;
-    private String originImage;
-    private String thumbnailImage;
+    private String originUrl;
+    private String thumbnailUrl;
     private List<KeywordDto> keywords;
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final String originImage, final String thumbnailImage,
+    public static CafeDetailTopResponse of(final Cafe cafe, final Image image,
                                            final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
@@ -35,15 +36,15 @@ public class CafeDetailTopResponse {
                 .latitude(cafe.getLatitude())
                 .longitude(cafe.getLongitude())
                 .starRating(cafe.getStarRating().doubleValue())
-                .originImage(originImage)
-                .thumbnailImage(thumbnailImage)
+                .originUrl(image.getOrigin())
+                .thumbnailUrl(image.getMedium())
                 .reviewCount(reviewCount)
                 .keywords(keywords)
                 .build();
     }
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final String originImage,
-                                           final String thumbnailImage, final Long reviewCount, final List<KeywordDto> keywords) {
+    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final Image image,
+                                           final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
                 .bookmarks(bookmarks)
@@ -53,8 +54,8 @@ public class CafeDetailTopResponse {
                 .longitude(cafe.getLongitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(reviewCount)
-                .originImage(originImage)
-                .thumbnailImage(thumbnailImage)
+                .originUrl(image.getOrigin())
+                .thumbnailUrl(image.getMedium())
                 .keywords(keywords)
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.review.dto;
 
 
+import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +20,11 @@ public class CafeDetailReviewDto {
     private LocalDate createDate;
     private String picture;
     private String nickname;
-    private List<String> imageUrls;
+    private List<ImageUrlDto> imageUrls;
     private List<String> recommendMenus;
 
     public static CafeDetailReviewDto of(
-            final Review review, final List<String> imageUrls, final List<String> recommendMenus) {
+            final Review review, final List<ImageUrlDto> imageUrls, final List<String> recommendMenus) {
 
         return CafeDetailReviewDto.builder()
                 .id(review.getId())

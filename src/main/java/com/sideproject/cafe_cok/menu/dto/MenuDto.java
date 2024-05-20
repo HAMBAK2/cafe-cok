@@ -15,25 +15,15 @@ import java.util.stream.Collectors;
 @Builder
 public class MenuDto {
 
+    private final Long id;
     private final String name;
     private final String price;
-    private final String originImage;
-    private final String thumbnailImage;
 
-    public static MenuDto from(Menu menu) {
+    public static MenuDto from(final Menu menu) {
         return MenuDto.builder()
+                .id(menu.getId())
                 .name(menu.getName())
                 .price(FormatConverter.priceConvert(menu.getPrice()))
                 .build();
     }
-
-    public static MenuDto of(final Menu menu, final String originImage, final String thumbnailImage) {
-        return MenuDto.builder()
-                .name(menu.getName())
-                .price(FormatConverter.priceConvert(menu.getPrice()))
-                .originImage(originImage)
-                .thumbnailImage(thumbnailImage)
-                .build();
-    }
-
 }

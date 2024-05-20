@@ -26,8 +26,14 @@ public class Image extends BaseEntity {
     @Column(name = "image_type", nullable = false)
     private ImageType imageType;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "origin", nullable = false)
+    private String origin;
+
+    @Column(name = "thumbnail", nullable = false)
+    private String thumbnail;
+
+    @Column(name = "medium")
+    private String medium;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cafes_id")
@@ -44,25 +50,28 @@ public class Image extends BaseEntity {
     protected Image() {
     }
 
-    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe) {
+    public Image(final ImageType imageType, final String origin, final String thumbnail, final Cafe cafe) {
         this.imageType = imageType;
-        this.imageUrl = imageUrl;
+        this.origin = origin;
+        this.thumbnail = thumbnail;
         this.cafe = cafe;
     }
 
-    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe, final Review review) {
-        this.imageType = imageType;
-        this.imageUrl = imageUrl;
-        this.cafe = cafe;
+    public Image(final ImageType imageType, final String origin, final String thumbnail,
+                 final String medium, final Cafe cafe) {
+        this(imageType, origin, thumbnail, cafe);
+        this.medium = medium;
+    }
+
+    public Image(final ImageType imageType, final String origin, final String thumbnail,
+                 final Cafe cafe, final Review review) {
+        this(imageType, origin, thumbnail, cafe);
         this.review = review;
     }
 
-    public Image(final ImageType imageType, final String imageUrl, final Cafe cafe, final Menu menu) {
-        this.imageType = imageType;
-        this.imageUrl = imageUrl;
-        this.cafe = cafe;
+    public Image(final ImageType imageType, final String origin, final String thumbnail,
+                 final Cafe cafe, final Menu menu) {
+        this(imageType, origin, thumbnail, cafe);
         this.menu = menu;
     }
-
-
 }
