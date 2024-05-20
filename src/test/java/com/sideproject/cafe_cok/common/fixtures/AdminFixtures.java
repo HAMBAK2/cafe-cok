@@ -44,20 +44,16 @@ public class AdminFixtures {
     }
 
     public static CafeMainImageDto 카페_메인_이미지_DTO() {
-        return CafeMainImageDto.from(카페_메인_이미지_리스트());
+        return CafeMainImageDto.from(카페_메인_이미지(ImageType.CAFE_MAIN, 카페()));
     }
 
     public static List<CafeOtherImageDto> 카페_나머지_이미지_DTO_리스트() {
-        List<Image> images = new ArrayList<>();
-        images.add(이미지(ImageType.CAFE_ORIGIN, 카페()));
-        images.add(이미지(ImageType.CAFE_THUMBNAIL, 카페()));
-        return Arrays.asList(CafeOtherImageDto.from(images));
+        Image 카페_이미지 = 카페_이미지(ImageType.CAFE, 카페());
+        return Arrays.asList(CafeOtherImageDto.from(카페_이미지));
     }
 
     public static List<CafeSaveMenuDto> 카페_메뉴_응답_리스트() {
-        return Arrays.asList(CafeSaveMenuDto.of(메뉴(),
-                이미지(ImageType.MENU_ORIGIN, 카페(), 메뉴()),
-                이미지(ImageType.MENU_THUMBNAIL, 카페(), 메뉴())));
+        return Arrays.asList(CafeSaveMenuDto.of(메뉴(), 메뉴_이미지(ImageType.MENU, 카페(), 메뉴())));
 
     }
 

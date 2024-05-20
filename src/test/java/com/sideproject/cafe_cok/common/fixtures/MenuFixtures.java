@@ -1,13 +1,16 @@
 package com.sideproject.cafe_cok.common.fixtures;
 
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.dto.MenuDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페;
+import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.메뉴_이미지;
 
 
 public class MenuFixtures {
@@ -25,12 +28,12 @@ public class MenuFixtures {
         return menu;
     }
 
-    public static MenuDto 메뉴_DTO() {
-        return MenuDto.of(메뉴(), 메뉴_원본_이미지_URL, 메뉴_썸네일_이미지_URL);
+    public static MenuImageUrlDto 메뉴_이미지_DTO() {
+        return new MenuImageUrlDto(메뉴(), 메뉴_이미지(ImageType.MENU, 카페(), 메뉴()));
     }
 
-    public static List<MenuDto> 메뉴_DTO_리스트() {
-        return Arrays.asList(메뉴_DTO());
+    public static List<MenuImageUrlDto> 메뉴_이미지_DTO_리스트() {
+        return Arrays.asList(메뉴_이미지_DTO());
     }
 
     public static Menu setMenuId(Menu menu, final Long id) {

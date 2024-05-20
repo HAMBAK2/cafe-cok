@@ -1,6 +1,5 @@
 package com.sideproject.cafe_cok.cafe.dto.response;
 
-import com.sideproject.cafe_cok.menu.dto.MenuDto;
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 import lombok.Builder;
 import lombok.Getter;

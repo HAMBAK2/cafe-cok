@@ -3,7 +3,6 @@ package com.sideproject.cafe_cok.image.dto;
 import com.sideproject.cafe_cok.image.domain.Image;
 import lombok.Builder;
 import lombok.Getter;
-import org.apache.catalina.LifecycleState;
 
 import java.util.List;
 import java.util.stream.Collectors;
