@@ -59,8 +59,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("longitude").description("카페 경도"),
                                 fieldWithPath("starRating").description("카페 별점"),
                                 fieldWithPath("reviewCount").description("카페의 리뷰 개수"),
-                                fieldWithPath("originImage").description("카페 대표 이미지 원본 URL"),
-                                fieldWithPath("thumbnailImage").description("카페 대표 이미지 썸네일 URL"),
+                                fieldWithPath("originUrl").description("카페 대표 이미지 원본 URL"),
+                                fieldWithPath("thumbnailUrl").description("카페 대표 이미지 중간 사이즈 썸네일 URL"),
                                 fieldWithPath("keywords").type(JsonFieldType.ARRAY)
                                         .description("선택된 키워드 리스트\n\n" + "- 선택된 키워드 순 내림차순, 최대 3개 제공"),
                                 fieldWithPath("keywords[].id").description("키워드 ID"),
@@ -96,10 +96,12 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페 메뉴리스트(2개)"),
                                 fieldWithPath("menus[].name").description("메뉴 이름"),
                                 fieldWithPath("menus[].price").description("메뉴 가격"),
-                                fieldWithPath("menus[].originImage").description("원본 이미지 URL"),
-                                fieldWithPath("menus[].thumbnailImage").description("썸네일 이미지 URL"),
+                                fieldWithPath("menus[].originUrl").description("메뉴 원본 이미지 URL"),
+                                fieldWithPath("menus[].thumbnailUrl").description("메뉴 썸네일 이미지 URL"),
                                 fieldWithPath("imageUrls").type(JsonFieldType.ARRAY)
                                         .description("전체 이미지 URL 리스트(최대6개)\n\n - 카페 이미지(최대 3개) \n\n - 나머지 리뷰 이미지"),
+                                fieldWithPath("imageUrls[].originUrl").description("원본 이미지 URL"),
+                                fieldWithPath("imageUrls[].thumbnailUrl").description("썸네일 이미지 URL"),
                                 fieldWithPath("userChoiceKeywords").type(JsonFieldType.ARRAY).description("사용자가 선택한 키워드 리스"),
                                 fieldWithPath("userChoiceKeywords[].name").description("키워드 이름"),
                                 fieldWithPath("userChoiceKeywords[].count").description("키워드 선택 횟수"),
@@ -112,6 +114,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("reviews[].picture").description("리뷰 작성자 프로필 이미지 경로"),
                                 fieldWithPath("reviews[].nickname").description("리뷰 작성자 닉네임"),
                                 fieldWithPath("reviews[].imageUrls").type(JsonFieldType.ARRAY).description("리뷰 이미지 리스트(최대 5개)"),
+                                fieldWithPath("reviews[].imageUrls[].originUrl").description("리뷰 원본 이미지 URL"),
+                                fieldWithPath("reviews[].imageUrls[].thumbnailUrl").description("리뷰 썸네일 이미지 URL"),
                                 fieldWithPath("reviews[].recommendMenus").type(JsonFieldType.ARRAY).description("추천 메뉴 리스트(최대3개)"))))
                 .andExpect(status().isOk());
 
@@ -139,8 +143,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("menus").type(JsonFieldType.ARRAY).description("카페 ID"),
                                 fieldWithPath("menus[].name").description("메뉴 이름"),
                                 fieldWithPath("menus[].price").description("메뉴 가격"),
-                                fieldWithPath("menus[].originImage").description("원본 이미지 URL"),
-                                fieldWithPath("menus[].thumbnailImage").description("썸네일 이미지 URL"))))
+                                fieldWithPath("menus[].originUrl").description("원본 이미지 URL"),
+                                fieldWithPath("menus[].thumbnailUrl").description("썸네일 이미지 URL"))))
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailMenus(any(Long.class));
@@ -167,6 +171,8 @@ class CafeControllerTest extends ControllerTest {
                         queryParameters(parameterWithName("cursor").description("페이징을 위한 커서 정보(null 전달 시 첫 번째 페이지 조회)")),
                         responseFields(
                                 fieldWithPath("imageUrls").type(JsonFieldType.ARRAY).description("이미지 URL 리스트(최대 8개)"),
+                                fieldWithPath("imageUrls[].originUrl").description("원본 이미지 URL"),
+                                fieldWithPath("imageUrls[].thumbnailUrl").description("썸네일 이미지 URL"),
                                 fieldWithPath("cursor").description("페이징 시 사용되는 커서 정보"),
                                 fieldWithPath("hasNextPage").description("다음 페이지 존재 여부"))))
                 .andExpect(status().isOk());
@@ -192,7 +198,9 @@ class CafeControllerTest extends ControllerTest {
                         preprocessResponse(prettyPrint()),
                         pathParameters(parameterWithName("cafeId").description("선택한 카페의 ID")),
                         responseFields(fieldWithPath("imageUrls")
-                                .type(JsonFieldType.ARRAY).description("이미지 URL 리스트(전체)"))))
+                                .type(JsonFieldType.ARRAY).description("이미지 URL 리스트(전체)"),
+                                fieldWithPath("imageUrls[].originUrl").description("원본 이미지 URL"),
+                                fieldWithPath("imageUrls[].thumbnailUrl").description("썸네일 이미지 URL"))))
                 .andExpect(status().isOk());
 
         verify(cafeService, times(1)).detailImagesAll(any(Long.class));
@@ -230,6 +238,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("reviews[].picture").description("리뷰 작성자 프로필 이미지 경로"),
                                 fieldWithPath("reviews[].nickname").description("리뷰 작성자 닉네임"),
                                 fieldWithPath("reviews[].imageUrls").type(JsonFieldType.ARRAY).description("리뷰 이미지 리스트(최대 5개)"),
+                                fieldWithPath("reviews[].imageUrls[].originUrl").description("리뷰 원본 이미지 URL"),
+                                fieldWithPath("reviews[].imageUrls[].thumbnailUrl").description("리뷰 썸네일 이미지 URL"),
                                 fieldWithPath("reviews[].recommendMenus").type(JsonFieldType.ARRAY).description("추천 메뉴 리스트(최대3개)"),
                                 fieldWithPath("cursor").description("페이징 시 사용되는 커서 정보"),
                                 fieldWithPath("hasNextPage").description("다음 페이지 존재 여부"))))
@@ -268,6 +278,8 @@ class CafeControllerTest extends ControllerTest {
                                 fieldWithPath("reviews[].picture").description("리뷰 작성자 프로필 이미지 경로"),
                                 fieldWithPath("reviews[].nickname").description("리뷰 작성자 닉네임"),
                                 fieldWithPath("reviews[].imageUrls").type(JsonFieldType.ARRAY).description("리뷰 이미지 리스트(최대 5개)"),
+                                fieldWithPath("reviews[].imageUrls[].originUrl").description("리뷰 원본 이미지 URL"),
+                                fieldWithPath("reviews[].imageUrls[].thumbnailUrl").description("리뷰 썸네일 이미지 URL"),
                                 fieldWithPath("reviews[].recommendMenus").type(JsonFieldType.ARRAY).description("추천 메뉴 리스트(최대3개)"))))
                 .andExpect(status().isOk());
 

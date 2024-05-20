@@ -102,7 +102,7 @@ public class CafeFixtures {
 
     public static CafeDetailTopResponse 카페_상세_상단_응답() {
         return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_카페_DTO()),
-                카페_이미지(ImageType.CAFE, 카페()), 리뷰_개수, 키워드_DTO_리스트());
+                카페_메인_이미지(ImageType.CAFE, 카페()), 리뷰_개수, 키워드_DTO_리스트());
     }
 
     public static BigDecimal getRandomBigDecimal(int min, int max) {
