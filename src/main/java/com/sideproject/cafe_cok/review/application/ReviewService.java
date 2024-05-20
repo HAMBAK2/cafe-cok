@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
+import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
@@ -100,8 +101,8 @@ public class ReviewService {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
-            List<ImageDto> findImages
-                    = ImageDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW));
+            List<ImageUrlDto> findImages
+                    = ImageUrlDto.fromList(imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW));
             List<KeywordDto> findKeywords
                     = KeywordDto.fromList(keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU));
 

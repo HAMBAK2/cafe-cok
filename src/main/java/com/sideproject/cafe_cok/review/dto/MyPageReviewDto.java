@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.review.dto;
 
 import com.sideproject.cafe_cok.image.dto.ImageDto;
+import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.Builder;
@@ -20,12 +21,12 @@ public class MyPageReviewDto {
     private String content;
     private String specialNote;
     private LocalDate createdDate;
-    private List<ImageDto> images;
+    private List<ImageUrlDto> imageUrls;
     private List<KeywordDto> keywords;
 
 
     public static MyPageReviewDto of(
-            final Review review, final List<ImageDto> images, final List<KeywordDto> keywords) {
+            final Review review, final List<ImageUrlDto> imageUrls, final List<KeywordDto> keywords) {
 
         return MyPageReviewDto.builder()
                 .cafeId(review.getCafe().getId())
@@ -35,7 +36,7 @@ public class MyPageReviewDto {
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())
                 .createdDate(review.getCreatedDate().toLocalDate())
-                .images(images)
+                .imageUrls(imageUrls)
                 .keywords(keywords)
                 .build();
     }
