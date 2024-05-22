@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.sideproject.cafe_cok.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,12 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Value("${cloud.aws.s3.url-prefix}")
+    private String s3UrlPrefix;
+
+    @Value("${cloud.aws.cloud-front.domain}")
+    private String cloudFrontDomain;
+
     public String upload(MultipartFile multipartFile, String dirName) {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
@@ -52,7 +59,7 @@ public class S3Uploader {
         String fileName = dirName + "/" + UUID.randomUUID() + "." + extension;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
-        return uploadImageUrl.replace(Constants.IMAGE_URL_PREFIX, "");
+        return uploadImageUrl.replace(s3UrlPrefix, cloudFrontDomain);
     }
 
     private String putS3(File uploadFile, String fileName) {
