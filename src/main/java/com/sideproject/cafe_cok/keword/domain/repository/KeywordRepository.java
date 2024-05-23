@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface KeywordRepository extends JpaRepository<Keyword, Long> {
+public interface KeywordRepository extends JpaRepository<Keyword, Long>, KeywordRepositoryCustom {
 
     Optional<Keyword> findByName(String name);
 
@@ -72,18 +72,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
 
     List<Keyword> findByNameIn(List<String> keywordNames);
-
-    @Query("SELECT k " +
-            "FROM Keyword k " +
-                "JOIN CombinationKeyword ck ON k.id = ck.keyword.id " +
-            "WHERE ck.combination.id = :combinationId")
-    List<Keyword> findByCombinationId(final Long combinationId);
-
-    @Query("SELECT k.name " +
-            "FROM Keyword k " +
-            "JOIN CombinationKeyword ck ON k.id = ck.keyword.id " +
-            "WHERE ck.combination.id = :combinationId")
-    List<String> findNamesByCombinationId(final Long combinationId);
 
     @Query("SELECT k " +
             "FROM Keyword k " +

@@ -96,11 +96,8 @@ class CombinationServiceTest extends ServiceTest {
         Combination combination = 조합();
 
         given(combinationRepository.getById(any(Long.class))).willReturn(combination);
-        given(combinationRepository.save(any(Combination.class))).willReturn(combination);
 
         CombinationIdResponse actual = combinationService.edit(request, combinationId);
-
-        verify(combinationRepository).save(combination);
         verify(combinationKeywordRepository).deleteByCombinationId(combinationId);
         assertThat(actual.getCombinationId()).isEqualTo(response.getCombinationId());
     }
@@ -116,12 +113,9 @@ class CombinationServiceTest extends ServiceTest {
         Combination combination = 조합();
 
         given(combinationRepository.getById(any(Long.class))).willReturn(combination);
-        given(combinationRepository.save(any(Combination.class))).willReturn(combination);
         given(keywordRepository.findNamesByCombinationId(any(Long.class))).willReturn(keywordNames);
 
         CombinationIdResponse actual = combinationService.edit(request, combinationId);
-
-        verify(combinationRepository).save(combination);
         verify(combinationKeywordRepository, never()).deleteByCombinationId(combinationId);
         assertThat(actual.getCombinationId()).isEqualTo(response.getCombinationId());
     }

@@ -2,11 +2,14 @@ package com.sideproject.cafe_cok.combination.dto.request;
 
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CombinationRequest {
 
     private String name;

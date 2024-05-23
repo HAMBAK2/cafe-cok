@@ -30,7 +30,12 @@ public class CombinationKeyword {
 
 
     public CombinationKeyword(final Combination combination, final Keyword keyword) {
-        this.combination = combination;
+        if(combination != null) changeCombination(combination);
         this.keyword = keyword;
+    }
+
+    public void changeCombination(final Combination combination) {
+        this.combination = combination;
+        combination.getCombinationKeywords().add(this);
     }
 }

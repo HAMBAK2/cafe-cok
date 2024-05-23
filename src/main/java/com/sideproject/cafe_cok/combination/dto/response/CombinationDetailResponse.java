@@ -24,5 +24,4 @@ public class CombinationDetailResponse {
                 .categoryKeywords(categoryKeywords)
                 .build();
     }
-
 }
