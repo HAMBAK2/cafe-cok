@@ -3,7 +3,12 @@ package com.sideproject.cafe_cok.bookmark.domain;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
@@ -11,6 +16,7 @@ import static jakarta.persistence.GenerationType.*;
 @Getter
 @Entity
 @Table(name = "bookmark_folders")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarkFolder {
 
     @Id
@@ -33,10 +39,11 @@ public class BookmarkFolder {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    protected BookmarkFolder() {
-    }
+    @OneToMany(mappedBy = "bookmarkFolder", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
-    public BookmarkFolder(final String name, final String color,
+    public BookmarkFolder(final String name,
+                          final String color,
                           final Boolean isVisible,
                           final Boolean isDefaultFolder,
                           final Member member) {
@@ -44,10 +51,10 @@ public class BookmarkFolder {
         this.color = color;
         this.isVisible = isVisible;
         this.isDefaultFolder = isDefaultFolder;
-        this.member = member;
+        if(member != null) changeMember(member);
     }
 
-    public void change(BookmarkFolderUpdateRequest request) {
+    public void change(final BookmarkFolderUpdateRequest request) {
         this.name = request.getName();
         this.color = request.getColor();
         this.isVisible = request.getIsVisible();
@@ -55,5 +62,10 @@ public class BookmarkFolder {
 
     public void changeVisible() {
         this.isVisible = !isVisible;
+    }
+
+    public void changeMember(final Member member) {
+        this.member = member;
+        member.getBookmarkFolders().add(this);
     }
 }

@@ -9,6 +9,7 @@ import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
+import com.sideproject.cafe_cok.cafe.exception.NoSuchCafeException;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
@@ -391,5 +392,11 @@ public class CafeService {
             cafe.setBookmarks(BookmarkCafeDto.fromList(bookmarks));
         }
         return cafes;
+    }
+
+    public Cafe findById(final Long id) {
+
+        return cafeRepository.findById(id)
+                .orElseThrow(NoSuchCafeException::new);
     }
 }

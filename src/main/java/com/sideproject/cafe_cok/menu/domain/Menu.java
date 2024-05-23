@@ -4,7 +4,9 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -13,6 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "menus")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Menu extends BaseEntity {
 
     @Id
@@ -29,9 +32,6 @@ public class Menu extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
-
-    protected Menu() {
-    }
 
     public Menu(final String name, final Integer price, final Cafe cafe) {
         this.name = name;

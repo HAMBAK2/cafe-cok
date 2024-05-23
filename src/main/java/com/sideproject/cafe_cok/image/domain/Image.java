@@ -7,7 +7,9 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -15,6 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "images")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
 
     @Id
@@ -46,9 +49,6 @@ public class Image extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "menus_id")
     private Menu menu;
-
-    protected Image() {
-    }
 
     public Image(final ImageType imageType, final String origin, final String thumbnail, final Cafe cafe) {
         this.imageType = imageType;

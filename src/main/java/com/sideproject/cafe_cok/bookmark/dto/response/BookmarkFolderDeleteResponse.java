@@ -7,7 +7,7 @@ public class BookmarkFolderDeleteResponse {
 
     private Long folderId;
 
-    public BookmarkFolderDeleteResponse(Long folderId) {
+    public BookmarkFolderDeleteResponse(final Long folderId) {
         this.folderId = folderId;
     }
 }

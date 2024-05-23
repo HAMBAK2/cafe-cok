@@ -137,9 +137,9 @@ public class ReviewService {
 
         Review findReview = reviewRepository.getById(reviewId);
 
-        if(request.getContent() != null) findReview.changeContent(request.getContent());
-        if(request.getSpecialNote() != null) findReview.changeSpecialNote(request.getSpecialNote());
-        if(request.getStarRating() != null) findReview.changeStarRating(request.getStarRating());
+        if(request.getContent() != null) findReview.setContent(request.getContent());
+        if(request.getSpecialNote() != null) findReview.setSpecialNote(request.getSpecialNote());
+        if(request.getStarRating() != null) findReview.setStarRating(request.getStarRating());
         if(request.getDeletedImageIds() != null) deleteByIds(request.getDeletedImageIds());
         if(files != null) saveByReviewAndMultipartFiles(findReview, files);
         if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);

@@ -5,7 +5,9 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -13,6 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Table(name = "plan_cafes")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanCafe extends BaseEntity {
 
     @Id
@@ -31,9 +34,6 @@ public class PlanCafe extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "match_type", nullable = false)
     private PlanCafeMatchType matchType;
-
-    protected PlanCafe() {
-    }
 
     public PlanCafe(Plan plan, Cafe cafe, PlanCafeMatchType matchType) {
         this.plan = plan;

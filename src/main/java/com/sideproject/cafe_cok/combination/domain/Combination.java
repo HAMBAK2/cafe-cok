@@ -2,7 +2,9 @@ package com.sideproject.cafe_cok.combination.domain;
 
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -10,6 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "combinations")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Combination {
 
     @Id
@@ -26,9 +29,6 @@ public class Combination {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "members_id")
     private Member member;
-
-    protected Combination() {
-    }
 
     public Combination(final String name, final String icon, final Member member) {
         this.name = name;

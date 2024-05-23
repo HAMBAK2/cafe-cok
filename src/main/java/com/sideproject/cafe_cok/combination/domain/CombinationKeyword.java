@@ -2,7 +2,9 @@ package com.sideproject.cafe_cok.combination.domain;
 
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -10,6 +12,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "combination_keywords")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CombinationKeyword {
 
     @Id
@@ -25,8 +28,6 @@ public class CombinationKeyword {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    protected CombinationKeyword() {
-    }
 
     public CombinationKeyword(final Combination combination, final Keyword keyword) {
         this.combination = combination;

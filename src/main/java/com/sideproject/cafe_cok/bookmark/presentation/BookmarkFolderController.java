@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Bookmark Folder", description = "북마크 폴더 관련 API")
 public class BookmarkFolderController {
 
-    private final BookmarkService bookmarkService;
     private final BookmarkFolderService bookmarkFolderService;
 
     @GetMapping("/folders")
@@ -79,7 +78,7 @@ public class BookmarkFolderController {
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long folderId) {
 
-        BookmarksResponse response = bookmarkService.bookmarks(folderId);
+        BookmarksResponse response = bookmarkFolderService.bookmarks(folderId);
         return ResponseEntity.ok(response);
     }
 

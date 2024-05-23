@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Table(name = "plans")
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plan extends BaseEntity {
 
     @Id

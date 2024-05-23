@@ -4,15 +4,17 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "reviews")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
 
     @Id
@@ -38,10 +40,6 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
-
-    protected Review() {
-    }
-
     public Review(final String content, final String specialNote, final Integer starRating,
                   final Cafe cafe, final Member member) {
         this.content = content;
@@ -51,15 +49,15 @@ public class Review extends BaseEntity {
         this.member = member;
     }
 
-    public void changeContent(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public void changeSpecialNote(String specialNote) {
+    public void setSpecialNote(String specialNote) {
         this.specialNote = specialNote;
     }
 
-    public void changeStarRating(Integer starRating) {
+    public void setStarRating(Integer starRating) {
         this.starRating = starRating;
     }
 

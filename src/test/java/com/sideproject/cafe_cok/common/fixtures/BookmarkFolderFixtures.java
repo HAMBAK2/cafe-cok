@@ -45,7 +45,7 @@ public class BookmarkFolderFixtures {
     }
 
     public static BookmarkFoldersResponse 북마크_폴더_목록_응답() {
-        return new BookmarkFoldersResponse(폴더_개수, Arrays.asList(일반_폴더_DTO()));
+        return BookmarkFoldersResponse.of(폴더_개수, Arrays.asList(일반_폴더()));
     }
 
     public static BookmarkFolderDeleteResponse 북마크_폴더_삭제_응답(Long folderId) {
@@ -53,7 +53,7 @@ public class BookmarkFolderFixtures {
     }
 
     public static BookmarkFolderDto 일반_폴더_DTO() {
-        return new BookmarkFolderDto(일반_폴더(), 북마크_개수_1개);
+        return BookmarkFolderDto.from(일반_폴더());
     }
 
     public static List<BookmarkFolderDto> 일반_폴더_DTO_리스트() {

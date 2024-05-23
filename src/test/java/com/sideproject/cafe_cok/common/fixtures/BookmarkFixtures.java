@@ -38,9 +38,7 @@ public class BookmarkFixtures {
 
     public static BookmarksResponse 북마크_리스트_응답() {
 
-        List<BookmarkDto> bookmarks = Arrays.asList(북마크_DTO(북마크()));
-
-        return new BookmarksResponse(일반_폴더_ID, 폴더_이름, 폴더_색상, bookmarks);
+        return BookmarksResponse.from(일반_폴더(), Arrays.asList(북마크()));
     }
 
     public static BookmarkSaveRequest 북마크_저장_요청() {

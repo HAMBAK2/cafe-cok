@@ -4,7 +4,9 @@ import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Table(name = "cafes")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
@@ -58,8 +61,6 @@ public class Cafe extends BaseEntity {
 
     @Column(name = "mapy")
     private Integer mapy;
-
-    protected Cafe(){}
 
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
                 final BigDecimal longitude, final BigDecimal latitude) {

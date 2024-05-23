@@ -7,11 +7,9 @@ import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
-    Long countByBookmarkFolderId(Long bookmarkFolderId);
+    List<Bookmark> findByBookmarkFolderId(final Long bookmarkFolderId);
 
-    List<Bookmark> findByBookmarkFolderId(Long bookmarkFolderId);
-
-    Long deleteByBookmarkFolderId(Long folderId);
+    Long deleteByBookmarkFolderId(final Long folderId);
 
     @Query("SELECT b " +
             "FROM Bookmark b JOIN BookmarkFolder bf ON b.bookmarkFolder.id = bf.id " +

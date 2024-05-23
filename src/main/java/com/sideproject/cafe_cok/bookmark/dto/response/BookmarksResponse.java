@@ -1,12 +1,16 @@
 package com.sideproject.cafe_cok.bookmark.dto.response;
 
+import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
+import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Builder
 public class BookmarksResponse {
 
     private Long folderId;
@@ -14,24 +18,20 @@ public class BookmarksResponse {
     private String folderColor;
     private List<BookmarkDto> bookmarks = new ArrayList<>();
 
-
-    private BookmarksResponse() {
+    public static BookmarksResponse from(final BookmarkFolder bookmarkFolder) {
+        return BookmarksResponse.builder()
+                .folderId(bookmarkFolder.getId())
+                .folderName(bookmarkFolder.getName())
+                .folderColor(bookmarkFolder.getColor())
+                .build();
     }
 
-    public BookmarksResponse(
-            final Long folderId, final String folderName, final String folderColor) {
-        this.folderId = folderId;
-        this.folderName = folderName;
-        this.folderColor = folderColor;
-        this.bookmarks = new ArrayList<>();
-    }
-
-    public BookmarksResponse(
-            final Long folderId, final String folderName,
-            final String folderColor, final List<BookmarkDto> bookmarks) {
-        this.folderId = folderId;
-        this.folderName = folderName;
-        this.folderColor = folderColor;
-        this.bookmarks = bookmarks;
+    public static BookmarksResponse from(final BookmarkFolder bookmarkFolder, final List<Bookmark> bookmarks) {
+        return BookmarksResponse.builder()
+                .folderId(bookmarkFolder.getId())
+                .folderName(bookmarkFolder.getName())
+                .folderColor(bookmarkFolder.getColor())
+                .bookmarks(BookmarkDto.fromList(bookmarks))
+                .build();
     }
 }

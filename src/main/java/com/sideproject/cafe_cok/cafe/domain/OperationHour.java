@@ -2,7 +2,9 @@ package com.sideproject.cafe_cok.cafe.domain;
 
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -14,6 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "operation_hours")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OperationHour extends BaseEntity {
 
     @Id
@@ -38,8 +41,6 @@ public class OperationHour extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
-    protected OperationHour() {
-    }
 
     public OperationHour(final DayOfWeek date, final LocalTime openingTime, final LocalTime closingTime,
                          final boolean isClosed, final Cafe cafe) {
