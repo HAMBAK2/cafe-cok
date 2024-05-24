@@ -15,8 +15,7 @@ import java.util.Arrays;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페;
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페_아이디;
-import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.리뷰_이미지_DTO;
-import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.리뷰_이미지_URL_DTO;
+import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.사용자;
 
@@ -33,11 +32,10 @@ public class ReviewFixtures {
 
     public static final String 추천_메뉴 = "추천 메뉴";
 
-    public static final String 리뷰_이미지_URL = "리뷰 이미지 URL";
 
 
     public static Review 리뷰() {
-        Review review = new Review(리뷰_내용, 리뷰_특이사항, 리뷰_별점, 카페(), 사용자());
+        Review review = new Review(리뷰_생성_요청(), 카페(), 사용자());
         setReviewId(review, 리뷰_ID);
         review.setCreateDate(LocalDateTime.now());
         return review;
@@ -70,7 +68,7 @@ public class ReviewFixtures {
     }
 
     public static ReviewDetailResponse 리뷰_상세_응답() {
-        return ReviewDetailResponse.of(리뷰(), Arrays.asList(리뷰_이미지_DTO()), 카테고리_키워드_DTO());
+        return ReviewDetailResponse.of(리뷰(), Arrays.asList(리뷰_이미지()), 카테고리_키워드_DTO());
     }
 
     public static Review setReviewId(Review review, final Long id) {

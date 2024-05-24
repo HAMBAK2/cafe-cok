@@ -2,12 +2,18 @@ package com.sideproject.cafe_cok.review.domain;
 
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.member.domain.Member;
+import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -40,11 +46,18 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    public Review(final String content, final String specialNote, final Integer starRating,
-                  final Cafe cafe, final Member member) {
-        this.content = content;
-        this.specialNote = specialNote;
-        this.starRating = starRating;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
+
+    public Review(final ReviewCreateRequest request,
+                  final Cafe cafe,
+                  final Member member) {
+        this.content = request.getContent();
+        this.specialNote = request.getSpecialNote();
+        this.starRating = request.getStarRating();
         this.cafe = cafe;
         this.member = member;
     }

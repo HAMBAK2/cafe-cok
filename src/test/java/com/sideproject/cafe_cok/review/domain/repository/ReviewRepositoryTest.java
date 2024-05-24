@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페;
 import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.사용자;
+import static com.sideproject.cafe_cok.common.fixtures.ReviewFixtures.리뷰_생성_요청;
 import static org.assertj.core.api.Assertions.*;
 
 class ReviewRepositoryTest extends RepositoryTest {
@@ -37,7 +38,7 @@ class ReviewRepositoryTest extends RepositoryTest {
         Member member = 사용자();
         Member savedMember = memberRepository.save(member);
 
-        Review review = new Review("콘텐츠", "특이사항", 3, savedCafe, savedMember);
+        Review review = new Review(리뷰_생성_요청(), savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
 
         Review findReview = reviewRepository.getById(savedReview.getId());

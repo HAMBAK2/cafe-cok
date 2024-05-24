@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.review.dto.response;
 
 
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.review.domain.Review;
@@ -22,8 +23,9 @@ public class ReviewDetailResponse {
     private List<ImageDto> images;
     private CategoryKeywordsDto categoryKeywords;
 
-    public static ReviewDetailResponse of(
-            final Review review, final List<ImageDto> images, final CategoryKeywordsDto categoryKeywords) {
+    public static ReviewDetailResponse of(final Review review,
+                                          final List<Image> images,
+                                          final CategoryKeywordsDto categoryKeywords) {
 
         return ReviewDetailResponse.builder()
                 .cafeId(review.getCafe().getId())
@@ -32,7 +34,7 @@ public class ReviewDetailResponse {
                 .starRating(review.getStarRating())
                 .content(review.getContent())
                 .specialNote(review.getSpecialNote())
-                .images(images)
+                .images(ImageDto.fromList(images))
                 .categoryKeywords(categoryKeywords)
                 .build();
     }

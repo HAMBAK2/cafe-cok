@@ -13,6 +13,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByCafeId(Long cafeId);
 
+    List<Review> findByMemberId(Long memberId);
+
     List<Review> findByCafeIdOrderByIdDesc(final Long cafeId, final Pageable pageable);
 
     @Query("SELECT r " +
@@ -21,9 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 "AND r.id < :cursor " +
             "ORDER BY r.id DESC")
     Page<Review> findByCafeIdOrderByIdDesc(final Long cafeId, final Pageable pageable, final Long cursor);
-
-    List<Review> findByMemberId(Long memberId);
-
 
     @Query("SELECT COUNT (r) FROM Review r WHERE r.member.id = :memberId")
     Long countReviewsByMemberId(Long memberId);

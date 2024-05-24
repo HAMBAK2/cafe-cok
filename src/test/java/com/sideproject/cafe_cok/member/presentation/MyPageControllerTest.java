@@ -234,7 +234,7 @@ class MyPageControllerTest extends ControllerTest {
     public void test_my_page_reviews_success() throws Exception{
 
         MyPageReviewResponse response = 마이페이지_리뷰_리스트_응답();
-        when(reviewService.getMyPageReviews(any(LoginMember.class)))
+        when(reviewService.getReviews(any(LoginMember.class)))
                 .thenReturn(response);
 
         mockMvc.perform(

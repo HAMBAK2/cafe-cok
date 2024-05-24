@@ -15,19 +15,14 @@ import java.util.Optional;
 
 public interface KeywordRepository extends JpaRepository<Keyword, Long>, KeywordRepositoryCustom {
 
-    Optional<Keyword> findByName(String name);
+    List<Keyword> findByNameIn(final List<String> keywordNames);
 
-    default Keyword getByName(String name) {
-        return findByName(name)
+    Optional<Keyword> findByName(final String keywordName);
+
+    default Keyword getByName(final String keywordName){
+        return findByName(keywordName)
                 .orElseThrow(NoSuchKeywordException::new);
     }
-
-    @Query("SELECT k " +
-            "FROM Keyword k " +
-                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
-            "WHERE crk.review.id = :reviewId " +
-                "AND k.category = :category")
-    List<Keyword> findByReviewIdAndCategory(final Long reviewId, final Category category);
 
     @Query("SELECT k.name " +
             "FROM Keyword k " +
@@ -69,9 +64,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long>, Keyword
                 "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.cafe.id = :cafeId")
     List<Keyword> findByCafeId(@Param("cafeId") Long cafeId);
-
-
-    List<Keyword> findByNameIn(List<String> keywordNames);
 
     @Query("SELECT k " +
             "FROM Keyword k " +

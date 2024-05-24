@@ -85,7 +85,7 @@ public class MyPageController {
     @Operation(summary = "마이페이지 리뷰탭을 눌렀을 때 동작")
     public ResponseEntity<MyPageReviewResponse> reviews(@AuthenticationPrincipal LoginMember loginMember) {
 
-        MyPageReviewResponse response = reviewService.getMyPageReviews(loginMember);
+        MyPageReviewResponse response = reviewService.getReviews(loginMember);
         return ResponseEntity.ok(response);
     }
 
