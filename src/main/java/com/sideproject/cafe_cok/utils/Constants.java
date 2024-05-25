@@ -10,6 +10,7 @@ import static java.time.DayOfWeek.*;
 
 public class Constants {
 
+    public static final Double EARTH_RADIUS_KM = 6371.0;
     public static final String CAFE_ORIGIN_IMAGE_DIR = "origin/cafe";
     public static final String CAFE_THUMBNAIL_IMAGE_DIR = "resized/cafe-thumbnail";
     public static final String CAFE_MAIN_ORIGIN_IMAGE_DIR = "origin/cafe-main";

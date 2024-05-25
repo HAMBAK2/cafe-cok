@@ -35,9 +35,17 @@ public class PlanCafe extends BaseEntity {
     @Column(name = "match_type", nullable = false)
     private PlanCafeMatchType matchType;
 
-    public PlanCafe(Plan plan, Cafe cafe, PlanCafeMatchType matchType) {
-        this.plan = plan;
+    public PlanCafe(final Plan plan,
+                    final Cafe cafe,
+                    final PlanCafeMatchType matchType) {
+
+        if(plan != null) changePlan(plan);
         this.cafe = cafe;
         this.matchType = matchType;
+    }
+
+    public void changePlan(final Plan plan) {
+        this.plan = plan;
+        plan.getPlanCafes().add(this);
     }
 }

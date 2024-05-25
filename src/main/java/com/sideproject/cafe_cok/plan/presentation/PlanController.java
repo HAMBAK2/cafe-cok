@@ -35,9 +35,8 @@ public class PlanController {
 
     @PatchMapping("/save")
     @Operation(summary = "계획하기 결과를 저장")
-    public ResponseEntity<SavePlanResponse> save(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @RequestBody SavePlanRequest request) {
+    public ResponseEntity<SavePlanResponse> save(@AuthenticationPrincipal LoginMember loginMember,
+                                                 @RequestBody SavePlanRequest request) {
 
         SavePlanResponse response = planService.save(request, loginMember);
         return ResponseEntity.ok(response);
@@ -45,9 +44,8 @@ public class PlanController {
 
     @PatchMapping("/share")
     @Operation(summary = "계획하기 결과를 공유")
-    public ResponseEntity<SharePlanResponse> share(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @RequestBody SharePlanRequest request) {
+    public ResponseEntity<SharePlanResponse> share(@AuthenticationPrincipal LoginMember loginMember,
+                                                   @RequestBody SharePlanRequest request) {
 
         SharePlanResponse response = planService.share(request, loginMember);
         return ResponseEntity.ok(response);
@@ -55,9 +53,9 @@ public class PlanController {
 
     @DeleteMapping("/{planId}/delete")
     @Operation(summary = "선택한 계획하기를 삭제")
-    public ResponseEntity<DeletePlanResponse> delete(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @PathVariable Long planId, @RequestParam PlanStatus status){
+    public ResponseEntity<DeletePlanResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
+                                                     @PathVariable Long planId,
+                                                     @RequestParam PlanStatus status){
 
         DeletePlanResponse response = planService.delete(status, planId);
         return ResponseEntity.ok(response);

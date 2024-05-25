@@ -3,7 +3,6 @@ package com.sideproject.cafe_cok.keword.domain.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
-import com.sideproject.cafe_cok.keword.domain.QCafeReviewKeyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import jakarta.persistence.EntityManager;
 

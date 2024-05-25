@@ -480,10 +480,10 @@ Host: localhost:8080
 
 {
   "locationName" : "위치 이름",
-  "latitude" : 19.540156290661955,
-  "longitude" : 97.48491084739283,
+  "latitude" : 61.496425351477065,
+  "longitude" : 112.9127638740431,
   "minutes" : 10,
-  "date" : "2024-05-23",
+  "date" : "2024-05-25",
   "startTime" : "09:00:00",
   "endTime" : "11:00:00",
   "keywords" : [ "키워드 이름" ]
@@ -559,14 +559,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 713
+Content-Length: 755
 
 {
   "planId" : 1,
   "matchType" : "MISMATCH",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "5월 23일 9시 0분",
+  "visitDateTime" : "00월 00일 00시 00분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -583,11 +583,11 @@ Content-Length: 713
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 20.32718086424939,
-    "longitude" : 42.8481792081237,
+    "latitude" : 50.370145320098466,
+    "longitude" : 83.40953760142479,
     "starRating" : 0.0,
     "reviewCount" : 0,
-    "imageUrl" : null
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
   } ],
   "matchCafes" : [ ],
   "similarCafes" : [ ]
@@ -728,7 +728,7 @@ Content-Length: 713
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>recommendCafes[].imageUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 이미지 URL</p></td>
 </tr>
 <tr>

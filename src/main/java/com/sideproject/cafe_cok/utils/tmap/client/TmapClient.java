@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +44,8 @@ public class TmapClient {
     }
 
 
-    public Integer getWalkingTimeUsingTmap(
-            final String startX, final String startY, final String endX, final String endY) {
+    public Integer getWalkingTime(
+            final BigDecimal startX, final BigDecimal startY, final BigDecimal endX, final BigDecimal endY) {
 
         HttpHeaders headers = generateTmapHeader();
         String body = generateTmapBody(startX, startY, endX, endY);
@@ -78,7 +79,7 @@ public class TmapClient {
     }
 
     private String generateTmapBody(
-            final String startX, final String startY, final String endX, final String endY) {
+            final BigDecimal startX, final BigDecimal startY, final BigDecimal endX, final BigDecimal endY) {
 
         Map<String, Object> bodyMap = new HashMap<>();
         bodyMap.put("startX", startX);

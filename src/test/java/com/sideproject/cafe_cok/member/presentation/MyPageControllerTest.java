@@ -178,7 +178,7 @@ class MyPageControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("마이페이지 계획텝에서 하나의 계획(여정)을 선택했을 때 동작 - 성공")
+    @DisplayName("마이페이지 계획탭에서 하나의 계획(여정)을 선택했을 때 동작 - 성공")
     public void test_my_page_detail_success() throws Exception{
 
         MyPagePlanDetailResponse response = 마이페이지_계획_상세_응답();

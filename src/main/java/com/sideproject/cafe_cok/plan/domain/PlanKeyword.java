@@ -30,8 +30,15 @@ public class PlanKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    public PlanKeyword(final Plan plan, final Keyword keyword) {
-        this.plan = plan;
+    public PlanKeyword(final Plan plan,
+                       final Keyword keyword) {
+
+        if(plan != null) changePlan(plan);
         this.keyword = keyword;
+    }
+
+    public void changePlan(final Plan plan) {
+        this.plan = plan;
+        plan.getPlanKeywords().add(this);
     }
 }

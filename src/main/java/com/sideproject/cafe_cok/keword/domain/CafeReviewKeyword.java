@@ -37,13 +37,18 @@ public class CafeReviewKeyword extends BaseEntity {
     public CafeReviewKeyword(final Cafe cafe,
                              final Review review,
                              final Keyword keyword) {
-        this.cafe = cafe;
-        this.keyword = keyword;
+        if(cafe != null) changeCafe(cafe);
         if(review != null) changeReview(review);
+        this.keyword = keyword;
     }
 
     public void changeReview(final Review review) {
         this.review = review;
         review.getCafeReviewKeywords().add(this);
+    }
+
+    public void changeCafe(final Cafe cafe) {
+        this.cafe = cafe;
+        cafe.getCafeReviewKeywords().add(this);
     }
 }

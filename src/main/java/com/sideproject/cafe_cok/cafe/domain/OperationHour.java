@@ -48,6 +48,11 @@ public class OperationHour extends BaseEntity {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.isClosed = isClosed;
+        if(cafe != null) changeCafe(cafe);
+    }
+
+    public void changeCafe(final Cafe cafe) {
         this.cafe = cafe;
+        cafe.getOperationHours().add(this);
     }
 }

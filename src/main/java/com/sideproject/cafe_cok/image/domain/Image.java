@@ -54,7 +54,7 @@ public class Image extends BaseEntity {
         this.imageType = imageType;
         this.origin = origin;
         this.thumbnail = thumbnail;
-        this.cafe = cafe;
+        if(cafe != null) changeCafe(cafe);
     }
 
     public Image(final ImageType imageType, final String origin, final String thumbnail,
@@ -78,5 +78,10 @@ public class Image extends BaseEntity {
     public void changeReview(final Review review) {
         this.review = review;
         review.getImages().add(this);
+    }
+
+    public void changeCafe(final Cafe cafe) {
+        this.cafe = cafe;
+        cafe.getImages().add(this);
     }
 }

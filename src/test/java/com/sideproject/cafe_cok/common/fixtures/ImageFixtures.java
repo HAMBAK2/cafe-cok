@@ -26,10 +26,6 @@ public class ImageFixtures {
         return new Image(ImageType.REVIEW, 원본_이미지_URL, 썸네일_이미지_URL, 카페(), 리뷰());
     }
 
-    public static ImageDto 리뷰_이미지_DTO() {
-        return ImageDto.from(리뷰_이미지());
-    }
-
     public static Image 카페_메인_이미지(final ImageType imageType, final Cafe cafe) {
         Image image = new Image(imageType, 원본_이미지_URL, 썸네일_이미지_URL, 중간_이미지_URL, cafe);
         setImageId(image, 이미지_ID);

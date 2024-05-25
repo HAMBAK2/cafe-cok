@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
@@ -54,10 +55,18 @@ public class PlanFixtures {
     }
 
     public static CreatePlanResponse 계획_응답() {
-        CreatePlanResponse response = new CreatePlanResponse(
-                MatchType.MISMATCH, 계획_요청(), 카테고리_키워드_DTO(), 카페_DTO_리스트());
-        response.setPlanId(계획_ID);
-        return response;
+
+        return CreatePlanResponse.builder()
+                .planId(계획_ID)
+                .matchType(MatchType.MISMATCH)
+                .locationName(위치_이름)
+                .minutes(도보_시간)
+                .visitDateTime(계획_일자_시간)
+                .categoryKeywords(카테고리_키워드_DTO())
+                .recommendCafes(카페_DTO_리스트())
+                .similarCafes(Collections.emptyList())
+                .matchCafes(Collections.emptyList())
+                .build();
     }
 
     public static SavePlanRequest 계획_저장_요청() {

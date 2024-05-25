@@ -2,16 +2,14 @@ package com.sideproject.cafe_cok.plan.dto.response;
 
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
+import lombok.Builder;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
-
 @Getter
+@Builder
 public class CreatePlanResponse {
 
     private Long planId;
@@ -20,46 +18,8 @@ public class CreatePlanResponse {
     private Integer minutes;
     private String visitDateTime;
     private CategoryKeywordsDto categoryKeywords;
-    private List<CafeDto> recommendCafes = new ArrayList<>();
-    private List<CafeDto> matchCafes = new ArrayList<>();
-    private List<CafeDto> similarCafes = new ArrayList<>();
+    private List<CafeDto> recommendCafes;
+    private List<CafeDto> matchCafes;
+    private List<CafeDto> similarCafes;
 
-    protected CreatePlanResponse() {
-    }
-
-    //Match 경우
-    public CreatePlanResponse(
-            final MatchType matchType, final CreatePlanRequest request, final CategoryKeywordsDto categoryKeywords,
-            final List<CafeDto> matchCafes, final List<CafeDto> similarCafes) {
-
-        this.matchType = matchType;
-        this.locationName = request.getLocationName();
-        this.minutes = request.getMinutes();
-        this.visitDateTime = convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime());
-        this.categoryKeywords = categoryKeywords;
-        this.matchCafes = matchCafes;
-        this.similarCafes = similarCafes;
-    }
-
-    //SIMILAR / MISMATCH 경우
-    public CreatePlanResponse(
-            final MatchType matchType, final CreatePlanRequest request,
-            final CategoryKeywordsDto categoryKeywords, final List<CafeDto> cafes) {
-
-        this.matchType = matchType;
-        this.locationName = request.getLocationName();
-        this.minutes = request.getMinutes();
-        this.visitDateTime = convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime());
-        this.categoryKeywords = categoryKeywords;
-
-        if(matchType.equals(MatchType.SIMILAR)) {
-            this.similarCafes = cafes;
-            return;
-        }
-        this.recommendCafes = cafes;
-    }
-
-    public void setPlanId(Long planId) {
-        this.planId = planId;
-    }
 }
