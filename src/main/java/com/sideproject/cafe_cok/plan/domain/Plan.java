@@ -5,19 +5,23 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.aop.target.LazyInitTargetSource;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
-@Table(name = "plans")
 @Entity
-@NoArgsConstructor
+@Table(name = "plans")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plan extends BaseEntity {
 
     @Id
@@ -54,6 +58,12 @@ public class Plan extends BaseEntity {
     @Column(name = "is_shared", nullable = false)
     private Boolean isShared;
 
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+    private List<PlanCafe> planCafes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
+    private List<PlanKeyword> planKeywords = new ArrayList<>();
+
     public Plan(final Member member, final String locationName,
                 final LocalDate visitDate, final LocalTime visitStartTime, final LocalTime visitEndTime,
                 final Integer minutes,final MatchType matchType, final Boolean isSaved, final Boolean isShared) {
@@ -68,14 +78,13 @@ public class Plan extends BaseEntity {
         this.isShared = isShared;
     }
 
-    public void setIsSaved(final Boolean isSaved) {
+    public void changeIsSaved(final Boolean isSaved) {
         this.isSaved = isSaved;
     }
-    public void setIsShared(final Boolean isShared) {
+
+    public void changeIsShared(final Boolean isShared) {
         this.isShared = isShared;
     }
 
-    public void setMember(final Member member) {
-        this.member = member;
-    }
+    public void changeMember(final Member member) { this.member = member; }
 }

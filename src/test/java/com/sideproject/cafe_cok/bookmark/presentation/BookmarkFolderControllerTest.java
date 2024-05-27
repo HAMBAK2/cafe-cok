@@ -307,7 +307,7 @@ class BookmarkFolderControllerTest extends ControllerTest {
         Long folderId = 일반_폴더_ID;
         BookmarksResponse response = 북마크_리스트_응답();
 
-        when(bookmarkService
+        when(bookmarkFolderService
                 .bookmarks(any(Long.class)))
                 .thenReturn(response);
 

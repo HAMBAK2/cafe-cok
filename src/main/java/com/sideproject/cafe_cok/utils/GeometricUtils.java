@@ -2,6 +2,8 @@ package com.sideproject.cafe_cok.utils;
 
 import java.math.BigDecimal;
 
+import static com.sideproject.cafe_cok.utils.Constants.*;
+
 
 public class GeometricUtils {
 
@@ -34,10 +36,19 @@ public class GeometricUtils {
         return distanceInMeter;
     }
 
+    public static double calculateRadiusInKm(final Integer minutes) {
+        double walkingSpeedMeterPerHour = WALK_SPEED * 1000.0;
+        double hours = (double) minutes / 60.0;
+        double distanceInMeter = walkingSpeedMeterPerHour * hours;
+        double distanceInKm = distanceInMeter / 1000.0;
+        return distanceInKm;
+    }
 
-    public static double calculateDistance(BigDecimal lat1, BigDecimal lon1, BigDecimal lat2, BigDecimal lon2) {
 
-        final double EARTH_RADIUS = 6371.0;
+    public static double calculateDistanceInKm(final BigDecimal lat1,
+                                               final BigDecimal lon1,
+                                               final BigDecimal lat2,
+                                               final BigDecimal lon2) {
 
         double radLat1 = Math.toRadians(lat1.doubleValue());
         double radLon1 = Math.toRadians(lon1.doubleValue());
@@ -49,8 +60,8 @@ public class GeometricUtils {
 
         double a = Math.pow(Math.sin(dLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(dLon / 2), 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = EARTH_RADIUS * c;
+        double distance = EARTH_RADIUS_KM * c;
 
-        return distance; // 단위: km
+        return distance;
     }
 }

@@ -37,7 +37,6 @@ public class CombinationService {
         Member findMember = memberRepository.getById(loginMember.getId());
         Combination combination = request.toEntity(findMember);
         Combination savedCombination = combinationRepository.save(combination);
-
         saveCombinationKeywordsByCombinationAndKeywordNames(savedCombination, request.getKeywords());
         return CombinationIdResponse.of(savedCombination.getId());
     }
@@ -48,7 +47,6 @@ public class CombinationService {
         Combination findCombination = combinationRepository.getById(combinationId);
         List<Keyword> findKeywords = keywordRepository.findByCombinationId(combinationId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-
         return CombinationDetailResponse.of(findCombination, categoryKeywords);
     }
 
@@ -56,18 +54,15 @@ public class CombinationService {
     public CombinationIdResponse edit(final CombinationRequest request, final Long  combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
-        findCombination.setName(request.getName());
-        findCombination.setIcon(request.getIcon());
+        findCombination.changeByRequest(request);
 
-        Combination savedCombination = combinationRepository.save(findCombination);
         List<String> findKeywords = keywordRepository.findNamesByCombinationId(combinationId);
         if(ListUtils.areListEqual(request.getKeywords(), findKeywords))
-            return CombinationIdResponse.of(savedCombination.getId());
+            return CombinationIdResponse.of(findCombination.getId());
 
         combinationKeywordRepository.deleteByCombinationId(combinationId);
-        saveCombinationKeywordsByCombinationAndKeywordNames(savedCombination, request.getKeywords());
-
-        return CombinationIdResponse.of(savedCombination.getId());
+        saveCombinationKeywordsByCombinationAndKeywordNames(findCombination, request.getKeywords());
+        return CombinationIdResponse.of(findCombination.getId());
     }
 
     private void saveCombinationKeywordsByCombinationAndKeywordNames(

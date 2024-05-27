@@ -3,7 +3,9 @@ package com.sideproject.cafe_cok.plan.dto.request;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePlanRequest {
 
     private String locationName;
@@ -36,7 +39,8 @@ public class CreatePlanRequest {
         this.keywords = keywords;
     }
 
-    public Plan toEntity(final Member member, MatchType matchType) {
+    public Plan toEntity(final Member member,
+                         final MatchType matchType) {
         return new Plan(
                 member, locationName, date, startTime, endTime,
                 minutes, matchType, false, false);

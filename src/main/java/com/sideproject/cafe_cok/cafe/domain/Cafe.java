@@ -2,13 +2,20 @@ package com.sideproject.cafe_cok.cafe.domain;
 
 import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +26,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Table(name = "cafes")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
@@ -59,7 +67,15 @@ public class Cafe extends BaseEntity {
     @Column(name = "mapy")
     private Integer mapy;
 
-    protected Cafe(){}
+    @OneToMany(mappedBy = "cafe")
+    private List<OperationHour> operationHours = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cafe")
+    private List<Image> images = new ArrayList<>();
+
 
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
                 final BigDecimal longitude, final BigDecimal latitude) {
@@ -97,7 +113,7 @@ public class Cafe extends BaseEntity {
         }
     }
 
-    public void addReviewCountAndCalculateStarRating(Integer starRating) {
+    public void addReviewCountAndCalculateStarRating(final Integer starRating) {
         BigDecimal totalScore = this.starRating.multiply(BigDecimal.valueOf(this.reviewCount));
         BigDecimal newReviewScore = BigDecimal.valueOf(starRating);
         totalScore = totalScore.add(newReviewScore);
@@ -105,6 +121,13 @@ public class Cafe extends BaseEntity {
         this.reviewCount++;
         BigDecimal newReviewCount = BigDecimal.valueOf(this.reviewCount);
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
+    }
+
+    public Image getImage(final ImageType imageType) {
+        return images.stream()
+                .filter(image -> image.getImageType() == imageType)
+                .findFirst()
+                .orElse(null);
     }
 
 }

@@ -3,13 +3,16 @@ package com.sideproject.cafe_cok.auth.domain;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Table(name = "oauth_tokens")
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuthToken extends BaseEntity {
 
     @Id
@@ -23,7 +26,6 @@ public class OAuthToken extends BaseEntity {
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
-    protected OAuthToken(){}
 
     public OAuthToken(final Member member, final String refreshToken) {
         this.member = member;

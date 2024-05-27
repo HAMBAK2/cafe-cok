@@ -45,8 +45,6 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     void deleteAllByIdIn(final List<Long> ids);
 
-    List<Image> findByReviewId(final Long reviewId);
-
     List<Image> findByReviewIdAndImageType(final Long reviewId, final ImageType imageType);
 
     void deleteByReviewId(final Long reviewId);

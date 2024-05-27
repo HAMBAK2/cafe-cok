@@ -5,10 +5,12 @@ import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -86,12 +88,13 @@ public class CafeFixtures {
 
     public static Cafe 카페() {
         Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도);
-        setCafeId(cafe, 카페_아이디);
+//        setCafeIdAndImages(cafe, 카페_아이디, Arrays.asList(카페_메인_이미지(ImageType.CAFE_MAIN, cafe)));
+        setCafeIdAndImages(cafe, 카페_아이디, new ArrayList<>());
         return cafe;
     }
 
     public static CafeDto 카페_DTO() {
-        CafeDto cafeDto = CafeDto.from(카페());
+        CafeDto cafeDto = CafeDto.of(카페(), 카페_대표_썸네일_이미지_URL);
         cafeDto.setBookmarks(Arrays.asList(북마크_카페_DTO()));
         return cafeDto;
     }
@@ -113,12 +116,15 @@ public class CafeFixtures {
         return BigDecimal.valueOf(shifted);
     }
 
-    public static Cafe setCafeId(Cafe cafe, final Long id) {
+    public static Cafe setCafeIdAndImages(Cafe cafe, final Long id, final List<Image> images) {
 
         try {
             Field idField = Cafe.class.getDeclaredField("id");
+            Field imagesField = Cafe.class.getDeclaredField("images");
             idField.setAccessible(true);
+            imagesField.setAccessible(true);
             idField.set(cafe, id);
+            imagesField.set(cafe, images);
             return cafe;
         } catch (final NoSuchFieldException | IllegalAccessException e) {
             throw new IllegalArgumentException(e.getMessage());

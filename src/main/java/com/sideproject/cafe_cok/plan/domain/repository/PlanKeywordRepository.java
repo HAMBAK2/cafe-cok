@@ -10,13 +10,15 @@ import java.util.Optional;
 
 public interface PlanKeywordRepository extends JpaRepository<PlanKeyword, Long> {
 
-    List<PlanKeyword> findByPlanId(Long planId);
+    List<PlanKeyword> findByPlanId(final Long planId);
 
-    void deleteByPlanId(Long planId);
+    void deleteByPlanId(final Long planId);
 
-    Optional<PlanKeyword> findFirstByPlanIdAndKeywordCategory(Long planId, Category category);
+    Optional<PlanKeyword> findFirstByPlanIdAndKeywordCategory(final Long planId,
+                                                              final Category category);
 
-    default PlanKeyword getFirstByPlanIdAndKeywordCategory(Long planId, Category category) {
+    default PlanKeyword getFirstByPlanIdAndKeywordCategory(final Long planId,
+                                                           final Category category) {
         return findFirstByPlanIdAndKeywordCategory(planId, category)
                 .orElseThrow(NoSuchPlanKeywordException::new);
     }

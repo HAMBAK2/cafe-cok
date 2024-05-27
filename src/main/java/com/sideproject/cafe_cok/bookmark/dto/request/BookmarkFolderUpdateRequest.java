@@ -1,17 +1,17 @@
 package com.sideproject.cafe_cok.bookmark.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarkFolderUpdateRequest {
 
     private Long folderId;
     private String name;
     private String color;
     private Boolean isVisible;
-
-    private BookmarkFolderUpdateRequest() {
-    }
 
     public BookmarkFolderUpdateRequest(
             final Long folderId, final String name,

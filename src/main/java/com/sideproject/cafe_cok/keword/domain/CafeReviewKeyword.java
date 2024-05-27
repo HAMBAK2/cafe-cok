@@ -5,13 +5,16 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "cafe_review_keywords")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CafeReviewKeyword extends BaseEntity {
 
     @Id
@@ -31,12 +34,21 @@ public class CafeReviewKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    protected CafeReviewKeyword() {
+    public CafeReviewKeyword(final Cafe cafe,
+                             final Review review,
+                             final Keyword keyword) {
+        if(cafe != null) changeCafe(cafe);
+        if(review != null) changeReview(review);
+        this.keyword = keyword;
     }
 
-    public CafeReviewKeyword(final Cafe cafe, final Review review, final Keyword keyword) {
-        this.cafe = cafe;
+    public void changeReview(final Review review) {
         this.review = review;
-        this.keyword = keyword;
+        review.getCafeReviewKeywords().add(this);
+    }
+
+    public void changeCafe(final Cafe cafe) {
+        this.cafe = cafe;
+        cafe.getCafeReviewKeywords().add(this);
     }
 }

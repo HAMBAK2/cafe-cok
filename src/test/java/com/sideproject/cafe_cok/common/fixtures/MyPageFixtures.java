@@ -8,8 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.common.fixtures.CombinationFixtures.조합_DTO;
-import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.리뷰_이미지_DTO;
-import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.리뷰_이미지_URL_DTO;
+import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.PlanFixtures.계획;
@@ -28,7 +27,7 @@ public class MyPageFixtures {
     }
 
     public static MyPageReviewDto 마이페이지_리뷰_DTO() {
-        return MyPageReviewDto.of(리뷰(), Arrays.asList(리뷰_이미지_URL_DTO()), 키워드_DTO_리스트());
+        return MyPageReviewDto.of(리뷰(), Arrays.asList(리뷰_이미지()), Arrays.asList(키워드()));
     }
 
     public static List<MyPageReviewDto> 마이페이지_리뷰_DTO_리스트() {

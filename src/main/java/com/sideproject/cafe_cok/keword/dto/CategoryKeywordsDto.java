@@ -2,14 +2,17 @@ package com.sideproject.cafe_cok.keword.dto;
 
 import com.sideproject.cafe_cok.cafe.exception.NoSuchCategoryException;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryKeywordsDto {
 
     private List<String> purpose = new ArrayList<>();
@@ -17,9 +20,6 @@ public class CategoryKeywordsDto {
     private List<String> theme = new ArrayList<>();
     private List<String> facility = new ArrayList<>();
     private List<String> atmosphere = new ArrayList<>();
-
-    protected CategoryKeywordsDto() {
-    }
 
     public CategoryKeywordsDto(final List<Keyword> keywords) {
 
@@ -34,6 +34,4 @@ public class CategoryKeywordsDto {
             }
         }
     }
-
-
 }

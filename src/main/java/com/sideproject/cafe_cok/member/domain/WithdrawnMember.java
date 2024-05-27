@@ -4,13 +4,16 @@ package com.sideproject.cafe_cok.member.domain;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "withdrawn_members")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WithdrawnMember extends BaseEntity {
 
     @Id
@@ -33,10 +36,6 @@ public class WithdrawnMember extends BaseEntity {
 
     @Column(name = "withdrawn_date", nullable = false)
     private LocalDateTime withdrawnDate;
-
-    protected WithdrawnMember() {
-
-    }
 
     public WithdrawnMember(final Member member) {
         this.email = member.getEmail();

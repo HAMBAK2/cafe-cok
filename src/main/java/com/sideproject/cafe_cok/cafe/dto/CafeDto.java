@@ -3,12 +3,14 @@ package com.sideproject.cafe_cok.cafe.dto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -35,7 +37,14 @@ public class CafeDto {
                 .latitude(cafe.getLatitude())
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(cafe.getReviewCount())
+                .imageUrl(cafe.getImage(ImageType.CAFE_MAIN).getThumbnail())
                 .build();
+    }
+
+    public static List<CafeDto> fromList(final List<Cafe> cafes) {
+        return cafes.stream()
+                .map(cafe -> CafeDto.from(cafe))
+                .collect(Collectors.toList());
     }
 
     public static CafeDto of(final Cafe cafe, final String imageUrl) {

@@ -7,7 +7,9 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -15,6 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "images")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
 
     @Id
@@ -47,14 +50,11 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
-    protected Image() {
-    }
-
     public Image(final ImageType imageType, final String origin, final String thumbnail, final Cafe cafe) {
         this.imageType = imageType;
         this.origin = origin;
         this.thumbnail = thumbnail;
-        this.cafe = cafe;
+        if(cafe != null) changeCafe(cafe);
     }
 
     public Image(final ImageType imageType, final String origin, final String thumbnail,
@@ -66,12 +66,22 @@ public class Image extends BaseEntity {
     public Image(final ImageType imageType, final String origin, final String thumbnail,
                  final Cafe cafe, final Review review) {
         this(imageType, origin, thumbnail, cafe);
-        this.review = review;
+        if(review != null) changeReview(review);
     }
 
     public Image(final ImageType imageType, final String origin, final String thumbnail,
                  final Cafe cafe, final Menu menu) {
         this(imageType, origin, thumbnail, cafe);
         this.menu = menu;
+    }
+
+    public void changeReview(final Review review) {
+        this.review = review;
+        review.getImages().add(this);
+    }
+
+    public void changeCafe(final Cafe cafe) {
+        this.cafe = cafe;
+        cafe.getImages().add(this);
     }
 }

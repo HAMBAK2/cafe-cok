@@ -2,17 +2,25 @@ package com.sideproject.cafe_cok.review.domain;
 
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.member.domain.Member;
+import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "reviews")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
 
     @Id
@@ -38,28 +46,31 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
-    protected Review() {
-    }
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 
-    public Review(final String content, final String specialNote, final Integer starRating,
-                  final Cafe cafe, final Member member) {
-        this.content = content;
-        this.specialNote = specialNote;
-        this.starRating = starRating;
+    public Review(final ReviewCreateRequest request,
+                  final Cafe cafe,
+                  final Member member) {
+        this.content = request.getContent();
+        this.specialNote = request.getSpecialNote();
+        this.starRating = request.getStarRating();
         this.cafe = cafe;
         this.member = member;
     }
 
-    public void changeContent(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public void changeSpecialNote(String specialNote) {
+    public void setSpecialNote(String specialNote) {
         this.specialNote = specialNote;
     }
 
-    public void changeStarRating(Integer starRating) {
+    public void setStarRating(Integer starRating) {
         this.starRating = starRating;
     }
 
