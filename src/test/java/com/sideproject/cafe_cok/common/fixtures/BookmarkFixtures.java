@@ -4,7 +4,6 @@ import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarksResponse;
 
@@ -47,7 +46,7 @@ public class BookmarkFixtures {
     }
 
     public static BookmarkIdResponse 북마크_ID_응답() {
-        return BookmarkIdResponse.of(북마크_ID);
+        return new BookmarkIdResponse(북마크_ID);
     }
 
     public static Bookmark setId(Bookmark bookmark, final Long id) {

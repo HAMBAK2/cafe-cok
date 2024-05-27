@@ -1,11 +1,8 @@
 package com.sideproject.cafe_cok.bookmark.dto.response;
 
-import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

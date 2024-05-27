@@ -2,7 +2,6 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderDto;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderDeleteResponse;
@@ -10,10 +9,8 @@ import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFoldersResponse;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.List;
 
 import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_개수;
-import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_개수_1개;
 import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.사용자;
 
 
@@ -56,14 +53,6 @@ public class BookmarkFolderFixtures {
 
     public static BookmarkFolderDeleteResponse 북마크_폴더_삭제_응답(Long folderId) {
         return new BookmarkFolderDeleteResponse(folderId);
-    }
-
-    public static BookmarkFolderDto 일반_폴더_DTO() {
-        return BookmarkFolderDto.from(일반_폴더());
-    }
-
-    public static List<BookmarkFolderDto> 일반_폴더_DTO_리스트() {
-        return Arrays.asList(일반_폴더_DTO());
     }
 
     public static BookmarkFolder 일반_폴더() {

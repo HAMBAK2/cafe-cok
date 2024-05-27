@@ -27,12 +27,12 @@ public class BookmarkService {
         Cafe findCafe = cafeRepository.getById(request.getCafeId());
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
         Bookmark savedBookmark = bookmarkRepository.save(new Bookmark(findCafe, findFolder));
-        return BookmarkIdResponse.of(savedBookmark.getId());
+        return new BookmarkIdResponse(savedBookmark.getId());
     }
 
     @Transactional
     public BookmarkIdResponse delete(final Long bookmarkId) {
         bookmarkRepository.deleteById(bookmarkId);
-        return BookmarkIdResponse.of(bookmarkId);
+        return new BookmarkIdResponse(bookmarkId);
     }
 }
