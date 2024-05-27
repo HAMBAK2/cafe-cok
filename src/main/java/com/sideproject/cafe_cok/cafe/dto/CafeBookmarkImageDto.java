@@ -1,7 +1,6 @@
 package com.sideproject.cafe_cok.cafe.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -609,9 +609,9 @@ Content-Length: 204
     "folderId" : 1,
     "name" : "폴더_이름",
     "color" : "폴더_색상",
-    "bookmarkCount" : 0,
-    "visible" : true,
-    "defaultFolder" : false
+    "bookmarkCount" : 1,
+    "defaultFolder" : false,
+    "visible" : true
   } ]
 }</code></pre>
 </div>
@@ -1021,7 +1021,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 1107
+Content-Length: 977
 
 {
   "planId" : 1,
@@ -1038,33 +1038,27 @@ Content-Length: 1107
   },
   "matchCafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 70.19570760029724,
-    "longitude" : 82.51717391141499,
-    "starRating" : 0.0,
-    "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "latitude" : 63.91650442630976,
+    "longitude" : 12.713780708884872,
+    "starRating" : 2.689931354083801,
+    "reviewCount" : 2,
+    "imageUrl" : "이미지 URL",
+    "bookmarkId" : 1
   } ],
   "similarCafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 70.19570760029724,
-    "longitude" : 82.51717391141499,
-    "starRating" : 0.0,
-    "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "latitude" : 63.91650442630976,
+    "longitude" : 12.713780708884872,
+    "starRating" : 2.689931354083801,
+    "reviewCount" : 2,
+    "imageUrl" : "이미지 URL",
+    "bookmarkId" : 1
   } ]
 }</code></pre>
 </div>
@@ -1152,19 +1146,9 @@ Content-Length: 1107
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarkId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].folderId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 폴더  ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].name</code></p></td>
@@ -1217,19 +1201,9 @@ Content-Length: 1107
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarkId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks[].folderId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 폴더  ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].name</code></p></td>

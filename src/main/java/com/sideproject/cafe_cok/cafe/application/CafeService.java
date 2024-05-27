@@ -1,8 +1,8 @@
 package com.sideproject.cafe_cok.cafe.application;
 
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
-import com.sideproject.cafe_cok.bookmark.domain.BookmarkRepository;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
+import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
@@ -134,7 +134,7 @@ public class CafeService {
         if(memberId != null) {
             List<Bookmark> findBookmarks = bookmarkRepository.findByCafeIdAndMemberId(cafeId, memberId);
             return CafeDetailTopResponse
-                    .of(findCafe, BookmarkCafeDto.fromList(findBookmarks), findImage, reviewCount, findKeywordDtos);
+                    .of(findCafe, BookmarkIdDto.fromList(findBookmarks), findImage, reviewCount, findKeywordDtos);
         }
         return CafeDetailTopResponse.of(findCafe, findImage, reviewCount, findKeywordDtos);
     }
@@ -389,7 +389,7 @@ public class CafeService {
 
         for (CafeDto cafe : cafes) {
             List<Bookmark> bookmarks = bookmarkRepository.findByCafeIdAndMemberId(cafe.getId(), memberId);
-            cafe.setBookmarks(BookmarkCafeDto.fromList(bookmarks));
+            cafe.setBookmarks(BookmarkIdDto.fromList(bookmarks));
         }
         return cafes;
     }

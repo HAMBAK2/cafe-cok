@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_ID;
-import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_카페_DTO;
+import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_ID_DTO;
 import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.MenuFixtures.메뉴_이미지_DTO_리스트;
@@ -98,7 +98,7 @@ public class CafeFixtures {
 
     public static CafeDto 카페_DTO() {
         CafeDto cafeDto = CafeDto.of(카페(), 카페_대표_썸네일_이미지_URL);
-        cafeDto.setBookmarks(Arrays.asList(북마크_카페_DTO()));
+        cafeDto.setBookmarks(Arrays.asList(북마크_ID_DTO()));
         return cafeDto;
     }
 
@@ -112,7 +112,7 @@ public class CafeFixtures {
     }
 
     public static CafeDetailTopResponse 카페_상세_상단_응답() {
-        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_카페_DTO()),
+        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_ID_DTO()),
                 카페_메인_이미지(ImageType.CAFE, 카페()), 리뷰_개수, 키워드_DTO_리스트());
     }
 

@@ -1,7 +1,6 @@
 package com.sideproject.cafe_cok.cafe.dto;
 
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import lombok.Builder;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 public class CafeDto {
 
     private Long id;
-    private List<BookmarkCafeDto> bookmarks;
+    private List<BookmarkIdDto> bookmarks;
     private String name;
     private String phoneNumber;
     private String roadAddress;
@@ -63,7 +62,7 @@ public class CafeDto {
 
     public static CafeDto of(final Cafe cafe,
                              final String imageUrl,
-                             final List<BookmarkCafeDto> bookmarks) {
+                             final List<BookmarkIdDto> bookmarks) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -78,7 +77,7 @@ public class CafeDto {
                 .build();
     }
 
-    public void setBookmarks(final List<BookmarkCafeDto> bookmarks) {
+    public void setBookmarks(final List<BookmarkIdDto> bookmarks) {
         this.bookmarks = bookmarks;
     }
 

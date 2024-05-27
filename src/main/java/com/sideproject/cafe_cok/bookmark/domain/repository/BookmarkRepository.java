@@ -1,5 +1,6 @@
-package com.sideproject.cafe_cok.bookmark.domain;
+package com.sideproject.cafe_cok.bookmark.domain.repository;
 
+import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

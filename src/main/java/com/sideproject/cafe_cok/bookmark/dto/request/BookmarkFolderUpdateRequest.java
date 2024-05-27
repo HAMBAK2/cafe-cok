@@ -13,9 +13,10 @@ public class BookmarkFolderUpdateRequest {
     private String color;
     private Boolean isVisible;
 
-    public BookmarkFolderUpdateRequest(
-            final Long folderId, final String name,
-            final String color, final Boolean isVisible) {
+    public BookmarkFolderUpdateRequest(final Long folderId,
+                                       final String name,
+                                       final String color,
+                                       final Boolean isVisible) {
         this.folderId = folderId;
         this.name = name;
         this.color = color;

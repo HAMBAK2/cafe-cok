@@ -13,9 +13,9 @@ public class BookmarkFolderDto {
     private Long folderId;
     private String name;
     private String color;
-    private Integer bookmarkCount;
     private boolean isVisible;
     private boolean isDefaultFolder;
+    private Integer bookmarkCount;
 
     public static BookmarkFolderDto from(final BookmarkFolder bookmarkFolder) {
         return BookmarkFolderDto.builder()

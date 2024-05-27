@@ -3,7 +3,7 @@ package com.sideproject.cafe_cok.cafe.dto.response;
 
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CafeDetailTopResponse {
 
     private Long cafeId;
-    private List<BookmarkCafeDto> bookmarks;
+    private List<BookmarkIdDto> bookmarks;
     private String cafeName;
     private String roadAddress;
     private BigDecimal latitude;
@@ -43,7 +43,7 @@ public class CafeDetailTopResponse {
                 .build();
     }
 
-    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkCafeDto> bookmarks, final Image image,
+    public static CafeDetailTopResponse of(final Cafe cafe, final List<BookmarkIdDto> bookmarks, final Image image,
                                            final Long reviewCount, final List<KeywordDto> keywords) {
         return CafeDetailTopResponse.builder()
                 .cafeId(cafe.getId())
