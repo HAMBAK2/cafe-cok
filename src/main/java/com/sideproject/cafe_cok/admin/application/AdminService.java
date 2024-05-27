@@ -101,11 +101,12 @@ public class AdminService {
         if(menus.isEmpty()) return menuDtos;
 
         for (AdminMenuSaveRequest menu : menus) {
-            if (menu.getImage() != null) {
+            Menu savedMenu = menuRepository.save(menu.toEntity(cafe));
+
+            if (menu.getImage() != null && !menu.getImage().isEmpty()) {
 
                 File convertedFile = convertBase64StringToFile(menu.getImage());
                 String originMenuUrl = s3Uploader.upload(convertedFile, MENU_ORIGIN_IMAGE_DIR);
-                Menu savedMenu = menuRepository.save(menu.toEntity(cafe));
                 Image menuImage = new Image(ImageType.MENU
                         , originMenuUrl
                         , changePath(originMenuUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR)
@@ -113,7 +114,9 @@ public class AdminService {
                         , savedMenu);
                 Image saveMenuImage = imageRepository.save(menuImage);
                 menuDtos.add(CafeSaveMenuDto.of(savedMenu, saveMenuImage));
+                continue;
             }
+            menuDtos.add(CafeSaveMenuDto.from(savedMenu));
         }
         return menuDtos;
     }
