@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
-import com.sideproject.cafe_cok.plan.dto.PlanDto;
+import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.cafe_cok.plan.dto.request.SavePlanRequest;
 import com.sideproject.cafe_cok.plan.dto.request.SharePlanRequest;
@@ -39,14 +39,8 @@ public class PlanFixtures {
         return plan;
     }
 
-    public static Plan 저장_공유_X_계획() {
-        Plan plan = new Plan(사용자(), 위치_이름, 날짜, 시작_시간, 끝_시간, 도보_시간, MatchType.SIMILAR, false, false);
-        setId(plan, 계획_ID);
-        return plan;
-    }
-
-    public static PlanDto 계획_DTO() {
-        return PlanDto.of(계획(), 키워드_DTO());
+    public static PlanKeywordDto 마이페이지_계획_DTO() {
+        return new PlanKeywordDto(계획_ID, 위치_이름, 날짜, 시작_시간, 키워드_이름);
     }
 
     public static CreatePlanRequest 계획_요청() {

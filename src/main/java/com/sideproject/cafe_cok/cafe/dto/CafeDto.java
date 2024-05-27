@@ -1,10 +1,9 @@
 package com.sideproject.cafe_cok.cafe.dto;
 
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.image.dto.ImageDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -47,7 +46,8 @@ public class CafeDto {
                 .collect(Collectors.toList());
     }
 
-    public static CafeDto of(final Cafe cafe, final String imageUrl) {
+    public static CafeDto of(final Cafe cafe,
+                             final String imageUrl) {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
@@ -58,6 +58,23 @@ public class CafeDto {
                 .starRating(cafe.getStarRating().doubleValue())
                 .reviewCount(cafe.getReviewCount())
                 .imageUrl(imageUrl)
+                .build();
+    }
+
+    public static CafeDto of(final Cafe cafe,
+                             final String imageUrl,
+                             final List<BookmarkCafeDto> bookmarks) {
+        return CafeDto.builder()
+                .id(cafe.getId())
+                .name(cafe.getName())
+                .phoneNumber(cafe.getPhoneNumber())
+                .roadAddress(cafe.getRoadAddress())
+                .longitude(cafe.getLongitude())
+                .latitude(cafe.getLatitude())
+                .starRating(cafe.getStarRating().doubleValue())
+                .reviewCount(cafe.getReviewCount())
+                .imageUrl(imageUrl)
+                .bookmarks(bookmarks)
                 .build();
     }
 

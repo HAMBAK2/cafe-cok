@@ -1,20 +1,19 @@
 package com.sideproject.cafe_cok.member.dto.response;
 
-import com.sideproject.cafe_cok.member.dto.MyPagePlanDto;
-import lombok.Builder;
+import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MyPagePlansAllResponse {
 
-    private List<MyPagePlanDto> plans;
+    private List<PlanKeywordDto> plans;
 
-    public static  MyPagePlansAllResponse from(final List<MyPagePlanDto> plans) {
-        return MyPagePlansAllResponse.builder()
-                .plans(plans)
-                .build();
+    public MyPagePlansAllResponse(final List<PlanKeywordDto> plans) {
+        this.plans = plans;
     }
 }

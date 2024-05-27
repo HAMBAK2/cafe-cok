@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.member.application.MyPageService;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
+import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.review.application.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,7 +57,7 @@ public class MyPageController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
-        MyPagePlansResponse response = myPageService.savedPlans(loginMember, sortBy, page, size);
+        MyPagePlansResponse response = myPageService.getPlans(loginMember, sortBy, PlanStatus.SAVED, page, size);
         return ResponseEntity.ok(response);
     }
 
@@ -68,7 +69,7 @@ public class MyPageController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
 
-        MyPagePlansResponse response = myPageService.sharedPlans(loginMember, sortBy, page, size);
+        MyPagePlansResponse response = myPageService.getPlans(loginMember, sortBy, PlanStatus.SHARED, page, size);
         return ResponseEntity.ok(response);
     }
 
@@ -103,7 +104,7 @@ public class MyPageController {
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
-        MyPagePlansAllResponse response = myPageService.savedPlansAll(loginMember, sortBy);
+        MyPagePlansAllResponse response = myPageService.getPlansAll(loginMember, sortBy, PlanStatus.SAVED);
         return ResponseEntity.ok(response);
     }
 
@@ -113,7 +114,7 @@ public class MyPageController {
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy) {
 
-        MyPagePlansAllResponse response = myPageService.sharedPlansAll(loginMember, sortBy);
+        MyPagePlansAllResponse response = myPageService.getPlansAll(loginMember, sortBy, PlanStatus.SHARED);
         return ResponseEntity.ok(response);
     }
 }

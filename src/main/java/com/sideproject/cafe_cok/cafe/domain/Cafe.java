@@ -76,7 +76,6 @@ public class Cafe extends BaseEntity {
     @OneToMany(mappedBy = "cafe")
     private List<Image> images = new ArrayList<>();
 
-
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
                 final BigDecimal longitude, final BigDecimal latitude) {
         validatePhoneNumber(phoneNumber);

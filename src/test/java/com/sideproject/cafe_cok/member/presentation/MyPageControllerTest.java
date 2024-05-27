@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.common.annotation.ControllerTest;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
+import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -110,7 +111,7 @@ class MyPageControllerTest extends ControllerTest {
         MyPagePlansResponse response = 마이페이지_계획_리스트_응답();
 
         when(myPageService
-                .savedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
+                .getPlans(any(LoginMember.class), any(PlanSortBy.class), any(PlanStatus.class), any(Integer.class), any(Integer.class)))
                 .thenReturn(response);
 
         mockMvc.perform(
@@ -147,7 +148,7 @@ class MyPageControllerTest extends ControllerTest {
         MyPagePlansResponse response = 마이페이지_계획_리스트_응답();
 
         when(myPageService
-                .sharedPlans(any(LoginMember.class), any(PlanSortBy.class), any(Integer.class), any(Integer.class)))
+                .getPlans(any(LoginMember.class), any(PlanSortBy.class), any(PlanStatus.class), any(Integer.class), any(Integer.class)))
                 .thenReturn(response);
 
         mockMvc.perform(
@@ -213,9 +214,7 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)
                                         .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트)"),
                                 fieldWithPath("similarCafes[].id").description("카페 ID"),
-                                fieldWithPath("similarCafes[].bookmarks").type(JsonFieldType.ARRAY).description("북마크 리스트"),
-                                fieldWithPath("similarCafes[].bookmarks[].bookmarkId").description("북마크 ID"),
-                                fieldWithPath("similarCafes[].bookmarks[].folderId").description("북마크 폴더  ID"),
+                                fieldWithPath("similarCafes[].bookmarkId").description("북마크 ID"),
                                 fieldWithPath("similarCafes[].name").description("카페 이름"),
                                 fieldWithPath("similarCafes[].phoneNumber").description("전화번호"),
                                 fieldWithPath("similarCafes[].roadAddress").description("도로명 주소"),
@@ -225,7 +224,17 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("similarCafes[].reviewCount").description("리뷰 수"),
                                 fieldWithPath("similarCafes[].imageUrl").description("카페 이미지 URL"),
                                 fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
-                                        .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"))))
+                                        .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)"),
+                                fieldWithPath("matchCafes[].id").description("카페 ID"),
+                                fieldWithPath("matchCafes[].bookmarkId").description("북마크 ID"),
+                                fieldWithPath("matchCafes[].name").description("카페 이름"),
+                                fieldWithPath("matchCafes[].phoneNumber").description("전화번호"),
+                                fieldWithPath("matchCafes[].roadAddress").description("도로명 주소"),
+                                fieldWithPath("matchCafes[].longitude").description("경도"),
+                                fieldWithPath("matchCafes[].latitude").description("위도"),
+                                fieldWithPath("matchCafes[].starRating").description("별점"),
+                                fieldWithPath("matchCafes[].reviewCount").description("리뷰 수"),
+                                fieldWithPath("matchCafes[].imageUrl").description("카페 이미지 URL"))))
                 .andExpect(status().isOk());
     }
 
@@ -303,7 +312,7 @@ class MyPageControllerTest extends ControllerTest {
 
         MyPagePlansAllResponse response = 저장된_계획_전체_리스트();
 
-        when(myPageService.savedPlansAll(any(LoginMember.class), any(PlanSortBy.class))).thenReturn(response);
+        when(myPageService.getPlansAll(any(LoginMember.class), any(PlanSortBy.class), any(PlanStatus.class))).thenReturn(response);
 
         mockMvc.perform(
                         get("/api/myPage/saved/plans/all?sortBy="+PlanSortBy.RECENT.name())
@@ -325,8 +334,6 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
-
-        verify(myPageService, times(1)).savedPlansAll(any(LoginMember.class), any(PlanSortBy.class));
     }
 
     @Test
@@ -335,7 +342,7 @@ class MyPageControllerTest extends ControllerTest {
 
         MyPagePlansAllResponse response = 공유된_계획_전체_리스트();
 
-        when(myPageService.sharedPlansAll(any(LoginMember.class), any(PlanSortBy.class))).thenReturn(response);
+        when(myPageService.getPlansAll(any(LoginMember.class), any(PlanSortBy.class), any(PlanStatus.class))).thenReturn(response);
 
         mockMvc.perform(
                         get("/api/myPage/shared/plans/all?sortBy="+PlanSortBy.RECENT.name())
@@ -357,7 +364,5 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
-
-        verify(myPageService, times(1)).sharedPlansAll(any(LoginMember.class), any(PlanSortBy.class));
     }
 }

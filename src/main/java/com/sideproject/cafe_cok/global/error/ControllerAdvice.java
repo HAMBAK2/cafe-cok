@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.global.error.dto.ErrorReportRequest;
 import com.sideproject.cafe_cok.global.error.dto.ErrorResponse;
 import com.sideproject.cafe_cok.global.error.exception.MissingRequiredValueException;
 import com.sideproject.cafe_cok.keword.exception.NoSuchKeywordException;
+import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.review.exception.NoSuchReviewException;
 import com.sideproject.cafe_cok.utils.tmap.exception.TmapException;
 import com.sideproject.cafe_cok.auth.exception.*;
@@ -49,6 +50,7 @@ public class ControllerAdvice {
             InvalidMemberException.class,
             InvalidCafeException.class,
             MissingRequiredValueException.class,
+            NoSuchPlanSortException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

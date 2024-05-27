@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
+import com.sideproject.cafe_cok.cafe.dto.CafeBookmarkImageDto;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_ID;
 import static com.sideproject.cafe_cok.common.fixtures.BookmarkFixtures.북마크_카페_DTO;
 import static com.sideproject.cafe_cok.common.fixtures.ImageFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
@@ -29,6 +31,7 @@ public class CafeFixtures {
     public static final String 카페_도로명_주소 = "OO시 OO구 OO동";
     public static final BigDecimal 카페_위도 = getRandomBigDecimal(0, 90);
     public static final BigDecimal 카페_경도 = getRandomBigDecimal(0, 180);
+    public static final BigDecimal 카페_별점 = getRandomBigDecimal(0, 5);
 
     public static final OpenStatus 영업_여부 = OpenStatus.OPEN;
 
@@ -97,6 +100,11 @@ public class CafeFixtures {
         CafeDto cafeDto = CafeDto.of(카페(), 카페_대표_썸네일_이미지_URL);
         cafeDto.setBookmarks(Arrays.asList(북마크_카페_DTO()));
         return cafeDto;
+    }
+
+    public static CafeBookmarkImageDto 카페_북마크_이미지_DTO() {
+        return new CafeBookmarkImageDto(
+                카페_아이디, 카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도, 카페_별점, 리뷰_개수, 이미지_URL, 북마크_ID);
     }
 
     public static List<CafeDto> 카페_DTO_리스트() {

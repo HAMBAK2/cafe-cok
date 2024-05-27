@@ -64,9 +64,16 @@ public class Plan extends BaseEntity {
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanKeyword> planKeywords = new ArrayList<>();
 
-    public Plan(final Member member, final String locationName,
-                final LocalDate visitDate, final LocalTime visitStartTime, final LocalTime visitEndTime,
-                final Integer minutes,final MatchType matchType, final Boolean isSaved, final Boolean isShared) {
+    public Plan(final Member member,
+                final String locationName,
+                final LocalDate visitDate,
+                final LocalTime visitStartTime,
+                final LocalTime visitEndTime,
+                final Integer minutes,
+                final MatchType matchType,
+                final Boolean isSaved,
+                final Boolean isShared) {
+
         this.member = member;
         this.locationName = locationName;
         this.visitDate = visitDate;
