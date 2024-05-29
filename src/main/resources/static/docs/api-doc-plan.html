@@ -475,15 +475,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/plan HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Content-Length: 242
+Content-Length: 244
 Host: localhost:8080
 
 {
   "locationName" : "위치 이름",
-  "latitude" : 73.82795313086042,
-  "longitude" : 16.3442599427811,
+  "latitude" : 42.682480917446306,
+  "longitude" : 19.75244107858464,
   "minutes" : 10,
-  "date" : "2024-05-28",
+  "date" : "2024-05-29",
   "startTime" : "09:00:00",
   "endTime" : "11:00:00",
   "keywords" : [ "키워드 이름" ]
@@ -559,7 +559,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 754
+Content-Length: 751
 
 {
   "planId" : 1,
@@ -576,18 +576,18 @@ Content-Length: 754
   },
   "recommendCafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 73.2043139217825,
-    "longitude" : 37.416702373473036,
-    "starRating" : 0.0,
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
     "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
   } ],
   "matchCafes" : [ ],
   "similarCafes" : [ ]

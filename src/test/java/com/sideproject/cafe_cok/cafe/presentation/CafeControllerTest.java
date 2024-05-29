@@ -290,9 +290,9 @@ class CafeControllerTest extends ControllerTest {
     @DisplayName("특정 지점에서 카페를 재검색 하는 기능 - 성공")
     public void test_cafe_find_again_success() throws Exception {
 
-        CafeFindAgainResponse response = 카페_지점_재검색_응답();
+        CafeSearchResponse response = 카페_검색_결과_응답();
 
-        when(cafeService.findCafeByAgain(any(BigDecimal.class), any(BigDecimal.class), any(Long.class))).thenReturn(response);
+        when(cafeService.getCafeListByAgain(any(BigDecimal.class), any(BigDecimal.class), any(Long.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/cafe/find/again")
                         .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
@@ -328,7 +328,7 @@ class CafeControllerTest extends ControllerTest {
     @DisplayName("검색창에서 카페를 검색 하는 기능 - 성공")
     public void test_cafe_find_bar_success() throws Exception {
 
-        CafeFindBarResponse response = 카페_검색창_검색_응답();
+        CafeSearchResponse response = 카페_검색_결과_응답();
 
         when(cafeService.findCafeByBar(any(BigDecimal.class), any(BigDecimal.class), any(Long.class))).thenReturn(response);
 
@@ -368,7 +368,7 @@ class CafeControllerTest extends ControllerTest {
     public void test_cafe_find_keyword_success() throws Exception {
 
         CafeFindCategoryRequest request = 카페_카테고리_검색_요청();
-        CafeFindCategoryResponse response = 카페_카테고리_검색_응답();
+        CafeSearchResponse response = 카페_검색_결과_응답();
 
         when(cafeService.findCafeByKeyword(any(CafeFindCategoryRequest.class), any(Long.class))).thenReturn(response);
 

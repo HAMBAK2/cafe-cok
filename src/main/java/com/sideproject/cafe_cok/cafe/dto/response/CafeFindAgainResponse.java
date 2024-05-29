@@ -1,20 +1,19 @@
 package com.sideproject.cafe_cok.cafe.dto.response;
 
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CafeFindAgainResponse {
 
-    private final List<CafeDto> cafes;
+    private List<CafeDto> cafes;
 
-    public static CafeFindAgainResponse from(List<CafeDto> cafes) {
-        return CafeFindAgainResponse.builder()
-                .cafes(cafes)
-                .build();
+    public CafeFindAgainResponse(final List<CafeDto> cafes) {
+        this.cafes = cafes;
     }
 }

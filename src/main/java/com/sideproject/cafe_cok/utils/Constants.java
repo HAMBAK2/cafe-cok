@@ -44,7 +44,7 @@ public class Constants {
 
     public static final Integer CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT = 5;
 
-    public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
+
 
     public static final Long NO_MEMBER_ID = 1L;
 

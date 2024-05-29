@@ -1,13 +1,12 @@
-package com.sideproject.cafe_cok.bookmark.domain;
+package com.sideproject.cafe_cok.bookmark.domain.repository;
 
+import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-
-    List<Bookmark> findByBookmarkFolderId(final Long bookmarkFolderId);
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom{
 
     Long deleteByBookmarkFolderId(final Long folderId);
 

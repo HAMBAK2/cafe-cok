@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -135,6 +136,14 @@ public class FormatConverter {
             hours.add(innerList);
         }
         return hours;
+    }
+
+    public static String convertOperationHourToString(final OperationHour operationHour) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String date = getKoreanDayOfWeek(operationHour.getDate());
+        String openingTime = operationHour.getOpeningTime().format(formatter);
+        String closingTime = operationHour.getClosingTime().format(formatter);
+        return date + " " + openingTime + "~" + closingTime;
     }
 
 }

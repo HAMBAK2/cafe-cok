@@ -609,7 +609,7 @@ Content-Length: 204
     "folderId" : 1,
     "name" : "폴더_이름",
     "color" : "폴더_색상",
-    "bookmarkCount" : 0,
+    "bookmarkCount" : 1,
     "defaultFolder" : false,
     "visible" : true
   } ]
@@ -758,9 +758,9 @@ Content-Length: 172
   "page" : 1,
   "plans" : [ {
     "id" : 1,
-    "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 28일 9시 0분"
+    "visitDateTime" : "5월 29일 9시 0분",
+    "keywordName" : "키워드 이름"
   } ]
 }</code></pre>
 </div>
@@ -897,9 +897,9 @@ Content-Length: 172
   "page" : 1,
   "plans" : [ {
     "id" : 1,
-    "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 28일 9시 0분"
+    "visitDateTime" : "5월 29일 9시 0분",
+    "keywordName" : "키워드 이름"
   } ]
 }</code></pre>
 </div>
@@ -1021,14 +1021,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 724
+Content-Length: 1101
 
 {
   "planId" : 1,
   "matchType" : "SIMILAR",
   "locationName" : "위치 이름",
   "minutes" : 10,
-  "visitDateTime" : "5월 28일 9시 0분",
+  "visitDateTime" : "5월 29일 9시 0분",
   "categoryKeywords" : {
     "purpose" : [ "키워드 이름" ],
     "menu" : [ ],
@@ -1036,21 +1036,35 @@ Content-Length: 724
     "facility" : [ ],
     "atmosphere" : [ ]
   },
-  "matchCafes" : [ ],
-  "similarCafes" : [ {
+  "matchCafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 73.2043139217825,
-    "longitude" : 37.416702373473036,
-    "starRating" : 0.0,
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
     "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
+  } ],
+  "similarCafes" : [ {
+    "id" : 1,
+    "name" : "카페 이름",
+    "phoneNumber" : "010-1234-5678",
+    "roadAddress" : "OO시 OO구 OO동",
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
+    "reviewCount" : 0,
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
   } ]
 }</code></pre>
 </div>
@@ -1138,21 +1152,6 @@ Content-Length: 724
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 리스트</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].bookmarkId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].folderId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 폴더  ID</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 이름</p></td>
@@ -1193,9 +1192,84 @@ Content-Length: 724
 <td class="tableblock halign-left valign-top"><p class="tableblock">카페 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>similarCafes[].bookmarks[].folderId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 폴더 ID</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 유사한 카페와 동일)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].phoneNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전화번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].roadAddress</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">도로명 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].longitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].latitude</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">위도</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].starRating</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">별점</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].reviewCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카페 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks[].bookmarkId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>matchCafes[].bookmarks[].folderId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 폴더 ID</p></td>
 </tr>
 </tbody>
 </table>
@@ -1294,11 +1368,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 200
+Content-Length: 82
 
 {
   "nickname" : "cafe_cok_nickname",
-  "picture" : "https://kr.object.ncloudstorage.com/cafe_cok-bucket/member/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-04-20%20%EC%98%A4%ED%9B%84%2011.46.07.png"
+  "picture" : "프로필 이미지 경로"
 }</code></pre>
 </div>
 </div>
@@ -1387,7 +1461,7 @@ Content-Length: 464
     "starRating" : 5,
     "content" : "리뷰 내용",
     "specialNote" : "리뷰 특이사항",
-    "createdDate" : "2024-05-28",
+    "createdDate" : "2024-05-29",
     "imageUrls" : [ {
       "originUrl" : "원본_이미지_URL",
       "thumbnailUrl" : "썸네일_이미지_URL"
@@ -1665,9 +1739,9 @@ Content-Length: 158
 {
   "plans" : [ {
     "id" : 1,
-    "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 28일 9시 0분"
+    "visitDateTime" : "5월 29일 9시 0분",
+    "keywordName" : "키워드 이름"
   } ]
 }</code></pre>
 </div>
@@ -1790,9 +1864,9 @@ Content-Length: 158
 {
   "plans" : [ {
     "id" : 1,
-    "keywordName" : "키워드 이름",
     "location" : "위치 이름",
-    "visitDateTime" : "5월 28일 9시 0분"
+    "visitDateTime" : "5월 29일 9시 0분",
+    "keywordName" : "키워드 이름"
   } ]
 }</code></pre>
 </div>

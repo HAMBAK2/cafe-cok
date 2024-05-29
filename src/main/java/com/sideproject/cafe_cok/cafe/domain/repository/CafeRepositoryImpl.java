@@ -1,24 +1,28 @@
 package com.sideproject.cafe_cok.cafe.domain.repository;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.SubQueryExpression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import com.sideproject.cafe_cok.cafe.dto.CafeDto;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
 import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.cafe.domain.QCafe.*;
 import static com.sideproject.cafe_cok.cafe.domain.QOperationHour.*;
+import static com.sideproject.cafe_cok.image.domain.QImage.*;
 import static com.sideproject.cafe_cok.keword.domain.QCafeReviewKeyword.*;
 import static com.sideproject.cafe_cok.keword.domain.QKeyword.*;
+import static com.sideproject.cafe_cok.plan.domain.QPlanCafe.*;
 import static com.sideproject.cafe_cok.utils.Constants.*;
 import static com.sideproject.cafe_cok.utils.GeometricUtils.*;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -47,6 +51,45 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
                         keywordNamesIn(request.getKeywords()),
                         isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()))
                 .fetch();
+    }
+
+    @Override
+    public List<Cafe> findWithinRadiusCafeList(final BigDecimal latitude,
+                                               final BigDecimal longitude) {
+        return queryFactory
+                .select(cafe)
+                .from(cafe)
+                .leftJoin(image).on(cafe.id.eq(image.cafe.id))
+                .where(isWithinRadius(latitude, longitude, MAX_RADIUS_TIME))
+                .fetch();
+
+    }
+
+    @Override
+    public List<Cafe> findByPlanIdAndMatchType(final Long planId,
+                                               final PlanCafeMatchType matchType) {
+
+        return queryFactory
+                .select(cafe)
+                .from(planCafe)
+                .leftJoin(planCafe.cafe, cafe)
+                .leftJoin(image).on(cafe.id.eq(image.cafe.id))
+                .where(planIdEq(planId),
+                        matchTypeEq(matchType))
+                .fetch();
+    }
+
+
+    private BooleanExpression imageTypeEq(final ImageType imageType) {
+        return isEmpty(imageType) ? null : image.imageType.eq(imageType);
+    }
+
+    private BooleanExpression matchTypeEq(final PlanCafeMatchType matchType) {
+        return isEmpty(matchType) ? null : planCafe.matchType.eq(matchType);
+    }
+
+    private BooleanExpression planIdEq(final Long id) {
+        return isEmpty(id) ? null : planCafe.plan.id.eq(id);
     }
 
     private BooleanExpression dateEq(final LocalDate date) {

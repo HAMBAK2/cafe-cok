@@ -13,33 +13,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
-
-    @Query("SELECT i " +
-            "FROM Image i " +
-            "WHERE i.cafe.id = :cafeId " +
-            "AND i.imageType = :imageType")
-    List<Image> findImagesByCafeIdAndImageType(final Long cafeId, final ImageType imageType);
-
-    @Query("SELECT i " +
-            "FROM Image i " +
-            "WHERE i.cafe.id = :cafeId " +
-                "AND i.imageType = :imageType")
-    List<Image> findImagesByCafeIdAndImageType(final Long cafeId, final ImageType imageType, final Pageable pageable);
-
-
+public interface ImageRepository extends JpaRepository<Image, Long>, ImageRepositoryCustom {
 
     Optional<Image> findImageByCafeAndImageType(final Cafe cafe, final ImageType imageType);
 
     default Image getImageByCafeAndImageType(final Cafe cafe, final ImageType imageType) {
         return findImageByCafeAndImageType(cafe, imageType)
-                .orElseThrow(NoSuchImageException::new);
-    }
-
-    Optional<Image> findImageByCafeIdAndImageType(final Long cafeId, final ImageType imageType);
-
-    default Image getImageByCafeIdAndImageType(final Long cafeId, final ImageType imageType) {
-        return findImageByCafeIdAndImageType(cafeId, imageType)
                 .orElseThrow(NoSuchImageException::new);
     }
 
@@ -53,46 +32,4 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
             "FROM Image i " +
             "WHERE i.id IN (:ids)")
     List<Image> findImageByIdIn(final List<Long> ids);
-
-    @Query("SELECT i FROM Image i " +
-            "JOIN i.review r " +
-            "JOIN r.cafe c " +
-            "WHERE c.id = :cafeId " +
-            "AND  i.id < :id " +
-            "ORDER BY i.id DESC")
-    Page<Image> findPageByCafeIdOrderByIdDesc(final Long cafeId, final Pageable pageable, final Long id);
-
-    @Query("SELECT i FROM Image i " +
-            "JOIN i.review r " +
-            "JOIN r.cafe c " +
-            "WHERE c.id = :cafeId " +
-                "AND i.imageType = :imageType " +
-            "ORDER BY i.id DESC")
-    Page<Image> findPageByCafeIdAndImageTypeOrderByIdDesc
-            (final Long cafeId, final ImageType imageType, final Pageable pageable);
-
-    @Query("SELECT i FROM Image i " +
-            "JOIN i.review r " +
-            "JOIN r.cafe c " +
-            "WHERE c.id = :cafeId " +
-                "AND i.imageType = :imageType " +
-            "ORDER BY i.id DESC")
-    List<Image> findImagesByCafeIdAndImageTypeOrderByIdDescOrderByIdDesc
-            (final Long cafeId, final ImageType imageType, final Pageable pageable);
-
-    @Query("SELECT i FROM Image i " +
-            "JOIN i.review r " +
-            "JOIN r.cafe c " +
-            "WHERE c.id = :cafeId " +
-            "AND i.imageType = :imageType " +
-            "ORDER BY i.id DESC")
-    Page<Image> findPageUrlsByCafeIdAndImageTypeOrderByIdDescOrderByIdDesc
-            (final Long cafeId, final ImageType imageType, final Pageable pageable);
-
-    Optional<Image> findImageByMenuAndImageType(final Menu menu, final ImageType imageType);
-
-    default Image getImageByMenuAndImageType(final Menu menu, final ImageType imageType) {
-        return findImageByMenuAndImageType(menu, imageType)
-                .orElseThrow(NoSuchImageException::new);
-    }
 }

@@ -1,33 +1,25 @@
 package com.sideproject.cafe_cok.keword.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class KeywordDto {
 
-    private final Long id;
-    private final Category category;
-    private final String name;
+    private Long id;
+    private Category category;
+    private String name;
 
-    public static KeywordDto from(final Keyword keyword) {
-
-        return KeywordDto.builder()
-                .id(keyword.getId())
-                .category(keyword.getCategory())
-                .name(keyword.getName())
-                .build();
-    }
-
-    public static List<KeywordDto> fromList(final List<Keyword> keywords) {
-        return keywords.stream()
-                .map(KeywordDto::from)
-                .collect(Collectors.toList());
+    @QueryProjection
+    public KeywordDto (final Keyword keyword) {
+        this.id = keyword.getId();
+        this.category = keyword.getCategory();
+        this.name = keyword.getName();
     }
 }

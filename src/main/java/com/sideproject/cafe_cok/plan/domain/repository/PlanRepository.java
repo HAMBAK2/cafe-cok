@@ -10,19 +10,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface PlanRepository extends JpaRepository<Plan, Long> {
+public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositoryCustom {
 
     List<Plan> findByMemberId(final Long memberId);
-
-    Page<Plan> findPageByMemberId(Long memberId, Pageable pageable);
-
-    @Query("SELECT p "+
-            "FROM Plan p " +
-            "WHERE p.member.id = :memberId " +
-                "AND (p.visitDate >= :visitDate " +
-                    "AND (p.visitStartTime >= :visitStartTime OR p.visitStartTime IS NULL))")
-    Page<Plan> findPageByMemberIdAndUpcomingPlanCondition(
-            Long memberId, LocalDate visitDate, LocalTime visitStartTime, Pageable pageable);
 
     default List<Plan> findMatchingPlan(final Plan plan) {
         ExampleMatcher matcher = ExampleMatcher.matching()

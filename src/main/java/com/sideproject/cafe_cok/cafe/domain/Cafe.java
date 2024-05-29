@@ -76,7 +76,6 @@ public class Cafe extends BaseEntity {
     @OneToMany(mappedBy = "cafe")
     private List<Image> images = new ArrayList<>();
 
-
     public Cafe(final String name, final String phoneNumber, final String roadAddress,
                 final BigDecimal longitude, final BigDecimal latitude) {
         validatePhoneNumber(phoneNumber);
@@ -123,11 +122,5 @@ public class Cafe extends BaseEntity {
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
-    public Image getImage(final ImageType imageType) {
-        return images.stream()
-                .filter(image -> image.getImageType() == imageType)
-                .findFirst()
-                .orElse(null);
-    }
 
 }

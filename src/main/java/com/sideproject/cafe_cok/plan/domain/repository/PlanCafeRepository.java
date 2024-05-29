@@ -9,7 +9,5 @@ import java.util.List;
 public interface PlanCafeRepository extends JpaRepository<PlanCafe, Long> {
 
 
-    void deleteByPlanId(Long planId);
-
-    List<PlanCafe> findByPlanIdAndMatchType(Long planId, PlanCafeMatchType matchType);
+    void deleteByPlanId(final Long planId);
 }

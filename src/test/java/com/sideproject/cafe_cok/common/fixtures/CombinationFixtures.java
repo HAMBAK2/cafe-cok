@@ -26,7 +26,7 @@ public class CombinationFixtures {
     }
 
     public static CombinationDto 조합_DTO() {
-        return CombinationDto.from(조합());
+        return new CombinationDto(조합_ID, 조합_이름, 조합_아이콘);
     }
 
     public static CombinationRequest 조합_생성_수정_요청() {

@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@Builder
 public class CafeDetailReviewDto {
 
     private Long id;
@@ -23,19 +22,17 @@ public class CafeDetailReviewDto {
     private List<ImageUrlDto> imageUrls;
     private List<String> recommendMenus;
 
-    public static CafeDetailReviewDto of(
-            final Review review, final List<ImageUrlDto> imageUrls, final List<String> recommendMenus) {
-
-        return CafeDetailReviewDto.builder()
-                .id(review.getId())
-                .starRating(review.getStarRating())
-                .content(review.getContent())
-                .specialNote(review.getSpecialNote())
-                .createDate(review.getCreatedDate().toLocalDate())
-                .picture(review.getMember().getPicture())
-                .nickname(review.getMember().getNickname())
-                .imageUrls(imageUrls)
-                .recommendMenus(recommendMenus)
-                .build();
+    public CafeDetailReviewDto(final Review review,
+                               final List<ImageUrlDto> imageUrls,
+                               final List<String> recommendMenus) {
+        this.id = review.getId();
+        this.content = review.getContent();
+        this.starRating = review.getStarRating();
+        this.specialNote = review.getSpecialNote();
+        this.createDate = review.getCreatedDate().toLocalDate();
+        this.picture = review.getMember().getPicture();
+        this.nickname = review.getMember().getNickname();
+        this.imageUrls = imageUrls;
+        this.recommendMenus = recommendMenus;
     }
 }

@@ -16,8 +16,8 @@ public class CafeDetailReviewPageResponse {
     private Long cursor;
     private Boolean hasNextPage;
 
-    public static CafeDetailReviewPageResponse of(
-            final List<KeywordCountDto> userChoiceKeywords, final List<CafeDetailReviewDto> reviews){
+    public static CafeDetailReviewPageResponse of(final List<KeywordCountDto> userChoiceKeywords,
+                                                  final List<CafeDetailReviewDto> reviews){
 
         return CafeDetailReviewPageResponse.builder()
                 .userChoiceKeywords(userChoiceKeywords)
@@ -25,9 +25,10 @@ public class CafeDetailReviewPageResponse {
                 .build();
     }
 
-    public static CafeDetailReviewPageResponse of(
-            final List<KeywordCountDto> userChoiceKeywords, final List<CafeDetailReviewDto> reviews,
-            final Long cursor, final Boolean hasNextPage) {
+    public static CafeDetailReviewPageResponse of(final List<KeywordCountDto> userChoiceKeywords,
+                                                  final List<CafeDetailReviewDto> reviews,
+                                                  final Long cursor,
+                                                  final Boolean hasNextPage) {
 
         return CafeDetailReviewPageResponse.builder()
                 .userChoiceKeywords(userChoiceKeywords)

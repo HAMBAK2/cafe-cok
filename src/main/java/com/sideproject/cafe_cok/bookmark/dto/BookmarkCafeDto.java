@@ -1,32 +1,31 @@
 package com.sideproject.cafe_cok.bookmark.dto;
 
-
-import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
-import lombok.Builder;
+import com.querydsl.core.annotations.QueryProjection;
+import com.sideproject.cafe_cok.cafe.domain.Cafe;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarkCafeDto {
 
     private Long bookmarkId;
-    private Long folderId;
+    private Long cafeId;
+    private String cafeName;
+    private String roadAddress;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 
-
-    public static BookmarkCafeDto from(final Bookmark bookmark) {
-        return BookmarkCafeDto.builder()
-                .bookmarkId(bookmark.getId())
-                .folderId(bookmark.getBookmarkFolder().getId())
-                .build();
+    public BookmarkCafeDto(final Long bookmarkId,
+                           final Cafe cafe) {
+        this.bookmarkId = bookmarkId;
+        this.cafeId = cafe.getId();
+        this.cafeName = cafe.getName();
+        this.roadAddress = cafe.getRoadAddress();
+        this.latitude = cafe.getLatitude();
+        this.longitude = cafe.getLongitude();
     }
-
-    public static List<BookmarkCafeDto> fromList(final List<Bookmark> bookmarks) {
-        return bookmarks.stream()
-                .map(bookmark -> BookmarkCafeDto.from(bookmark))
-                .collect(Collectors.toList());
-    }
-
 }

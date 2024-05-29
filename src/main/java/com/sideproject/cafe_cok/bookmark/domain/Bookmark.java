@@ -28,7 +28,8 @@ public class Bookmark {
     @JoinColumn(name = "bookmark_folders_id")
     private BookmarkFolder bookmarkFolder;
 
-    public Bookmark(final Cafe cafe, final BookmarkFolder bookmarkFolder) {
+    public Bookmark(final Cafe cafe,
+                    final BookmarkFolder bookmarkFolder) {
         this.cafe = cafe;
         if(bookmarkFolder != null) {
             changeBookmarkFolder(bookmarkFolder);

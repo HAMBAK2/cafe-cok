@@ -43,23 +43,6 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long>, Keyword
             "WHERE crk.review.id = :reviewId")
     List<String> findNamesByReviewId(final Long reviewId);
 
-
-    @Query("SELECT NEW com.sideproject.cafe_cok.keword.dto.KeywordCountDto(k.name, COUNT(crk)) " +
-            "FROM Keyword k " +
-                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
-            "WHERE crk.cafe.id = :cafeId " +
-            "GROUP BY k.id " +
-            "ORDER BY COUNT(crk) DESC")
-    List<KeywordCountDto> findKeywordCountsByCafeId(@Param("cafeId") Long cafeId);
-
-    @Query("SELECT k " +
-            "FROM Keyword k " +
-                "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
-            "WHERE crk.cafe.id = :cafeId " +
-            "GROUP BY k.id " +
-            "ORDER BY COUNT(crk) DESC")
-    List<Keyword> findKeywordsByCafeIdOrderByCountDesc(@Param("cafeId") Long cafeId, Pageable pageable);
-
     @Query("SELECT k FROM Keyword k " +
                 "JOIN CafeReviewKeyword crk ON k.id = crk.keyword.id " +
             "WHERE crk.cafe.id = :cafeId")

@@ -46,11 +46,11 @@ public class ImageFixtures {
     }
 
     public static ImageUrlDto 리뷰_이미지_URL_DTO() {
-        return ImageUrlDto.from(리뷰_이미지());
+        return new ImageUrlDto(원본_이미지_URL, 썸네일_이미지_URL);
     }
 
     public static ImageUrlDto 카페_이미지_URL_DTO(){
-        return ImageUrlDto.from(카페_이미지(ImageType.CAFE, 카페()));
+        return new ImageUrlDto(원본_이미지_URL, 썸네일_이미지_URL);
     }
 
     public static Image setImageId(Image image, final Long id) {

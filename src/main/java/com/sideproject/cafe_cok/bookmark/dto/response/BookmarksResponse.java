@@ -1,37 +1,28 @@
 package com.sideproject.cafe_cok.bookmark.dto.response;
 
-import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkDto;
-import lombok.Builder;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarksResponse {
 
     private Long folderId;
     private String folderName;
     private String folderColor;
-    private List<BookmarkDto> bookmarks = new ArrayList<>();
+    private List<BookmarkCafeDto> bookmarks = new ArrayList<>();
 
-    public static BookmarksResponse from(final BookmarkFolder bookmarkFolder) {
-        return BookmarksResponse.builder()
-                .folderId(bookmarkFolder.getId())
-                .folderName(bookmarkFolder.getName())
-                .folderColor(bookmarkFolder.getColor())
-                .build();
-    }
-
-    public static BookmarksResponse from(final BookmarkFolder bookmarkFolder, final List<Bookmark> bookmarks) {
-        return BookmarksResponse.builder()
-                .folderId(bookmarkFolder.getId())
-                .folderName(bookmarkFolder.getName())
-                .folderColor(bookmarkFolder.getColor())
-                .bookmarks(BookmarkDto.fromList(bookmarks))
-                .build();
+    public BookmarksResponse (final BookmarkFolder bookmarkFolder,
+                              final List<BookmarkCafeDto> bookmarks) {
+        this.folderId = bookmarkFolder.getId();
+        this.folderName = bookmarkFolder.getName();
+        this.folderColor = bookmarkFolder.getColor();
+        this.bookmarks = bookmarks;
     }
 }

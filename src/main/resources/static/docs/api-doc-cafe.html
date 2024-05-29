@@ -513,26 +513,26 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 452
+Content-Length: 449
 
 {
   "cafeId" : 1,
-  "bookmarks" : [ {
-    "bookmarkId" : 1,
-    "folderId" : 1
-  } ],
   "cafeName" : "카페 이름",
   "roadAddress" : "OO시 OO구 OO동",
-  "latitude" : 73.2043139217825,
-  "longitude" : 37.416702373473036,
-  "starRating" : 0.0,
-  "reviewCount" : 2,
+  "latitude" : 76.13089065834586,
+  "longitude" : 71.2899852920867,
+  "starRating" : 0,
+  "reviewCount" : 0,
   "originUrl" : "원본_이미지_URL",
   "thumbnailUrl" : "중간_이미지_URL",
   "keywords" : [ {
     "id" : 1,
     "category" : "PURPOSE",
     "name" : "키워드 이름"
+  } ],
+  "bookmarks" : [ {
+    "bookmarkId" : 1,
+    "folderId" : 1
   } ]
 }</code></pre>
 </div>
@@ -687,10 +687,10 @@ Content-Length: 1066
 
 {
   "roadAddress" : "OO시 OO구 OO동",
+  "phoneNumber" : "010-1234-5678",
   "openStatus" : "영업중",
   "businessHours" : [ "영업 시간" ],
   "closedDay" : [ "휴무일" ],
-  "phoneNumber" : "010-1234-5678",
   "menus" : [ {
     "name" : "메뉴이름",
     "price" : "10,000원",
@@ -713,7 +713,7 @@ Content-Length: 1066
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-28",
+    "createDate" : "2024-05-29",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ {
@@ -1209,7 +1209,7 @@ Content-Length: 118
 <h4 id="_http_request_6">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=37.416702373473036&amp;longitude=73.2043139217825 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/again?latitude=71.2899852920867&amp;longitude=76.13089065834586 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
@@ -1251,23 +1251,23 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 402
+Content-Length: 399
 
 {
   "cafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 73.2043139217825,
-    "longitude" : 37.416702373473036,
-    "starRating" : 0.0,
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
     "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
   } ]
 }</code></pre>
 </div>
@@ -1364,7 +1364,7 @@ Content-Length: 402
 <h4 id="_http_request_7">Http request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=37.416702373473036&amp;longitude=73.2043139217825 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/cafe/find/bar?latitude=71.2899852920867&amp;longitude=76.13089065834586 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
@@ -1406,23 +1406,23 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 402
+Content-Length: 399
 
 {
   "cafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 73.2043139217825,
-    "longitude" : 37.416702373473036,
-    "starRating" : 0.0,
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
     "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
   } ]
 }</code></pre>
 </div>
@@ -1524,12 +1524,12 @@ Content-Length: 402
 Content-Type: application/json
 Authorization: Bearer fake-token
 Accept: application/json
-Content-Length: 110
+Content-Length: 109
 Host: localhost:8080
 
 {
-  "latitude" : 37.416702373473036,
-  "longitude" : 73.2043139217825,
+  "latitude" : 71.2899852920867,
+  "longitude" : 76.13089065834586,
   "keywords" : [ "키워드 이름" ]
 }</code></pre>
 </div>
@@ -1578,23 +1578,23 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 402
+Content-Length: 399
 
 {
   "cafes" : [ {
     "id" : 1,
-    "bookmarks" : [ {
-      "bookmarkId" : 1,
-      "folderId" : 1
-    } ],
     "name" : "카페 이름",
     "phoneNumber" : "010-1234-5678",
     "roadAddress" : "OO시 OO구 OO동",
-    "latitude" : 73.2043139217825,
-    "longitude" : 37.416702373473036,
-    "starRating" : 0.0,
+    "latitude" : 76.13089065834586,
+    "longitude" : 71.2899852920867,
+    "starRating" : 0,
     "reviewCount" : 0,
-    "imageUrl" : "//카페 대표 이미지 썸네일 URL"
+    "imageUrl" : "//카페 대표 이미지 썸네일 URL",
+    "bookmarks" : [ {
+      "bookmarkId" : 1,
+      "folderId" : 1
+    } ]
   } ]
 }</code></pre>
 </div>
@@ -1762,7 +1762,7 @@ Content-Length: 548
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-28",
+    "createDate" : "2024-05-29",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ {
@@ -1938,7 +1938,7 @@ Content-Length: 508
     "content" : "리뷰 내용",
     "starRating" : 5,
     "specialNote" : "리뷰 특이사항",
-    "createDate" : "2024-05-28",
+    "createDate" : "2024-05-29",
     "picture" : "프로필 이미지 경로",
     "nickname" : "cafe_cok_nickname",
     "imageUrls" : [ {

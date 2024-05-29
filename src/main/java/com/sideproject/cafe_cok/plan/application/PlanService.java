@@ -141,7 +141,7 @@ public class PlanService {
                 .minutes(request.getMinutes())
                 .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
                 .categoryKeywords(categoryKeywords)
-                .recommendCafes(CafeDto.fromList(recommendCafes))
+//                .recommendCafes(CafeDto.fromList(recommendCafes))
                 .build();
     }
 
@@ -159,7 +159,7 @@ public class PlanService {
                 .minutes(request.getMinutes())
                 .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
                 .categoryKeywords(categoryKeywords)
-                .similarCafes(CafeDto.fromList(similarCafes))
+//                .similarCafes(CafeDto.fromList(similarCafes))
                 .build();
     }
 
@@ -180,8 +180,8 @@ public class PlanService {
                 .minutes(request.getMinutes())
                 .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
                 .categoryKeywords(categoryKeywords)
-                .similarCafes(CafeDto.fromList(similarCafes))
-                .matchCafes(CafeDto.fromList(allMatchCafes))
+//                .similarCafes(CafeDto.fromList(similarCafes))
+//                .matchCafes(CafeDto.fromList(allMatchCafes))
                 .build();
     }
 

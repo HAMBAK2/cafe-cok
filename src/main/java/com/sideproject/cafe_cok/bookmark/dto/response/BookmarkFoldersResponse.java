@@ -1,27 +1,22 @@
 package com.sideproject.cafe_cok.bookmark.dto.response;
 
 
-import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderDto;
-import lombok.Builder;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookmarkFoldersResponse {
 
-    private Long folderCount;
-    private List<BookmarkFolderDto> folders;
+    private Integer folderCount;
+    private List<BookmarkFolderCountDto> folders;
 
-    public static BookmarkFoldersResponse of(final Long folderCount, final List<BookmarkFolder> bookmarkFolders) {
-
-        return BookmarkFoldersResponse.builder()
-                .folderCount(folderCount)
-                .folders(BookmarkFolderDto.fromList(bookmarkFolders))
-                .build();
+    public BookmarkFoldersResponse(final List<BookmarkFolderCountDto> folders) {
+        this.folderCount = folders.size();
+        this.folders = folders;
     }
-
 }
