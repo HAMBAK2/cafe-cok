@@ -1,10 +1,15 @@
 package com.sideproject.cafe_cok.member.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
+import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
+import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
-import com.sideproject.cafe_cok.cafe.dto.CafeBookmarkImageDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.combination.domain.repository.CombinationRepository;
 import com.sideproject.cafe_cok.combination.dto.CombinationDto;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
@@ -30,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import static org.springframework.data.domain.Sort.*;
@@ -46,6 +52,8 @@ public class MyPageService {
     private final MemberRepository memberRepository;
     private final ReviewRepository reviewRepository;
     private final KeywordRepository keywordRepository;
+    private final ImageRepository imageRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final CombinationRepository combinationRepository;
 
     private final Integer FIRST_PAGE_NUMBER = 0;
@@ -121,15 +129,35 @@ public class MyPageService {
         return new MyPageCombinationResponse(findCombinations);
     }
 
-    public MyPagePlanDetailResponse planDetail(final Long planId) {
+    public MyPagePlanDetailResponse planDetail(final LoginMember loginMember,
+                                               final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
         List<Keyword> findKeywords = keywordRepository.findKeywordByPlanId(planId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
 
-        List<CafeBookmarkImageDto> findSimilarCafes = cafeRepository.findByPlanIdAndMatchType(planId, PlanCafeMatchType.SIMILAR);
-        List<CafeBookmarkImageDto> findMatchCafes = cafeRepository.findByPlanIdAndMatchType(planId, PlanCafeMatchType.MATCH);
+        List<CafeDto> findSimilarCafes =
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.SIMILAR);
+        List<CafeDto> findMatchCafes =
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.MATCH);
 
         return new MyPagePlanDetailResponse(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
+    }
+
+    public List<CafeDto> getCafeDtoListByPlanIdAndMatchTypeAndImageType(final Long memberId,
+                                                                        final Long planId,
+                                                                        final PlanCafeMatchType matchType) {
+        List<Cafe> findCafeList = cafeRepository.findByPlanIdAndMatchType(planId, matchType);
+        List<CafeDto> cafeDtoList = findCafeList.stream()
+                .map(cafe -> {
+                    String findImageUrl =
+                            imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN).getThumbnail();
+
+                    List<BookmarkIdDto> findBookmarkIdDtoList = null;
+                    if (memberId != null) findBookmarkIdDtoList =
+                            bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafe.getId(), memberId);
+                    return new CafeDto(cafe, findImageUrl, findBookmarkIdDtoList);
+                }).collect(Collectors.toList());
+        return cafeDtoList;
     }
 }

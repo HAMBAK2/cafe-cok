@@ -5,8 +5,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.cafe.dto.CafeBookmarkImageDto;
-import com.sideproject.cafe_cok.cafe.dto.QCafeBookmarkImageDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
@@ -15,9 +14,9 @@ import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.cafe_cok.bookmark.domain.QBookmark.*;
 import static com.sideproject.cafe_cok.cafe.domain.QCafe.*;
 import static com.sideproject.cafe_cok.cafe.domain.QOperationHour.*;
 import static com.sideproject.cafe_cok.image.domain.QImage.*;
@@ -55,29 +54,28 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<CafeBookmarkImageDto> findByPlanIdAndMatchType(final Long planId,
-                                                               final PlanCafeMatchType matchType) {
+    public List<Cafe> findWithinRadiusCafeList(final BigDecimal latitude,
+                                               final BigDecimal longitude) {
+        return queryFactory
+                .select(cafe)
+                .from(cafe)
+                .leftJoin(image).on(cafe.id.eq(image.cafe.id))
+                .where(isWithinRadius(latitude, longitude, MAX_RADIUS_TIME))
+                .fetch();
+
+    }
+
+    @Override
+    public List<Cafe> findByPlanIdAndMatchType(final Long planId,
+                                               final PlanCafeMatchType matchType) {
 
         return queryFactory
-                .select(new QCafeBookmarkImageDto(
-                        cafe.id,
-                        cafe.name,
-                        cafe.phoneNumber,
-                        cafe.roadAddress,
-                        cafe.latitude,
-                        cafe.longitude,
-                        cafe.starRating,
-                        cafe.reviewCount,
-                        image.thumbnail,
-                        bookmark.id
-                ))
+                .select(cafe)
                 .from(planCafe)
                 .leftJoin(planCafe.cafe, cafe)
                 .leftJoin(image).on(cafe.id.eq(image.cafe.id))
-                .leftJoin(bookmark).on(cafe.id.eq(bookmark.cafe.id))
                 .where(planIdEq(planId),
-                        matchTypeEq(matchType),
-                        imageTypeEq(ImageType.CAFE_MAIN))
+                        matchTypeEq(matchType))
                 .fetch();
     }
 

@@ -43,7 +43,7 @@ public class ReviewFixtures {
 
 
     public static CafeDetailReviewDto 카페_상세_리뷰_DTO() {
-        return CafeDetailReviewDto.of(리뷰(), Arrays.asList(리뷰_이미지_URL_DTO()), Arrays.asList(추천_메뉴));
+        return new CafeDetailReviewDto(리뷰(), Arrays.asList(리뷰_이미지_URL_DTO()), Arrays.asList(추천_메뉴));
     }
 
 

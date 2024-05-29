@@ -16,6 +16,7 @@ import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.사용자;
 
 public class BookmarkFolderFixtures {
 
+    public static final Long 북마크_폴더_ID = 1L;
     public static final Long 폴더_개수 = 1L;
     public static final Integer 폴더_리스트_사이즈 = 1;
     public static final Integer 폴더_리스트_인덱스 = 0;

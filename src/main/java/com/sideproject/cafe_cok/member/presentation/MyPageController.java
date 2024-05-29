@@ -78,7 +78,7 @@ public class MyPageController {
     public ResponseEntity<MyPagePlanDetailResponse> planDetail(
             @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long planId){
 
-        MyPagePlanDetailResponse response = myPageService.planDetail(planId);
+        MyPagePlanDetailResponse response = myPageService.planDetail(loginMember, planId);
         return ResponseEntity.ok(response);
     }
 

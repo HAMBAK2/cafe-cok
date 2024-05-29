@@ -23,7 +23,7 @@ public class MyPageFixtures {
 
 
     public static MyPageReviewDto 마이페이지_리뷰_DTO() {
-        return MyPageReviewDto.of(리뷰(), Arrays.asList(리뷰_이미지()), Arrays.asList(키워드()));
+        return new MyPageReviewDto(리뷰(), Arrays.asList(리뷰_이미지_URL_DTO()), Arrays.asList(키워드_DTO()));
     }
 
     public static List<MyPageReviewDto> 마이페이지_리뷰_DTO_리스트() {

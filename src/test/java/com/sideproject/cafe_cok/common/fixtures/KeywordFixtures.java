@@ -39,7 +39,7 @@ public class KeywordFixtures {
     }
 
     public static KeywordDto 키워드_DTO() {
-        return KeywordDto.from(키워드());
+        return new KeywordDto(키워드());
     }
 
     public static List<KeywordDto> 키워드_DTO_리스트() {

@@ -1,13 +1,10 @@
 package com.sideproject.cafe_cok.member.dto.response;
 
-import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.cafe.dto.CafeBookmarkImageDto;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,13 +23,13 @@ public class MyPagePlanDetailResponse {
     private Integer minutes;
     private String visitDateTime;
     private CategoryKeywordsDto categoryKeywords;
-    private List<CafeBookmarkImageDto> matchCafes = new ArrayList<>();
-    private List<CafeBookmarkImageDto> similarCafes = new ArrayList<>();
+    private List<CafeDto> matchCafes = new ArrayList<>();
+    private List<CafeDto> similarCafes = new ArrayList<>();
 
     public MyPagePlanDetailResponse(final Plan plan,
                                     final CategoryKeywordsDto categoryKeywords,
-                                    final List<CafeBookmarkImageDto> similarCafes,
-                                    final List<CafeBookmarkImageDto> matchCafes) {
+                                    final List<CafeDto> similarCafes,
+                                    final List<CafeDto> matchCafes) {
 
         this.planId = plan.getId();
         this.matchType = plan.getMatchType();

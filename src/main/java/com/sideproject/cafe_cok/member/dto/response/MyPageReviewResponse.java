@@ -8,10 +8,7 @@ import java.util.List;
 @Getter
 public class MyPageReviewResponse {
 
-    List<MyPageReviewDto> reviews;
-
-    protected MyPageReviewResponse() {
-    }
+    private List<MyPageReviewDto> reviews;
 
     public MyPageReviewResponse(final List<MyPageReviewDto> reviews) {
         this.reviews = reviews;

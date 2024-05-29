@@ -34,8 +34,8 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "해당하는 카페의 상세 정보 상단")
-    public ResponseEntity<CafeDetailTopResponse> detailTop(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId, HttpServletRequest servletRequest){
+    public ResponseEntity<CafeDetailTopResponse> detailTop(@PathVariable Long cafeId,
+                                                           HttpServletRequest servletRequest){
 
         Long memberId = getMemberId(servletRequest);
         CafeDetailTopResponse response = cafeService.detailTop(cafeId, memberId);
@@ -44,8 +44,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/basicInfo")
     @Operation(summary = "카페 상세 정보의 기본 정보 탭")
-    public ResponseEntity<CafeDetailBasicInfoResponse> detailBasicInfo(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailBasicInfoResponse> detailBasicInfo(@PathVariable Long cafeId) {
 
         CafeDetailBasicInfoResponse response = cafeService.detailBasicInfo(cafeId);
         return ResponseEntity.ok(response);
@@ -53,8 +52,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/menus")
     @Operation(summary = "카페 상세 정보의 메뉴 탭")
-    public ResponseEntity<CafeDetailMenuResponse> detailMenus(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailMenuResponse> detailMenus(@PathVariable Long cafeId) {
 
         CafeDetailMenuResponse response = cafeService.detailMenus(cafeId);
         return ResponseEntity.ok(response);
@@ -62,9 +60,8 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/images")
     @Operation(summary = "카페 상세 정보의 사진 탭(페이징)")
-    public ResponseEntity<CafeDetailImagePageResponse> detailImages(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
-            @RequestParam(required = false) Long cursor) {
+    public ResponseEntity<CafeDetailImagePageResponse> detailImages(@PathVariable Long cafeId,
+                                                                    @RequestParam(required = false) Long cursor) {
 
         CafeDetailImagePageResponse response = cafeService.detailImages(cafeId, cursor);
         return ResponseEntity.ok(response);
@@ -72,7 +69,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/images/all")
     @Operation(summary = "카페 상세 정보의 사진의 전체 리스트")
-    public ResponseEntity<CafeDetailImageAllResponse> detailImagesAll(@Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailImageAllResponse> detailImagesAll(@PathVariable Long cafeId) {
 
         CafeDetailImageAllResponse response = cafeService.detailImagesAll(cafeId);
         return ResponseEntity.ok(response);
@@ -80,9 +77,8 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/reviews")
     @Operation(summary = "카페 상세 정보의 리뷰 탭(페이징)")
-    public ResponseEntity<CafeDetailReviewPageResponse> detailReviews(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId,
-            @RequestParam(required = false) Long cursor) {
+    public ResponseEntity<CafeDetailReviewPageResponse> detailReviews(@PathVariable Long cafeId,
+                                                                      @RequestParam(required = false) Long cursor) {
 
         CafeDetailReviewPageResponse response = cafeService.detailReviews(cafeId, cursor);
         return ResponseEntity.ok(response);
@@ -90,8 +86,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/reviews/all")
     @Operation(summary = "카페 상세 정보의 리뷰 탭(전체 리스트)")
-    public ResponseEntity<CafeDetailReviewAllResponse> detailReviewsAll(
-            @Parameter(description = "카페의 ID") @PathVariable Long cafeId) {
+    public ResponseEntity<CafeDetailReviewAllResponse> detailReviewsAll(@PathVariable Long cafeId) {
 
         CafeDetailReviewAllResponse response = cafeService.detailReviewsAll(cafeId);
         return ResponseEntity.ok(response);
@@ -99,45 +94,33 @@ public class CafeController {
 
     @GetMapping("/find/again")
     @Operation(summary = "특정 지점에서 카페를 재검색 하는 기능")
-    public ResponseEntity<CafeFindAgainResponse> findAgain(
-            @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
-            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude,
-            HttpServletRequest servletRequest) {
+    public ResponseEntity<CafeSearchResponse> findAgain(@RequestParam BigDecimal latitude,
+                                                        @RequestParam BigDecimal longitude,
+                                                        HttpServletRequest servletRequest) {
 
         Long memberId = getMemberId(servletRequest);
-        CafeFindAgainResponse response = cafeService.findCafeByAgain(latitude, longitude, memberId);
+        CafeSearchResponse response = cafeService.getCafeListByAgain(latitude, longitude, memberId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/find/bar")
     @Operation(summary = "검색창에 검색을 했을 때 동작하는 기능")
-    @ApiResponse(
-            responseCode = "200",
-            description =
-                    "검색창 검색 성공\n\n" +
-                    "찾는 카페가 존재하는 경우: Cafe의 상세 정보 전달, exist = true\n\n" +
-                    "찾는 카페가 존재하지 않는 경우: 근처 카페의 리스트 cafes(근처에 카페가 있는 경우), 카테고리와 키워드 정보, exist=false",
-            content = @Content(schema = @Schema(implementation = CafeFindBarResponse.class))
-    )
-    
-    public ResponseEntity<CafeFindBarResponse> findBar(
-            @Parameter(description = "위도 좌표") @RequestParam BigDecimal latitude,
-            @Parameter(description = "경도 좌표") @RequestParam BigDecimal longitude,
-            HttpServletRequest servletRequest) {
+    public ResponseEntity<CafeSearchResponse> findBar(@RequestParam BigDecimal latitude,
+                                                      @RequestParam BigDecimal longitude,
+                                                      HttpServletRequest servletRequest) {
 
         Long memberId = getMemberId(servletRequest);
-        CafeFindBarResponse response = cafeService.findCafeByBar(latitude, longitude, memberId);
+        CafeSearchResponse response = cafeService.findCafeByBar(latitude, longitude, memberId);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/find/keyword")
     @Operation(summary = "선택한 키워드와 현재 위치를 기준으로 검색")
-    
-    public ResponseEntity<CafeFindCategoryResponse> findKeyword(
-            @RequestBody CafeFindCategoryRequest request, HttpServletRequest servletRequest) {
+    public ResponseEntity<CafeSearchResponse> findKeyword(@RequestBody CafeFindCategoryRequest request,
+                                                          HttpServletRequest servletRequest) {
 
         Long memberId = getMemberId(servletRequest);
-        CafeFindCategoryResponse response = cafeService.findCafeByKeyword(request, memberId);
+        CafeSearchResponse response = cafeService.findCafeByKeyword(request, memberId);
         return ResponseEntity.ok(response);
     }
 

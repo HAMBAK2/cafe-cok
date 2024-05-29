@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-
-    List<Bookmark> findByBookmarkFolderId(final Long bookmarkFolderId);
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom{
 
     Long deleteByBookmarkFolderId(final Long folderId);
 

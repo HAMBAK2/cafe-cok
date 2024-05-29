@@ -7,15 +7,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-@Builder
 public class CafeDetailMenuResponse {
 
     private List<MenuImageUrlDto> menus;
 
-    public static CafeDetailMenuResponse from(final List<MenuImageUrlDto> menus) {
-        return CafeDetailMenuResponse.builder()
-                .menus(menus)
-                .build();
+    public CafeDetailMenuResponse(final List<MenuImageUrlDto> menus) {
+        this.menus = menus;
     }
-
 }

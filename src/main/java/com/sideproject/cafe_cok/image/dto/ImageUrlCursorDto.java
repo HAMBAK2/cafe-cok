@@ -8,15 +8,18 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ImageUrlDto {
+public class ImageUrlCursorDto {
 
     private String originUrl;
     private String thumbnailUrl;
+    private Long cursor;
 
     @QueryProjection
-    public ImageUrlDto(final String originUrl,
-                       final String thumbnailUrl) {
+    public ImageUrlCursorDto(final String originUrl,
+                             final String thumbnailUrl,
+                             final Long cursor) {
         this.originUrl = originUrl;
         this.thumbnailUrl = thumbnailUrl;
+        this.cursor = cursor;
     }
 }

@@ -26,8 +26,7 @@ public class MemberFixtures {
     }
 
     public static MyPagePlanDetailResponse 마이페이지_계획_상세_응답() {
-        return new MyPagePlanDetailResponse(
-                계획(), 카테고리_키워드_DTO(), Arrays.asList(카페_북마크_이미지_DTO()), Arrays.asList(카페_북마크_이미지_DTO()));
+        return new MyPagePlanDetailResponse(계획(), 카테고리_키워드_DTO(), 카페_DTO_리스트(), 카페_DTO_리스트());
     }
 
 

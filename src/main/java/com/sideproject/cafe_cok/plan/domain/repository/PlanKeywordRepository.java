@@ -13,13 +13,4 @@ public interface PlanKeywordRepository extends JpaRepository<PlanKeyword, Long> 
     List<PlanKeyword> findByPlanId(final Long planId);
 
     void deleteByPlanId(final Long planId);
-
-    Optional<PlanKeyword> findFirstByPlanIdAndKeywordCategory(final Long planId,
-                                                              final Category category);
-
-    default PlanKeyword getFirstByPlanIdAndKeywordCategory(final Long planId,
-                                                           final Category category) {
-        return findFirstByPlanIdAndKeywordCategory(planId, category)
-                .orElseThrow(NoSuchPlanKeywordException::new);
-    }
 }

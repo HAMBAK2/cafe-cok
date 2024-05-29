@@ -9,11 +9,11 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CafeFindAgainResponse {
+public class CafeSearchResponse {
 
     private List<CafeDto> cafes;
 
-    public CafeFindAgainResponse(final List<CafeDto> cafes) {
+    public CafeSearchResponse(final List<CafeDto> cafes) {
         this.cafes = cafes;
     }
 }

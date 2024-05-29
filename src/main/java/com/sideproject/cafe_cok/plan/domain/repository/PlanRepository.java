@@ -14,16 +14,6 @@ public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositor
 
     List<Plan> findByMemberId(final Long memberId);
 
-    @Query("SELECT p "+
-            "FROM Plan p " +
-            "WHERE p.member.id = :memberId " +
-                "AND (p.visitDate >= :visitDate " +
-                    "AND (p.visitStartTime >= :visitStartTime OR p.visitStartTime IS NULL))")
-    Page<Plan> findPageByMemberIdAndUpcomingPlanCondition(final Long memberId,
-                                                          final LocalDate visitDate,
-                                                          final LocalTime visitStartTime,
-                                                          final Pageable pageable);
-
     default List<Plan> findMatchingPlan(final Plan plan) {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withIgnorePaths("id", "isSaved", "isShared", "createdDate", "lastModifiedDate")

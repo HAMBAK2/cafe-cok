@@ -6,11 +6,13 @@ import com.sideproject.cafe_cok.global.error.exception.MissingRequiredValueExcep
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
+import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
+import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.member.dto.response.MyPageReviewResponse;
 import com.sideproject.cafe_cok.review.domain.Review;
@@ -109,15 +111,16 @@ public class ReviewService {
     public MyPageReviewResponse getReviews(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
-        List<MyPageReviewDto> findReviewDtos = findReviews.stream().map(review -> {
-            List<Image> findImages = imageRepository.findByReviewIdAndImageType(review.getId(), ImageType.REVIEW);
-            List<Keyword> findKeywords = keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU);
+        List<MyPageReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
+            List<ImageUrlDto> findImageUrlDtoList
+                    = imageRepository.findImageUrlDtoListByReviewIdAndImageType(review.getId(), ImageType.REVIEW);
+            List<KeywordDto> findKeywords = keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU);
             if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
                 findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
-            return MyPageReviewDto.of(review, findImages, findKeywords);
+            return new MyPageReviewDto(review, findImageUrlDtoList, findKeywords);
         }).collect(Collectors.toList());
 
-        return new MyPageReviewResponse(findReviewDtos);
+        return new MyPageReviewResponse(findReviewDtoList);
     }
 
     private void saveByReviewAndKeywordNames(final Review review,

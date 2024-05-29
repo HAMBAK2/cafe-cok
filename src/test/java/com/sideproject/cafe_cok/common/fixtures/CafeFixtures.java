@@ -2,7 +2,6 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
-import com.sideproject.cafe_cok.cafe.dto.CafeBookmarkImageDto;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
@@ -45,20 +44,12 @@ public class CafeFixtures {
     public static final Boolean 다음_페이지_존재_여부 = true;
 
 
-    public static CafeFindCategoryResponse 카페_카테고리_검색_응답() {
-        return CafeFindCategoryResponse.from(카페_DTO_리스트());
-    }
-
     public static CafeFindCategoryRequest 카페_카테고리_검색_요청() {
         return new CafeFindCategoryRequest(카페_위도, 카페_경도, 키워드_이름_리스트);
     }
 
-    public static CafeFindBarResponse 카페_검색창_검색_응답() {
-        return CafeFindBarResponse.from(카페_DTO_리스트());
-    }
-
-    public static CafeFindAgainResponse 카페_지점_재검색_응답() {
-        return CafeFindAgainResponse.from(카페_DTO_리스트());
+    public static CafeSearchResponse 카페_검색_결과_응답() {
+        return new CafeSearchResponse(카페_DTO_리스트());
     }
 
     public static CafeDetailImageAllResponse 카페_상세_사진_전체_응답() {
@@ -75,45 +66,39 @@ public class CafeFixtures {
     }
 
     public static CafeDetailImagePageResponse 카페_상세_사진_페이징_응답() {
-        return CafeDetailImagePageResponse.of(Arrays.asList(카페_이미지_URL_DTO()), 커서, 다음_페이지_존재_여부);
+        return new CafeDetailImagePageResponse(Arrays.asList(카페_이미지_URL_DTO()), 커서, 다음_페이지_존재_여부);
     }
 
     public static CafeDetailMenuResponse 카페_상세_메뉴_응답() {
-        return CafeDetailMenuResponse.from(메뉴_이미지_DTO_리스트());
+        return new CafeDetailMenuResponse(메뉴_이미지_DTO_리스트());
     }
 
     public static CafeDetailBasicInfoResponse 카페_상세_기본_정보_응답() {
-        return CafeDetailBasicInfoResponse
-                .of(카페(), 영업_여부, 영업_시간_리스트, 휴무일_리스트, 메뉴_이미지_DTO_리스트(),
+        return new CafeDetailBasicInfoResponse
+                (카페(), 영업_여부, 영업_시간_리스트, 휴무일_리스트, 메뉴_이미지_DTO_리스트(),
                         Arrays.asList(카페_이미지_URL_DTO(), 리뷰_이미지_URL_DTO()),
                         Arrays.asList(키워드_카운트_DTO()), Arrays.asList(카페_상세_리뷰_DTO()));
     }
 
     public static Cafe 카페() {
         Cafe cafe = new Cafe(카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도);
-//        setCafeIdAndImages(cafe, 카페_아이디, Arrays.asList(카페_메인_이미지(ImageType.CAFE_MAIN, cafe)));
         setCafeIdAndImages(cafe, 카페_아이디, new ArrayList<>());
         return cafe;
     }
 
     public static CafeDto 카페_DTO() {
-        CafeDto cafeDto = CafeDto.of(카페(), 카페_대표_썸네일_이미지_URL);
-        cafeDto.setBookmarks(Arrays.asList(북마크_ID_DTO()));
+        CafeDto cafeDto = new CafeDto(카페(), 카페_대표_썸네일_이미지_URL, Arrays.asList(북마크_ID_DTO()));
         return cafeDto;
     }
 
-    public static CafeBookmarkImageDto 카페_북마크_이미지_DTO() {
-        return new CafeBookmarkImageDto(
-                카페_아이디, 카페_이름, 카페_전화번호, 카페_도로명_주소, 카페_위도, 카페_경도, 카페_별점, 리뷰_개수, 이미지_URL, 북마크_ID);
-    }
 
     public static List<CafeDto> 카페_DTO_리스트() {
         return Arrays.asList(카페_DTO());
     }
 
     public static CafeDetailTopResponse 카페_상세_상단_응답() {
-        return CafeDetailTopResponse.of(카페(), Arrays.asList(북마크_ID_DTO()),
-                카페_메인_이미지(ImageType.CAFE, 카페()), 리뷰_개수, 키워드_DTO_리스트());
+        return new CafeDetailTopResponse(
+                카페(),카페_메인_이미지(ImageType.CAFE, 카페()),키워드_DTO_리스트(), Arrays.asList(북마크_ID_DTO()));
     }
 
     public static BigDecimal getRandomBigDecimal(int min, int max) {

@@ -122,11 +122,5 @@ public class Cafe extends BaseEntity {
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
-    public Image getImage(final ImageType imageType) {
-        return images.stream()
-                .filter(image -> image.getImageType() == imageType)
-                .findFirst()
-                .orElse(null);
-    }
 
 }

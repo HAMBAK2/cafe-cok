@@ -30,7 +30,7 @@ public class BookmarkFixtures {
 
 
     public static BookmarkIdDto 북마크_ID_DTO(){
-        return BookmarkIdDto.from(북마크());
+        return new BookmarkIdDto(북마크_ID, 북마크_폴더_ID);
     }
     public static BookmarkCafeDto 북마크_카페_DTO() {
         return new BookmarkCafeDto(북마크_ID, 카페());
