@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,10 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "members_id")
     private Member member;
+
+    @Column(name = "is_active")
+    @ColumnDefault("1")
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();

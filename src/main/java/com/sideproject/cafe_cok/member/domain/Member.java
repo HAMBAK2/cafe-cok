@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,10 @@ public class Member extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
+
+    @Column(name = "is_active")
+    @ColumnDefault("1")
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "member")
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();

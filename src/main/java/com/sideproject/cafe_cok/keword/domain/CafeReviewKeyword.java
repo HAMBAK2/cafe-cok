@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -33,6 +34,10 @@ public class CafeReviewKeyword extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
+
+    @Column(name = "is_active")
+    @ColumnDefault("1")
+    private Boolean isActive;
 
     public CafeReviewKeyword(final Cafe cafe,
                              final Review review,
