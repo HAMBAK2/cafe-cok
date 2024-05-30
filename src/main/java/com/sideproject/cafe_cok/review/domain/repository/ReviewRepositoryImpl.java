@@ -20,17 +20,34 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public List<Review> findByCafeIdOrderByIdDesc(final Long cafeId,
-                                                  final Long cursor,
-                                                  final Pageable pageable) {
+    public List<Review> findByCafeIdAndCursorOrderByIdDesc(final Long cafeId,
+                                                           final Long cursor,
+                                                           final Pageable pageable) {
 
         return queryFactory
                 .select(review)
                 .from(review)
                 .where(review.cafe.id.eq(cafeId),
                         reviewIdLt(cursor),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .orderBy(review.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<Review> findByCafeIdOrderByIdDesc(final Long cafeId,
+                                                  final Pageable pageable) {
+
+        return queryFactory
+                .select(review)
+                .from(review)
+                .where(review.cafe.id.eq(cafeId),
+                        memberDeletedAtIsNull())
+                .orderBy(review.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
@@ -38,7 +55,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
         return isEmpty(cursor) ? null : review.id.lt(cursor);
     }
 
-    private BooleanExpression reviewDeletedAtIsNull() {
-        return review.deletedAt.isNull();
+    private BooleanExpression memberDeletedAtIsNull() {
+        return review.member.deletedAt.isNull();
     }
 }

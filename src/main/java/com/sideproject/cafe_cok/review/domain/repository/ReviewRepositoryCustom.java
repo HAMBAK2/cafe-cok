@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface ReviewRepositoryCustom {
 
+    List<Review> findByCafeIdAndCursorOrderByIdDesc(final Long cafeId,
+                                                    final Long cursor,
+                                                    final Pageable pageable);
+
     List<Review> findByCafeIdOrderByIdDesc(final Long cafeId,
-                                           final Long cursor,
                                            final Pageable pageable);
 }

@@ -48,9 +48,6 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -64,7 +61,7 @@ public class Review extends BaseEntity {
         this.specialNote = request.getSpecialNote();
         this.starRating = request.getStarRating();
         this.cafe = cafe;
-        this.member = member;
+        if(member != null) changeMember(member);
     }
 
     public void setContent(String content) {
@@ -77,6 +74,11 @@ public class Review extends BaseEntity {
 
     public void setStarRating(Integer starRating) {
         this.starRating = starRating;
+    }
+
+    public void changeMember(final Member member) {
+        this.member = member;
+        member.getReviews().add(this);
     }
 
 }

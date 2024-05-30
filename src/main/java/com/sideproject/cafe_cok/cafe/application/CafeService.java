@@ -120,7 +120,7 @@ public class CafeService {
         List<CafeDetailReviewDto> reviews;
 
         List<Review> findReviews = reviewRepository
-                .findByCafeIdOrderByIdDesc(
+                .findByCafeIdAndCursorOrderByIdDesc(
                         cafeId,
                         cursor,
                         PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT));
@@ -143,7 +143,7 @@ public class CafeService {
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
         Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdAndDeletedAtIsNullOrderByIdDesc(cafeId, pageable);
+        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 

@@ -98,7 +98,7 @@ public class KeywordRepositoryImpl implements KeywordRepositoryCustom {
                 .from(keyword)
                 .leftJoin(cafeReviewKeyword).on(keyword.id.eq(cafeReviewKeyword.keyword.id))
                 .where(cafeIdEq(cafeId),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .groupBy(keyword.id)
                 .orderBy(keyword.id.count().desc())
                 .offset(pageable.getOffset())
@@ -118,7 +118,7 @@ public class KeywordRepositoryImpl implements KeywordRepositoryCustom {
                 .from(keyword)
                 .leftJoin(cafeReviewKeyword).on(keyword.id.eq(cafeReviewKeyword.keyword.id))
                 .where(cafeIdEq(cafeId),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .groupBy(keyword.id)
                 .orderBy(keyword.id.count().desc())
                 .offset(pageable.getOffset())
@@ -126,8 +126,8 @@ public class KeywordRepositoryImpl implements KeywordRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression reviewDeletedAtIsNull() {
-        return cafeReviewKeyword.review.deletedAt.isNull();
+    private BooleanExpression memberDeletedAtIsNull() {
+        return cafeReviewKeyword.review.member.deletedAt.isNull();
     }
 
     private BooleanExpression cafeIdEq(final Long cafeId) {

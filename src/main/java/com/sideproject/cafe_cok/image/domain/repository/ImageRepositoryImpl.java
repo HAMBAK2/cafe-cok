@@ -69,7 +69,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .fetch();
     }
 
@@ -85,7 +85,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -104,7 +104,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(image.id.desc())
@@ -127,7 +127,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
                         imageIdLt(cursor),
-                        reviewDeletedAtIsNull())
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(image.id.desc())
@@ -142,7 +142,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
         return isEmpty(cursor) ? null : image.id.lt(cursor);
     }
 
-    private BooleanExpression reviewDeletedAtIsNull() {
-        return image.review.deletedAt.isNull();
+    private BooleanExpression memberDeletedAtIsNull() {
+        return image.review.member.deletedAt.isNull();
     }
 }

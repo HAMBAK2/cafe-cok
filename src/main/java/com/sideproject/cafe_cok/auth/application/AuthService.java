@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.auth.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthToken;
@@ -14,11 +15,15 @@ import com.sideproject.cafe_cok.auth.dto.response.AccessTokenResponse;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkFolderRepository;
 import com.sideproject.cafe_cok.member.domain.Member;
+import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -66,6 +71,19 @@ public class AuthService {
 
         AuthRefreshToken findAuthRefreshToken = authRefreshTokenRepository.getById(loginMember.getId());
         authRefreshTokenRepository.delete(findAuthRefreshToken);
+    }
+
+    @Transactional
+    public void withdrawal(final LoginMember loginMember,
+                           final String reason) {
+
+        Member findMember = memberRepository.getById(loginMember.getId());
+        findMember.changeDeletedAt(LocalDateTime.now());
+        findMember.changeDeletionReason(reason);
+
+        List<Review> findReviews = findMember.getReviews();
+        findReviews.stream()
+                .forEach(review -> review.getCafe().minusReviewCountAndCalculateStarRating(review.getStarRating()));
     }
 
     private Member findMember(final OAuthMember oAuthMember) {

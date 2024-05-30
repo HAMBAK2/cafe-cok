@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import com.sideproject.cafe_cok.member.exception.InvalidMemberException;
 import com.sideproject.cafe_cok.plan.domain.Plan;
+import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.utils.Constants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -42,11 +43,14 @@ public class Member extends BaseEntity {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private OAuthToken oauthToken;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    @Column(name = "deletion_reason")
+    private String deletionReason;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private OAuthToken oauthToken;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();
@@ -56,6 +60,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Plan> plans = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
 
     public Member(final String email,
                   final String nickname,
@@ -81,6 +88,15 @@ public class Member extends BaseEntity {
 
     public void changePicture(final String picture) {
         this.picture = picture;
+    }
+
+
+    public void changeDeletedAt(final LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public void changeDeletionReason(final String deletionReason) {
+        this.deletionReason = deletionReason;
     }
 
 

@@ -53,9 +53,6 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
     public Image(final ImageType imageType,
                  final String origin,
                  final String thumbnail,

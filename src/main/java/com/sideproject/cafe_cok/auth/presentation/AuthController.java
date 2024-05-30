@@ -51,4 +51,13 @@ public class AuthController {
         authService.logout(loginMember);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PostMapping("/withdrawal")
+    @Operation(summary = "회원탈퇴")
+    public ResponseEntity<Void> withdrawal(@AuthenticationPrincipal LoginMember loginMember,
+                                           @RequestParam("reason") final String reason) {
+
+        authService.withdrawal(loginMember, reason);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
