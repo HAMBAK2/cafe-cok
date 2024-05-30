@@ -2,7 +2,6 @@ package com.sideproject.cafe_cok.auth.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
-import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthToken;
@@ -21,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service

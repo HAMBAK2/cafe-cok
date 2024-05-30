@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.global.error;
 
+import com.sideproject.cafe_cok.admin.exception.NoWithdrawalMemberException;
 import com.sideproject.cafe_cok.auth.exception.*;
 import com.sideproject.cafe_cok.global.error.dto.ErrorReportRequest;
 import com.sideproject.cafe_cok.global.error.dto.ErrorResponse;
@@ -50,7 +51,8 @@ public class ControllerAdvice {
             InvalidMemberException.class,
             InvalidCafeException.class,
             MissingRequiredValueException.class,
-            NoSuchPlanSortException.class
+            NoSuchPlanSortException.class,
+            NoWithdrawalMemberException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

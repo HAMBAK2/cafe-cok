@@ -3,15 +3,13 @@ package com.sideproject.cafe_cok.admin.presentation;
 import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -34,6 +32,14 @@ public class AdminController {
             @RequestPart(value = "otherImages", required = false) List<MultipartFile> otherImages) {
 
         AdminCafeSaveResponse response = adminService.saveCafe(request, mainImage, otherImages);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping(value = "/member/restore")
+    @Operation(summary = "탈퇴한 회원을 복구하는 기능")
+    public ResponseEntity<AdminRestoreMemberResponse> restoreMember(@RequestParam("memberId") Long memberId) {
+
+        AdminRestoreMemberResponse response = adminService.restoreMember(memberId);
         return ResponseEntity.ok(response);
     }
 }
