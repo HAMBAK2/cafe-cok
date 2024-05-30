@@ -124,7 +124,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        imageIdLt(cursor))
+                        imageIdLt(cursor),
+                        reviewDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(image.id.desc())
