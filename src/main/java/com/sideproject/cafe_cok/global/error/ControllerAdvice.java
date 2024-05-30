@@ -100,7 +100,8 @@ public class ControllerAdvice {
     @ExceptionHandler({
             NoPermissionException.class,
             DefaultFolderDeletionNotAllowedException.class,
-            DefaultFolderUpdateNotAllowedException.class
+            DefaultFolderUpdateNotAllowedException.class,
+            InvalidRestoreMemberException.class
     })
     public ResponseEntity<ErrorResponse> handleNoPermission(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

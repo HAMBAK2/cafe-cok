@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.auth.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
+import com.sideproject.cafe_cok.auth.exception.InvalidRestoreMemberException;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthToken;
@@ -85,11 +86,23 @@ public class AuthService {
 
     private Member findMember(final OAuthMember oAuthMember) {
         String email = oAuthMember.getEmail();
-        if(memberRepository.existsByEmail(email)) {
-            return memberRepository.getByEmail(email);
+        if(memberRepository.existsByEmailAndDeletedAtIsNull(email)) {
+            return memberRepository.getByEmailAndDeletedAtIsNull(email);
+        }
+
+        if(memberRepository.existsByEmailAndDeletedAtIsNotNull(email)) {
+            Member foundMember = memberRepository.getByEmailAndDeletedAtIsNotNull(email);
+            LocalDateTime deletedAt = foundMember.getDeletedAt();
+            if(isMoreThanSevenDaysAgo(deletedAt)) throw new InvalidRestoreMemberException(deletedAt);
         }
 
         return saveMember(oAuthMember);
+    }
+
+    private boolean isMoreThanSevenDaysAgo(final LocalDateTime deletedAt) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime deletedAtPlusSevenDay = deletedAt.plusDays(7);
+        return now.isAfter(deletedAt) && now.isBefore(deletedAtPlusSevenDay);
     }
 
     private Member saveMember(final OAuthMember oAuthMember) {
