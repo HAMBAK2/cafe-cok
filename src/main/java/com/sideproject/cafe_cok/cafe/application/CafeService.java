@@ -113,7 +113,6 @@ public class CafeService {
         return CafeDetailImageAllResponse.from(images);
     }
 
-    /* TODO: 변환 필요 */
     public CafeDetailReviewPageResponse detailReviews(final Long cafeId,
                                                       final Long cursor) {
 
@@ -144,7 +143,7 @@ public class CafeService {
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
         Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        List<Review> reviews = reviewRepository.findByCafeIdAndDeletedAtIsNullOrderByIdDesc(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 
