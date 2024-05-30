@@ -97,7 +97,8 @@ public class KeywordRepositoryImpl implements KeywordRepositoryCustom {
                 .select(new QKeywordDto(keyword))
                 .from(keyword)
                 .leftJoin(cafeReviewKeyword).on(keyword.id.eq(cafeReviewKeyword.keyword.id))
-                .where(cafeIdEq(cafeId))
+                .where(cafeIdEq(cafeId),
+                        cafeReviewKeyword.review.deletedAt.isNull())
                 .groupBy(keyword.id)
                 .orderBy(keyword.id.count().desc())
                 .offset(pageable.getOffset())

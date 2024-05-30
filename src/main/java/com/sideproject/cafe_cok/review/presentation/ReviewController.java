@@ -11,7 +11,6 @@ import com.sideproject.cafe_cok.review.dto.response.ReviewEditResponse;
 import com.sideproject.cafe_cok.review.application.ReviewService;
 import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -35,9 +34,7 @@ public class ReviewController {
     @Operation(summary = "리뷰 작성 기능")
     public ResponseEntity<ReviewCreateResponse> createReview(
             @AuthenticationPrincipal LoginMember loginMember,
-            @Parameter(description = "사진을 제외한 Review의 정보를 담은 객체")
             @RequestPart ReviewCreateRequest request,
-            @Parameter(description = "사용자가 업로드한 이미지 파일들")
             @RequestPart(value = "files", required = false) List<MultipartFile> files){
 
         ReviewCreateResponse response = reviewService.createReview(request, loginMember, files);
@@ -46,8 +43,8 @@ public class ReviewController {
 
     @DeleteMapping("/review/{reviewId}/delete")
     @Operation(summary = "리뷰 삭제 기능")
-    public ResponseEntity<ReviewDeleteResponse> delete(
-            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
+    public ResponseEntity<ReviewDeleteResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
+                                                       @PathVariable Long reviewId) {
 
         ReviewDeleteResponse response = reviewService.delete(reviewId);
         return ResponseEntity.ok(response);
@@ -55,8 +52,8 @@ public class ReviewController {
 
     @GetMapping("/review/{reviewId}")
     @Operation(summary = "리뷰 상세 정보를 반환하는 기능")
-    public ResponseEntity<ReviewDetailResponse> detail(
-            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long reviewId) {
+    public ResponseEntity<ReviewDetailResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
+                                                       @PathVariable Long reviewId) {
 
         ReviewDetailResponse response = reviewService.detail(reviewId);
         return ResponseEntity.ok(response);
