@@ -10,6 +10,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -50,27 +53,39 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
-    public Image(final ImageType imageType, final String origin, final String thumbnail, final Cafe cafe) {
+    public Image(final ImageType imageType,
+                 final String origin,
+                 final String thumbnail,
+                 final Cafe cafe) {
         this.imageType = imageType;
         this.origin = origin;
         this.thumbnail = thumbnail;
         if(cafe != null) changeCafe(cafe);
     }
 
-    public Image(final ImageType imageType, final String origin, final String thumbnail,
-                 final String medium, final Cafe cafe) {
+    public Image(final ImageType imageType,
+                 final String origin,
+                 final String thumbnail,
+                 final String medium,
+                 final Cafe cafe) {
         this(imageType, origin, thumbnail, cafe);
         this.medium = medium;
     }
 
-    public Image(final ImageType imageType, final String origin, final String thumbnail,
-                 final Cafe cafe, final Review review) {
+    public Image(final ImageType imageType,
+                 final String origin,
+                 final String thumbnail,
+                 final Cafe cafe,
+                 final Review review) {
         this(imageType, origin, thumbnail, cafe);
         if(review != null) changeReview(review);
     }
 
-    public Image(final ImageType imageType, final String origin, final String thumbnail,
-                 final Cafe cafe, final Menu menu) {
+    public Image(final ImageType imageType,
+                 final String origin,
+                 final String thumbnail,
+                 final Cafe cafe,
+                 final Menu menu) {
         this(imageType, origin, thumbnail, cafe);
         this.menu = menu;
     }

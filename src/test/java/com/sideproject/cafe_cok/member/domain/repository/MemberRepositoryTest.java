@@ -45,7 +45,7 @@ class MemberRepositoryTest extends RepositoryTest {
         Member member = 사용자();
         Member savedMember = memberRepository.save(member);
 
-        Member findMember = memberRepository.getByEmail(savedMember.getEmail());
+        Member findMember = memberRepository.getByEmailAndDeletedAtIsNull(savedMember.getEmail());
 
         assertThat(findMember.getEmail()).isEqualTo(savedMember.getEmail());
     }
@@ -56,7 +56,7 @@ class MemberRepositoryTest extends RepositoryTest {
 
         String notExistEmail = "not@eixst.com";
 
-        assertThatThrownBy(() -> memberRepository.getByEmail(notExistEmail))
+        assertThatThrownBy(() -> memberRepository.getByEmailAndDeletedAtIsNull(notExistEmail))
                 .isInstanceOf(NoSuchMemberException.class);
     }
 }

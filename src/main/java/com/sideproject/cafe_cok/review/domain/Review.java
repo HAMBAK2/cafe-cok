@@ -11,7 +11,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class Review extends BaseEntity {
         this.specialNote = request.getSpecialNote();
         this.starRating = request.getStarRating();
         this.cafe = cafe;
-        this.member = member;
+        if(member != null) changeMember(member);
     }
 
     public void setContent(String content) {
@@ -72,6 +74,11 @@ public class Review extends BaseEntity {
 
     public void setStarRating(Integer starRating) {
         this.starRating = starRating;
+    }
+
+    public void changeMember(final Member member) {
+        this.member = member;
+        member.getReviews().add(this);
     }
 
 }

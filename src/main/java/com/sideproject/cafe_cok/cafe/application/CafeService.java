@@ -113,7 +113,6 @@ public class CafeService {
         return CafeDetailImageAllResponse.from(images);
     }
 
-    /* TODO: 변환 필요 */
     public CafeDetailReviewPageResponse detailReviews(final Long cafeId,
                                                       final Long cursor) {
 
@@ -121,7 +120,7 @@ public class CafeService {
         List<CafeDetailReviewDto> reviews;
 
         List<Review> findReviews = reviewRepository
-                .findByCafeIdOrderByIdDesc(
+                .findByCafeIdAndCursorOrderByIdDesc(
                         cafeId,
                         cursor,
                         PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT));

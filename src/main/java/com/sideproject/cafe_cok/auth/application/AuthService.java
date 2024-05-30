@@ -2,17 +2,8 @@ package com.sideproject.cafe_cok.auth.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
-import com.sideproject.cafe_cok.combination.domain.Combination;
-import com.sideproject.cafe_cok.combination.domain.repository.CombinationKeywordRepository;
-import com.sideproject.cafe_cok.combination.domain.repository.CombinationRepository;
-import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
-import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
+import com.sideproject.cafe_cok.auth.exception.InvalidRestoreMemberException;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
-import com.sideproject.cafe_cok.plan.domain.Plan;
-import com.sideproject.cafe_cok.plan.domain.repository.PlanCafeRepository;
-import com.sideproject.cafe_cok.plan.domain.repository.PlanKeywordRepository;
-import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
-import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthTokenRepository;
@@ -23,15 +14,13 @@ import com.sideproject.cafe_cok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.cafe_cok.auth.dto.response.AccessTokenResponse;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkFolderRepository;
-import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
 import com.sideproject.cafe_cok.member.domain.Member;
-import com.sideproject.cafe_cok.member.domain.WithdrawnMember;
-import com.sideproject.cafe_cok.member.domain.repository.WithdrawnMemberRepository;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -42,25 +31,14 @@ public class AuthService {
 
     private final TokenCreator tokenCreator;
     private final MemberRepository memberRepository;
-    private final WithdrawnMemberRepository withdrawnMemberRepository;
-    private final ReviewRepository reviewRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
-    private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
-    private final PlanRepository planRepository;
-    private final PlanCafeRepository planCafeRepository;
-    private final PlanKeywordRepository planKeywordRepository;
-    private final CombinationRepository combinationRepository;
-    private final CombinationKeywordRepository combinationKeywordRepository;
-    private final BookmarkRepository bookmarkRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
-    private final ImageRepository imageRepository;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
     private final String BASIC_FOLDER_COLOR = "#FE8282";
     private final Boolean BASIC_FOLDER_VISIBLE = true;
     private final Boolean BASIC_FOLDER_DEFAULT = true;
-
 
     @Transactional
     public AccessAndRefreshTokenResponse generateAccessAndRefreshToken(final OAuthMember oAuthMember) {
@@ -94,53 +72,37 @@ public class AuthService {
     }
 
     @Transactional
-    public void withdrawal(final LoginMember loginMember) {
+    public void withdrawal(final LoginMember loginMember,
+                           final String reason) {
 
-        //북마크 관련 정보 삭제
-        List<BookmarkFolder> findBookmarkFolders = bookmarkFolderRepository.findByMemberId(loginMember.getId());
-        for (BookmarkFolder findBookmarkFolder : findBookmarkFolders) {
-            bookmarkRepository.deleteByBookmarkFolderId(findBookmarkFolder.getId());
-            bookmarkFolderRepository.deleteById(findBookmarkFolder.getId());
-        }
-
-        //조합관련 정보 삭제
-        List<Combination> findCombinations = combinationRepository.findByMemberId(loginMember.getId());
-        for (Combination findCombination : findCombinations) {
-            combinationKeywordRepository.deleteByCombinationId(findCombination.getId());
-            combinationRepository.deleteById(findCombination.getId());
-        }
-
-        //계획 관련 정보 삭제
-        List<Plan> findPlans = planRepository.findByMemberId(loginMember.getId());
-        for (Plan findPlan : findPlans) {
-            planCafeRepository.deleteByPlanId(findPlan.getId());
-            planKeywordRepository.deleteByPlanId(findPlan.getId());
-            planRepository.deleteById(findPlan.getId());
-        }
-
-        //리뷰 관련 정보 삭제
-        List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
-        for (Review findReview : findReviews) {
-            cafeReviewKeywordRepository.deleteByReviewId(findReview.getId());
-            imageRepository.deleteByReviewId(findReview.getId());
-            reviewRepository.deleteById(findReview.getId());
-        }
-
-        //로그아웃 처리 후 탈퇴한 사용자 정보 테이블에 정보 추가 및 기존 정보 삭제
-        logout(loginMember);
         Member findMember = memberRepository.getById(loginMember.getId());
-        WithdrawnMember withdrawnMember = new WithdrawnMember(findMember);
-        withdrawnMemberRepository.save(withdrawnMember);
-        memberRepository.deleteById(findMember.getId());
+        findMember.changeDeletedAt(LocalDateTime.now());
+        findMember.changeDeletionReason(reason);
+
+        List<Review> findReviews = findMember.getReviews();
+        findReviews.stream()
+                .forEach(review -> review.getCafe().minusReviewCountAndCalculateStarRating(review.getStarRating()));
     }
 
     private Member findMember(final OAuthMember oAuthMember) {
         String email = oAuthMember.getEmail();
-        if(memberRepository.existsByEmail(email)) {
-            return memberRepository.getByEmail(email);
+        if(memberRepository.existsByEmailAndDeletedAtIsNull(email)) {
+            return memberRepository.getByEmailAndDeletedAtIsNull(email);
+        }
+
+        if(memberRepository.existsByEmailAndDeletedAtIsNotNull(email)) {
+            Member foundMember = memberRepository.getByEmailAndDeletedAtIsNotNull(email);
+            LocalDateTime deletedAt = foundMember.getDeletedAt();
+            if(isMoreThanSevenDaysAgo(deletedAt)) throw new InvalidRestoreMemberException(deletedAt);
         }
 
         return saveMember(oAuthMember);
+    }
+
+    private boolean isMoreThanSevenDaysAgo(final LocalDateTime deletedAt) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime deletedAtPlusSevenDay = deletedAt.plusDays(7);
+        return now.isAfter(deletedAt) && now.isBefore(deletedAtPlusSevenDay);
     }
 
     private Member saveMember(final OAuthMember oAuthMember) {
@@ -162,7 +124,4 @@ public class AuthService {
 
         return oAuthTokenRepository.save(new OAuthToken(member, oAuthMember.getRefreshToken()));
     }
-
-
-
 }

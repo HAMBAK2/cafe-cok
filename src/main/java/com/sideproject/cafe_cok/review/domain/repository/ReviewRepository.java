@@ -12,9 +12,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
     List<Review> findByMemberId(final Long memberId);
 
-    List<Review> findByCafeIdOrderByIdDesc(final Long cafeId,
-                                           final Pageable pageable);
-
     @Query("SELECT COUNT (r) FROM Review r WHERE r.member.id = :memberId")
     Long countReviewsByMemberId(final Long memberId);
 

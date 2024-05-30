@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.image.domain.QImage.*;
+import static com.sideproject.cafe_cok.review.domain.QReview.review;
 import static org.springframework.util.StringUtils.isEmpty;
 
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
@@ -67,7 +68,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType))
+                        image.imageType.eq(imageType),
+                        memberDeletedAtIsNull())
                 .fetch();
     }
 
@@ -82,7 +84,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType))
+                        image.imageType.eq(imageType),
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -100,7 +103,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType))
+                        image.imageType.eq(imageType),
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(image.id.desc())
@@ -122,7 +126,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        imageIdLt(cursor))
+                        imageIdLt(cursor),
+                        memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(image.id.desc())
@@ -135,5 +140,9 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
     private BooleanExpression imageIdLt(final Long cursor) {
         return isEmpty(cursor) ? null : image.id.lt(cursor);
+    }
+
+    private BooleanExpression memberDeletedAtIsNull() {
+        return image.review.member.deletedAt.isNull();
     }
 }

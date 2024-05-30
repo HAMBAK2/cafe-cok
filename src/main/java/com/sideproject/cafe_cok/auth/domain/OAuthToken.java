@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Table(name = "oauth_tokens")
@@ -26,8 +27,11 @@ public class OAuthToken extends BaseEntity {
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
-    public OAuthToken(final Member member, final String refreshToken) {
+    public OAuthToken(final Member member,
+                      final String refreshToken) {
         this.member = member;
         this.refreshToken = refreshToken;
     }

@@ -4,6 +4,8 @@ package com.sideproject.cafe_cok.admin.application;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
+import com.sideproject.cafe_cok.admin.exception.NoWithdrawalMemberException;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
@@ -13,9 +15,12 @@ import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
+import com.sideproject.cafe_cok.member.domain.Member;
+import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.CafeSaveMenuDto;
+import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.utils.FormatConverter;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +42,7 @@ import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 @Transactional(readOnly = true)
 public class AdminService {
 
+    private final MemberRepository memberRepository;
     private final CafeRepository cafeRepository;
     private final MenuRepository menuRepository;
     private final ImageRepository imageRepository;
@@ -62,6 +68,22 @@ public class AdminService {
         List<List<String>> operationHours = saveOperationHours(savedCafe, request.getHours());
 
         return AdminCafeSaveResponse.of(savedCafe, mainImageDto, otherImageDtos, menuDtos, operationHours);
+    }
+
+    @Transactional
+    public AdminRestoreMemberResponse restoreMember(final Long memberId) {
+
+        Member findMember = memberRepository.getById(memberId);
+        if (findMember.getDeletedAt() == null) throw new NoWithdrawalMemberException();
+
+        findMember.changeDeletedAt(null);
+        findMember.changeDeletionReason(null);
+
+        List<Review> findReviews = findMember.getReviews();
+        findReviews.stream()
+                .forEach(review -> review.getCafe().addReviewCountAndCalculateStarRating(review.getStarRating()));
+
+        return new AdminRestoreMemberResponse(findMember);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {

@@ -122,5 +122,15 @@ public class Cafe extends BaseEntity {
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
+    public void minusReviewCountAndCalculateStarRating(final Integer starRating) {
+        BigDecimal totalScore = this.starRating.multiply(BigDecimal.valueOf(this.reviewCount));
+        BigDecimal minusReviewScore = BigDecimal.valueOf(starRating);
+        totalScore = totalScore.subtract(minusReviewScore);
+
+        this.reviewCount--;
+        BigDecimal newReviewCount = BigDecimal.valueOf(this.reviewCount);
+        this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
+    }
+
 
 }

@@ -34,17 +34,24 @@ public class Combination {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    @OneToMany(mappedBy = "combination")
+    @OneToMany(mappedBy = "combination", cascade = CascadeType.ALL)
     private List<CombinationKeyword> combinationKeywords = new ArrayList<>();
 
-    public Combination(final String name, final String icon, final Member member) {
+    public Combination(final String name,
+                       final String icon,
+                       final Member member) {
         this.name = name;
         this.icon = icon;
-        this.member = member;
+        if(member != null) changeMember(member);
     }
 
     public void changeByRequest(final CombinationRequest request) {
         this.name = request.getName();
         this.icon = request.getIcon();
+    }
+
+    public void changeMember(final Member member) {
+        this.member = member;
+        member.getCombinations().add(this);
     }
 }
