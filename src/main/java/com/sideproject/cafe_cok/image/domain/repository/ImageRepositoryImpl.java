@@ -68,7 +68,8 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType))
+                        image.imageType.eq(imageType),
+                        reviewDeletedAtIsNull())
                 .fetch();
     }
 
