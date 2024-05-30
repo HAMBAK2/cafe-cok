@@ -27,9 +27,6 @@ public class OAuthToken extends BaseEntity {
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
     public OAuthToken(final Member member,
                       final String refreshToken) {
         this.member = member;
