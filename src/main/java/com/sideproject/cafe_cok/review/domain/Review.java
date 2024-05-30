@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +48,8 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "members_id")
     private Member member;
 
-    @Column(name = "is_active")
-    @ColumnDefault("1")
-    private Boolean isActive;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();

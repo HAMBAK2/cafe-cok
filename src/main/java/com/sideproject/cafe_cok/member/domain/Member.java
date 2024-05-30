@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -40,9 +41,8 @@ public class Member extends BaseEntity {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @Column(name = "is_active")
-    @ColumnDefault("1")
-    private Boolean isActive;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "member")
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();

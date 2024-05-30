@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDateTime;
+
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -51,9 +53,8 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
-    @Column(name = "is_active")
-    @ColumnDefault("1")
-    private Boolean isActive;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public Image(final ImageType imageType,
                  final String origin,
