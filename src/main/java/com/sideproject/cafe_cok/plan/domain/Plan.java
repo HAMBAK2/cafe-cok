@@ -74,7 +74,7 @@ public class Plan extends BaseEntity {
                 final Boolean isSaved,
                 final Boolean isShared) {
 
-        this.member = member;
+        if(member != null) changeMember(member);
         this.locationName = locationName;
         this.visitDate = visitDate;
         this.visitStartTime = visitStartTime;
@@ -93,5 +93,9 @@ public class Plan extends BaseEntity {
         this.isShared = isShared;
     }
 
-    public void changeMember(final Member member) { this.member = member; }
+    public void changeMember(final Member member) {
+        this.member = member;
+        member.getPlans().add(this);
+    }
+
 }

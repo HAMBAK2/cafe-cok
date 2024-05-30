@@ -1,16 +1,16 @@
 package com.sideproject.cafe_cok.member.domain;
 
-import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
+import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import com.sideproject.cafe_cok.member.exception.InvalidMemberException;
+import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.utils.Constants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,8 +44,14 @@ public class Member extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Combination> combinations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Plan> plans = new ArrayList<>();
 
     public Member(final String email,
                   final String nickname,

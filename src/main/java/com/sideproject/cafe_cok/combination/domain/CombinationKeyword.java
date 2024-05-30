@@ -29,7 +29,8 @@ public class CombinationKeyword {
     private Keyword keyword;
 
 
-    public CombinationKeyword(final Combination combination, final Keyword keyword) {
+    public CombinationKeyword(final Combination combination,
+                              final Keyword keyword) {
         if(combination != null) changeCombination(combination);
         this.keyword = keyword;
     }

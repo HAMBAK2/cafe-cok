@@ -37,9 +37,6 @@ public class CafeReviewKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
     public CafeReviewKeyword(final Cafe cafe,
                              final Review review,
                              final Keyword keyword) {
