@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.member.domain;
 
+import com.sideproject.cafe_cok.auth.domain.OAuthToken;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
@@ -40,6 +41,9 @@ public class Member extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private OAuthToken oauthToken;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

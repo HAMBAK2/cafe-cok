@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.aop.target.LazyInitTargetSource;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
