@@ -73,7 +73,7 @@ public class ReviewService {
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
 
         saveByReviewAndMultipartFiles(savedReview, files);
-        return new ReviewCreateResponse(savedReview.getId());
+        return new ReviewCreateResponse(savedReview.getId(), savedReview.getCafe().getId());
     }
 
     @Transactional

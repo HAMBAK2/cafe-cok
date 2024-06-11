@@ -18,16 +18,15 @@ public class MenuImageUrlDto {
     private String originUrl;
     private String thumbnailUrl;
 
-    public MenuImageUrlDto(final Menu menu) {
-        this.name = menu.getName();
-        this.price = priceConvert(menu.getPrice());
-    }
-
     @QueryProjection
     public MenuImageUrlDto(final Menu menu,
                            final Image image) {
-        this(menu);
-        this.originUrl = image.getOrigin();
-        this.thumbnailUrl = image.getThumbnail();
+        this.name = menu.getName();
+        this.price = priceConvert(menu.getPrice());
+        if(image != null)
+        {
+            this.originUrl = image.getOrigin();
+            this.thumbnailUrl = image.getThumbnail();
+        }
     }
 }

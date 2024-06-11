@@ -6,11 +6,11 @@ import lombok.Getter;
 public class ReviewCreateResponse {
 
     private Long reviewId;
+    private Long cafeId;
 
-    protected ReviewCreateResponse() {
-    }
-
-    public ReviewCreateResponse(final Long reviewId) {
+    public ReviewCreateResponse(final Long reviewId,
+                                final Long cafeId) {
         this.reviewId = reviewId;
+        this.cafeId = cafeId;
     }
 }

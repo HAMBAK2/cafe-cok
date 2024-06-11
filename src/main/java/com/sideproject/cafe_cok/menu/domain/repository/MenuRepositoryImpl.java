@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.menu.domain.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.image.domain.QImage;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import static com.sideproject.cafe_cok.image.domain.QImage.image;
 import static com.sideproject.cafe_cok.menu.domain.QMenu.*;
+import static com.sideproject.cafe_cok.plan.domain.QPlanCafe.planCafe;
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class MenuRepositoryImpl implements MenuRepositoryCustom{
 
