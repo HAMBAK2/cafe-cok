@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -64,11 +65,11 @@ public class AuthService {
     @Transactional
     public void logout(final LoginMember loginMember) {
 
-        OAuthToken findOAuthToken = oAuthTokenRepository.getByMemberId(loginMember.getId());
-        oAuthTokenRepository.delete(findOAuthToken);
+        Optional<OAuthToken> findOAuthToken = oAuthTokenRepository.findByMemberId(loginMember.getId());
+        if(findOAuthToken.isPresent()) oAuthTokenRepository.delete(findOAuthToken.get());
 
-        AuthRefreshToken findAuthRefreshToken = authRefreshTokenRepository.getById(loginMember.getId());
-        authRefreshTokenRepository.delete(findAuthRefreshToken);
+        Optional<AuthRefreshToken> findRefreshToken = authRefreshTokenRepository.findById(loginMember.getId());
+        if(findRefreshToken.isPresent()) authRefreshTokenRepository.delete(findRefreshToken.get());
     }
 
     @Transactional
