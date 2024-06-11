@@ -590,10 +590,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 20
+Content-Length: 36
 
 {
-  "reviewId" : 1
+  "reviewId" : 1,
+  "cafeId" : 1
 }</code></pre>
 </div>
 </div>
@@ -618,6 +619,11 @@ Content-Length: 20
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviewId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">생성된 리뷰 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cafeId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰를 작성한 카페의 ID</p></td>
 </tr>
 </tbody>
 </table>

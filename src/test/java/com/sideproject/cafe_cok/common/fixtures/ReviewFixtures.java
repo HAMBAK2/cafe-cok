@@ -60,7 +60,7 @@ public class ReviewFixtures {
     }
 
     public static ReviewCreateResponse 리뷰_생성_응답() {
-        return new ReviewCreateResponse(리뷰_ID);
+        return new ReviewCreateResponse(리뷰_ID, 카페_아이디);
     }
 
     public static ReviewDeleteResponse 리뷰_삭제_응답() {

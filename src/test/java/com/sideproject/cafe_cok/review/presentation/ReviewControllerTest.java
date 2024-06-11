@@ -78,7 +78,8 @@ class ReviewControllerTest extends ControllerTest {
                                 fieldWithPath("specialNote").description("리뷰 특이사항"),
                                 fieldWithPath("keywords").type(JsonFieldType.ARRAY).description("리뷰 키워드 이름 리스트"),
                                 fieldWithPath("starRating").description("리뷰 별점")),
-                        responseFields(fieldWithPath("reviewId").description("생성된 리뷰 ID"))))
+                        responseFields(fieldWithPath("reviewId").description("생성된 리뷰 ID"),
+                                fieldWithPath("cafeId").description("리뷰를 작성한 카페의 ID"))))
                 .andExpect(status().isOk());
 
         verify(reviewService, times(1))
