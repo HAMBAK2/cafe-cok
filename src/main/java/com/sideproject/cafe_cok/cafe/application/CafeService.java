@@ -17,6 +17,7 @@ import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
+import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
