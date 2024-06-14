@@ -49,9 +49,6 @@ public class Member extends BaseEntity {
     @Column(name = "deletion_reason")
     private String deletionReason;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private OAuthToken oauthToken;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();
 

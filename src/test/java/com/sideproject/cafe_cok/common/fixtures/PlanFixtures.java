@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.util.Collections;
 
 import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.*;
+import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페_DTO_리스트;
 import static com.sideproject.cafe_cok.common.fixtures.KeywordFixtures.*;
 import static com.sideproject.cafe_cok.common.fixtures.MemberFixtures.사용자;
 
