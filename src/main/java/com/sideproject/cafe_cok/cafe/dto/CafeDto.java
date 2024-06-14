@@ -41,6 +41,19 @@ public class CafeDto {
         this.bookmarks = bookmarks;
     }
 
+    public CafeDto(final Cafe cafe,
+                   final String imageUrl) {
+        this.id = cafe.getId();
+        this.name = cafe.getName();
+        this.phoneNumber = cafe.getPhoneNumber();
+        this.roadAddress = cafe.getRoadAddress();
+        this.latitude = cafe.getLatitude();
+        this.longitude = cafe.getLongitude();
+        this.starRating = cafe.getStarRating();
+        this.reviewCount = cafe.getReviewCount();
+        this.imageUrl = imageUrl;
+    }
+
     public void setBookmarks(final List<BookmarkIdDto> bookmarks) {
         this.bookmarks = bookmarks;
     }

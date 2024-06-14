@@ -106,11 +106,12 @@ class PlanControllerTest extends ControllerTest {
         CreatePlanResponse response = 계획_응답();
 
         when(planService
-                .plan(any(CreatePlanRequest.class)))
+                .plan(any(CreatePlanRequest.class), any(Long.class)))
                 .thenReturn(response);
 
         mockMvc.perform(
                         post("/api/plan")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
@@ -156,7 +157,8 @@ class PlanControllerTest extends ControllerTest {
                                 fieldWithPath("matchCafes").type(JsonFieldType.ARRAY)
                                         .description("일치하는 카페(결과 타입이 MATCH인 경우 존재, 아닌 경우 빈 리스트, 형식은 추천 카페와 동일)"),
                                 fieldWithPath("similarCafes").type(JsonFieldType.ARRAY)
-                                        .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트, 형식은 추천 카페와 동일)"))))
+                                        .description("유사한 카페(결과 타입이 MATCH, SIMILAR인 경우 존재, 아닌 경우 빈 리스트, 형식은 추천 카페와 동일)")
+                        )))
                 .andExpect(status().isOk());
     }
 
