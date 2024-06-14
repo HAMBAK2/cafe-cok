@@ -27,7 +27,7 @@ public class Constants {
     public static final List<DayOfWeek> operationDays =
             Arrays.asList(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
 
-    public static final String DECODED_URL_SPLIT_STR = "com/";
+    public static final String DECODED_URL_SPLIT_STR = "net/";
     public static final String URL_DECODER_DECODE_ENC = "UTF-8";
 
     public static final Integer RECOMMEND_MENU_MAX_CNT = 3;

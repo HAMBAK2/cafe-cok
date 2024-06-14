@@ -49,7 +49,9 @@ public class S3Uploader {
     }
 
     public void delete(String url) {
+        System.out.println("딜리트 위한 URL : " + url);
         String key = extractObjectKeyFromUrl(url);
+        System.out.println("딜리트 위한 키 : " + key);
         amazonS3Client.deleteObject(bucket, key);
     }
 
