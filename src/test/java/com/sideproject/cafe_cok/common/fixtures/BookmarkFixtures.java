@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
+import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderAndBookmarkIdResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkSaveRequest;
@@ -47,6 +48,10 @@ public class BookmarkFixtures {
 
     public static BookmarkIdResponse 북마크_ID_응답() {
         return new BookmarkIdResponse(북마크_ID);
+    }
+
+    public static BookmarkFolderAndBookmarkIdResponse 북마크폴더_북마크_ID_응답() {
+        return new BookmarkFolderAndBookmarkIdResponse(북마크_ID, 북마크_폴더_ID);
     }
 
     public static Bookmark setId(Bookmark bookmark, final Long id) {

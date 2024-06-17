@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.bookmark.presentation;
 
+import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderAndBookmarkIdResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.cafe_cok.common.annotation.ControllerTest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkSaveRequest;
@@ -41,7 +42,7 @@ class BookmarkControllerTest extends ControllerTest {
     public void test_save_bookmark_post() throws Exception {
 
         BookmarkSaveRequest request = 북마크_저장_요청();
-        BookmarkIdResponse response = 북마크_ID_응답();
+        BookmarkFolderAndBookmarkIdResponse response = 북마크폴더_북마크_ID_응답();
 
         when(bookmarkService.save(any(BookmarkSaveRequest.class))).thenReturn(response);
 
@@ -56,7 +57,8 @@ class BookmarkControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        responseFields(fieldWithPath("bookmarkId").description("저장한 북마크 ID")),
+                        responseFields(fieldWithPath("bookmarkId").description("저장한 북마크 ID"),
+                                fieldWithPath("bookmarkFolderId").description("저장한 북마크의 폴더 ID")),
                         requestFields(
                                 fieldWithPath("cafeId").description("저장하려는 카페 Id"),
                                 fieldWithPath("folderId").description("저장하려는 폴더 ID"))))
@@ -74,7 +76,7 @@ class BookmarkControllerTest extends ControllerTest {
     public void test_delete_bookmark_success() throws Exception {
 
         Long bookmarkId = 북마크_ID;
-        BookmarkIdResponse response = 북마크_ID_응답();
+        BookmarkFolderAndBookmarkIdResponse response = 북마크폴더_북마크_ID_응답();
 
         when(bookmarkService.delete(any(Long.class))).thenReturn(response);
 
@@ -88,7 +90,8 @@ class BookmarkControllerTest extends ControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
-                        responseFields(fieldWithPath("bookmarkId").description("삭제한 북마크 ID")),
+                        responseFields(fieldWithPath("bookmarkId").description("삭제한 북마크 ID"),
+                                fieldWithPath("bookmarkFolderId").description("삭제한 북마크의 폴더 ID")),
                         pathParameters(parameterWithName("bookmarkId").description("삭제할 북마크의 ID"))))
                 .andExpect(status().isOk());
 

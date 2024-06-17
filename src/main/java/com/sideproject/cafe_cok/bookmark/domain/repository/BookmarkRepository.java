@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.bookmark.domain.repository;
 
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
+import com.sideproject.cafe_cok.bookmark.exception.NoSuchBookmarkException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +17,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, Bookm
                 "AND bf.member.id = :memberId")
     List<Bookmark> findByCafeIdAndMemberId(final Long cafeId, final Long memberId);
 
+    default Bookmark getById(final Long id) {
+        return findById(id)
+                .orElseThrow(NoSuchBookmarkException::new);
+    }
 }
