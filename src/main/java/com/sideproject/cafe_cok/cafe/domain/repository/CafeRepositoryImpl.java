@@ -79,6 +79,24 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<Cafe> findNearestCafes(final BigDecimal latitude,
+                                       final BigDecimal longitude) {
+
+
+        NumberExpression<Double> distance =
+                Expressions.numberTemplate(Double.class,
+                "6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) " +
+                        "+ sin(radians({0})) * sin(radians({1})))",
+                latitude.doubleValue(), cafe.latitude.doubleValue(), cafe.longitude.doubleValue(), longitude.doubleValue());
+
+        return queryFactory
+                .selectFrom(cafe)
+                .orderBy(distance.asc())
+                .limit(10)
+                .fetch();
+    }
+
 
     private BooleanExpression imageTypeEq(final ImageType imageType) {
         return isEmpty(imageType) ? null : image.imageType.eq(imageType);

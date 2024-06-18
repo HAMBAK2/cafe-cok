@@ -18,4 +18,7 @@ public interface CafeRepositoryCustom {
 
     List<Cafe> findByPlanIdAndMatchType(final Long planId,
                                         final PlanCafeMatchType matchType);
+
+    List<Cafe> findNearestCafes(final BigDecimal latitude,
+                                final BigDecimal longitude);
 }
