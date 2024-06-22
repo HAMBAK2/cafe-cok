@@ -27,7 +27,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "cafes")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Cafe extends BaseEntity {
+public class
+Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
     private static final Integer X_NUM_DIGITS = 3;
@@ -61,12 +62,6 @@ public class Cafe extends BaseEntity {
     @Column(name = "review_count")
     private Long reviewCount;
 
-    @Column(name = "mapx")
-    private Integer mapx;
-
-    @Column(name = "mapy")
-    private Integer mapy;
-
     @OneToMany(mappedBy = "cafe")
     private List<OperationHour> operationHours = new ArrayList<>();
 
@@ -76,30 +71,17 @@ public class Cafe extends BaseEntity {
     @OneToMany(mappedBy = "cafe")
     private List<Image> images = new ArrayList<>();
 
-    public Cafe(final String name, final String phoneNumber, final String roadAddress,
-                final BigDecimal longitude, final BigDecimal latitude) {
+    public Cafe(final String name,
+                final String phoneNumber,
+                final String roadAddress,
+                final BigDecimal longitude,
+                final BigDecimal latitude) {
         validatePhoneNumber(phoneNumber);
-
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.roadAddress = roadAddress;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.starRating = BigDecimal.ZERO;
-        this.reviewCount = 0L;
-    }
-
-    public Cafe(final String name, final String phoneNumber, final String roadAddress,
-                final Integer mapx, final Integer mapy) {
-        validatePhoneNumber(phoneNumber);
-
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.roadAddress = roadAddress;
-        this.mapx = mapx;
-        this.mapy = mapy;
-        this.latitude = FormatConverter.convertToDecimal(mapy, Y_NUM_DIGITS);
-        this.longitude = FormatConverter.convertToDecimal(mapx, X_NUM_DIGITS);
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
     }

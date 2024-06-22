@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.menu.dto.CafeSaveMenuDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -16,8 +17,8 @@ public class AdminCafeSaveResponse {
     private Long id;
     private String name;
     private String roadAddress;
-    private Integer mapx;
-    private Integer mapy;
+    private BigDecimal mapx;
+    private BigDecimal mapy;
     private String telephone;
     private CafeMainImageDto mainImage;
     private List<CafeOtherImageDto> otherImages;
@@ -32,8 +33,8 @@ public class AdminCafeSaveResponse {
                 .id(cafe.getId())
                 .name(cafe.getName())
                 .roadAddress(cafe.getRoadAddress())
-                .mapx(cafe.getMapx())
-                .mapy(cafe.getMapy())
+                .mapx(cafe.getLongitude())
+                .mapy(cafe.getLatitude())
                 .telephone(cafe.getPhoneNumber())
                 .mainImage(mainImage)
                 .otherImages(otherImages)

@@ -9,6 +9,7 @@ import com.sideproject.cafe_cok.image.dto.CafeMainImageDto;
 import com.sideproject.cafe_cok.image.dto.CafeOtherImageDto;
 import com.sideproject.cafe_cok.menu.dto.CafeSaveMenuDto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +24,8 @@ public class AdminFixtures {
     private static final String 메뉴_이름 = "메뉴 이름";
     private static final Integer 메뉴_가격 = 10000;
     private static final String 메뉴_이미지 = "Base64로 인코딩된 이미지 정보";
-
-    public static final Integer X_좌표 = 123456789;
-    public static final Integer Y_좌표 = 123456789;
+    public static final BigDecimal X_좌표 = new BigDecimal(123456789);
+    public static final BigDecimal Y_좌표 = new BigDecimal(123456789);
 
     public static AdminCafeSaveRequest 카페_저장_요청() {
         return new AdminCafeSaveRequest(카페_이름, 카페_도로명_주소, X_좌표, Y_좌표, 카페_전화번호,
