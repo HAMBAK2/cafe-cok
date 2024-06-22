@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.common.fixtures;
 
+import com.sideproject.cafe_cok.member.dto.request.MemberFeedbackRequest;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.review.dto.MyPageReviewDto;
 
@@ -16,6 +17,11 @@ import static com.sideproject.cafe_cok.common.fixtures.ReviewFixtures.*;
 public class MyPageFixtures {
 
     public static final Integer 페이지_번호 = 1;
+    public static final String 개선의견_내용 = "개선의견 내용";
+
+    public static MemberFeedbackRequest 개선의견_요청() {
+        return new MemberFeedbackRequest(개선의견_내용);
+    }
 
     public static MyPageProfileResponse 마이페이지_프로필_응답() {
         return MyPageProfileResponse.of(사용자(), 리뷰_개수);
