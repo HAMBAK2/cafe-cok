@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.member.application;
 
+import com.sideproject.cafe_cok.member.dto.request.MemberFeedbackRequest;
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
@@ -13,6 +14,8 @@ import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
+import com.sideproject.cafe_cok.member.domain.Feedback;
+import com.sideproject.cafe_cok.member.domain.repository.FeedbackRepository;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.plan.domain.Plan;
@@ -55,6 +58,7 @@ public class MyPageService {
     private final ImageRepository imageRepository;
     private final BookmarkRepository bookmarkRepository;
     private final CombinationRepository combinationRepository;
+    private final FeedbackRepository feedbackRepository;
 
     private final Integer FIRST_PAGE_NUMBER = 0;
     private final Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;
@@ -159,5 +163,15 @@ public class MyPageService {
                     return new CafeDto(cafe, findImageUrl, findBookmarkIdDtoList);
                 }).collect(Collectors.toList());
         return cafeDtoList;
+    }
+
+
+    @Transactional
+    public void addFeedback(final LoginMember loginMember,
+                            final MemberFeedbackRequest request) {
+
+        Member findMember = memberRepository.getById(loginMember.getId());
+        Feedback newFeedback = new Feedback(findMember.getEmail(), request.getContent());
+        feedbackRepository.save(newFeedback);
     }
 }

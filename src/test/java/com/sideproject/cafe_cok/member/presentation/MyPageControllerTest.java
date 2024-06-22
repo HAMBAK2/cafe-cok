@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.member.presentation;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
+import com.sideproject.cafe_cok.member.dto.request.MemberFeedbackRequest;
 import com.sideproject.cafe_cok.member.dto.response.*;
 import com.sideproject.cafe_cok.common.annotation.ControllerTest;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
@@ -26,8 +27,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -368,5 +368,28 @@ class MyPageControllerTest extends ControllerTest {
                                 fieldWithPath("plans[].location").description("사용자가 검색한 장소_필수X"),
                                 fieldWithPath("plans[].visitDateTime").description("사용자가 검색한 날짜와 시간_필수X"))))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("개선 의견 남기기 - 성공")
+    public void test_add_feedback() throws Exception {
+
+        MemberFeedbackRequest request = 개선의견_요청();
+
+        mockMvc.perform(
+                        post("/api/myPage/add/feedback")
+                                .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andDo(document("myPage/add/feedback/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer JWT 엑세스 토큰")),
+                        requestFields(
+                                fieldWithPath("content").description("사용자가 작성한 개선 의견"))))
+                .andExpect(status().isNoContent());
     }
 }

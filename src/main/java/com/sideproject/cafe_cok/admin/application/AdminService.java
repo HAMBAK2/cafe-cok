@@ -51,6 +51,7 @@ public class AdminService {
     private final ImageRepository imageRepository;
     private final OperationHourRepository operationHourRepository;
 
+
     private final S3Uploader s3Uploader;
 
     private final Integer START_TIME_IDX = 0;

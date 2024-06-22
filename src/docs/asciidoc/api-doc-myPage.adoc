@@ -119,4 +119,14 @@ include::{snippets}/myPage/shared/plans/all/success/http-response.adoc[]
 ==== Response Fields
 include::{snippets}/myPage/shared/plans/all/success/response-fields.adoc[]
 
+=== 4-13.개선 의견 남기기 - 성공
+==== Request Header
+include::{snippets}/myPage/add/feedback/success/request-headers.adoc[]
+==== Http request
+include::{snippets}/myPage/add/feedback/success/http-request.adoc[]
+==== Request fields
+include::{snippets}/myPage/add/feedback/success/request-fields.adoc[]
+==== Http Response
+include::{snippets}/myPage/add/feedback/success/http-response.adoc[]
+
 === link:api-docs.html[API 목록으로]
