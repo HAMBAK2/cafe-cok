@@ -138,7 +138,6 @@ public class PlanService {
                                                   final CategoryKeywordsDto categoryKeywords,
                                                   final Long memberId) {
 
-//        List<Cafe> recommendCafes = cafeRepository.findAllByOrderByStarRatingDescNameAsc();
         List<Cafe> recommendCafes = cafeRepository.findNearestCafes(request.getLatitude(), request.getLongitude());
         return CreatePlanResponse.builder()
                 .matchType(MatchType.MISMATCH)
