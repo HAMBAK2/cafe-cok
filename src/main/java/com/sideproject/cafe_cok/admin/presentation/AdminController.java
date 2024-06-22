@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -21,7 +23,6 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
-
 
     @PostMapping(value = "/cafe/save",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,6 +41,15 @@ public class AdminController {
     public ResponseEntity<AdminRestoreMemberResponse> restoreMember(@RequestParam("memberId") Long memberId) {
 
         AdminRestoreMemberResponse response = adminService.restoreMember(memberId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/cafe/exist")
+    @Operation(summary = "저장하려는 카페가 존재하는지 확인하는 기능")
+    public ResponseEntity<AdminCafeExistResponse> checkCafeExist(@RequestParam BigDecimal mapx,
+                                                                 @RequestParam BigDecimal mapy){
+
+        AdminCafeExistResponse response = adminService.checkCafeExist(mapx, mapy);
         return ResponseEntity.ok(response);
     }
 }

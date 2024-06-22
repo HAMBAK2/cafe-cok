@@ -4,7 +4,9 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.exception.NoSuchCafeException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeRepositoryCustom {
 
@@ -13,5 +15,7 @@ public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeRepositor
                 .orElseThrow(NoSuchCafeException::new);
     }
 
-    List<Cafe> findAllByOrderByStarRatingDescNameAsc();
+    Optional<Cafe> findByLatitudeAndLongitude(final BigDecimal latitude,
+                                              final BigDecimal longitude);
+
 }

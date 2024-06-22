@@ -1,6 +1,7 @@
 package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +12,13 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.common.fixtures.AdminFixtures.*;
+import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페_경도;
+import static com.sideproject.cafe_cok.common.fixtures.CafeFixtures.카페_위도;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -23,8 +27,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +38,7 @@ class AdminControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("카페를 저장하는 기능 - 성공")
-    public void test_create_review_success() throws Exception{
+    public void test_create_cafe_success() throws Exception{
 
         byte[] content = "Test file content".getBytes();
         MockMultipartFile mainImage = new MockMultipartFile(
@@ -106,7 +111,33 @@ class AdminControllerTest extends ControllerTest {
                                 fieldWithPath("hours[]").type(JsonFieldType.ARRAY).description("시작시간과 종료을 담은 리스트"),
                                 fieldWithPath("hours[][]").description("idx:0(시작시간), idx:1(종료시간)"))))
                 .andExpect(status().isOk());
-
     }
+
+    @Test
+    @DisplayName("저장하려는 카페가 존재하는지 확인하는 기능 - 성공")
+    public void test_check_cafe_exist_success() throws Exception{
+
+        AdminCafeExistResponse response = 카페_존재_여부_응답();
+
+        when(adminService.checkCafeExist(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+
+
+        mockMvc.perform(get("/api/admin/cafe/exist")
+                        .param("mapx", 카페_경도.toString())
+                        .param("mapy", 카페_위도.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("admin/cafe/exist/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("mapx").description("검색한 위치의 경도"),
+                                parameterWithName("mapy").description("검색한 위치의 위도")),
+                        responseFields(
+                                fieldWithPath("exist").description("카페 존재 여부(true/false)"))))
+                .andExpect(status().isOk());
+    }
+
 
 }

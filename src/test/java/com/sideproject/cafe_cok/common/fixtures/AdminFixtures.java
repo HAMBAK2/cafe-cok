@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.common.fixtures;
 
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
@@ -26,6 +27,12 @@ public class AdminFixtures {
     private static final String 메뉴_이미지 = "Base64로 인코딩된 이미지 정보";
     public static final BigDecimal X_좌표 = new BigDecimal(123456789);
     public static final BigDecimal Y_좌표 = new BigDecimal(123456789);
+
+
+    public static AdminCafeExistResponse 카페_존재_여부_응답() {
+        return new AdminCafeExistResponse(true);
+    }
+
 
     public static AdminCafeSaveRequest 카페_저장_요청() {
         return new AdminCafeSaveRequest(카페_이름, 카페_도로명_주소, X_좌표, Y_좌표, 카페_전화번호,
