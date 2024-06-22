@@ -159,7 +159,7 @@ public class CafeService {
 
             pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT);
             List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByCafeIdAndImageTypeOrderByIdDesc(cafeId, ImageType.REVIEW, pageable);
+                    .findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(cafeId, review.getId(), pageable);
 
             cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
         }
