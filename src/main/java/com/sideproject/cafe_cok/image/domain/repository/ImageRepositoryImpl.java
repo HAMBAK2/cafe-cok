@@ -92,9 +92,9 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
     }
 
     @Override
-    public List<ImageUrlDto> findImageUrlDtoListByCafeIdAndImageTypeOrderByIdDesc(final Long cafeId,
-                                                                                  final ImageType imageType,
-                                                                                  final Pageable pageable) {
+    public List<ImageUrlDto> findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(final Long cafeId,
+                                                                                 final Long reviewId,
+                                                                                 final Pageable pageable) {
 
         return queryFactory
                 .select(new QImageUrlDto(
@@ -103,7 +103,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType),
+                        image.review.id.eq(reviewId),
                         memberDeletedAtIsNull())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
