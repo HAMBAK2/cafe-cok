@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.admin.application;
 
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import com.sideproject.cafe_cok.admin.exception.NoWithdrawalMemberException;
@@ -29,10 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.sideproject.cafe_cok.utils.Constants.*;
 import static com.sideproject.cafe_cok.utils.FormatConverter.*;
@@ -84,6 +87,14 @@ public class AdminService {
                 .forEach(review -> review.getCafe().addReviewCountAndCalculateStarRating(review.getStarRating()));
 
         return new AdminRestoreMemberResponse(findMember);
+    }
+
+    public AdminCafeExistResponse checkCafeExist(final BigDecimal mapx,
+                                  final BigDecimal mapy) {
+
+        Optional<Cafe> findOptionalCafe = cafeRepository.findByLatitudeAndLongitude(mapy, mapx);
+        if(findOptionalCafe.isEmpty()) return new AdminCafeExistResponse(false);
+        return new AdminCafeExistResponse(true);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {

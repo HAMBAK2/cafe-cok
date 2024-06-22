@@ -26,7 +26,7 @@ public interface ImageRepository extends JpaRepository<Image, Long>, ImageReposi
 
     List<Image> findByReviewIdAndImageType(final Long reviewId, final ImageType imageType);
 
-    void deleteByReviewId(final Long reviewId);
+    List<Image> findByMenu(Menu menu);
 
     @Query("SELECT i " +
             "FROM Image i " +
