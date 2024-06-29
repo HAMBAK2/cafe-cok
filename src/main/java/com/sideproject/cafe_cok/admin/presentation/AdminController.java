@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.admin.presentation;
 import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeFindResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,15 @@ public class AdminController {
                                                                  @RequestParam BigDecimal mapy){
 
         AdminCafeExistResponse response = adminService.checkCafeExist(mapx, mapy);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = "/cafe")
+    @Operation(summary = "검색한 카페가 존재하면 카페의 정보를 반환하는 기능")
+    public ResponseEntity<AdminCafeFindResponse> findCafe(@RequestParam BigDecimal mapx,
+                                                           @RequestParam BigDecimal mapy){
+
+        AdminCafeFindResponse response = adminService.findCafe(mapx, mapy);
         return ResponseEntity.ok(response);
     }
 }

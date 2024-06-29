@@ -22,11 +22,13 @@ public interface ImageRepository extends JpaRepository<Image, Long>, ImageReposi
                 .orElseThrow(NoSuchImageException::new);
     }
 
+    List<Image> findImageByCafe(final Cafe cafe);
+
     void deleteAllByIdIn(final List<Long> ids);
 
     List<Image> findByReviewIdAndImageType(final Long reviewId, final ImageType imageType);
 
-    List<Image> findByMenu(Menu menu);
+    List<Image> findByMenu(final Menu menu);
 
     @Query("SELECT i " +
             "FROM Image i " +
