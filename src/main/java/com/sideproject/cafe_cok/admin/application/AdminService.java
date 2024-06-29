@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeFindResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import com.sideproject.cafe_cok.admin.exception.NoWithdrawalMemberException;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
@@ -91,11 +92,48 @@ public class AdminService {
     }
 
     public AdminCafeExistResponse checkCafeExist(final BigDecimal mapx,
-                                  final BigDecimal mapy) {
+                                                 final BigDecimal mapy) {
 
         Optional<Cafe> findOptionalCafe = cafeRepository.findByLatitudeAndLongitude(mapy, mapx);
         if(findOptionalCafe.isEmpty()) return new AdminCafeExistResponse(false);
         return new AdminCafeExistResponse(true);
+    }
+
+    public AdminCafeFindResponse findCafe(final BigDecimal mapx,
+                                          final BigDecimal mapy) {
+
+        Optional<Cafe> findOptionalCafe = cafeRepository.findByLatitudeAndLongitude(mapy, mapx);
+        if(findOptionalCafe.isEmpty()) return new AdminCafeFindResponse();
+
+        Cafe findCafe = findOptionalCafe.get();
+        List<Image> findCafeImages = imageRepository.findImageByCafe(findCafe);
+        CafeMainImageDto findCafeMainImage = null;
+        List<CafeOtherImageDto> findCafeOtherImages = new ArrayList<>();
+        for (Image findCafeImage : findCafeImages) {
+            if(findCafeImage.getImageType().equals(ImageType.CAFE_MAIN)) {
+                findCafeMainImage = CafeMainImageDto.from(findCafeImage);
+                continue;
+            }
+            if(findCafeImage.getImageType().equals(ImageType.CAFE)) {
+                findCafeOtherImages.add(CafeOtherImageDto.from(findCafeImage));
+            }
+        }
+
+        List<CafeSaveMenuDto> findMenuDtoList = new ArrayList<>();
+        List<Menu> findMenus = menuRepository.findByCafeId(findCafe.getId());
+        for (Menu findMenu : findMenus) {
+            List<Image> findMenuImages = imageRepository.findByMenu(findMenu);
+            for (Image findMenuImage : findMenuImages) {
+                findMenuDtoList.add(CafeSaveMenuDto.of(findMenu, findMenuImage));
+            }
+        }
+
+        List<OperationHour> findOperationHourList = operationHourRepository.findByCafeId(findCafe.getId());
+        List<List<String>> findHours = convertOperationHoursToListString(findOperationHourList);
+        AdminCafeSaveResponse cafe = AdminCafeSaveResponse
+                .of(findCafe, findCafeMainImage, findCafeOtherImages, findMenuDtoList, findHours);
+
+        return new AdminCafeFindResponse(cafe);
     }
 
     private CafeMainImageDto saveCafeMainImages(final MultipartFile mainImage, final Cafe cafe) {

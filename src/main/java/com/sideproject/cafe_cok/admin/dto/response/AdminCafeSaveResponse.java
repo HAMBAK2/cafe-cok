@@ -25,7 +25,8 @@ public class AdminCafeSaveResponse {
     private List<CafeSaveMenuDto> menus;
     private List<List<String>> hours;
 
-    public static AdminCafeSaveResponse of(final Cafe cafe, final CafeMainImageDto mainImage,
+    public static AdminCafeSaveResponse of(final Cafe cafe,
+                                           final CafeMainImageDto mainImage,
                                            final List<CafeOtherImageDto> otherImages,
                                            final List<CafeSaveMenuDto> menus,
                                            final List<List<String>> hours) {
