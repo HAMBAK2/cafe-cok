@@ -75,8 +75,9 @@ public class AdminService {
             List<Menu> findMenus = menuRepository.findByCafeId(cafe.getId());
 
             for (Menu menu : findMenus) {
-                Image findImage = imageRepository.findByMenu(menu).get(0);
-                findImages.add(findImage);
+                List<Image> findMenuImages = imageRepository.findByMenu(menu);
+                if(findMenuImages.isEmpty()) continue;
+                findImages.add(findImages.get(0));
             }
 
             for (Image findImage : findImages) {
