@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.common.fixtures;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeFindResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
@@ -28,6 +29,10 @@ public class AdminFixtures {
     public static final BigDecimal X_좌표 = new BigDecimal(123456789);
     public static final BigDecimal Y_좌표 = new BigDecimal(123456789);
 
+
+    public static AdminCafeFindResponse 카페_조회_응답() {
+        return new AdminCafeFindResponse(카페_저장_응답());
+    }
 
     public static AdminCafeExistResponse 카페_존재_여부_응답() {
         return new AdminCafeExistResponse(true);

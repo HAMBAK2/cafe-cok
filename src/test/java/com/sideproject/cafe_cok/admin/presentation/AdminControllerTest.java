@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
+import com.sideproject.cafe_cok.admin.dto.response.AdminCafeFindResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
 import com.sideproject.cafe_cok.common.annotation.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -136,6 +137,57 @@ class AdminControllerTest extends ControllerTest {
                                 parameterWithName("mapy").description("검색한 위치의 위도")),
                         responseFields(
                                 fieldWithPath("exist").description("카페 존재 여부(true/false)"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("검색한 카페가 존재하면 카페의 정보를 반환하는 기능 - 성공")
+    public void test_find_cafe_success() throws Exception{
+
+        AdminCafeFindResponse response = 카페_조회_응답();
+
+        when(adminService.findCafe(any(BigDecimal.class), any(BigDecimal.class))).thenReturn(response);
+
+        mockMvc.perform(get("/api/admin/cafe")
+                        .param("mapx", 카페_경도.toString())
+                        .param("mapy", 카페_위도.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("admin/cafe/success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("mapx").description("검색한 위치의 경도"),
+                                parameterWithName("mapy").description("검색한 위치의 위도")),
+                        responseFields(
+                                fieldWithPath("cafe").type(JsonFieldType.OBJECT).description("조회한 카페관련 정보를 담은 객체"),
+                                fieldWithPath("cafe.id").description("카페 ID"),
+                                fieldWithPath("cafe.name").description("카페 이름"),
+                                fieldWithPath("cafe.roadAddress").description("카페 주소"),
+                                fieldWithPath("cafe.mapx").description("카페 경도"),
+                                fieldWithPath("cafe.mapy").description("카페 위도"),
+                                fieldWithPath("cafe.telephone").description("카페 전화번호"),
+                                fieldWithPath("cafe.mainImage").type(JsonFieldType.OBJECT).description("저장된 카페 이미지들의 정보"),
+                                fieldWithPath("cafe.mainImage.id").description("메인 이미지 ID"),
+                                fieldWithPath("cafe.mainImage.origin").description("메인 이미지 원본 URL"),
+                                fieldWithPath("cafe.mainImage.medium").description("메인 이미지 중간 URL"),
+                                fieldWithPath("cafe.mainImage.thumbnail").description("메인 이미지 썸네일 URL"),
+                                fieldWithPath("cafe.otherImages").type(JsonFieldType.ARRAY).description("나머지 카페 이미지 리스트"),
+                                fieldWithPath("cafe.otherImages[].id").description("나머지 이미지 ID"),
+                                fieldWithPath("cafe.otherImages[].origin").description("나머지 이미지 원본 URL"),
+                                fieldWithPath("cafe.otherImages[].thumbnail").description("나머지 이미지 썸네일 URL"),
+                                fieldWithPath("cafe.menus").type(JsonFieldType.ARRAY).description("카페의 메뉴 리스트"),
+                                fieldWithPath("cafe.menus[].id").description("메뉴 ID"),
+                                fieldWithPath("cafe.menus[].name").description("메뉴 이름"),
+                                fieldWithPath("cafe.menus[].price").description("메뉴 가격"),
+                                fieldWithPath("cafe.menus[].image").type(JsonFieldType.OBJECT).description("메뉴 이미지 객체"),
+                                fieldWithPath("cafe.menus[].image.id").description("메뉴 이미지 ID"),
+                                fieldWithPath("cafe.menus[].image.origin").description("메뉴 원본 이미지 URL"),
+                                fieldWithPath("cafe.menus[].image.thumbnail").description("메뉴 썸네일 이미지 URL"),
+                                fieldWithPath("cafe.hours").type(JsonFieldType.ARRAY).description("카페 운영 시간에 관한 정보(월~일(7개)"),
+                                fieldWithPath("cafe.hours[]").type(JsonFieldType.ARRAY).description("시작시간과 종료을 담은 리스트"),
+                                fieldWithPath("cafe.hours[][]").description("idx:0(시작시간), idx:1(종료시간)"))))
                 .andExpect(status().isOk());
     }
 
