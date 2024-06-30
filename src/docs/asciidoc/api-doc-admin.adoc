@@ -16,7 +16,17 @@ include::{snippets}/admin/cafe/save/success/http-response.adoc[]
 ==== Response fields
 include::{snippets}/admin/cafe/save/success/response-fields.adoc[]
 
-=== 0-2. 카페 존재 여부 조회(Get) - 성공
+=== 0-2. 카페 조회(존재하면 카페 정보 반환) - 성공
+==== Http request
+include::{snippets}/admin/cafe/success/http-request.adoc[]
+==== Query parameters
+include::{snippets}/admin/cafe/success/query-parameters.adoc[]
+==== Http response
+include::{snippets}/admin/cafe/success/http-response.adoc[]
+==== Response fields
+include::{snippets}/admin/cafe/success/response-fields.adoc[]
+
+=== 0-3. 카페 존재 여부 조회(Get) - 성공
 ==== Http request
 include::{snippets}/admin/cafe/exist/success/http-request.adoc[]
 ==== Query parameters

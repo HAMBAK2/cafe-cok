@@ -18,7 +18,9 @@ public class AdminMenuSaveRequest {
 
     protected AdminMenuSaveRequest() {}
 
-    public AdminMenuSaveRequest(final String name, final Integer price, final String image) {
+    public AdminMenuSaveRequest(final String name,
+                                final Integer price,
+                                final String image) {
         this.name = name;
         this.price = price;
         this.image = image;
