@@ -84,6 +84,19 @@ Cafe extends BaseEntity {
         this.reviewCount = 0L;
     }
 
+    public void changeCafe(final String name,
+                           final String phoneNumber,
+                           final String roadAddress,
+                           final BigDecimal longitude,
+                           final BigDecimal latitude) {
+        validatePhoneNumber(phoneNumber);
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
     private void validatePhoneNumber(final String phoneNumber) {
         if(phoneNumber == null || phoneNumber.isEmpty()) return;
         Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);

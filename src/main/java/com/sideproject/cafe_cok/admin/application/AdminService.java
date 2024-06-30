@@ -63,9 +63,39 @@ public class AdminService {
 
     @Transactional
     public AdminCafeSaveResponse saveCafe(final AdminCafeSaveRequest request,
-                                          final MultipartFile mainImage, final List<MultipartFile> otherImages) {
+                                          final MultipartFile mainImage,
+                                          final List<MultipartFile> otherImages) {
 
         Cafe cafe = request.toEntity();
+        Optional<Cafe> findOptionalCafe = cafeRepository.findByLatitudeAndLongitude(request.getMapy(), request.getMapx());
+        if(findOptionalCafe.isPresent()) {
+
+            cafe = findOptionalCafe.get();
+            List<Image> findImages = imageRepository.findImageByCafe(cafe);
+            List<Menu> findMenus = menuRepository.findByCafeId(cafe.getId());
+
+            for (Menu menu : findMenus) {
+                Image findImage = imageRepository.findByMenu(menu).get(0);
+                findImages.add(findImage);
+            }
+
+            for (Image findImage : findImages) {
+                String origin = findImage.getOrigin();
+                String thumbnail = findImage.getThumbnail();
+                String medium = findImage.getMedium();
+
+                if(origin != null) s3Uploader.delete(origin);
+                if(thumbnail != null) s3Uploader.delete(origin);
+                if(medium != null) s3Uploader.delete(origin);
+            }
+
+            imageRepository.deleteAll(findImages);
+            menuRepository.deleteAll(findMenus);
+            List<OperationHour> findOperationHours = operationHourRepository.findByCafeId(cafe.getId());
+            operationHourRepository.deleteAll(findOperationHours);
+            cafe.changeCafe(request.getName(), request.getTelephone(), request.getRoadAddress(), request.getMapx(), request.getMapy());
+        }
+
         Cafe savedCafe = cafeRepository.save(cafe);
         CafeMainImageDto mainImageDto = saveCafeMainImages(mainImage, savedCafe);
         List<CafeOtherImageDto> otherImageDtos = saveCafeOtherImages(otherImages, savedCafe);
@@ -123,6 +153,7 @@ public class AdminService {
         List<Menu> findMenus = menuRepository.findByCafeId(findCafe.getId());
         for (Menu findMenu : findMenus) {
             List<Image> findMenuImages = imageRepository.findByMenu(findMenu);
+            if(findMenuImages.isEmpty()) findMenuDtoList.add(CafeSaveMenuDto.from(findMenu));
             for (Image findMenuImage : findMenuImages) {
                 findMenuDtoList.add(CafeSaveMenuDto.of(findMenu, findMenuImage));
             }
