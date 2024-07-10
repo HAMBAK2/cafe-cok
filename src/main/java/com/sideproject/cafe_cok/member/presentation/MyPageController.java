@@ -113,7 +113,7 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/add/feedback")
+    @PostMapping("/feedback")
     @Operation(summary = "마이페이지 개선 의견 남기기 기능")
     public ResponseEntity<Void> addFeedback(@AuthenticationPrincipal LoginMember loginMember,
                                             @RequestBody MemberFeedbackRequest request) {

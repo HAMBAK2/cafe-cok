@@ -3,6 +3,9 @@ package com.sideproject.cafe_cok.auth.application;
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
 import com.sideproject.cafe_cok.auth.exception.InvalidRestoreMemberException;
+import com.sideproject.cafe_cok.member.domain.Feedback;
+import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
+import com.sideproject.cafe_cok.member.domain.repository.FeedbackRepository;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
 import com.sideproject.cafe_cok.auth.domain.OAuthToken;
@@ -32,6 +35,7 @@ public class AuthService {
 
     private final TokenCreator tokenCreator;
     private final MemberRepository memberRepository;
+    private final FeedbackRepository feedbackRepository;
     private final OAuthTokenRepository oAuthTokenRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
@@ -78,8 +82,12 @@ public class AuthService {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         findMember.changeDeletedAt(LocalDateTime.now());
-        findMember.changeDeletionReason(reason);
 
+        Feedback newFeedback = new Feedback(
+                findMember.getEmail(),
+                FeedbackCategory.WITHDRAWAL_REASON,
+                reason);
+        feedbackRepository.save(newFeedback);
         List<Review> findReviews = findMember.getReviews();
         findReviews.stream()
                 .forEach(review -> review.getCafe().minusReviewCountAndCalculateStarRating(review.getStarRating()));

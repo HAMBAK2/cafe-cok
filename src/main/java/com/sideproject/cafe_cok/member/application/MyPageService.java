@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.member.application;
 
+import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import com.sideproject.cafe_cok.member.dto.request.MemberFeedbackRequest;
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
@@ -171,7 +172,10 @@ public class MyPageService {
                             final MemberFeedbackRequest request) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        Feedback newFeedback = new Feedback(findMember.getEmail(), request.getContent());
+        Feedback newFeedback = new Feedback(
+                findMember.getEmail(),
+                FeedbackCategory.IMPROVEMENT_SUGGESTION,
+                request.getContent());
         feedbackRepository.save(newFeedback);
     }
 }
