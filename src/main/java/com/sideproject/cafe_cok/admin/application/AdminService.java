@@ -113,7 +113,6 @@ public class AdminService {
         if (findMember.getDeletedAt() == null) throw new NoWithdrawalMemberException();
 
         findMember.changeDeletedAt(null);
-        findMember.changeDeletionReason(null);
 
         List<Review> findReviews = findMember.getReviews();
         findReviews.stream()

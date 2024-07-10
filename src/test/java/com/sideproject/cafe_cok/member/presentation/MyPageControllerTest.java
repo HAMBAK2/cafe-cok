@@ -377,13 +377,13 @@ class MyPageControllerTest extends ControllerTest {
         MemberFeedbackRequest request = 개선의견_요청();
 
         mockMvc.perform(
-                        post("/api/myPage/add/feedback")
+                        post("/api/myPage/feedback")
                                 .header(AUTHORIZATION_HEADER_NAME, AUTHORIZATION_HEADER_VALUE)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
-                .andDo(document("myPage/add/feedback/success",
+                .andDo(document("myPage/feedback/success",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

@@ -46,9 +46,6 @@ public class Member extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "deletion_reason")
-    private String deletionReason;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();
 
@@ -92,9 +89,6 @@ public class Member extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    public void changeDeletionReason(final String deletionReason) {
-        this.deletionReason = deletionReason;
-    }
 
 
 }
