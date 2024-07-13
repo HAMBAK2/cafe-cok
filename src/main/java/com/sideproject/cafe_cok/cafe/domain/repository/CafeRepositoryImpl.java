@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.cafe.domain.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -38,18 +39,27 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     @Override
     public List<Cafe> findNotMismatchCafes(final CreatePlanRequest request) {
 
+        BooleanBuilder conditions = new BooleanBuilder();
+
+        if (request.getDate() != null) {
+            conditions.and(dateEq(request.getDate()));
+        }
+
+        if (!request.getStartTime().equals(LocalTime.MIDNIGHT) && !request.getEndTime().equals(LocalTime.MIDNIGHT)) {
+            conditions.and(openingTimeLoe(request.getStartTime()));
+            conditions.and(closingTimeGoe(request.getEndTime()));
+        }
+
+        conditions.and(keywordNamesIn(request.getKeywords()));
+        conditions.and(isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()));
+
         return queryFactory
                 .select(cafe)
                 .from(operationHour)
                 .leftJoin(operationHour.cafe, cafe)
                 .leftJoin(cafe.cafeReviewKeywords, cafeReviewKeyword)
                 .leftJoin(cafeReviewKeyword.keyword, keyword)
-                .where(
-                        dateEq(request.getDate()),
-                        openingTimeLoe(request.getStartTime()),
-                        closingTimeGoe(request.getEndTime()),
-                        keywordNamesIn(request.getKeywords()),
-                        isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()))
+                .where(conditions)
                 .fetch();
     }
 
