@@ -55,8 +55,8 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
 
         return queryFactory
                 .select(cafe)
-                .from(operationHour)
-                .leftJoin(operationHour.cafe, cafe)
+                .from(cafe)
+                .leftJoin(cafe.operationHours, operationHour)
                 .leftJoin(cafe.cafeReviewKeywords, cafeReviewKeyword)
                 .leftJoin(cafeReviewKeyword.keyword, keyword)
                 .where(conditions)
@@ -143,7 +143,7 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
         if(isEmpty(latitude) || isEmpty(longitude)) return null;
 
         double radiusInKm;
-        if(isEmpty(minutes)) radiusInKm = calculateRadiusInKm(MAX_RADIUS_TIME);
+        if(isEmpty(minutes) || minutes == 0) radiusInKm = calculateRadiusInKm(MAX_RADIUS_TIME);
         else radiusInKm = calculateRadiusInKm(minutes);
 
         NumberExpression<BigDecimal> radiansLatitude =
