@@ -281,8 +281,16 @@ public class CafeService {
     }
 
     private OpenStatus checkOpenStatus(final OperationHour operationHour) {
-        if(operationHour.getOpeningTime().isAfter(LocalTime.now())
-                && operationHour.getClosingTime().isBefore(LocalTime.now())) return OpenStatus.OPEN;
+
+        LocalTime openingTime = operationHour.getOpeningTime();
+        LocalTime closingTime = operationHour.getClosingTime();
+
+        LocalTime now = LocalTime.now();
+
+        boolean before = openingTime.isBefore(now);
+        boolean after = closingTime.isAfter(now);
+
+        if(after && before) return OpenStatus.OPEN;
         return OpenStatus.CLOSE;
     }
 
