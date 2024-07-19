@@ -11,6 +11,8 @@ import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.keword.dto.QKeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.QKeywordDto;
+import com.sideproject.cafe_cok.theme.domain.QTheme;
+import com.sideproject.cafe_cok.theme.domain.QThemeKeyword;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.keword.domain.QCafeReviewKeyword.*;
+import static com.sideproject.cafe_cok.theme.domain.QTheme.*;
+import static com.sideproject.cafe_cok.theme.domain.QThemeKeyword.*;
 import static org.springframework.util.StringUtils.isEmpty;
 import static com.sideproject.cafe_cok.combination.domain.QCombinationKeyword.*;
 import static com.sideproject.cafe_cok.keword.domain.QKeyword.*;
@@ -123,6 +127,19 @@ public class KeywordRepositoryImpl implements KeywordRepositoryCustom {
                 .orderBy(keyword.id.count().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .fetch();
+    }
+
+    @Override
+    public List<String> findKeywordNames(final List<String> keywords) {
+
+        return queryFactory
+                .select(keyword.name)
+                .from(keyword)
+                .leftJoin(themeKeyword).on(keyword.id.eq(themeKeyword.keyword.id))
+                .leftJoin(theme).on(theme.id.eq(themeKeyword.theme.id))
+                .where(theme.name.in(keywords)
+                        .or(keyword.name.in(keywords)))
                 .fetch();
     }
 

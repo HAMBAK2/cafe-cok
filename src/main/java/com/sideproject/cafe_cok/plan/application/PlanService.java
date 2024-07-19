@@ -59,10 +59,11 @@ public class PlanService {
     public CreatePlanResponse plan(final CreatePlanRequest request,
                                    final Long memberId) {
 
-        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
+        List<String> findKeywordNames = keywordRepository.findKeywordNames(request.getKeywords());
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(findKeywordNames));
         if(categoryKeywords.getPurpose().isEmpty()) throw new NoSuchPlanKeywordException();
 
-        List<Cafe> notMismatchCafes = getNotMissMatchCafes(request);
+        List<Cafe> notMismatchCafes = getNotMissMatchCafes(request, findKeywordNames);
         if(notMismatchCafes.isEmpty()) return createMisMatchPlan(request, categoryKeywords, memberId);
 
         List<Cafe> allMatchCafes = getCafesByKeywordAllMatch(notMismatchCafes, request.getKeywords());
@@ -105,9 +106,10 @@ public class PlanService {
     }
 
 
-    private List<Cafe> getNotMissMatchCafes(final CreatePlanRequest request) {
+    private List<Cafe> getNotMissMatchCafes(final CreatePlanRequest request,
+                                            final List<String> keywordNames) {
 
-        List<Cafe> notMismatchCafes = cafeRepository.findNotMismatchCafes(request);
+        List<Cafe> notMismatchCafes = cafeRepository.findNotMismatchCafes(request, keywordNames);
         Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
 
         return notMismatchCafes.stream().filter(cafe -> {
