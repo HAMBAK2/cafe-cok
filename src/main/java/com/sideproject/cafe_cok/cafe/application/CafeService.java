@@ -190,16 +190,19 @@ public class CafeService {
         return new CafeSearchResponse(withinRadiusCafes);
     }
 
-    public CafeSearchResponse findCafeByKeyword(final CafeFindCategoryRequest request, final Long memberId) {
+    public CafeSearchResponse findCafeByKeyword(final CafeFindCategoryRequest request,
+                                                final Long memberId) {
 
         List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(request.getLatitude(), request.getLongitude(), memberId);
-        List<String> targetKeywordNames = request.getKeywords();
-
+        List<String> targetKeywordNames = keywordRepository.findKeywordNames(request.getKeywords());
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
-        for (CafeDto withinRadiusCafe : withinRadiusCafes) {
-            List<String> findNames = keywordRepository.findNamesByCafeId(withinRadiusCafe.getId());
-            boolean allMatch = targetKeywordNames.stream().allMatch(findNames::contains);
-            if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
+
+        if(!targetKeywordNames.isEmpty()) {
+            for (CafeDto withinRadiusCafe : withinRadiusCafes) {
+                List<String> findNames = keywordRepository.findNamesByCafeId(withinRadiusCafe.getId());
+                boolean allMatch = targetKeywordNames.stream().allMatch(findNames::contains);
+                if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
+            }
         }
 
         return new CafeSearchResponse(filteredWithinRadiusCafes);

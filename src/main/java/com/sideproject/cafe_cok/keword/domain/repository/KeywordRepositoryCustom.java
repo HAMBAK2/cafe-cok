@@ -28,4 +28,6 @@ public interface KeywordRepositoryCustom {
 
     List<KeywordCountDto> findKeywordCountDtoListByCafeIdOrderByCountDesc(final Long cafeId,
                                                                           final Pageable pageable);
+
+    List<String> findKeywordNames(final List<String> keywords);
 }
