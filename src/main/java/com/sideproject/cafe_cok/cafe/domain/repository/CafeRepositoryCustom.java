@@ -11,7 +11,8 @@ import java.util.List;
 
 public interface CafeRepositoryCustom {
 
-    List<Cafe> findNotMismatchCafes(final CreatePlanRequest request);
+    List<Cafe> findNotMismatchCafes(final CreatePlanRequest request,
+                                    final List<String> keywordNames);
 
     List<Cafe> findWithinRadiusCafeList(final BigDecimal latitude,
                                         final BigDecimal longitude);

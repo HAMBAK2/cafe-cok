@@ -37,7 +37,8 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<Cafe> findNotMismatchCafes(final CreatePlanRequest request) {
+    public List<Cafe> findNotMismatchCafes(final CreatePlanRequest request,
+                                           final List<String> keywordNames) {
 
         BooleanBuilder conditions = new BooleanBuilder();
 
@@ -50,7 +51,7 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
             conditions.and(closingTimeGoe(request.getEndTime()));
         }
 
-        conditions.and(keywordNamesIn(request.getKeywords()));
+        conditions.and(keywordNamesIn(keywordNames));
         conditions.and(isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()));
 
         return queryFactory
