@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<!-- head -->
+<head>
+    <title>카페콕 관리자/개선의견</title>
+</head>
+<!-- Content -->
+<div layout:fragment="content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">개선의견</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">개선의견</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-body">
+                    사용자들의 개선의견을 조회할 수 있는 페이지입니다.
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    개선의견 List
+                </div>
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Email</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Id</th>
+                                <th>Email</th>
+                                <th>Content</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr th:each="suggestion : ${suggestions}">
+                                <td th:text="${suggestion.id}">Id</td>
+                                <td th:text="${suggestion.email}">Email</td>
+                                <td th:text="${suggestion.content}">Content</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</html>
