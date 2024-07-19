@@ -20,9 +20,9 @@ public class AdminFeedbackController {
     @GetMapping("/suggestions")
     public String suggestions(Model model) {
 
-        List<SuggestionDto> findSuggestionDtos = adminFeedbackService.findFeedbackByCategory(FeedbackCategory.IMPROVEMENT_SUGGESTION);
-        model.addAttribute("suggestions", findSuggestionDtos);
-        return "page/main/suggestions";
+        List<SuggestionDto> findSuggestions = adminFeedbackService.findFeedbackByCategory(FeedbackCategory.IMPROVEMENT_SUGGESTION);
+        model.addAttribute("suggestions", findSuggestions);
+        return "page/feedback/suggestions";
     }
 
     @GetMapping("/withdrawal-reason")
@@ -30,6 +30,6 @@ public class AdminFeedbackController {
 
         List<SuggestionDto> findWithdrawalReasons = adminFeedbackService.findFeedbackByCategory(FeedbackCategory.WITHDRAWAL_REASON);
         model.addAttribute("withdrawalReasons", findWithdrawalReasons);
-        return "page/main/withdrawal-reason";
+        return "page/feedback/withdrawal-reason";
     }
 }
