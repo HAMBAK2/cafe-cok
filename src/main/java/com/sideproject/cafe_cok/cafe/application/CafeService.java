@@ -179,7 +179,8 @@ public class CafeService {
 
         List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(latitude, longitude, memberId);
         CafeDto targetCafe = withinRadiusCafes.stream()
-                .filter(cafe -> cafe.getLatitude().equals(latitude) && cafe.getLatitude().equals(longitude))
+                .filter(cafe -> cafe.getLatitude().compareTo(latitude) == 0 &&
+                        cafe.getLongitude().compareTo(longitude) == 0)
                 .findFirst()
                 .orElse(null);
 
