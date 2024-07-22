@@ -74,6 +74,7 @@ public class FormatConverter {
     public static String convertFormatPhoneNumber(final String phoneNumber) {
 
         if(phoneNumber == null || phoneNumber.isEmpty()) return phoneNumber;
+        if(phoneNumber.split("-")[0].equals("0507")) return phoneNumber;
 
         try {
             PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
