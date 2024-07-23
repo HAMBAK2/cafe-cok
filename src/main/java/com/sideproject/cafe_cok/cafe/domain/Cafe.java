@@ -25,8 +25,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "cafes")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class
-Cafe extends BaseEntity {
+public class Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
     private static final Integer X_NUM_DIGITS = 3;

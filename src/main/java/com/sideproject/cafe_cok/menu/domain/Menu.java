@@ -33,9 +33,19 @@ public class Menu extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
-    public Menu(final String name, final Integer price, final Cafe cafe) {
+    public Menu(final String name,
+                final Integer price,
+                final Cafe cafe) {
         this.name = name;
         this.price = price;
         this.cafe = cafe;
+    }
+
+    public void changeName(final String name) {
+        this.name = name;
+    }
+
+    public void changePrice(final Integer price) {
+        this.price = price;
     }
 }

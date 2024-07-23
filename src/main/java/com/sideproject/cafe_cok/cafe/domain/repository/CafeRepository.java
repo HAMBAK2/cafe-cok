@@ -18,4 +18,6 @@ public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeRepositor
     Optional<Cafe> findByLatitudeAndLongitude(final BigDecimal latitude,
                                               final BigDecimal longitude);
 
+    List<Cafe> findAllByOrderByIdDesc();
+
 }

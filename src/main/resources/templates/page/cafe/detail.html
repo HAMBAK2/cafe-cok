@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title th:text="'카페콕 관리자/카페 리스트 / ' + ${cafe.name}">카페콕 관리자/카페 리스트 / 카페 이름</title>
+    <style>
+        .btn-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .submit-button-container {
+            position: absolute;
+            right: 10px;
+            bottom: 80px;
+        }
+
+        .submit-button-container button {
+            font-size: 1.25rem;
+            padding: 5px 30px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap; /* 여러 줄로 감싸도록 설정 */
+            gap: 10px; /* 체크박스 간의 간격 */
+        }
+        .form-check {
+            margin: 0;
+        }
+        .form-check-input {
+            transform: scale(1.2); /* 체크박스 크기 조절 */
+        }
+        .form-check-label {
+            font-size: 1.2rem; /* 레이블 글자 크기 조절 */
+            padding: 5px 10px; /* 레이블 주변 여백 추가 */
+            background-color: black; /* 레이블 배경색 */
+            color: white; /* 레이블 텍스트 색상 설정 */
+            font-weight: bold; /* 레이블 텍스트 두껍게 설정 */
+            border-radius: 5px; /* 레이블 모서리 둥글게 */
+            transition: background-color 0.3s; /* 배경색 전환 효과 */
+        }
+        .form-check-label:hover {
+            background-color: #e9ecef; /* 레이블 호버시 배경색 */
+        }
+    </style>
+    <script src="/js/cafe-detail.js"></script>
+</head>
+<div layout:fragment="content">
+    <main>
+        <div th:if="${message}" class="alert alert-success" role="alert">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4" th:text="${cafe.name}">카페 목록</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active"><a th:href="@{/admin/cafes}">카페 목록</a></li>
+                <li class="breadcrumb-item active" th:text="${cafe.name}">카페 이름</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-body">
+                    선택한 카페의 상세 정보를 확인할 수 있는 페이지입니다. 변경 후 화면 최하단 "수정하기" 버튼 클릭 시 수정이 가능합니다.
+                </div>
+            </div>
+            <div>
+                <form id="cafe-form">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeName" class="form-label">카페명</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeId" name="id" th:value="${cafe.id}" style="display: none;">
+                            <input type="text" class="form-control" id="cafeName" name="name" th:value="${cafe.name}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeAddress" class="form-label">주소</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeAddress" name="address" th:value="${cafe.address}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafePhoneNumber" class="form-label">전화번호</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafePhoneNumber" name="phoneNumber" th:value="${cafe.phoneNumber}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeLatitude" class="form-label">위도</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeLatitude" name="latitude" th:value="${cafe.latitude}" readonly
+                                   style="background-color: #f0f0f0; color: #6c757d; cursor: not-allowed;">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeLongitude" class="form-label">경도</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeLongitude" name="longitude" th:value="${cafe.longitude}" readonly
+                                   style="background-color: #f0f0f0; color: #6c757d; cursor: not-allowed;">
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">이미지</h4>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            메인 이미지 포함 총 3개까지 입력 가능하며, 파일을 선택해서 추가하면 수정된 이미지로 변경됩니다.
+                        </div>
+                    </div>
+                    <div class="image-container" id="image-container">
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeMainImage" class="form-label">메인 이미지</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="cafeMainImageFile" th:data-image-id="${cafe.images.get(0).id}">
+                            </div>
+                            <div class="col-md-4 btn-container">
+                                <span id="cafeImage0" style="display:none;" th:text="${cafe.images.get(0).origin}"></span>
+                                <button type="button" class="btn btn-dark" th:id = "viewCafeImageButton0"
+                                        th:attr="data-index=0"
+                                        onclick="window.open(showImage(this, 'cafeImage').textContent, '_blank')">기존 이미지 보기</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeOtherImage1" class="form-label">추가 이미지1</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" th:if="${cafe.images.size() >= 2}" class="form-control" id="cafeOtherImageFile1" th:data-image-id="${cafe.images.get(1).id}">
+                                <input type="file" th:unless="${cafe.images.size() >= 2}" class="form-control" id="cafeOtherImageFile1">
+                            </div>
+                            <div class="col-md-4 btn-container">
+                                <span id="cafeImage1" th:if="${cafe.images.size() >= 2}" style="display:none;" th:text="${cafe.images.get(1).origin}"></span>
+                                <button type="button" th:if="${cafe.images.size() >= 2}" class="btn btn-dark" th:id = "viewCafeImageButton1"
+                                        th:attr="data-index=1"
+                                        onclick="window.open(showImage(this, 'cafeImage').textContent, '_blank')">기존 이미지 보기</button>
+                                <button type="button" th:unless="${cafe.images.size() >= 2}" class="btn btn-dark" th:id = "noCafeImageButton1" disabled>이미지 없음</button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeOtherImage2" class="form-label">추가 이미지2</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" th:if="${cafe.images.size() >= 3}" class="form-control" id="cafeOtherImageFile2" th:data-image-id="${cafe.images.get(2).id}">
+                                <input type="file" th:unless="${cafe.images.size() >= 3}" class="form-control" id="cafeOtherImageFile2">
+                            </div>
+                            <div class="col-md-4 btn-container">
+                                <span id="cafeImage2" th:if="${cafe.images.size() >= 3}" style="display:none;" th:text="${cafe.images.get(2).origin}"></span>
+                                <button type="button" th:if="${cafe.images.size() >= 3}" class="btn btn-dark" th:id = "viewCafeImageButton2"
+                                        th:attr="data-index=2"
+                                        onclick="window.open(showImage(this, 'cafeImage').textContent, '_blank')">기존 이미지 보기</button>
+                                <button type="button" th:unless="${cafe.images.size() >= 3}" class="btn btn-dark" th:id = "noCafeImageButton2" disabled>이미지 없음</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">메뉴</h4>
+                        <button type="button" class="btn btn-success" onclick="addMenuList()">메뉴 목록 추가</button>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            메뉴 삭제 버튼을 누르면 기존에 저장된 메뉴가 완전히 삭제됩니다. 이미지 파일을 추가하면 해당 이미지 파일로 변경됩니다.
+                        </div>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(cafe.menus)}" class="menu-container" id="menu-container"></div>
+
+<!--                    <div th:if="${!#lists.isEmpty(cafe.menus)}" th:each="menu, iterStat : ${cafe.menus}" class="menu-container" id="menu-container">-->
+                    <div class="menu-container" id="menu-container">
+
+                        <div class="row mb-3" th:if="${!#lists.isEmpty(cafe.menus)}" th:each="menu, iterStat : ${cafe.menus}">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" th:id="'menuId' + ${iterStat.index}" name="id" th:value="${menu.id}" style="display: none;">
+                                <input type="file" class="form-control" th:id="'menuImageFile' + ${iterStat.index}">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" th:id="'menuName' + ${iterStat.index}"
+                                       th:placeholder="'메뉴명'" th:value="${menu.name}">
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control" th:id="'menuPrice' + ${iterStat.index}"
+                                       th:placeholder="'가격'" th:value="${menu.price}">
+                            </div>
+                            <div class="col-md-4 btn-container" th:if="${menu.image != null && menu.image.origin.trim() != ''}">
+                                <span th:id="'menuImage' + ${iterStat.index}" style="display:none;" th:text="${menu.image.origin}"></span>
+                                <button type="button" class="btn btn-dark" th:id = "'viewMenuImageButton' + ${iterStat.index}"
+                                        th:attr="data-index=${iterStat.index}"
+                                        onclick="window.open(showImage(this, 'menuImage').textContent, '_blank')">기존 이미지 보기</button>
+                                <button type="button" class="btn btn-danger" th:id="'deleteMenuButton' + ${iterStat.index}"
+                                        th:data-menu-Id = "${menu.id}"
+                                        th:data-idx = "${iterStat.index}">기존 메뉴 삭제</button>
+                            </div>
+                            <div class="col-md-4 btn-container" th:if="${menu.image == null || menu.image.origin.trim() == ''}">
+                                <button type="button" class="btn btn-dark" th:id = "'viewImageButton' + ${iterStat.index}" disabled>기존 이미지 없음</button>
+                                <button type="button" class="btn btn-danger" th:id="'deleteMenuButton' + ${iterStat.index}"
+                                        th:data-menu-Id = "${menu.id}"
+                                        th:data-idx = "${iterStat.index}">기존 메뉴 삭제</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">영업시간</h4>
+                    </div>
+                    <div class="operation-hours-container" >
+                        <div class="checkbox-container">
+                            <div th:each="day, iterStat : ${daysOfWeek}" class="form-check">
+                                <input class="form-check-input" type="checkbox" th:id="'day' + ${iterStat.index}"
+                                       th:name="'days'"
+                                       th:value="${day}">
+                                <label class="form-check-label" th:for="'day' + ${iterStat.index}" th:text="${day}"></label>
+                            </div>
+                        </div>
+                        <div class="input-container row mt-3">
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="시작 시간">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="시작 분">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <label class="form-label">  ~~~~~~~~~  </label>
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="종료 시간">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="종료 분">
+                            </div>
+
+                            <div class="col-md-1 mb-2">
+                                <button type="button" class="btn btn-success" onclick="selectApply()">선택 적용</button>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row" id="selected-time-group">
+                            <div th:each="hour, iterStat : ${cafe.hours}" class="col-md-12 mb-3">
+                                <div class="row input-group">
+                                    <div class="col-md-1 mb-2">
+                                        <span class="day-span" th:text="${hour.day}"></span>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control start-hour" th:id="start-hour" th:value="${hour.startHour}">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control start-minute" th:id="start-minute" th:value="${hour.startMinute}">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <label class="form-label">  ~~~~~~~~~  </label>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control end-hour" th:id="end-hour" th:value="${hour.endHour}">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control end-minute" th:id="end-minute" th:value="${hour.endMinute}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="submit-button-container">
+                        <button type="submit" class="btn btn-success">수정하기</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+</html>

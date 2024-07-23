@@ -13,8 +13,11 @@ import java.text.NumberFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+
+import static java.time.DayOfWeek.*;
 
 public class FormatConverter {
 
@@ -71,6 +74,27 @@ public class FormatConverter {
         }
     }
 
+    public static DayOfWeek getDyaOfWeekByKoreanDay(String day) {
+        switch (day) {
+            case "월":
+                return MONDAY;
+            case "화":
+                return TUESDAY;
+            case "수":
+                return WEDNESDAY;
+            case "목":
+                return THURSDAY;
+            case "금":
+                return FRIDAY;
+            case "토":
+                return SATURDAY;
+            case "일":
+                return SUNDAY;
+            default:
+                throw new IllegalArgumentException("유효하지 않은 요일입니다: " + day);
+        }
+    }
+
     public static String convertFormatPhoneNumber(final String phoneNumber) {
 
         if(phoneNumber == null || phoneNumber.isEmpty()) return phoneNumber;
@@ -88,19 +112,14 @@ public class FormatConverter {
 
     public static File convertBase64StringToFile(final String base64String) {
 
-        String[] splitedString = base64String.split(",");
-
-        String extension = splitedString[0].split(";")[0].split("/")[1];
-        byte[] imageData = DatatypeConverter.parseBase64Binary(splitedString[1]);
-        String filename = UUID.randomUUID().toString() + "." + extension;
+        byte[] decode = Base64.getDecoder().decode(base64String);
+        String filename = UUID.randomUUID().toString() + ".jpg";
         File file = new File(filename);
         try(FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(imageData);
-            System.out.println("Image file saved as " + filename);
+            fos.write(decode);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return file;
     }
 
