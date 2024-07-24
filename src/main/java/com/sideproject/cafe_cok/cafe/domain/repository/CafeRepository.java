@@ -20,4 +20,7 @@ public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeRepositor
 
     List<Cafe> findAllByOrderByIdDesc();
 
+    boolean existsByKakaoId(Long kakaoId);
+
+
 }

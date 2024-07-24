@@ -313,4 +313,8 @@ public class AdminService {
 
         operationHourRepository.saveAll(newOperationHours);
     }
+
+    public boolean cafeExistsByKakaoId(final Long id) {
+        return cafeRepository.existsByKakaoId(id);
+    }
 }
