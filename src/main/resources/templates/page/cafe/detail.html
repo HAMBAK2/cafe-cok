@@ -17,7 +17,7 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4" th:text="${cafe.name}">카페 목록</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/admin">home</a></li>
                 <li class="breadcrumb-item active"><a th:href="@{/admin/cafes}">카페 목록</a></li>
                 <li class="breadcrumb-item active" th:text="${cafe.name}">카페 이름</li>
             </ol>

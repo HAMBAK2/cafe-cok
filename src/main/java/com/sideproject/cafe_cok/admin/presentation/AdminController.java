@@ -29,10 +29,15 @@ public class AdminController {
     @Value("${oauth.kakao.client-id}")
     private String kakaoApiKey;
 
+
+    @GetMapping()
+    public String home() {
+
+        return "page/home";
+    }
+
     @GetMapping("/suggestions")
     public String suggestions(Model model) {
-
-        System.out.println(kakaoApiKey);
         List<AdminSuggestionDto> findSuggestions = adminService.findFeedbackByCategory(FeedbackCategory.IMPROVEMENT_SUGGESTION);
         model.addAttribute("suggestions", findSuggestions);
         return "page/feedback/suggestions";
@@ -86,7 +91,4 @@ public class AdminController {
 
         return response;
     }
-
-
-
 }
