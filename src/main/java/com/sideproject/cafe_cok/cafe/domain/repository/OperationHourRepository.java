@@ -10,4 +10,7 @@ public interface OperationHourRepository extends JpaRepository<OperationHour, Lo
 
     List<OperationHour> findByCafeId(final Long cafeId);
 
+    void deleteByCafeId(final Long cafeId);
+
+
 }

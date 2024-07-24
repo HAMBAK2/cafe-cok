@@ -1,65 +1,92 @@
 package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.application.AdminService;
-import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
-import com.sideproject.cafe_cok.admin.dto.response.AdminCafeExistResponse;
-import com.sideproject.cafe_cok.admin.dto.response.AdminCafeFindResponse;
-import com.sideproject.cafe_cok.admin.dto.response.AdminCafeSaveResponse;
-import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.sideproject.cafe_cok.admin.dto.AdminCafeDto;
+import com.sideproject.cafe_cok.admin.dto.AdminSuggestionDto;
+import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/admin")
+@Controller
 @RequiredArgsConstructor
-@Tag(name = "Admin", description = "관리자 페이지 관련 API")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final AdminService adminService;
+    private final List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
 
-    @PostMapping(value = "/cafe/save",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "카페를 저장하는 기능")
-    public ResponseEntity<AdminCafeSaveResponse> saveCafe(
-            @RequestPart AdminCafeSaveRequest request,
-            @RequestPart(value = "mainImage") MultipartFile mainImage,
-            @RequestPart(value = "otherImages", required = false) List<MultipartFile> otherImages) {
+    @Value("${oauth.kakao.client-id}")
+    private String kakaoApiKey;
 
-        AdminCafeSaveResponse response = adminService.saveCafe(request, mainImage, otherImages);
-        return ResponseEntity.ok(response);
+    @GetMapping("/suggestions")
+    public String suggestions(Model model) {
+
+        System.out.println(kakaoApiKey);
+        List<AdminSuggestionDto> findSuggestions = adminService.findFeedbackByCategory(FeedbackCategory.IMPROVEMENT_SUGGESTION);
+        model.addAttribute("suggestions", findSuggestions);
+        return "page/feedback/suggestions";
     }
 
-    @PatchMapping(value = "/member/restore")
-    @Operation(summary = "탈퇴한 회원을 복구하는 기능")
-    public ResponseEntity<AdminRestoreMemberResponse> restoreMember(@RequestParam("memberId") Long memberId) {
+    @GetMapping("/withdrawal-reason")
+    public String withdrawalReason(Model model) {
 
-        AdminRestoreMemberResponse response = adminService.restoreMember(memberId);
-        return ResponseEntity.ok(response);
+        List<AdminSuggestionDto> findWithdrawalReasons = adminService.findFeedbackByCategory(FeedbackCategory.WITHDRAWAL_REASON);
+        model.addAttribute("withdrawalReasons", findWithdrawalReasons);
+        return "page/feedback/withdrawal-reason";
     }
 
-    @GetMapping(value = "/cafe/exist")
-    @Operation(summary = "저장하려는 카페가 존재하는지 확인하는 기능")
-    public ResponseEntity<AdminCafeExistResponse> checkCafeExist(@RequestParam BigDecimal mapx,
-                                                                 @RequestParam BigDecimal mapy){
+    @GetMapping("/cafes")
+    public String getCafes(Model model) {
+        List<AdminCafeDto> findCafes = adminService.findCafes();
+        model.addAttribute("cafes", findCafes);
 
-        AdminCafeExistResponse response = adminService.checkCafeExist(mapx, mapy);
-        return ResponseEntity.ok(response);
+
+
+        return "page/cafe/list";
     }
 
-    @GetMapping(value = "/cafe")
-    @Operation(summary = "검색한 카페가 존재하면 카페의 정보를 반환하는 기능")
-    public ResponseEntity<AdminCafeFindResponse> findCafe(@RequestParam BigDecimal mapx,
-                                                           @RequestParam BigDecimal mapy){
-
-        AdminCafeFindResponse response = adminService.findCafe(mapx, mapy);
-        return ResponseEntity.ok(response);
+    @GetMapping("/cafe/{id}")
+    public String getCafeById(@PathVariable Long id, Model model) {
+        AdminCafeDto findCafe = adminService.findCafeById(id);
+        model.addAttribute("cafe", findCafe);
+        model.addAttribute("daysOfWeek", daysOfWeek);
+        if (model.containsAttribute("message")) {
+            model.addAttribute("message", model.asMap().get("message"));
+        }
+        return "page/cafe/detail";
     }
+
+    @GetMapping("/cafe/register")
+    public String cafeRegisterForm(Model model) {
+        model.addAttribute("daysOfWeek", daysOfWeek);
+        model.addAttribute("kakaoApiKey", kakaoApiKey);
+        return "/page/cafe/register";
+    }
+
+    @GetMapping("/proxy/kakao")
+    public ResponseEntity<String> proxyKakaoRequest(@RequestParam String query) {
+        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query + " 서울";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
+
+        return response;
+    }
+
+
+
 }

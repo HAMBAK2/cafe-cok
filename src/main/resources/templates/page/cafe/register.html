@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <title>카페콕 관리자/카페 등록</title>
+    <link rel="stylesheet" th:href="@{/css/cafe-style.css}" />
+    <script src="/js/cafe-register.js"></script>
+    <script src="/js/cafe.js"></script>
+</head>
+<div layout:fragment="content">
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4" >카페 등록</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">카페 등록</li>
+            </ol>
+            <div class="card mb-4">
+                <div class="card-body">
+                    새로운 카페를 등록하는 페이지 입니다. <br>
+                    카페를 검색 후 검색된 목록에서 카페를 선택하면 카페 정보를 가져옵니다. <br>
+                    카페 검색 시 목록이 너무 많거나 잘 나오지 않는 경우 찾으려는 지역까지 포함해서 검색해 보세요. <br>
+                    ex) 스타벅스 은평구
+                </div>
+            </div>
+            <div>
+                <form id="cafe-register-form">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafe-search" class="form-label">카페 검색</label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="search-cafe-name" name="name" placeholder="카페 이름을 입력하세요">
+                        </div>
+                        <div class="mt-3" id="searchResults"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeName" class="form-label">카페명</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeName" name="name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeAddress" class="form-label">주소</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeAddress" name="address">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafePhoneNumber" class="form-label">전화번호</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafePhoneNumber" name="phoneNumber">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeLatitude" class="form-label">위도</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeLatitude" name="latitude" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="cafeLongitude" class="form-label">경도</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="cafeLongitude" name="longitude" disabled>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="kakao-cafe-id" class="form-label">카카오 카페 ID</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" id="kakao-cafe-id" name="kakao-cafe-id" disabled>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">이미지</h4>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            메인 이미지 포함 총 3개까지 입력 가능합니다.
+                        </div>
+                    </div>
+                    <div class="image-container" id="image-container">
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeMainImage" class="form-label">메인 이미지</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="cafeMainImageFile">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeOtherImage1" class="form-label">추가 이미지1</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="cafeOtherImageFile1">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-1">
+                                <label for="cafeOtherImage2" class="form-label">추가 이미지2</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" id="cafeOtherImageFile2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">메뉴</h4>
+                        <button type="button" class="btn btn-success" onclick="addMenuList()">메뉴 추가</button>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            메뉴 추가 버튼을 눌러 메뉴 리스트를 생성한 뒤 값을 입력하여 등록합니다.
+                        </div>
+                    </div>
+
+                    <div class="menu-container" id="menu-container">
+
+                    </div>
+
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">영업시간</h4>
+                    </div>
+                    <div class="operation-hours-container" >
+                        <div class="checkbox-container">
+                            <div th:each="day, iterStat : ${daysOfWeek}" class="form-check">
+                                <input class="form-check-input" type="checkbox" th:id="'day' + ${iterStat.index}"
+                                       th:name="'days'"
+                                       th:value="${day}">
+                                <label class="form-check-label" th:for="'day' + ${iterStat.index}" th:text="${day}"></label>
+                            </div>
+                        </div>
+                        <div class="input-container row mt-3">
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="시작 시간">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="시작 분">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <label class="form-label">  ~~~~~~~~~  </label>
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="종료 시간">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" class="form-control" placeholder="종료 분">
+                            </div>
+
+                            <div class="col-md-2 mb-2">
+                                <button type="button" class="btn btn-success" onclick="selectApply()">선택 적용</button>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row" id="selected-time-group">
+                            <div th:each="day, iterStat : ${daysOfWeek}" class="col-md-12 mb-3">
+                                <div class="row input-group">
+                                    <div class="col-md-1 mb-2">
+                                        <span class="day-span" th:text="${day}"></span>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control start-hour" id="start-hour" placeholder="00">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control start-minute" id="start-minute" placeholder="00">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <label class="form-label">  ~~~~~~~~~  </label>
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control end-hour" id="end-hour" placeholder="00">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
+                                        <input type="text" class="form-control end-minute" id="end-minute" placeholder="00">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="submit-button-container">
+                        <button type="submit" class="btn btn-success">등록하기</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+</html>

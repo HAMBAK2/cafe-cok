@@ -99,4 +99,16 @@ public class Image extends BaseEntity {
         this.cafe = cafe;
         cafe.getImages().add(this);
     }
+
+    public void changeOrigin(final String origin) {
+        this.origin = origin;
+    }
+
+    public void changMedium(final String medium) {
+        this.medium = medium;
+    }
+
+    public void changeThumbnail(final String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 }
