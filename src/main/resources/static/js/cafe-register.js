@@ -12,23 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function fetchCafeResults(query) {
-        // const apiUrl = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}`;
-        // console.log(kakaoApiKey);
-        // fetch(apiUrl, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Authorization': `KakaoAK ${apiKey}`
-        //     }
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         displayResults(data.documents);
-        //     })
-        //     .catch(error => {
-        //         console.error('Error fetching data:', error);
-        //         resultsContainer.innerHTML = '<p>검색 결과를 불러오는 데 실패했습니다.</p>';
-        //     });
-
         const apiUrl = `/admin/proxy/kakao?query=${encodeURIComponent(query)}`;
 
         fetch(apiUrl)
@@ -65,7 +48,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     const y = this.getAttribute('data-y');
                     const x = this.getAttribute('data-x');
 
-                    abc(placeName, addressName, phone, id, y, x);
+                    checkCafeExists(id)
+                        .then(exists => {
+                            if (!exists) {
+                                insertValue(placeName, addressName, phone, id, y, x);
+                            } else {
+                                alert("이미 등록된 카페입니다.")
+                                return;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('오류 발생:', error);
+                        });
 
                     resultsContainer.innerHTML = '';
                 });
@@ -75,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function abc(placeName, addressName, phone, id, y, x) {
+    function insertValue(placeName, addressName, phone, id, y, x) {
 
         document.getElementById('cafeName').value = placeName;
         document.getElementById('cafeAddress').value = addressName;
@@ -83,16 +77,29 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('cafeLatitude').value = y;
         document.getElementById('cafeLongitude').value = x;
         document.getElementById('kakao-cafe-id').value = id;
+    }
 
-
+    function checkCafeExists(kakaoId) {
+        return fetch(`/admin/cafe/exists/` + kakaoId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답이 올바르지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                return data; // data는 boolean 값입니다.
+            })
+            .catch(error => {
+                console.error('카페 존재 여부 확인 중 오류 발생:', error);
+                return false; // 오류 발생 시 false 반환
+            });
     }
 });
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("cafe-register-form").addEventListener("submit", async function(event) {
         event.preventDefault(); // 폼 제출을 막음
-
-        console.log("등록 선택");
 
         const name = document.getElementById('cafeName').value;
         const address = document.getElementById('cafeAddress').value;

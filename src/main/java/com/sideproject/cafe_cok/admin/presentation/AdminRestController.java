@@ -56,4 +56,9 @@ public class AdminRestController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/cafe/exists/{kakaoId}")
+    public ResponseEntity<Boolean> checkCafeExists(@PathVariable Long kakaoId) {
+        boolean exists = adminService.cafeExistsByKakaoId(kakaoId);
+        return ResponseEntity.ok(exists);
+    }
 }
