@@ -72,11 +72,11 @@ public class AdminController {
         return "page/cafe/detail";
     }
 
-    @GetMapping("/cafe/register")
+    @GetMapping("/cafe/add")
     public String cafeRegisterForm(Model model) {
         model.addAttribute("daysOfWeek", daysOfWeek);
         model.addAttribute("kakaoApiKey", kakaoApiKey);
-        return "/page/cafe/register";
+        return "page/cafe/add";
     }
 
     @GetMapping("/proxy/kakao")
