@@ -49,7 +49,7 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            <tr th:each="cafe : ${cafes}" th:attr="onclick='window.location.href=\'/admin/cafes/' + ${cafe.id} + '\''">
+                            <tr th:each="cafe : ${cafes}" th:attr="onclick='window.location.href=\'/admin/cafe/' + ${cafe.id} + '\''">
                                 <td th:text="${cafe.id}">아이디</td>
                                 <td th:text="${cafe.name}">카페명</td>
                                 <td th:text="${cafe.address}">주소</td>

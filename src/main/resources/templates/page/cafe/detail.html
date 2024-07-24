@@ -5,48 +5,9 @@
       layout:decorate="~{layouts/default_layout}">
 <head>
     <title th:text="'카페콕 관리자/카페 리스트 / ' + ${cafe.name}">카페콕 관리자/카페 리스트 / 카페 이름</title>
-    <style>
-        .btn-container {
-            display: flex;
-            gap: 5px;
-        }
-
-        .submit-button-container {
-            position: absolute;
-            right: 10px;
-            bottom: 80px;
-        }
-
-        .submit-button-container button {
-            font-size: 1.25rem;
-            padding: 5px 30px;
-        }
-
-        .checkbox-container {
-            display: flex;
-            flex-wrap: wrap; /* 여러 줄로 감싸도록 설정 */
-            gap: 10px; /* 체크박스 간의 간격 */
-        }
-        .form-check {
-            margin: 0;
-        }
-        .form-check-input {
-            transform: scale(1.2); /* 체크박스 크기 조절 */
-        }
-        .form-check-label {
-            font-size: 1.2rem; /* 레이블 글자 크기 조절 */
-            padding: 5px 10px; /* 레이블 주변 여백 추가 */
-            background-color: black; /* 레이블 배경색 */
-            color: white; /* 레이블 텍스트 색상 설정 */
-            font-weight: bold; /* 레이블 텍스트 두껍게 설정 */
-            border-radius: 5px; /* 레이블 모서리 둥글게 */
-            transition: background-color 0.3s; /* 배경색 전환 효과 */
-        }
-        .form-check-label:hover {
-            background-color: #e9ecef; /* 레이블 호버시 배경색 */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/cafe-style.css}" />
     <script src="/js/cafe-detail.js"></script>
+    <script src="/js/cafe.js"></script>
 </head>
 <div layout:fragment="content">
     <main>
@@ -246,7 +207,7 @@
                                 <input type="text" class="form-control" placeholder="종료 분">
                             </div>
 
-                            <div class="col-md-1 mb-2">
+                            <div class="col-md-2 mb-2">
                                 <button type="button" class="btn btn-success" onclick="selectApply()">선택 적용</button>
                             </div>
                         </div>

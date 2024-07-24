@@ -1,9 +1,11 @@
 package com.sideproject.cafe_cok.cafe.domain;
 
+import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
+import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 
@@ -59,6 +62,9 @@ public class Cafe extends BaseEntity {
     @Column(name = "review_count")
     private Long reviewCount;
 
+    @Column(name = "kakao_id")
+    private Long kakaoId;
+
     @OneToMany(mappedBy = "cafe")
     private List<OperationHour> operationHours = new ArrayList<>();
 
@@ -79,6 +85,18 @@ public class Cafe extends BaseEntity {
         this.roadAddress = roadAddress;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.starRating = BigDecimal.ZERO;
+        this.reviewCount = 0L;
+    }
+
+    public Cafe(final AdminCafeSaveRequest request) {
+        validatePhoneNumber(convertFormatPhoneNumber(request.getPhone()));
+        this.name = request.getName();
+        this.phoneNumber = convertFormatPhoneNumber(request.getPhone());
+        this.roadAddress = request.getAddress();
+        this.longitude = request.getLongitude();
+        this.latitude = request.getLatitude();
+        this.kakaoId = request.getKakaoId();
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
     }
