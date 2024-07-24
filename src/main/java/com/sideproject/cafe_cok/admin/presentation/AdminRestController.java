@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.admin.dto.response.AdminRestoreMemberResponse;
 import com.sideproject.cafe_cok.admin.dto.response.AdminSuccessAndRedirectResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ public class AdminRestController {
 
     private final AdminService adminService;
 
+    @Value("${oauth.kakao.client-id}")
+    private String kakaoApiKey;
     @PutMapping("/cafe/{id}")
     public ResponseEntity<AdminSuccessAndRedirectResponse> updateCafe(@PathVariable Long id,
                                                                       @RequestBody AdminCafeUpdateRequest request) {
@@ -60,5 +63,10 @@ public class AdminRestController {
     public ResponseEntity<Boolean> checkCafeExists(@PathVariable Long kakaoId) {
         boolean exists = adminService.cafeExistsByKakaoId(kakaoId);
         return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/app-key")
+    public String getAppKey() {
+        return kakaoApiKey;
     }
 }

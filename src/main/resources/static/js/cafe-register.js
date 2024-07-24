@@ -12,16 +12,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function fetchCafeResults(query) {
-        const apiUrl = `/admin/proxy/kakao?query=${encodeURIComponent(query)}`;
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                displayResults(data.documents);
+        fetch('/admin/app-key')
+            .then(response => response.text())  // text()로 변경하여 문자열로 응답을 받음
+            .then(appKey => {
+                const apiUrl = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}`;
+
+                fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `KakaoAK ${appKey}` // 서버에서 받은 appKey 사용
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        displayResults(data.documents);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        resultsContainer.innerHTML = '<p>검색 결과를 불러오는 데 실패했습니다.</p>';
+                    });
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
-                resultsContainer.innerHTML = '<p>검색 결과를 불러오는 데 실패했습니다.</p>';
+                console.error('Error fetching appKey:', error);
+                resultsContainer.innerHTML = '<p>App Key를 가져오는 데 실패했습니다.</p>';
             });
     }
 

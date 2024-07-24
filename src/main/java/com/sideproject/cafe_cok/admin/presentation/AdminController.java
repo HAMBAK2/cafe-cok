@@ -26,10 +26,6 @@ public class AdminController {
     private final AdminService adminService;
     private final List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
 
-    @Value("${oauth.kakao.client-id}")
-    private String kakaoApiKey;
-
-
     @GetMapping()
     public String home() {
 
@@ -75,20 +71,6 @@ public class AdminController {
     @GetMapping("/cafe/add")
     public String cafeRegisterForm(Model model) {
         model.addAttribute("daysOfWeek", daysOfWeek);
-        model.addAttribute("kakaoApiKey", kakaoApiKey);
         return "page/cafe/add";
-    }
-
-    @GetMapping("/proxy/kakao")
-    public ResponseEntity<String> proxyKakaoRequest(@RequestParam String query) {
-        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query + " 서울";
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
-
-        return response;
     }
 }
