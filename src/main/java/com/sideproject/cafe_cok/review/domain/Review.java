@@ -30,8 +30,7 @@ public class Review extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @Lob
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "specialNote", length = 1000)
