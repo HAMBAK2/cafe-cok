@@ -19,6 +19,7 @@ import com.sideproject.cafe_cok.auth.dto.response.AccessTokenResponse;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkFolderRepository;
 import com.sideproject.cafe_cok.member.domain.Member;
+import com.sideproject.cafe_cok.nickname.application.NicknameService;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -41,6 +42,8 @@ public class AuthService {
     private final OAuthTokenRepository oAuthTokenRepository;
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
+
+    private final NicknameService nicknameService;
 
     private final String BASIC_FOLDER_NAME = "기본 폴더";
     private final String BASIC_FOLDER_COLOR = "#FE8282";
@@ -118,7 +121,7 @@ public class AuthService {
 
     private Member saveMember(final OAuthMember oAuthMember) {
 
-        String randomNickname = generateRandomNickname();
+        String randomNickname = nicknameService.generateNickname();
         Member targetMember = new Member(oAuthMember.getEmail(), randomNickname, SocialType.KAKAO);
         Member savedMember = memberRepository.save(targetMember);
         bookmarkFolderRepository
@@ -137,15 +140,5 @@ public class AuthService {
         }
 
         return oAuthTokenRepository.save(new OAuthToken(member, oAuthMember.getRefreshToken()));
-    }
-
-    private String generateRandomNickname() {
-
-        String randomNickname = "";
-        do {
-            randomNickname = RandomStringUtils.random(15, true, true);
-        } while (memberRepository.existsByNickname(randomNickname));
-
-        return randomNickname;
     }
 }
