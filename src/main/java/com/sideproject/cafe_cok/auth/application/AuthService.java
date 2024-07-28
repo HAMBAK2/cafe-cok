@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.auth.dto.OAuthMember;
 import com.sideproject.cafe_cok.auth.exception.InvalidRestoreMemberException;
 import com.sideproject.cafe_cok.member.domain.Feedback;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
+import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import com.sideproject.cafe_cok.member.domain.repository.FeedbackRepository;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.auth.domain.AuthToken;
@@ -20,6 +21,7 @@ import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkFolderReposit
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,7 +117,10 @@ public class AuthService {
     }
 
     private Member saveMember(final OAuthMember oAuthMember) {
-        Member savedMember = memberRepository.save(oAuthMember.toMember());
+
+        String randomNickname = generateRandomNickname();
+        Member targetMember = new Member(oAuthMember.getEmail(), randomNickname, SocialType.KAKAO);
+        Member savedMember = memberRepository.save(targetMember);
         bookmarkFolderRepository
                 .save(new BookmarkFolder(
                         BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR,
@@ -132,5 +137,15 @@ public class AuthService {
         }
 
         return oAuthTokenRepository.save(new OAuthToken(member, oAuthMember.getRefreshToken()));
+    }
+
+    private String generateRandomNickname() {
+
+        String randomNickname = "";
+        do {
+            randomNickname = RandomStringUtils.random(15, true, true);
+        } while (memberRepository.existsByNickname(randomNickname));
+
+        return randomNickname;
     }
 }

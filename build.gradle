@@ -73,6 +73,8 @@ dependencies {
 
 	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	implementation 'org.apache.commons:commons-lang3:3.13.0'
 }
 
 ext {
