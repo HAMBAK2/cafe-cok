@@ -20,6 +20,7 @@ public class NicknameComponent {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "value", unique = true)
     private String value;
 
     @Enumerated(value = EnumType.STRING)
