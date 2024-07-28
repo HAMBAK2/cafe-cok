@@ -51,9 +51,6 @@ public class AdminController {
     public String getCafes(Model model) {
         List<AdminCafeDto> findCafes = adminService.findCafes();
         model.addAttribute("cafes", findCafes);
-
-
-
         return "page/cafe/list";
     }
 
