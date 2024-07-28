@@ -226,13 +226,13 @@ public class AdminService {
         List<AdminMenuRequestDto> menus = request.getMenus();
         for (AdminMenuRequestDto menu : menus) {
             Menu newMenu = new Menu(menu.getName(), menu.getPrice(), savedCafe);
-            menuRepository.save(newMenu);
+            Menu savedMenu = menuRepository.save(newMenu);
 
             //메뉴 이미지 저장
             converted = convertBase64StringToFile(menu.getImage());
             originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
             thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
-            Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe);
+            Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
             imageRepository.save(menuImage);
         }
 

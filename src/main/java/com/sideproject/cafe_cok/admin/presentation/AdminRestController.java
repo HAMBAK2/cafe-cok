@@ -41,12 +41,7 @@ public class AdminRestController {
 
     @PostMapping("/cafe")
     public ResponseEntity<AdminSuccessAndRedirectResponse> saveCafe(@RequestBody AdminCafeSaveRequest request) {
-        List<AdminOperationHourDto> hours = request.getHours();
-        for (AdminOperationHourDto hour : hours) {
-            System.out.println(hour.getDay());
-            System.out.println(hour.getStartHour());
-            System.out.println(hour.getEndHour());
-        }
+        System.out.println("진입함");
         AdminSuccessAndRedirectResponse response = adminService.saveCafe(request);
         return ResponseEntity.ok(response);
     }
