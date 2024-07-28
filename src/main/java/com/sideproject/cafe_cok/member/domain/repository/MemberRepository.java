@@ -17,6 +17,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     boolean existsByEmailAndDeletedAtIsNotNull(final String email);
 
+    boolean existsByNickname(final String nickname);
+
     default Member getById(final Long id) {
         return findById(id)
                 .orElseThrow(NoSuchMemberException::new);

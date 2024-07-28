@@ -6,14 +6,12 @@ import lombok.Getter;
 public class UserInfo {
 
     private String email;
-    private String nickname;
 
     private UserInfo() {
     }
 
-    public UserInfo(final String email, final String nickname) {
+    public UserInfo(final String email) {
         this.email = email;
-        this.nickname = nickname;
     }
 
 

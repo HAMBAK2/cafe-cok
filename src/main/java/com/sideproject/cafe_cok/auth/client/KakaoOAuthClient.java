@@ -48,7 +48,7 @@ public class KakaoOAuthClient implements OAuthClient {
         UserInfo userInfo = parseUserInfo(payload);
 
         String refreshToken = kakaoTokenResponse.getRefreshToken();
-        return new OAuthMember(userInfo.getEmail(), userInfo.getNickname(), refreshToken);
+        return new OAuthMember(userInfo.getEmail(), refreshToken);
     }
 
     @Override
