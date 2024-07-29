@@ -6,16 +6,14 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import jakarta.xml.bind.DatatypeConverter;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.io.*;
 import java.text.NumberFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static java.time.DayOfWeek.*;
 
@@ -113,7 +111,8 @@ public class FormatConverter {
     public static File convertBase64StringToFile(final String base64String) {
 
         byte[] decode = Base64.getDecoder().decode(base64String);
-        String filename = UUID.randomUUID().toString() + ".jpg";
+        String extension = detectImageType(decode);
+        String filename = UUID.randomUUID().toString() + "." + extension;
         File file = new File(filename);
         try(FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(decode);
@@ -121,6 +120,21 @@ public class FormatConverter {
             e.printStackTrace();
         }
         return file;
+    }
+
+    private static String detectImageType(byte[] imageData) {
+        try (InputStream is = new ByteArrayInputStream(imageData);
+             ImageInputStream iis = ImageIO.createImageInputStream(is)) {
+
+            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+            if (readers.hasNext()) {
+                ImageReader reader = readers.next();
+                return reader.getFormatName();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static String changePath(String originPath, final String originDirName, final String newDirName) {

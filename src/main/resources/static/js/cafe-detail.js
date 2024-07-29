@@ -2,7 +2,6 @@
 
 function showImage(button, prefix) {
     let index = button.getAttribute('data-index');
-    console.log(index);
     let elementId = prefix + index;
     let element = document.getElementById(elementId);
 

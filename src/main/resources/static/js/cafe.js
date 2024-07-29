@@ -53,10 +53,8 @@ function addMenuList() {
 
 function getCurrentMenuCount() {
     const rows = document.querySelectorAll('#menu-container .row.mb-3');
-    console.log(rows);
     if(rows.length === 0) return 0;
     const lastRow = rows[rows.length - 1];
-    console.log(lastRow);
     const inputElement = lastRow.querySelector('input[type="file"]');
 
     if (inputElement) {
@@ -202,7 +200,6 @@ function generateHours() {
 
     const hours = [];
     for(let i = 0; i < 7; i++) {
-        console.log(startHours[i]);
         const hourObject = {
             day: days[i],
             startHour: startHours[i] || 0,
