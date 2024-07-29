@@ -95,6 +95,21 @@ function deleteMenu(menuId, idx) {
     rowDiv.remove();
 }
 
+function selectAllDays() {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllDay() {
+    const checkboxes = document.querySelectorAll('.form-check-input');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
 
 function selectApply() {
     const checkboxes = document.querySelectorAll('.form-check-input');
