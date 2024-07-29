@@ -30,7 +30,9 @@ import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +59,9 @@ public class ReviewService {
 
     private static final String KEYWORD = "keyword";
 
+    @Value("${cloud.aws.cloud-front.domain}")
+    private String cloudFrontDomain;
+
     @Transactional
     public ReviewCreateResponse createReview(final ReviewCreateRequest request,
                                              final LoginMember loginMember,
@@ -72,7 +77,9 @@ public class ReviewService {
         if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
 
-        saveByReviewAndMultipartFiles(savedReview, files);
+        List<Image> images = saveByReviewAndMultipartFiles(savedReview, files);
+        if(images != null) getIsExistObject(images);
+
         return new ReviewCreateResponse(savedReview.getId(), savedReview.getCafe().getId());
     }
 
@@ -101,9 +108,12 @@ public class ReviewService {
         if(request.getSpecialNote() != null) findReview.setSpecialNote(request.getSpecialNote());
         if(request.getStarRating() != null) findReview.setStarRating(request.getStarRating());
         if(request.getDeletedImageIds() != null) deleteByIds(request.getDeletedImageIds());
-        if(files != null) saveByReviewAndMultipartFiles(findReview, files);
+
         if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
         else changeByReviewAndKeywordNames(findReview, request.getKeywords());
+
+        List<Image> images = saveByReviewAndMultipartFiles(findReview, files);
+        if(images != null) getIsExistObject(images);
 
         return new ReviewEditResponse(reviewId);
     }
@@ -142,12 +152,13 @@ public class ReviewService {
         }
     }
 
-    private void saveByReviewAndMultipartFiles(final Review review,
-                                               final List<MultipartFile> files) {
+    private List<Image> saveByReviewAndMultipartFiles(final Review review,
+                                                      final List<MultipartFile> files) {
 
-        if(files == null) return;
+        if(files == null) return null;
         List<Image> reviewImages = saveImagesObjectStorage(review, files);
-        imageRepository.saveAll(reviewImages);
+        List<Image> savedImages = imageRepository.saveAll(reviewImages);
+        return savedImages;
     }
 
     @Transactional
@@ -176,5 +187,20 @@ public class ReviewService {
                             review));
         }
         return reviewImages;
+    }
+
+    private boolean getIsExistObject(final List<Image> images) {
+
+        List<String> objectNames = images.stream()
+                .map(image -> {
+                    String replace = image.getThumbnail().replace(cloudFrontDomain, "");
+                    return replace.substring(1, replace.length());
+                })
+                .collect(Collectors.toList());
+
+        boolean exists = s3Uploader.isExistObject(objectNames);
+        if(!exists) throw new FileUploadException();
+
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.global.error.exception.MissingRequiredValueExcep
 import com.sideproject.cafe_cok.keword.exception.NoSuchKeywordException;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.review.exception.NoSuchReviewException;
+import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import com.sideproject.cafe_cok.utils.tmap.exception.TmapException;
 import com.sideproject.cafe_cok.auth.exception.*;
 import com.sideproject.cafe_cok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
@@ -136,6 +137,11 @@ public class ControllerAdvice {
     }
 
 
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ErrorResponse> handleFileUploadException(RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final Exception e,

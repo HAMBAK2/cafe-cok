@@ -7,6 +7,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.imgscalr.Scalr;
@@ -25,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ import static com.sideproject.cafe_cok.utils.Constants.URL_DECODER_DECODE_ENC;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
+    private final int maxRetries = 10;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -57,6 +60,37 @@ public class S3Uploader {
     public void delete(String url) {
         String key = extractObjectKeyFromUrl(url);
         amazonS3Client.deleteObject(bucket, key);
+    }
+
+    public boolean isExistObject(String objectName) {
+        int attempt = 0;
+        boolean exists = false;
+
+        while(attempt < maxRetries) {
+            exists = amazonS3Client.doesObjectExist(bucket, objectName);
+
+            if(exists) return true;
+
+            attempt++;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new FileUploadException();
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isExistObject(List<String> objectNames) {
+        boolean exists = true;
+        for (String objectName : objectNames) {
+            exists = isExistObject(objectName);
+            if(!exists) return false;
+        }
+
+        return true;
     }
 
     public String upload(File uploadFile, String dirName) {
