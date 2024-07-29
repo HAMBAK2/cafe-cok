@@ -2,23 +2,29 @@ package com.sideproject.cafe_cok.utils.S3.component;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
-import com.sideproject.cafe_cok.utils.Constants;
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,15 +62,46 @@ public class S3Uploader {
     public String upload(File uploadFile, String dirName) {
         int lastIndex = uploadFile.getName().lastIndexOf(".");
         String extension = uploadFile.getName().substring(lastIndex + 1);
+        File compressFile = compressAndRotate(uploadFile, extension);
         String fileName = dirName + "/" + UUID.randomUUID() + "." + extension;
-        String uploadImageUrl = putS3(uploadFile, fileName);
+        String uploadImageUrl = putS3(compressFile, fileName);
+
         removeNewFile(uploadFile);
+        removeNewFile(compressFile);
         return uploadImageUrl.replace(s3UrlPrefix, cloudFrontDomain);
     }
 
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    private File compressAndRotate(File file, String extension) {
+        try {
+            BufferedImage image = rotate(file);
+            File compressed = new File(file.getParent(), file.getName() + "_compressed." + extension);
+
+            ImageWriter writer = ImageIO.getImageWritersByFormatName(extension).next();
+            ImageOutputStream ios = ImageIO.createImageOutputStream(compressed);
+            writer.setOutput(ios);
+
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            if(param.canWriteCompressed()) {
+                param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                param.setCompressionQuality(0.2f);
+            }
+
+            writer.write(null, new IIOImage(image, null, null), param);
+
+            ios.close();
+            writer.dispose();
+            return compressed;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void removeNewFile(File targetFile) {
@@ -106,4 +143,44 @@ public class S3Uploader {
             return null;
         }
     }
+
+    private BufferedImage rotate(File file) throws IOException {
+
+        int orientation = 1;
+        Metadata metadata;
+        Directory directory;
+
+        try {
+            metadata = ImageMetadataReader.readMetadata(file);
+            directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if(directory != null) {
+                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        BufferedImage bfImage = ImageIO.read(file);
+
+        switch (orientation) {
+            case 1:
+                break;
+            case 3:
+                bfImage = Scalr.rotate(bfImage, Scalr.Rotation.CW_180, null);
+            case 6:
+                bfImage = Scalr.rotate(bfImage, Scalr.Rotation.CW_90, null);
+                break;
+            case 8:
+                bfImage = Scalr.rotate(bfImage, Scalr.Rotation.CW_270, null);
+                break;
+            default:
+                orientation = 1;
+                break;
+        }
+
+        return bfImage;
+    }
+
+
 }

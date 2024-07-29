@@ -41,7 +41,6 @@ public class AdminRestController {
 
     @PostMapping("/cafe")
     public ResponseEntity<AdminSuccessAndRedirectResponse> saveCafe(@RequestBody AdminCafeSaveRequest request) {
-        System.out.println("진입함");
         AdminSuccessAndRedirectResponse response = adminService.saveCafe(request);
         return ResponseEntity.ok(response);
     }
