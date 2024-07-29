@@ -189,6 +189,10 @@
                                        th:value="${day}">
                                 <label class="form-check-label" th:for="'day' + ${iterStat.index}" th:text="${day}"></label>
                             </div>
+                            <div class="col-md-2 mb-2">
+                                <button type="button" class="btn btn-success" onclick="selectAllDays()">전체 선택</button>
+                                <button type="button" class="btn btn-danger" onclick="deselectAllDay()">전체 해제</button>
+                            </div>
                         </div>
                         <div class="input-container row mt-3">
                             <div class="col-md-1 mb-2">
