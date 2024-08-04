@@ -178,4 +178,9 @@ public class MyPageService {
                 request.getContent());
         feedbackRepository.save(newFeedback);
     }
+
+    public MyPageResponse myPage(final LoginMember loginMember) {
+        Member findMember = memberRepository.getById(loginMember.getId());
+        return new MyPageResponse(findMember.getNickname(), findMember.getPicture());
+    }
 }

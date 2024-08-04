@@ -29,6 +29,13 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final ReviewService reviewService;
 
+    @GetMapping("")
+    @Operation(summary = "마이페이지에 접근했을 때 나타나는 기본 프로필 정보")
+    public ResponseEntity<MyPageResponse> myPage(@AuthenticationPrincipal LoginMember loginMember) {
+        MyPageResponse response = myPageService.myPage(loginMember);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/profile")
     @Operation(summary = "마이페이지 상단의 사용자 프로필을 나타냄")
     public ResponseEntity<MyPageProfileResponse> profile(@AuthenticationPrincipal LoginMember loginMember) {
