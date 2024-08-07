@@ -213,3 +213,17 @@ function generateHours() {
 
     return hours;
 }
+
+function showLoading() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'flex';
+    }
+}
+
+function hideLoading() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'none';
+    }
+}

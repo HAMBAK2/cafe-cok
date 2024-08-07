@@ -78,7 +78,7 @@ public class ReviewService {
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
 
         List<Image> images = saveByReviewAndMultipartFiles(savedReview, files);
-        if(images != null) getIsExistObject(images);
+        if(images != null) s3Uploader.isExistObject(images);
 
         return new ReviewCreateResponse(savedReview.getId(), savedReview.getCafe().getId());
     }
@@ -113,7 +113,7 @@ public class ReviewService {
         else changeByReviewAndKeywordNames(findReview, request.getKeywords());
 
         List<Image> images = saveByReviewAndMultipartFiles(findReview, files);
-        if(images != null) getIsExistObject(images);
+        if(images != null) s3Uploader.isExistObject(images);
 
         return new ReviewEditResponse(reviewId);
     }
@@ -187,20 +187,5 @@ public class ReviewService {
                             review));
         }
         return reviewImages;
-    }
-
-    private boolean getIsExistObject(final List<Image> images) {
-
-        List<String> objectNames = images.stream()
-                .map(image -> {
-                    String replace = image.getThumbnail().replace(cloudFrontDomain, "");
-                    return replace.substring(1, replace.length());
-                })
-                .collect(Collectors.toList());
-
-        boolean exists = s3Uploader.isExistObject(objectNames);
-        if(!exists) throw new FileUploadException();
-
-        return true;
     }
 }
