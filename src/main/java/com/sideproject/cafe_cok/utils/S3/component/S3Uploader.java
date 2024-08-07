@@ -7,6 +7,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,6 +31,7 @@ import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.sideproject.cafe_cok.utils.Constants.DECODED_URL_SPLIT_STR;
 import static com.sideproject.cafe_cok.utils.Constants.URL_DECODER_DECODE_ENC;
@@ -83,11 +86,13 @@ public class S3Uploader {
         return false;
     }
 
-    public boolean isExistObject(List<String> objectNames) {
+    public boolean isExistObject(List<Image> images) {
+
         boolean exists = true;
-        for (String objectName : objectNames) {
-            exists = isExistObject(objectName);
-            if(!exists) return false;
+        for (Image image : images) {
+            String replace = image.getThumbnail().replace(cloudFrontDomain, "");
+            exists = isExistObject(replace.substring(1, replace.length()));
+            if(!exists) throw new FileUploadException();
         }
 
         return true;

@@ -55,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
+        showLoading();
+
         Promise.all(otherImagesBase64Promises).then((otherImagesBase64) => {
             const data = {
                 cafeId,
@@ -76,11 +78,13 @@ document.addEventListener("DOMContentLoaded", function() {
             })
                 .then(response => response.json())
                 .then(data => {
+                    hideLoading();
                     if(data.redirectUrl) {
                         window.location.href = data.redirectUrl;
                     }
                 })
                 .catch(error => {
+                    hideLoading();
                     console.error('Error:', error);
                 });
         });

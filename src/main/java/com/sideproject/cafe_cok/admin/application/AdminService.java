@@ -109,6 +109,8 @@ public class AdminService {
         findCafe.setPhoneNumber(request.getPhoneNumber());
         cafeRepository.save(findCafe);
 
+        List<Image> savedImage = new ArrayList<>();
+
 
         //카페 메인 이미지 수정
         if(request.getImage().getImageBase64() != null) {
@@ -125,7 +127,7 @@ public class AdminService {
                 findImage.changeOrigin(originImageUrl);
                 findImage.changMedium(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR));
                 findImage.changeThumbnail(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR));
-                imageRepository.save(findImage);
+                savedImage.add(imageRepository.save(findImage));
             }
         }
 
@@ -144,14 +146,14 @@ public class AdminService {
                     s3Uploader.delete(findImage.getOrigin());
                     findImage.changeOrigin(originImageUrl);
                     findImage.changeThumbnail(thumbnailImageUrl);
-                    imageRepository.save(findImage);
+                    savedImage.add(imageRepository.save(findImage));
                 }
                 continue;
             }
 
             //새로운 이미지가 추가된 경우
             Image newImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageUrl, findCafe);
-            imageRepository.save(newImage);
+            savedImage.add(imageRepository.save(newImage));
         }
 
         //운영 시간 수정
@@ -192,9 +194,11 @@ public class AdminService {
                     targetImage.changeThumbnail(thumbnailImageUrl);
                 }
 
-                imageRepository.save(targetImage);
+                savedImage.add(imageRepository.save(targetImage));
             }
         }
+
+        if(!savedImage.isEmpty()) s3Uploader.isExistObject(savedImage);
 
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + id);
     }
@@ -204,6 +208,7 @@ public class AdminService {
 
         Cafe newCafe = new Cafe(request);
         Cafe savedCafe = cafeRepository.save(newCafe);
+        List<Image> savedImages = new ArrayList<>();
 
         //메인 이미지 저장
         File converted = convertBase64StringToFile(request.getMainImage());
@@ -211,7 +216,7 @@ public class AdminService {
         String thumbnailImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR);
         String midImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR);
         Image mainImage = new Image(ImageType.CAFE_MAIN, originImageUrl, thumbnailImageDir, midImageDir, savedCafe);
-        imageRepository.save(mainImage);
+        savedImages.add(imageRepository.save(mainImage));
 
         //카페 나머지 이미지 저장
         for (String otherImage : request.getOtherImages()) {
@@ -219,7 +224,7 @@ public class AdminService {
             originImageUrl = s3Uploader.upload(converted, CAFE_ORIGIN_IMAGE_DIR);
             thumbnailImageDir = changePath(originImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR);
             Image othreImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageDir, savedCafe);
-            imageRepository.save(othreImage);
+            savedImages.add(imageRepository.save(othreImage));
         }
 
         //메뉴 저장
@@ -233,12 +238,14 @@ public class AdminService {
             originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
             thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
             Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
-            imageRepository.save(menuImage);
+            savedImages.add(imageRepository.save(menuImage));
         }
 
         //운영시간 저장
         List<AdminOperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
+
+        if(!savedImages.isEmpty()) s3Uploader.isExistObject(savedImages);
 
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
     }
