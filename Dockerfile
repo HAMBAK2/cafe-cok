@@ -8,8 +8,6 @@ ARG COLLECTOR_IP
 RUN curl -L ${PINPOINT_AGENT_DOWNLOAD_URL} | tar -xz -C /opt/
 ENV PINPOINT_AGENT_PATH=/opt/pinpoint-agent-${PINPOINT_VERSION}
 
-COPY pinpoint-root.config ${PINPOINT_AGENT_PATH}/pinpoint-root.config
-
 RUN sed -i "s/profiler.transport.grpc.collector.ip=.*/profiler.transport.grpc.collector.ip=${COLLECTOR_IP}/" ${PINPOINT_AGENT_PATH}/pinpoint-root.config
 
 ENV JAVA_OPTS="-javaagent:${PINPOINT_AGENT_PATH}/pinpoint-bootstrap-${PINPOINT_VERSION}.jar -Dpinpoint.agentId=cafe-cok -Dpinpoint.applicationName=cafe-cok-app -Dpinpoint.config=${PINPOINT_AGENT_PATH}/pinpoint-root.config"
