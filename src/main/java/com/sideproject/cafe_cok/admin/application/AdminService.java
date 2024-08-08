@@ -234,11 +234,13 @@ public class AdminService {
             Menu savedMenu = menuRepository.save(newMenu);
 
             //메뉴 이미지 저장
-            converted = convertBase64StringToFile(menu.getImage());
-            originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
-            thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
-            Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
-            savedImages.add(imageRepository.save(menuImage));
+            if(menu.getImage() != null && !menu.getImage().isEmpty()) {
+                converted = convertBase64StringToFile(menu.getImage());
+                originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
+                thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
+                Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
+                savedImages.add(imageRepository.save(menuImage));
+            }
         }
 
         //운영시간 저장
