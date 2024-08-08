@@ -61,6 +61,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
+          build-args: |
+            COLLECTOR_IP=${{ secrets.DOCKER_COLLECTOR_IP }}
 
   backend-docker-pull-and-run:
     runs-on: [self-hosted, dev]
