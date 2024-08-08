@@ -13,5 +13,5 @@ RUN sed -i "s/profiler.transport.grpc.collector.ip=.*/profiler.transport.grpc.co
 ENV JAVA_OPTS="-javaagent:${PINPOINT_AGENT_PATH}/pinpoint-bootstrap-${PINPOINT_VERSION}.jar -Dpinpoint.agentId=cafe-cok -Dpinpoint.applicationName=cafe-cok-app -Dpinpoint.config=${PINPOINT_AGENT_PATH}/pinpoint-root.config"
 
 COPY ${JAR_FILE} cafe-cok.jar
-CMD ["java", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "${JAVA_OPTS}", "-jar", "cafe-cok.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=prod -Duser.timezone=Asia/Seoul -jar cafe-cok.jar"]
 
