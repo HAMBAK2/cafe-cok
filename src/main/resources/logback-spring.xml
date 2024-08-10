@@ -2,32 +2,11 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <property name="INFO_LOG_PATH" value="./logs/cafe-cok/info"/>
     <property name="WARN_LOG_PATH" value="./logs/cafe-cok/warn"/>
-    <property name="ERROR_LOG_PATH" value="./logs/cafe-cok/error"/>
-    <property name="INFO_LOG_FILE" value="${INFO_LOG_PATH}/info-%d{yyyy-MM-dd}-%i.log"/>
     <property name="WARN_LOG_FILE" value="${WARN_LOG_PATH}/warn-%d{yyyy-MM-dd}-%i.log"/>
-    <property name="ERROR_LOG_FILE" value="${ERROR_LOG_PATH}/error-%d{yyyy-MM-dd}-%i.log"/>
 
-    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>info</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder>
-            <pattern>
-                [%X{request_id:-startup}] %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-            </pattern>
-        </encoder>
-        <file>${INFO_LOG_PATH}/info.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${INFO_LOG_FILE}</fileNamePattern>
-            <maxFileSize>10MB</maxFileSize>
-            <maxHistory>10</maxHistory>
-            <totalSizeCap>100MB</totalSizeCap>
-        </rollingPolicy>
-    </appender>
+    <property name="ERROR_LOG_PATH" value="./logs/cafe-cok/error"/>
+    <property name="ERROR_LOG_FILE" value="${ERROR_LOG_PATH}/error-%d{yyyy-MM-dd}-%i.log"/>
 
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -82,9 +61,7 @@
     </root>
 
     <springProfile name="prod">
-        <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="INFO_FIlE"/>
+        <root level="WARN">
             <appender-ref ref="WARN_FILE"/>
             <appender-ref ref="ERROR_FILE"/>
         </root>
