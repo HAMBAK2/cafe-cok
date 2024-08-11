@@ -4,7 +4,9 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
+import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import jakarta.xml.bind.DatatypeConverter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -17,6 +19,7 @@ import java.util.*;
 
 import static java.time.DayOfWeek.*;
 
+@Slf4j
 public class FormatConverter {
 
     private static final String COUNTRY_CODE_KOREA = "KR";
@@ -96,15 +99,15 @@ public class FormatConverter {
     public static String convertFormatPhoneNumber(final String phoneNumber) {
 
         if(phoneNumber == null || phoneNumber.isEmpty()) return phoneNumber;
-        if(phoneNumber.split("-")[0].equals("0507")) return phoneNumber;
+        if(phoneNumber.split("-")[0].equals("0507") || phoneNumber.split("-")[0].equals("0503")) return phoneNumber;
 
         try {
             PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
             Phonenumber.PhoneNumber parsedPhoneNumber = phoneNumberUtil.parse(phoneNumber, COUNTRY_CODE_KOREA);
             return phoneNumberUtil.format(parsedPhoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL);
         } catch (NumberParseException e) {
-            e.printStackTrace();
-            return null;
+            log.error("전화번호 형식이 올바르지 않습니다. 입력값: {}", phoneNumber);
+            throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
         }
     }
 
