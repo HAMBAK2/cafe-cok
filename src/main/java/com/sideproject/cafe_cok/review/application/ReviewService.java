@@ -40,8 +40,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.sideproject.cafe_cok.utils.Constants.*;
+import static com.sideproject.cafe_cok.utils.FormatConverter.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,13 +61,12 @@ public class ReviewService {
 
     private static final String KEYWORD = "keyword";
 
-    @Value("${cloud.aws.cloud-front.domain}")
-    private String cloudFrontDomain;
-
     @Transactional
     public ReviewCreateResponse createReview(final ReviewCreateRequest request,
                                              final LoginMember loginMember,
                                              final List<MultipartFile> files) {
+
+        List<String> savedImageUrls = uploadImageToS3(files);
 
         Cafe findCafe = cafeRepository.getById(request.getCafeId());
         findCafe.addReviewCountAndCalculateStarRating(request.getStarRating());
@@ -76,9 +77,7 @@ public class ReviewService {
 
         if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
-
-        List<Image> images = saveByReviewAndMultipartFiles(savedReview, files);
-        if(images != null) s3Uploader.isExistObject(images);
+        saveReviewImages(savedReview, savedImageUrls);
 
         return new ReviewCreateResponse(savedReview.getId(), savedReview.getCafe().getId());
     }
@@ -103,6 +102,8 @@ public class ReviewService {
                                    final List<MultipartFile> files,
                                    final Long reviewId) {
 
+        List<String> savedImageUrls = uploadImageToS3(files);
+
         Review findReview = reviewRepository.getById(reviewId);
         if(request.getContent() != null) findReview.setContent(request.getContent());
         if(request.getSpecialNote() != null) findReview.setSpecialNote(request.getSpecialNote());
@@ -112,8 +113,7 @@ public class ReviewService {
         if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
         else changeByReviewAndKeywordNames(findReview, request.getKeywords());
 
-        List<Image> images = saveByReviewAndMultipartFiles(findReview, files);
-        if(images != null) s3Uploader.isExistObject(images);
+        saveReviewImages(findReview, savedImageUrls);
 
         return new ReviewEditResponse(reviewId);
     }
@@ -152,13 +152,24 @@ public class ReviewService {
         }
     }
 
-    private List<Image> saveByReviewAndMultipartFiles(final Review review,
-                                                      final List<MultipartFile> files) {
+    private void saveReviewImages(final Review review,
+                                  final List<String> imageUrls) {
 
-        if(files == null) return null;
-        List<Image> reviewImages = saveImagesObjectStorage(review, files);
+        if(imageUrls.isEmpty()) return;
+
+        Cafe cafe = review.getCafe();
+        List<Image> reviewImages = imageUrls.stream()
+                .map(imageUrl -> {
+                    String convertedUrl = changePath(imageUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR);
+                    return new Image(
+                            ImageType.REVIEW,
+                            imageUrl,
+                            convertedUrl,
+                            cafe,
+                            review);
+                })
+                .collect(Collectors.toList());
         List<Image> savedImages = imageRepository.saveAll(reviewImages);
-        return savedImages;
     }
 
     @Transactional
@@ -172,20 +183,13 @@ public class ReviewService {
         imageRepository.deleteAllByIdIn(ids);
     }
 
-    private List<Image> saveImagesObjectStorage(final Review review,
-                                                final List<MultipartFile> files) {
+    private List<String> uploadImageToS3(final List<MultipartFile> files) {
 
-        List<Image> reviewImages = new ArrayList<>();
-        Cafe cafe = review.getCafe();
-        for (MultipartFile file : files) {
-            String imageUrl = s3Uploader.upload(file, REVIEW_ORIGIN_IMAGE_DIR);
-            reviewImages.add(
-                    new Image(ImageType.REVIEW,
-                            imageUrl,
-                            FormatConverter.changePath(imageUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR),
-                            cafe,
-                            review));
-        }
-        return reviewImages;
+        List<String> savedImageUrls = files.stream()
+                .map(file -> s3Uploader.upload(file, REVIEW_ORIGIN_IMAGE_DIR))
+                .collect(Collectors.toList());
+        if(savedImageUrls.isEmpty()) return savedImageUrls;
+        s3Uploader.isExistObject(savedImageUrls);
+        return savedImageUrls;
     }
 }
