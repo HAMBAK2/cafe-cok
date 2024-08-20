@@ -198,8 +198,6 @@ public class AdminService {
             }
         }
 
-        if(!savedImage.isEmpty()) s3Uploader.isExistObject(savedImage);
-
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + id);
     }
 
@@ -246,8 +244,6 @@ public class AdminService {
         //운영시간 저장
         List<AdminOperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
-
-        if(!savedImages.isEmpty()) s3Uploader.isExistObject(savedImages);
 
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
     }
