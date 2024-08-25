@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class NicknameService {
 
+    private final Random random = new Random();
     private final NicknameComponentRepository nicknameComponentRepository;
     private final MemberRepository memberRepository;
 
@@ -31,9 +33,8 @@ public class NicknameService {
 
         String nickname = "";
         do {
-
-            String adjective = adjectives.get((int) Math.random() * adjectives.size()).getValue();
-            String noun = nouns.get((int) Math.random() * nouns.size()).getValue();
+            String adjective = adjectives.get(random.nextInt(adjectives.size())).getValue();
+            String noun = nouns.get(random.nextInt(nouns.size())).getValue();
 
             nickname = adjective + " " + noun;
         } while(memberRepository.existsByNickname(nickname));
