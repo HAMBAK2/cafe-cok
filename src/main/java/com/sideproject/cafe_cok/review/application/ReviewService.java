@@ -155,7 +155,7 @@ public class ReviewService {
     private void saveReviewImages(final Review review,
                                   final List<String> imageUrls) {
 
-        if(imageUrls.isEmpty()) return;
+        if(imageUrls == null || imageUrls.isEmpty()) return;
 
         Cafe cafe = review.getCafe();
         List<Image> reviewImages = imageUrls.stream()
@@ -184,6 +184,8 @@ public class ReviewService {
     }
 
     private List<String> uploadImageToS3(final List<MultipartFile> files) {
+
+        if(files == null || files.isEmpty()) return null;
 
         List<String> savedImageUrls = files.stream()
                 .map(file -> s3Uploader.upload(file, REVIEW_ORIGIN_IMAGE_DIR))
