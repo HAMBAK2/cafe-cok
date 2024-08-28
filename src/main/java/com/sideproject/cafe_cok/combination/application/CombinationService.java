@@ -62,7 +62,7 @@ public class CombinationService {
         if(ListUtils.areListEqual(request.getKeywords(), findKeywords))
             return CombinationIdResponse.of(findCombination.getId());
 
-        combinationKeywordRepository.deleteByCombinationId(combinationId);
+        combinationKeywordRepository.deleteById(combinationId);
         saveCombinationKeywordsByCombinationAndKeywordNames(findCombination, request.getKeywords());
         return CombinationIdResponse.of(findCombination.getId());
     }

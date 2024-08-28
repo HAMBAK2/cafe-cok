@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CombinationKeywordRepository extends JpaRepository<CombinationKeyword, Long> {
 
-    void deleteByCombinationId(final Long combinationId);
-
 }
