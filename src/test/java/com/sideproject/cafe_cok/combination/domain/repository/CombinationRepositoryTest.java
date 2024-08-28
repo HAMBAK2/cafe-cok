@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.combination.domain.repository;
 
+import com.sideproject.cafe_cok.TestConstants;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.combination.dto.CombinationDto;
 import com.sideproject.cafe_cok.combination.exception.NoSuchCombinationException;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
+import static com.sideproject.cafe_cok.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -24,16 +26,6 @@ class CombinationRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    private static final String MEMBER_EMAIL = "test@test.com";
-    private static final String MEMBER_NICKNAME = "nickname";
-    private static final SocialType MEMBER_SOCIAL_TYPE = SocialType.KAKAO;
-    private static final String COMBINATION_NAME_1 = "combination_name_1";
-    private static final String COMBINATION_NAME_2 = "combination_name_2";
-    private static final String COMBINATION_ICON_1 = "combination_icon_1";
-    private static final String COMBINATION_ICON_2 = "combination_icon_2";
-    private static final Long NON_EXISTENT_ID = 999L;
-
 
     @Test
     @DisplayName("저장된 조합이 조합 ID로 정상적으로 조회되는지 확인")

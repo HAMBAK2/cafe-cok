@@ -40,6 +40,4 @@ public class Bookmark {
         this.bookmarkFolder = bookmarkFolder;
         bookmarkFolder.getBookmarks().add(this);
     }
-
-
 }

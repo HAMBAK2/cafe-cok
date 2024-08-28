@@ -9,16 +9,9 @@ import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long>, BookmarkRepositoryCustom{
 
-    Long deleteByBookmarkFolderId(final Long folderId);
-
-    @Query("SELECT b " +
-            "FROM Bookmark b JOIN BookmarkFolder bf ON b.bookmarkFolder.id = bf.id " +
-            "WHERE b.cafe.id = :cafeId " +
-                "AND bf.member.id = :memberId")
-    List<Bookmark> findByCafeIdAndMemberId(final Long cafeId, final Long memberId);
-
     default Bookmark getById(final Long id) {
         return findById(id)
-                .orElseThrow(NoSuchBookmarkException::new);
+                .orElseThrow(() ->
+                        new NoSuchBookmarkException("[ID : " + id + "] 에 해당하는 북마크가 존재하지 않습니다."));
     }
 }
