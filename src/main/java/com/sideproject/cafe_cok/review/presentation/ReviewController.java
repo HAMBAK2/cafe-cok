@@ -23,16 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/review")
 @RequiredArgsConstructor
 @Tag(name = "Review", description = "리뷰 관련 API")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping(value = "/review/create",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "리뷰 작성 기능")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "리뷰 저장")
     public ResponseEntity<ReviewCreateResponse> createReview(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestPart ReviewCreateRequest request,
@@ -42,8 +41,8 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/review/{reviewId}/delete")
-    @Operation(summary = "리뷰 삭제 기능")
+    @DeleteMapping("/{reviewId}")
+    @Operation(summary = "reviewId에 해당하는 리뷰 삭제")
     public ResponseEntity<ReviewDeleteResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                        @PathVariable Long reviewId) {
 
@@ -51,8 +50,8 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/review/{reviewId}")
-    @Operation(summary = "리뷰 상세 정보를 반환하는 기능")
+    @GetMapping("/{reviewId}")
+    @Operation(summary = "reviewId에 해당하는 리뷰 조회")
     public ResponseEntity<ReviewDetailResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                        @PathVariable Long reviewId) {
 
@@ -60,9 +59,9 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping(value = "/review/{reviewId}/edit",
+    @PatchMapping(value = "/{reviewId}",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "리뷰 수정 기능")
+    @Operation(summary = "reviewId에 해당하는 리뷰 수정")
     public ResponseEntity<ReviewEditResponse> edit(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long reviewId,
