@@ -2,28 +2,35 @@ package com.sideproject.cafe_cok.plan.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
+import com.sideproject.cafe_cok.image.domain.enums.ImageType;
+import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
+import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
+import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
+import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.PlanCafe;
 import com.sideproject.cafe_cok.plan.domain.PlanKeyword;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
+import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanCafeRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
+import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
 import com.sideproject.cafe_cok.plan.dto.request.SavePlanRequest;
 import com.sideproject.cafe_cok.plan.dto.request.SharePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.response.CreatePlanResponse;
-import com.sideproject.cafe_cok.plan.dto.response.DeletePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
-import com.sideproject.cafe_cok.plan.dto.response.SharePlanResponse;
+import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
+import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.tmap.client.TmapClient;
@@ -32,6 +39,8 @@ import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanKeywordException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +48,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sideproject.cafe_cok.utils.FormatConverter.convertLocalDateLocalTimeToString;
+import static org.springframework.data.domain.Sort.by;
 
 
 @Service
@@ -55,10 +65,14 @@ public class PlanService {
     private final PlanCafeRepository planCafeRepository;
     private final PlanKeywordRepository planKeywordRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ImageRepository imageRepository;
+
+    private final Integer FIRST_PAGE_NUMBER = 0;
+    private final Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;
 
     @Transactional
-    public CreatePlanResponse doPlan(final CreatePlanRequest request,
-                                     final Long memberId) {
+    public SavePlanResponse doPlan(final CreatePlanRequest request,
+                                   final Long memberId) {
 
         request.validate();
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
@@ -133,29 +147,29 @@ public class PlanService {
 
 
     @Transactional
-    public SavePlanResponse save(final SavePlanRequest request,
+    public PlanIdResponse save(final SavePlanRequest request,
                                  final LoginMember loginMember) {
 
         Plan findPlan = planRepository.getById(request.getPlanId());
         Member findMember = memberRepository.getById(loginMember.getId());
         findPlan.changeIsSaved(true);
         findPlan.changeMember(findMember);
-        return new SavePlanResponse(findPlan.getId());
+        return new PlanIdResponse(findPlan.getId());
     }
 
     @Transactional
-    public SharePlanResponse share(final SharePlanRequest request,
-                                   final LoginMember loginMember) {
+    public PlanIdResponse share(final SharePlanRequest request,
+                                final LoginMember loginMember) {
 
         Plan findPlan = planRepository.getById(request.getPlanId());
         Member findMember = memberRepository.getById(loginMember.getId());
         findPlan.changeIsShared(true);
         findPlan.changeMember(findMember);
-        return new SharePlanResponse(findPlan.getId());
+        return new PlanIdResponse(findPlan.getId());
     }
 
     @Transactional
-    public DeletePlanResponse delete(final PlanStatus status,
+    public PlanIdResponse delete(final PlanStatus status,
                                      final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
@@ -163,19 +177,88 @@ public class PlanService {
         else findPlan.changeIsShared(false);
 
         if(!findPlan.getIsSaved() && !findPlan.getIsShared()) planRepository.delete(findPlan);
-        return new DeletePlanResponse(findPlan.getId());
+        return new PlanIdResponse(findPlan.getId());
     }
 
-    private CreatePlanResponse createMisMatchPlan(final CreatePlanRequest request,
-                                                  final CategoryKeywordsDto categoryKeywords,
-                                                  final Long memberId) {
+    public PlanPageResponse getPlans(final LoginMember loginMember,
+                                     final PlanSortBy planSortBy,
+                                     final PlanStatus status,
+                                     final Integer page,
+                                     final Integer size) {
+
+        Sort sortBy = getSortBy(planSortBy);
+        PageRequest pageRequest = PageRequest.of(page-1, size, sortBy);
+        List<PlanKeywordDto> plans = planRepository
+                .findPlansByMemberIdAndCategory(loginMember.getId(), Category.PURPOSE, planSortBy, status, pageRequest);
+
+        return new PlanPageResponse(page, plans);
+    }
+
+    public PlanAllResponse getPlansAll(final LoginMember loginMember,
+                                       final PlanSortBy planSortBy,
+                                       final PlanStatus status) {
+
+        Sort sortBy = getSortBy(planSortBy);
+        PageRequest pageRequest = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sortBy);
+        List<PlanKeywordDto> plans = planRepository
+                .findPlansByMemberIdAndCategory(loginMember.getId(), Category.PURPOSE, planSortBy, status, pageRequest);
+
+        return new PlanAllResponse(plans);
+    }
+
+    public PlanResponse findPlan(final LoginMember loginMember,
+                                 final Long planId) {
+
+        Plan findPlan = planRepository.getById(planId);
+        List<Keyword> findKeywords = keywordRepository.findKeywordByPlanId(planId);
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
+
+        List<CafeDto> findSimilarCafes =
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.SIMILAR);
+        List<CafeDto> findMatchCafes =
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.MATCH);
+
+        return new PlanResponse(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
+    }
+
+    public List<CafeDto> getCafeDtoListByPlanIdAndMatchTypeAndImageType(final Long memberId,
+                                                                        final Long planId,
+                                                                        final PlanCafeMatchType matchType) {
+        List<Cafe> findCafeList = cafeRepository.findByPlanIdAndMatchType(planId, matchType);
+        List<CafeDto> cafeDtoList = findCafeList.stream()
+                .map(cafe -> {
+                    String findImageUrl =
+                            imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN).getThumbnail();
+
+                    List<BookmarkIdDto> findBookmarkIdDtoList = null;
+                    if (memberId != null) findBookmarkIdDtoList =
+                            bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafe.getId(), memberId);
+                    return new CafeDto(cafe, findImageUrl, findBookmarkIdDtoList);
+                }).collect(Collectors.toList());
+        return cafeDtoList;
+    }
+
+    private Sort getSortBy(final PlanSortBy planSortBy) {
+        Sort sortBy;
+        switch (planSortBy){
+            case RECENT -> sortBy = by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
+            case UPCOMING -> sortBy = by(Sort.Direction.ASC, PlanSortBy.UPCOMING.getValue(), "visitStartTime", "id");
+            default -> throw new NoSuchPlanSortException();
+        }
+
+        return sortBy;
+    }
+
+    private SavePlanResponse createMisMatchPlan(final CreatePlanRequest request,
+                                                final CategoryKeywordsDto categoryKeywords,
+                                                final Long memberId) {
 
         List<Cafe> recommendCafes;
         if(request.getLocationName() != null && !request.getLocationName().isEmpty())
             recommendCafes = cafeRepository.findNearestCafes(request.getLatitude(), request.getLongitude());
         else recommendCafes = cafeRepository.findDateAndLimit(request.getDate(), 10);
 
-        return CreatePlanResponse.builder()
+        return SavePlanResponse.builder()
                 .matchType(MatchType.MISMATCH)
                 .locationName(request.getLocationName())
                 .minutes(request.getMinutes())
@@ -185,17 +268,17 @@ public class PlanService {
                 .build();
     }
 
-    private CreatePlanResponse createMatchPlan(final CreatePlanRequest request,
-                                               final CategoryKeywordsDto categoryKeywords,
-                                               final List<Cafe> similarCafes,
-                                               final List<Cafe> matchCafes,
-                                               final Long memberId) {
+    private SavePlanResponse createMatchPlan(final CreatePlanRequest request,
+                                             final CategoryKeywordsDto categoryKeywords,
+                                             final List<Cafe> similarCafes,
+                                             final List<Cafe> matchCafes,
+                                             final Long memberId) {
 
         MatchType matchType = MatchType.SIMILAR;
         if(!matchCafes.isEmpty()) matchType = MatchType.MATCH;
         Long planId = createPlan(matchType, similarCafes, matchCafes, request);
 
-        return CreatePlanResponse.builder()
+        return SavePlanResponse.builder()
                 .planId(planId)
                 .matchType(matchType)
                 .locationName(request.getLocationName())

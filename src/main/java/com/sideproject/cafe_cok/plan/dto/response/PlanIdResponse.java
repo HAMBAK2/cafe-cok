@@ -3,14 +3,14 @@ package com.sideproject.cafe_cok.plan.dto.response;
 import lombok.Getter;
 
 @Getter
-public class SharePlanResponse {
+public class PlanIdResponse {
 
     private Long planId;
 
-    protected SharePlanResponse() {
+    protected PlanIdResponse() {
     }
 
-    public SharePlanResponse(Long planId) {
+    public PlanIdResponse(Long planId) {
         this.planId = planId;
     }
 }

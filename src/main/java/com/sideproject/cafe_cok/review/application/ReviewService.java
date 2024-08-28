@@ -14,33 +14,27 @@ import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
-import com.sideproject.cafe_cok.member.dto.response.MyPageReviewResponse;
+import com.sideproject.cafe_cok.review.dto.response.ReviewListResponse;
 import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
-import com.sideproject.cafe_cok.review.dto.MyPageReviewDto;
+import com.sideproject.cafe_cok.review.dto.ReviewDto;
 import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
-import com.sideproject.cafe_cok.review.dto.response.ReviewCreateResponse;
-import com.sideproject.cafe_cok.review.dto.response.ReviewDeleteResponse;
-import com.sideproject.cafe_cok.review.dto.response.ReviewDetailResponse;
-import com.sideproject.cafe_cok.review.dto.response.ReviewEditResponse;
-import com.sideproject.cafe_cok.utils.FormatConverter;
+import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
+import com.sideproject.cafe_cok.review.dto.response.ReviewIdResponse;
+import com.sideproject.cafe_cok.review.dto.response.ReviewResponse;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
-import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.sideproject.cafe_cok.utils.Constants.*;
 import static com.sideproject.cafe_cok.utils.FormatConverter.*;
@@ -62,9 +56,9 @@ public class ReviewService {
     private static final String KEYWORD = "keyword";
 
     @Transactional
-    public ReviewCreateResponse createReview(final ReviewCreateRequest request,
-                                             final LoginMember loginMember,
-                                             final List<MultipartFile> files) {
+    public ReviewSaveResponse save(final ReviewCreateRequest request,
+                                   final LoginMember loginMember,
+                                   final List<MultipartFile> files) {
 
         List<String> savedImageUrls = uploadImageToS3(files);
 
@@ -79,26 +73,26 @@ public class ReviewService {
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
         saveReviewImages(savedReview, savedImageUrls);
 
-        return new ReviewCreateResponse(savedReview.getId(), savedReview.getCafe().getId());
+        return new ReviewSaveResponse(savedReview.getId(), savedReview.getCafe().getId());
     }
 
     @Transactional
-    public ReviewDeleteResponse delete(final Long reviewId) {
+    public ReviewIdResponse delete(final Long reviewId) {
 
         reviewRepository.deleteById(reviewId);
-        return new ReviewDeleteResponse(reviewId);
+        return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewDetailResponse detail(final Long reviewId) {
+    public ReviewResponse detail(final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
         List<Image> findReviewImages = imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW);
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
-        return ReviewDetailResponse.of(findReview, findReviewImages, CategoryKeywords);
+        return ReviewResponse.of(findReview, findReviewImages, CategoryKeywords);
     }
 
     @Transactional
-    public ReviewEditResponse edit(final ReviewEditRequest request,
+    public ReviewIdResponse edit(final ReviewEditRequest request,
                                    final List<MultipartFile> files,
                                    final Long reviewId) {
 
@@ -115,22 +109,22 @@ public class ReviewService {
 
         saveReviewImages(findReview, savedImageUrls);
 
-        return new ReviewEditResponse(reviewId);
+        return new ReviewIdResponse(reviewId);
     }
 
-    public MyPageReviewResponse getReviews(final LoginMember loginMember) {
+    public ReviewListResponse getReviews(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
-        List<MyPageReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
+        List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
             List<ImageUrlDto> findImageUrlDtoList
                     = imageRepository.findImageUrlDtoListByReviewIdAndImageType(review.getId(), ImageType.REVIEW);
             List<KeywordDto> findKeywords = keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU);
             if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
                 findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
-            return new MyPageReviewDto(review, findImageUrlDtoList, findKeywords);
+            return new ReviewDto(review, findImageUrlDtoList, findKeywords);
         }).collect(Collectors.toList());
 
-        return new MyPageReviewResponse(findReviewDtoList);
+        return new ReviewListResponse(findReviewDtoList);
     }
 
     private void saveByReviewAndKeywordNames(final Review review,

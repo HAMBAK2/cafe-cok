@@ -1,4 +1,4 @@
-package com.sideproject.cafe_cok.member.dto.response;
+package com.sideproject.cafe_cok.plan.dto.response;
 
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import lombok.AccessLevel;
@@ -9,11 +9,14 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MyPagePlansAllResponse {
+public class PlanPageResponse {
 
+    private Integer page;
     private List<PlanKeywordDto> plans;
 
-    public MyPagePlansAllResponse(final List<PlanKeywordDto> plans) {
+    public PlanPageResponse(final Integer page,
+                            final List<PlanKeywordDto> plans) {
+        this.page = page;
         this.plans = plans;
     }
 }

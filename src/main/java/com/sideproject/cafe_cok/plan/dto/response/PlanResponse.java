@@ -1,4 +1,4 @@
-package com.sideproject.cafe_cok.member.dto.response;
+package com.sideproject.cafe_cok.plan.dto.response;
 
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
@@ -15,7 +15,7 @@ import static com.sideproject.cafe_cok.utils.FormatConverter.convertLocalDateLoc
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MyPagePlanDetailResponse {
+public class PlanResponse {
 
     private Long planId;
     private MatchType matchType;
@@ -26,10 +26,10 @@ public class MyPagePlanDetailResponse {
     private List<CafeDto> matchCafes = new ArrayList<>();
     private List<CafeDto> similarCafes = new ArrayList<>();
 
-    public MyPagePlanDetailResponse(final Plan plan,
-                                    final CategoryKeywordsDto categoryKeywords,
-                                    final List<CafeDto> similarCafes,
-                                    final List<CafeDto> matchCafes) {
+    public PlanResponse(final Plan plan,
+                        final CategoryKeywordsDto categoryKeywords,
+                        final List<CafeDto> similarCafes,
+                        final List<CafeDto> matchCafes) {
 
         this.planId = plan.getId();
         this.matchType = plan.getMatchType();
