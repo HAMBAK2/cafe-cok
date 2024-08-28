@@ -1,5 +1,11 @@
 package com.sideproject.cafe_cok.cafe.application;
 
+import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
+import com.sideproject.cafe_cok.admin.dto.AdminOperationHourDto;
+import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
+import com.sideproject.cafe_cok.admin.dto.request.AdminMenuRequestDto;
+import com.sideproject.cafe_cok.admin.dto.response.AdminSuccessAndRedirectResponse;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
@@ -15,6 +21,7 @@ import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
+import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
@@ -22,13 +29,16 @@ import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.review.domain.Review;
+import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -50,6 +60,7 @@ public class CafeService {
     private final KeywordRepository keywordRepository;
     private final BookmarkRepository bookmarkRepository;
     private final OperationHourRepository operationHourRepository;
+    private final S3Uploader s3Uploader;
 
     public static final Integer CAFE_DETAIL_CAFE_IMAGE_MAX_CNT = 3;
     public static final Integer CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT = 6;
@@ -152,6 +163,174 @@ public class CafeService {
         return new CafeDetailBasicInfoResponse(
                 findCafe, openStatus, businessHours, closedDay,
                 findMenuImageUrlDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
+    }
+
+    @Transactional
+    public AdminSuccessAndRedirectResponse save(final AdminCafeSaveRequest request) {
+
+        Cafe newCafe = new Cafe(request);
+        Cafe savedCafe = cafeRepository.save(newCafe);
+        List<Image> savedImages = new ArrayList<>();
+
+        File converted = convertBase64StringToFile(request.getMainImage());
+        String originImageUrl = s3Uploader.upload(converted, CAFE_MAIN_ORIGIN_IMAGE_DIR);
+        String thumbnailImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR);
+        String midImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR);
+        Image mainImage = new Image(ImageType.CAFE_MAIN, originImageUrl, thumbnailImageDir, midImageDir, savedCafe);
+        savedImages.add(imageRepository.save(mainImage));
+
+        for (String otherImage : request.getOtherImages()) {
+            converted = convertBase64StringToFile(otherImage);
+            originImageUrl = s3Uploader.upload(converted, CAFE_ORIGIN_IMAGE_DIR);
+            thumbnailImageDir = changePath(originImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR);
+            Image othreImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageDir, savedCafe);
+            savedImages.add(imageRepository.save(othreImage));
+        }
+
+        List<AdminMenuRequestDto> menus = request.getMenus();
+        for (AdminMenuRequestDto menu : menus) {
+            Menu newMenu = new Menu(menu.getName(), menu.getPrice(), savedCafe);
+            Menu savedMenu = menuRepository.save(newMenu);
+
+            if(menu.getImage() != null && !menu.getImage().isEmpty()) {
+                converted = convertBase64StringToFile(menu.getImage());
+                originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
+                thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
+                Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
+                savedImages.add(imageRepository.save(menuImage));
+            }
+        }
+
+        List<AdminOperationHourDto> hours = request.getHours();
+        if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
+
+        return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
+    }
+
+    @Transactional
+    public AdminSuccessAndRedirectResponse update(final Long id,
+                                                  final AdminCafeUpdateRequest request) {
+
+        Cafe findCafe = cafeRepository.getById(id);
+        findCafe.setName(request.getName());
+        findCafe.setRoadAddress(request.getAddress());
+        findCafe.setPhoneNumber(request.getPhoneNumber());
+        cafeRepository.save(findCafe);
+
+        List<Image> savedImage = new ArrayList<>();
+
+        if(request.getImage().getImageBase64() != null) {
+
+            File converted = convertBase64StringToFile(request.getImage().getImageBase64());
+            String originImageUrl = s3Uploader.upload(converted, CAFE_MAIN_ORIGIN_IMAGE_DIR);
+
+            Optional<Image> optionalImage = imageRepository.findById(request.getImage().getId());
+            if(optionalImage.isPresent()) {
+                Image findImage = optionalImage.get();
+                s3Uploader.delete(findImage.getOrigin());
+                s3Uploader.delete(findImage.getMedium());
+                s3Uploader.delete(findImage.getThumbnail());
+                findImage.changeOrigin(originImageUrl);
+                findImage.changMedium(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR));
+                findImage.changeThumbnail(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR));
+                savedImage.add(imageRepository.save(findImage));
+            }
+        }
+
+        for (AdminImageDto otherImage : request.getOtherImages()) {
+
+            File converted = convertBase64StringToFile(otherImage.getImageBase64());
+            String originImageUrl = s3Uploader.upload(converted, CAFE_ORIGIN_IMAGE_DIR);
+            String thumbnailImageUrl = changePath(originImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR);
+
+            if(otherImage.getId() != null) {
+                Optional<Image> optionalImage = imageRepository.findById(otherImage.getId());
+                if(optionalImage.isPresent()) {
+                    Image findImage = optionalImage.get();
+                    s3Uploader.delete(findImage.getThumbnail());
+                    s3Uploader.delete(findImage.getOrigin());
+                    findImage.changeOrigin(originImageUrl);
+                    findImage.changeThumbnail(thumbnailImageUrl);
+                    savedImage.add(imageRepository.save(findImage));
+                }
+                continue;
+            }
+
+            Image newImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageUrl, findCafe);
+            savedImage.add(imageRepository.save(newImage));
+        }
+
+        List<AdminOperationHourDto> hours = request.getHours();
+        operationHourRepository.deleteByCafeId(id);
+        if(checkoutInputHours(hours)) saveOperationHours(hours, findCafe);
+
+        List<AdminMenuRequestDto> menus = request.getMenus();
+        for (AdminMenuRequestDto menu : menus) {
+
+            Menu targetMenu;
+            if(menu.getId() != null) {
+                Optional<Menu> optionalMenu = menuRepository.findById(menu.getId());
+                if(optionalMenu.isEmpty()) continue;
+                targetMenu = optionalMenu.get();
+                targetMenu.changeName(menu.getName());
+                targetMenu.changePrice(menu.getPrice());
+            }
+            else  targetMenu = new Menu(menu.getName(), menu.getPrice(), findCafe);
+            menuRepository.save(targetMenu);
+
+            if (menu.getImage() != null && !menu.getImage().isEmpty()) {
+
+                File converted = convertBase64StringToFile(menu.getImage());
+                String originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
+                String thumbnailImageUrl = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
+
+                List<Image> findImages = imageRepository.findByMenu(targetMenu);
+                Image targetImage;
+                if(findImages.isEmpty()) {
+                    targetImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageUrl, findCafe, targetMenu);
+                } else {
+                    targetImage = findImages.get(0);
+                    targetImage.changeOrigin(originImageUrl);
+                    targetImage.changeThumbnail(thumbnailImageUrl);
+                }
+
+                savedImage.add(imageRepository.save(targetImage));
+            }
+        }
+
+        return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + id);
+    }
+
+    public boolean isExistByKakaoId(final Long id) {
+        return cafeRepository.existsByKakaoId(id);
+    }
+
+    private void saveOperationHours(final List<AdminOperationHourDto> hours, final Cafe cafe) {
+        List<OperationHour> newOperationHours = new ArrayList<>();
+        for (AdminOperationHourDto hour : hours) {
+            DayOfWeek day = getDyaOfWeekByKoreanDay(hour.getDay());
+            LocalTime startTime = LocalTime.of(hour.getStartHour(), hour.getStartMinute());
+            LocalTime endTime = LocalTime.of(hour.getEndHour(), hour.getEndMinute());
+            boolean isClosed = false;
+
+            if(startTime.equals(LocalTime.MIDNIGHT) && endTime.equals(LocalTime.MIDNIGHT)) isClosed = true;
+            OperationHour newOperationHour = new OperationHour(day, startTime, endTime, isClosed, cafe);
+            newOperationHours.add(newOperationHour);
+        }
+
+        operationHourRepository.saveAll(newOperationHours);
+    }
+
+    private boolean checkoutInputHours(List<AdminOperationHourDto> hours) {
+
+        for (AdminOperationHourDto hour : hours) {
+            if(hour.getStartHour() != 0) return true;
+            if(hour.getStartMinute() != 0) return true;
+            if(hour.getEndHour() != 0) return true;
+            if(hour.getEndMinute() != 0) return true;
+        }
+
+        return false;
     }
 
 

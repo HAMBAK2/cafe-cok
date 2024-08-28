@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function checkCafeExists(kakaoId) {
-        return fetch(`/admin/cafe/exists/` + kakaoId)
+        return fetch(`/api/cafe/` + kakaoId)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('네트워크 응답이 올바르지 않습니다.');
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 hours: generateHours()
             };
 
-            fetch(`/admin/cafe`, {
+            fetch(`/api/cafe`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

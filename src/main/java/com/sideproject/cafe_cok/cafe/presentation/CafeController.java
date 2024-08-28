@@ -1,5 +1,8 @@
 package com.sideproject.cafe_cok.cafe.presentation;
 
+import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
+import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
+import com.sideproject.cafe_cok.admin.dto.response.AdminSuccessAndRedirectResponse;
 import com.sideproject.cafe_cok.auth.application.AuthService;
 import com.sideproject.cafe_cok.auth.exception.EmptyAuthorizationHeaderException;
 import com.sideproject.cafe_cok.auth.exception.InvalidTokenException;
@@ -67,6 +70,29 @@ public class CafeController {
         Long memberId = getMemberId(servletRequest);
         CafeListResponse response = cafeService.findCafeByKeyword(latitude, longitude, keywords, memberId);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    @Operation(summary = "카페 저장")
+    public ResponseEntity<AdminSuccessAndRedirectResponse> save(@RequestBody AdminCafeSaveRequest request) {
+        AdminSuccessAndRedirectResponse response = cafeService.save(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{cafeId}")
+    @Operation(summary = "cafeId에 해당하는 카페 수정")
+    public ResponseEntity<AdminSuccessAndRedirectResponse> update(@PathVariable Long cafeId,
+                                                                      @RequestBody AdminCafeUpdateRequest request) {
+
+        AdminSuccessAndRedirectResponse response = cafeService.update(cafeId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{kakaoId}")
+    @Operation(summary = "kakaoId에 해당하는 카페 존재여부 조회")
+    public ResponseEntity<Boolean> isExistByKakaoId(@PathVariable Long kakaoId) {
+        boolean exists = cafeService.isExistByKakaoId(kakaoId);
+        return ResponseEntity.ok(exists);
     }
 
     private Long getMemberId(final HttpServletRequest request) {

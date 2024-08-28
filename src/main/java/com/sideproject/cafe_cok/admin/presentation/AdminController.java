@@ -25,6 +25,8 @@ public class AdminController {
 
     private final AdminService adminService;
     private final List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
+    @Value("${oauth.kakao.client-id}")
+    private String kakaoApiKey;
 
     @GetMapping()
     public String home() {
@@ -69,5 +71,11 @@ public class AdminController {
     public String cafeRegisterForm(Model model) {
         model.addAttribute("daysOfWeek", daysOfWeek);
         return "page/cafe/add";
+    }
+
+    @GetMapping("/app-key")
+    @ResponseBody
+    public String getAppKey() {
+        return kakaoApiKey;
     }
 }
