@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/plan")
 @RequiredArgsConstructor
-@Tag(name = "Plan", description = "계획하기 관련 API")
+@Tag(name = "Plan", description = "계획 관련 API")
 public class PlanController {
 
     private final PlanService planService;
     private final AuthService authService;
 
     @PostMapping
-    @Operation(summary = "계획하기 결과보기 요청")
+    @Operation(summary = "계획 저장 및 조회")
     public ResponseEntity<CreatePlanResponse> plan(@RequestBody CreatePlanRequest request,
                                                    HttpServletRequest servletRequest) {
 
@@ -42,8 +42,8 @@ public class PlanController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/save")
-    @Operation(summary = "계획하기 결과를 저장")
+    @PatchMapping
+    @Operation(summary = "계획 상태 저장으로 수정")
     public ResponseEntity<SavePlanResponse> save(@AuthenticationPrincipal LoginMember loginMember,
                                                  @RequestBody SavePlanRequest request) {
 
@@ -52,7 +52,7 @@ public class PlanController {
     }
 
     @PatchMapping("/share")
-    @Operation(summary = "계획하기 결과를 공유")
+    @Operation(summary = "계획 상태 공유로 수정")
     public ResponseEntity<SharePlanResponse> share(@AuthenticationPrincipal LoginMember loginMember,
                                                    @RequestBody SharePlanRequest request) {
 
@@ -60,8 +60,8 @@ public class PlanController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{planId}/delete")
-    @Operation(summary = "선택한 계획하기를 삭제")
+    @DeleteMapping("/{planId}")
+    @Operation(summary = "planId에 해당하는 계획 삭제")
     public ResponseEntity<DeletePlanResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                      @PathVariable Long planId,
                                                      @RequestParam PlanStatus status){
