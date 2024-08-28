@@ -3,6 +3,8 @@ package com.sideproject.cafe_cok.review.presentation;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
+import com.sideproject.cafe_cok.review.dto.response.ReviewAllResponse;
+import com.sideproject.cafe_cok.review.dto.response.ReviewPageResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewListResponse;
 import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
 import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
@@ -76,6 +78,23 @@ public class ReviewController {
             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
 
         ReviewIdResponse response = reviewService.edit(request, files, reviewId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}")
+    @Operation(summary = "cafeId에 해당하는 리뷰 조회(페이징)")
+    public ResponseEntity<ReviewPageResponse> findByCafeId(@PathVariable Long cafeId,
+                                                           @RequestParam(required = false) Long cursor) {
+
+        ReviewPageResponse response = reviewService.findByCafeId(cafeId, cursor);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{cafeId}/all")
+    @Operation(summary = "cafeId에 해당하는 리뷰 조회(전체)")
+    public ResponseEntity<ReviewAllResponse> findByCafeIdAll(@PathVariable Long cafeId) {
+
+        ReviewAllResponse response = reviewService.findByCafeIdAll(cafeId);
         return ResponseEntity.ok(response);
     }
 

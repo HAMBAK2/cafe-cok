@@ -14,9 +14,6 @@ public interface CafeRepositoryCustom {
     List<Cafe> findByDateAndTimeOrderByStarRatingDesc(final CreatePlanRequest request);
     List<Cafe> findByDateAndTimeAndDistance(final CreatePlanRequest request);
 
-    List<Cafe> findWithinRadiusCafeList(final BigDecimal latitude,
-                                        final BigDecimal longitude);
-
     List<Cafe> findByPlanIdAndMatchType(final Long planId,
                                         final PlanCafeMatchType matchType);
 

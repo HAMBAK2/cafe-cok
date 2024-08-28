@@ -6,12 +6,10 @@ import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
-import com.sideproject.cafe_cok.cafe.dto.request.CafeFindCategoryRequest;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
-import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
@@ -53,92 +51,9 @@ public class CafeService {
     private final BookmarkRepository bookmarkRepository;
     private final OperationHourRepository operationHourRepository;
 
-    private static final Boolean HAS_NEXT_PAGE = true;
-    private static final Boolean NO_NEXT_PAGE = false;
-
-    public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
     public static final Integer CAFE_DETAIL_CAFE_IMAGE_MAX_CNT = 3;
     public static final Integer CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT = 6;
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
-    public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
-    public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
-
-    public CafeDetailImagePageResponse detailImages(final Long cafeId,
-                                                    final Long cursor) {
-
-        List<ImageUrlDto> images = new ArrayList<>();
-
-        Pageable pageable;
-        Integer cafeDetailImageSize = CAFE_DETAIL_IMAGE_SIZE;
-
-        if(cursor == null) {
-            List<ImageUrlDto> findCafeImageUrlDtoList = getCafeImageUrlDtoList(cafeId);
-            cafeDetailImageSize -= findCafeImageUrlDtoList.size();
-            images.addAll(findCafeImageUrlDtoList);
-        }
-
-        List<ImageUrlCursorDto> findReviewImageUrlCursorDtoList = imageRepository
-                .findImageUrlCursorDtoListByCafeIdAndImageTypeOrderByIdDesc(
-                        cafeId,
-                        cursor,
-                        ImageType.REVIEW,
-                        PageRequest.of(0, cafeDetailImageSize));
-
-        if(findReviewImageUrlCursorDtoList.size() < cafeDetailImageSize) {
-            images.addAll(convertFromImageUrlCursorDtoToImageUrlDto(findReviewImageUrlCursorDtoList));
-            return new CafeDetailImagePageResponse(images, NO_NEXT_PAGE);
-        }
-
-        Long newCursor = findReviewImageUrlCursorDtoList.get(findReviewImageUrlCursorDtoList.size() - 1).getCursor();
-        images.addAll(convertFromImageUrlCursorDtoToImageUrlDto(findReviewImageUrlCursorDtoList));
-        return new CafeDetailImagePageResponse(images, newCursor, HAS_NEXT_PAGE);
-    }
-
-    private List<ImageUrlDto> getCafeImageUrlDtoList(final Long cafeId) {
-        return imageRepository
-                .findCafeImageUrlDtoListByCafeId(
-                        cafeId,
-                        PageRequest.of(0, CAFE_DETAIL_CAFE_IMAGE_MAX_CNT));
-    }
-
-    public CafeDetailImageAllResponse detailImagesAll(final Long cafeId) {
-
-        List<ImageUrlDto> images = new ArrayList<>();
-        List<ImageUrlDto> findCafeImageUrlDtoList = getCafeImageUrlDtoList(cafeId);
-        List<ImageUrlDto> findReviewImageUrlDtoList =
-                imageRepository.findImageUrlDtoListByCafeIdImageType(cafeId, ImageType.REVIEW);
-
-        images.addAll(findCafeImageUrlDtoList);
-        images.addAll(findReviewImageUrlDtoList);
-        return CafeDetailImageAllResponse.from(images);
-    }
-
-    public CafeDetailReviewPageResponse detailReviews(final Long cafeId,
-                                                      final Long cursor) {
-
-        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
-        List<CafeDetailReviewDto> reviews;
-
-        List<Review> findReviews = reviewRepository
-                .findByCafeIdAndCursorOrderByIdDesc(
-                        cafeId,
-                        cursor,
-                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT));
-        reviews = convertReviewsToCafeDetailReviewDtoList(cafeId, findReviews);
-
-        if(reviews.size() == CAFE_DETAIL_REVIEW_CNT) {
-            Long newCursor = reviews.get(reviews.size() - 1).getId();;
-            return CafeDetailReviewPageResponse.of(userChoiceKeywords, reviews, newCursor, HAS_NEXT_PAGE);
-        }
-
-        return CafeDetailReviewPageResponse.of(userChoiceKeywords, reviews);
-    }
-
-    public CafeDetailReviewAllResponse detailReviewsAll(final Long cafeId) {
-        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
-        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, ALL_LIST_CNT);;
-        return CafeDetailReviewAllResponse.of(userChoiceKeywords, reviews);
-    }
 
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
@@ -165,54 +80,31 @@ public class CafeService {
         return cafeDetailReviewDtoList;
     }
 
-    public CafeSearchResponse getCafeListByAgain(final BigDecimal latitude,
-                                                 final BigDecimal longitude,
-                                                 final Long memberId) {
-
-        List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(latitude, longitude, memberId);
-        return new CafeSearchResponse(withinRadiusCafes);
-    }
-
-    public CafeSearchResponse findCafeByBar(final BigDecimal latitude,
+    public CafeListResponse getNearestCafes(final BigDecimal latitude,
                                             final BigDecimal longitude,
                                             final Long memberId) {
 
-        List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(latitude, longitude, memberId);
-        CafeDto targetCafe = withinRadiusCafes.stream()
-                .filter(cafe -> cafe.getLatitude().compareTo(latitude) == 0 &&
-                        cafe.getLongitude().compareTo(longitude) == 0)
-                .findFirst()
-                .orElse(null);
-
-        if(targetCafe != null) {
-            withinRadiusCafes.remove(targetCafe);
-            withinRadiusCafes.add(0, targetCafe);
-        }
-        return new CafeSearchResponse(withinRadiusCafes);
+        List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
+        return new CafeListResponse(findCafes);
     }
 
-    public CafeSearchResponse findCafeByKeyword(final CafeFindCategoryRequest request,
-                                                final Long memberId) {
+    public CafeListResponse findCafeByKeyword(final BigDecimal latitude,
+                                              final BigDecimal longitude,
+                                              final List<String> keywords,
+                                              final Long memberId) {
 
-        List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(request.getLatitude(), request.getLongitude(), memberId);
-        List<String> targetKeywordNames = request.getKeywords();
+        List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
 
-        if(!targetKeywordNames.isEmpty()) {
-            for (CafeDto withinRadiusCafe : withinRadiusCafes) {
-                List<String> findNames = keywordRepository.findNamesByCafeId(withinRadiusCafe.getId());
-                boolean allMatch = targetKeywordNames.stream().allMatch(findNames::contains);
-                if(allMatch) filteredWithinRadiusCafes.add(withinRadiusCafe);
+        if(keywords != null && !keywords.isEmpty()) {
+            for (CafeDto cafe : findCafes) {
+                List<String> findNames = keywordRepository.findNamesByCafeId(cafe.getId());
+                boolean allMatch = keywords.stream().allMatch(findNames::contains);
+                if(allMatch) filteredWithinRadiusCafes.add(cafe);
             }
         }
 
-        return new CafeSearchResponse(filteredWithinRadiusCafes);
-    }
-
-    public CafeDetailMenuResponse detailMenus(final Long cafeId) {
-
-        List<MenuImageUrlDto> findMenus = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
-        return new CafeDetailMenuResponse(findMenus);
+        return new CafeListResponse(filteredWithinRadiusCafes);
     }
 
     public CafeDetailTopResponse detailTop(final Long cafeId,
@@ -262,11 +154,6 @@ public class CafeService {
                 findMenuImageUrlDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
     }
 
-    private List<ImageUrlDto> convertFromImageUrlCursorDtoToImageUrlDto(final List<ImageUrlCursorDto> dtoList) {
-        return dtoList.stream()
-                .map(dto -> new ImageUrlDto(dto.getOriginUrl(), dto.getThumbnailUrl()))
-                .collect(Collectors.toList());
-    }
 
     private List<ImageUrlDto> getImageUrlDtoListByCafeId(final Long cafeId) {
 
@@ -303,10 +190,10 @@ public class CafeService {
                 cafeId, PageRequest.of(0, USER_CHOICE_KEYWORD_CNT));
     }
 
-    private List<CafeDto> getWithinRadiusCafeDtoList(final BigDecimal latitude,
-                                                     final BigDecimal longitude,
-                                                     final Long memberId) {
-        List<Cafe> findCafes = cafeRepository.findWithinRadiusCafeList(latitude, longitude);
+    private List<CafeDto> findNearestCafes(final BigDecimal latitude,
+                                           final BigDecimal longitude,
+                                           final Long memberId) {
+        List<Cafe> findCafes = cafeRepository.findNearestCafes(latitude, longitude);
         List<CafeDto> cafeDtoList = findCafes.stream()
                 .map(cafe -> {
                     String findImageUrl =
