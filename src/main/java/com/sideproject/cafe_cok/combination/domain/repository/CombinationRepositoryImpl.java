@@ -18,7 +18,7 @@ public class CombinationRepositoryImpl implements CombinationRepositoryCustom{
     }
 
     @Override
-    public List<CombinationDto> findDtoByMemberId(final Long memberId) {
+    public List<CombinationDto> findByMemberId(final Long memberId) {
 
         return queryFactory
                 .select(new QCombinationDto(

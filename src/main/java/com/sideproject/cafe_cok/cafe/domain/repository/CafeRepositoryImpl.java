@@ -138,10 +138,6 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
         return isEmpty(timeGoe) ? null : operationHour.closingTime.goe(timeGoe);
     }
 
-    private BooleanExpression keywordNamesIn(final List<String> keywordNames) {
-        return isEmpty(keywordNames) ? null : keyword.name.in(keywordNames);
-    }
-
     private BooleanExpression isWithinRadius(final BigDecimal latitude,
                                              final BigDecimal longitude,
                                              final Integer minutes) {

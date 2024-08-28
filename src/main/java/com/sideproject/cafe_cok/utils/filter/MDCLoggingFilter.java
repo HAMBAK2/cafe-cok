@@ -1,4 +1,4 @@
-package com.sideproject.cafe_cok.filter;
+package com.sideproject.cafe_cok.utils.filter;
 
 import jakarta.servlet.*;
 import org.slf4j.MDC;
