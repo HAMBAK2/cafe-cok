@@ -26,8 +26,10 @@ public class TestConstants {
     public static final BigDecimal CAFE_LATITUDE = new BigDecimal("37.5665");
 
     /* BOOKMARK FOLDER */
-    public static final String BOOKMARK_FOLDER_NAME = "bookmark folder name";
-    public static final String BOOKMARK_FOLDER_COLOR = "bookmark folder color";
+    public static final String BOOKMARK_FOLDER_NAME_1 = "bookmark folder name1";
+    public static final String BOOKMARK_FOLDER_COLOR_1 = "bookmark folder color1";
+    public static final String BOOKMARK_FOLDER_NAME_2 = "bookmark folder name2";
+    public static final String BOOKMARK_FOLDER_COLOR_2 = "bookmark folder color2";
     public static final Boolean BOOKMARK_IS_VISIBLE = true;
     public static final Boolean BOOKMARK_IS_DEFAULT_FOLDER = true;
     

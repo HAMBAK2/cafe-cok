@@ -1,8 +1,6 @@
 package com.sideproject.cafe_cok.bookmark.domain.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
 import com.sideproject.cafe_cok.bookmark.dto.QBookmarkFolderCountDto;
 import jakarta.persistence.EntityManager;
