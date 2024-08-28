@@ -21,7 +21,7 @@ public interface KeywordRepositoryCustom {
     List<String> findNamesByCafeId(final Long cafeId);
 
     List<KeywordDto> findByReviewIdAndCategory(final Long reviewId,
-                                            final Category category);
+                                               final Category category);
 
     List<KeywordDto> findKeywordDtoListByCafeIdOrderByCountDesc(final Long cafeId,
                                                                 final Pageable pageable);
@@ -29,5 +29,6 @@ public interface KeywordRepositoryCustom {
     List<KeywordCountDto> findKeywordCountDtoListByCafeIdOrderByCountDesc(final Long cafeId,
                                                                           final Pageable pageable);
 
-    List<String> findKeywordNames(final List<String> keywords);
+    List<String> findKeywordNamesByCategory(final List<String> keywordNames,
+                                            final Category category);
 }

@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.cafe.domain.QCafe.*;
@@ -37,29 +38,34 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<Cafe> findNotMismatchCafes(final CreatePlanRequest request,
-                                           final List<String> keywordNames) {
-
+    public List<Cafe> findByDateAndTimeOrderByStarRatingDesc(final CreatePlanRequest request) {
         BooleanBuilder conditions = new BooleanBuilder();
+        conditions.and(dateEq(request.getDate()));
+        conditions.and(openingTimeLoe(request.getStartTime()));
+        if(!request.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(request.getEndTime()));
 
-        if (request.getDate() != null) {
-            conditions.and(dateEq(request.getDate()));
-        }
+        return queryFactory
+                .select(cafe)
+                .from(cafe)
+                .leftJoin(cafe.operationHours, operationHour)
+                .where(conditions)
+                .orderBy(cafe.starRating.desc())
+                .fetch();
+    }
 
-        if (!request.getStartTime().equals(LocalTime.MIDNIGHT) && !request.getEndTime().equals(LocalTime.MIDNIGHT)) {
-            conditions.and(openingTimeLoe(request.getStartTime()));
-            conditions.and(closingTimeGoe(request.getEndTime()));
-        }
 
-        conditions.and(keywordNamesIn(keywordNames));
+    @Override
+    public List<Cafe> findByDateAndTimeAndDistance(final CreatePlanRequest request) {
+        BooleanBuilder conditions = new BooleanBuilder();
+        conditions.and(dateEq(request.getDate()));
+        conditions.and(openingTimeLoe(request.getStartTime()));
+        if(!request.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(request.getEndTime()));
         conditions.and(isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()));
 
         return queryFactory
                 .select(cafe)
                 .from(cafe)
                 .leftJoin(cafe.operationHours, operationHour)
-                .leftJoin(cafe.cafeReviewKeywords, cafeReviewKeyword)
-                .leftJoin(cafeReviewKeyword.keyword, keyword)
                 .where(conditions)
                 .fetch();
     }
@@ -94,17 +100,33 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     public List<Cafe> findNearestCafes(final BigDecimal latitude,
                                        final BigDecimal longitude) {
 
-
         NumberExpression<Double> distance =
                 Expressions.numberTemplate(Double.class,
-                "6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) " +
-                        "+ sin(radians({0})) * sin(radians({1})))",
-                latitude.doubleValue(), cafe.latitude.doubleValue(), cafe.longitude.doubleValue(), longitude.doubleValue());
+                        "6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) " +
+                                "+ sin(radians({0})) * sin(radians({1})))",
+                        latitude.doubleValue(), cafe.latitude.doubleValue(), cafe.longitude.doubleValue(), longitude.doubleValue());
 
         return queryFactory
                 .selectFrom(cafe)
                 .orderBy(distance.asc())
                 .limit(10)
+                .fetch();
+    }
+
+    @Override
+    public List<Cafe> findDateAndLimit(final LocalDate date,
+                                       final Integer limit) {
+
+        BooleanBuilder conditions = new BooleanBuilder();
+        conditions.and(dateEq(date));
+
+        return queryFactory
+                .select(cafe)
+                .from(cafe)
+                .leftJoin(cafe.operationHours, operationHour)
+                .where(conditions)
+                .orderBy(cafe.starRating.desc())
+                .limit(limit)
                 .fetch();
     }
 

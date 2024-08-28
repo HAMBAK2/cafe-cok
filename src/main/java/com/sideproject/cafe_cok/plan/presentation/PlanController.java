@@ -38,7 +38,7 @@ public class PlanController {
                                                    HttpServletRequest servletRequest) {
 
         Long memberId = getMemberId(servletRequest);
-        CreatePlanResponse response = planService.plan(request, memberId);
+        CreatePlanResponse response = planService.doPlan(request, memberId);
         return ResponseEntity.ok(response);
     }
 
