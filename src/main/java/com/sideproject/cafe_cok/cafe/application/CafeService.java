@@ -195,7 +195,7 @@ public class CafeService {
                                                 final Long memberId) {
 
         List<CafeDto> withinRadiusCafes = getWithinRadiusCafeDtoList(request.getLatitude(), request.getLongitude(), memberId);
-        List<String> targetKeywordNames = keywordRepository.findKeywordNames(request.getKeywords());
+        List<String> targetKeywordNames = request.getKeywords();
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
 
         if(!targetKeywordNames.isEmpty()) {

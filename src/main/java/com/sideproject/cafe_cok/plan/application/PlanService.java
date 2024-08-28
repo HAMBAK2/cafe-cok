@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
+import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
@@ -56,20 +57,80 @@ public class PlanService {
     private final BookmarkRepository bookmarkRepository;
 
     @Transactional
-    public CreatePlanResponse plan(final CreatePlanRequest request,
-                                   final Long memberId) {
+    public CreatePlanResponse doPlan(final CreatePlanRequest request,
+                                     final Long memberId) {
 
-        List<String> findKeywordNames = keywordRepository.findKeywordNames(request.getKeywords());
-        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(findKeywordNames));
+        request.validate();
+        CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
         if(categoryKeywords.getPurpose().isEmpty()) throw new NoSuchPlanKeywordException();
 
-        List<Cafe> notMismatchCafes = getNotMissMatchCafes(request, findKeywordNames);
-        if(notMismatchCafes.isEmpty()) return createMisMatchPlan(request, categoryKeywords, memberId);
+        List<Cafe> findCafes;
+        List<Cafe> matchCafes;
+        List<Cafe> similarCafes = new ArrayList<>();
+        if(request.getLocationName() != null && !request.getLocationName().isEmpty()) {
+            findCafes = findCafesWhenDestinationIsPresent(request);
+            matchCafes = findCafes.stream()
+                    .filter(cafe -> {
+                        List<String> cafeKeywordNames = cafe.getCafeReviewKeywords().stream()
+                                .map(cafeReviewKeyword -> cafeReviewKeyword.getKeyword().getName())
+                                .collect(Collectors.toList());
+                        boolean allMatch = request.getKeywords().stream().allMatch(cafeKeywordNames::contains);
+                        if(cafeKeywordNames.isEmpty()) allMatch = false;
+                        if (!allMatch ) {
+                            similarCafes.add(cafe);
+                            return false;
+                        }
+                        return true;
+                    }).collect(Collectors.toList());
+        }
+        else {
+            findCafes = cafeRepository.findByDateAndTimeOrderByStarRatingDesc(request);
+            List<String> findPurposeNames = keywordRepository.findKeywordNamesByCategory(request.getKeywords(), Category.PURPOSE);
+            matchCafes = findCafes.stream()
+                    .filter(cafe -> {
 
-        List<Cafe> allMatchCafes = getCafesByKeywordAllMatch(notMismatchCafes, request.getKeywords());
-        if(allMatchCafes.isEmpty()) createSimilarPlan(request, categoryKeywords, notMismatchCafes, memberId);
-        return createMatchPlan(request, categoryKeywords, notMismatchCafes, allMatchCafes, memberId);
+                        List<String> cafePurposeNames = new ArrayList<>();
+                        List<String> cafeKeywordNames = cafe.getCafeReviewKeywords().stream()
+                                .map(cafeReviewKeyword -> {
+                                    Keyword keyword = cafeReviewKeyword.getKeyword();
+                                    if(keyword.getCategory().equals(Category.PURPOSE))
+                                        cafePurposeNames.add(keyword.getName());
+                                    return keyword.getName();
+                                })
+                                .collect(Collectors.toList());
+
+                        if(cafeKeywordNames.isEmpty()) return false;
+                        boolean allMatch = request.getKeywords().stream().allMatch(cafeKeywordNames::contains);
+                        if (!allMatch) {
+                            if(findPurposeNames.stream().allMatch(cafePurposeNames::contains)) similarCafes.add(cafe);
+                            return false;
+                        }
+                        return true;
+                    }).collect(Collectors.toList());
+        }
+
+        if(matchCafes.isEmpty() && similarCafes.isEmpty()) return createMisMatchPlan(request, categoryKeywords, memberId);
+        return createMatchPlan(request, categoryKeywords, similarCafes, matchCafes, memberId);
     }
+
+    private List<Cafe> findCafesWhenDestinationIsPresent(final CreatePlanRequest request) {
+
+        List<Cafe> findCafes = cafeRepository.findByDateAndTimeAndDistance(request);
+        Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
+
+        return findCafes.stream()
+                .filter(cafe -> {
+                    int walkTime = walkingTimeMap.computeIfAbsent(cafe, key -> tmapClient
+                            .getWalkingTime(request.getLongitude(), request.getLatitude(),
+                                    key.getLongitude(), key.getLatitude()));
+                    return walkTime <= request.getMinutes();
+                })
+                .sorted(Comparator.comparingInt((Cafe cafe) -> walkingTimeMap.get(cafe))
+                        .thenComparing(Comparator.comparingDouble((Cafe cafe)
+                                -> cafe.getStarRating().doubleValue()).reversed()))
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional
     public SavePlanResponse save(final SavePlanRequest request,
@@ -105,91 +166,44 @@ public class PlanService {
         return new DeletePlanResponse(findPlan.getId());
     }
 
-
-    private List<Cafe> getNotMissMatchCafes(final CreatePlanRequest request,
-                                            final List<String> keywordNames) {
-
-        List<Cafe> notMismatchCafes = cafeRepository.findNotMismatchCafes(request, keywordNames);
-        Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
-
-        return notMismatchCafes.stream().filter(cafe -> {
-                    int walkingTime = walkingTimeMap.computeIfAbsent(cafe, key -> tmapClient.getWalkingTime(
-                            request.getLongitude(), request.getLatitude(),
-                            key.getLongitude(), key.getLatitude()));
-                    return walkingTime <= request.getMinutes();
-                })
-                .sorted(Comparator.comparingInt((Cafe cafe) -> walkingTimeMap.get(cafe))
-                        .thenComparing(Comparator.comparingDouble((Cafe cafe)
-                                -> cafe.getStarRating().doubleValue()).reversed()))
-                .collect(Collectors.toList());
-    }
-
-    private List<Cafe> getCafesByKeywordAllMatch(final List<Cafe> cafes,
-                                                 final List<String> keywords) {
-
-        List<Cafe> cafesByKeywordAllMatch = cafes.stream()
-                .filter(cafe -> keywords.stream()
-                        .allMatch(keyword -> keywordRepository.findByCafeId(cafe.getId())
-                                .stream()
-                                .anyMatch(findKeyword -> findKeyword.getName().equals(keyword))))
-                .collect(Collectors.toList());
-        return cafesByKeywordAllMatch;
-    }
-
     private CreatePlanResponse createMisMatchPlan(final CreatePlanRequest request,
                                                   final CategoryKeywordsDto categoryKeywords,
                                                   final Long memberId) {
 
-        List<Cafe> recommendCafes = cafeRepository.findNearestCafes(request.getLatitude(), request.getLongitude());
+        List<Cafe> recommendCafes;
+        if(request.getLocationName() != null && !request.getLocationName().isEmpty())
+            recommendCafes = cafeRepository.findNearestCafes(request.getLatitude(), request.getLongitude());
+        else recommendCafes = cafeRepository.findDateAndLimit(request.getDate(), 10);
+
         return CreatePlanResponse.builder()
                 .matchType(MatchType.MISMATCH)
                 .locationName(request.getLocationName())
-                .minutes(request.getMinutes() == 0 ? 30 : request.getMinutes())
+                .minutes(request.getMinutes())
                 .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
                 .categoryKeywords(categoryKeywords)
                 .recommendCafes(mapToCafeDtoListFromCafeList(recommendCafes, memberId))
                 .build();
     }
 
-    private CreatePlanResponse createSimilarPlan(final CreatePlanRequest request,
-                                                 final CategoryKeywordsDto categoryKeywords,
-                                                 final List<Cafe> similarCafes,
-                                                 final Long memberId) {
-
-        MatchType matchType = MatchType.SIMILAR;
-        Long planId = createPlan(matchType, similarCafes, Collections.emptyList(), request);
-
-        return CreatePlanResponse.builder()
-                .planId(planId)
-                .matchType(matchType)
-                .locationName(request.getLocationName())
-                .minutes(request.getMinutes() == 0 ? 30 : request.getMinutes())
-                .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
-                .categoryKeywords(categoryKeywords)
-                .similarCafes(mapToCafeDtoListFromCafeList(similarCafes, memberId))
-                .build();
-    }
-
     private CreatePlanResponse createMatchPlan(final CreatePlanRequest request,
                                                final CategoryKeywordsDto categoryKeywords,
-                                               final List<Cafe> notMismatchCafes,
-                                               final List<Cafe> allMatchCafes,
+                                               final List<Cafe> similarCafes,
+                                               final List<Cafe> matchCafes,
                                                final Long memberId) {
 
-        List<Cafe> similarCafes = new ArrayList<>(notMismatchCafes);
-        similarCafes.removeAll(allMatchCafes);
-        MatchType matchType = MatchType.MATCH;
-        Long planId = createPlan(matchType, similarCafes, allMatchCafes, request);
+        MatchType matchType = MatchType.SIMILAR;
+        if(!matchCafes.isEmpty()) matchType = MatchType.MATCH;
+        Long planId = createPlan(matchType, similarCafes, matchCafes, request);
 
         return CreatePlanResponse.builder()
                 .planId(planId)
                 .matchType(matchType)
                 .locationName(request.getLocationName())
-                .minutes(request.getMinutes() == 0 ? 30 : request.getMinutes())
+                .minutes(request.getMinutes())
                 .visitDateTime(convertLocalDateLocalTimeToString(request.getDate(), request.getStartTime()))
                 .categoryKeywords(categoryKeywords)
                 .similarCafes(mapToCafeDtoListFromCafeList(similarCafes, memberId))
-                .matchCafes(mapToCafeDtoListFromCafeList(allMatchCafes, memberId))
+                .matchCafes(mapToCafeDtoListFromCafeList(matchCafes, memberId))
                 .build();
     }
 

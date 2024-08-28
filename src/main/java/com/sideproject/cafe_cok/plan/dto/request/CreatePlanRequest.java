@@ -25,10 +25,14 @@ public class CreatePlanRequest {
     private LocalTime endTime;
     private List<String> keywords;
 
-    public CreatePlanRequest(
-            final String locationName, final BigDecimal latitude, final BigDecimal longitude,
-            final Integer minutes, final LocalDate date, final LocalTime startTime,
-            final LocalTime endTime, final List<String> keywords) {
+    public CreatePlanRequest(final String locationName,
+                             final BigDecimal latitude,
+                             final BigDecimal longitude,
+                             final Integer minutes,
+                             final LocalDate date,
+                             final LocalTime startTime,
+                             final LocalTime endTime,
+                             final List<String> keywords) {
         this.locationName = locationName;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -44,5 +48,14 @@ public class CreatePlanRequest {
         return new Plan(
                 member, locationName, date, startTime, endTime,
                 minutes, matchType, false, false);
+    }
+
+    public void validate() {
+
+        if(date == null) throw new IllegalArgumentException("방문 날짜는 필수 값 입니다.");
+        if(startTime == null || startTime.equals(LocalTime.MIDNIGHT)) throw new IllegalArgumentException("방문 시간은 필수 값 입니다.");
+        if(locationName != null && !locationName.isBlank() && minutes == null)
+            throw new IllegalArgumentException("방문지를 선택했을 시 도보 거리는 필수 값 입니다.");
+        if(minutes != null && minutes == 0) this.minutes = 30;
     }
 }
