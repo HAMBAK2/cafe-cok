@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/bookmark")
-@Tag(name = "Bookmark", description = "북마크 관련 API")
+@Tag(name = "Bookmark", description = "Bookmark API")
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-    @PostMapping("/save")
-    @Operation(summary = "저장버튼 클릭 -> 폴더 선택 후 저장 완료 시 동작하는 기능")
+    @PostMapping
+    @Operation(summary = "북마크 저장")
     public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> saveBookmark(
             @AuthenticationPrincipal LoginMember loginMember,
             @RequestBody BookmarkSaveRequest request) {
@@ -30,8 +30,8 @@ public class BookmarkController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{bookmarkId}/delete")
-    @Operation(summary = "저장된 북마크 삭제 기능")
+    @DeleteMapping("/{bookmarkId}")
+    @Operation(summary = "북마크 삭제")
     public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> deleteBookmark(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long bookmarkId) {
