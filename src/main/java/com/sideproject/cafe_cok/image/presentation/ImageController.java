@@ -17,7 +17,7 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    @GetMapping("/{cafeId}")
+    @GetMapping("/by-cafe/{cafeId}")
     @Operation(summary = "cafeId에 해당하는 이미지 조회(페이징)")
     public ResponseEntity<ImagePageResponse> findByCafeId(@PathVariable Long cafeId,
                                                           @RequestParam(required = false) Long cursor) {
@@ -26,7 +26,7 @@ public class ImageController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{cafeId}/all")
+    @GetMapping("/by-cafe/{cafeId}/all")
     @Operation(summary = "cafeId에 해당하는 이미지 조회(전체)")
     public ResponseEntity<ImageAllResponse> detailImagesAll(@PathVariable Long cafeId) {
 

@@ -17,7 +17,7 @@ public class MenuController {
 
     private final MenuService menuService;
 
-    @GetMapping("/{cafeId}")
+    @GetMapping("/by-cafe/{cafeId}")
     @Operation(summary = "cafeId에 해당하는 메뉴 조회")
     public ResponseEntity<MenuListResponse> findByCafeId(@PathVariable Long cafeId) {
 

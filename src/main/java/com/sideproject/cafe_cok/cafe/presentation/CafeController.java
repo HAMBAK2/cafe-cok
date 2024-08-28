@@ -88,8 +88,8 @@ public class CafeController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{kakaoId}")
-    @Operation(summary = "kakaoId에 해당하는 카페 존재여부 조회")
+    @GetMapping("/{kakaoId}/exist")
+    @Operation(summary = "kakao map 카페 ID에 해당하는 카페 존재여부 조회")
     public ResponseEntity<Boolean> isExistByKakaoId(@PathVariable Long kakaoId) {
         boolean exists = cafeService.isExistByKakaoId(kakaoId);
         return ResponseEntity.ok(exists);

@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.AdminCafeDto;
 import com.sideproject.cafe_cok.admin.dto.AdminSuggestionDto;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -75,6 +76,7 @@ public class AdminController {
 
     @GetMapping("/app-key")
     @ResponseBody
+    @Hidden
     public String getAppKey() {
         return kakaoApiKey;
     }
