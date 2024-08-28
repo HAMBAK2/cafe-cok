@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/combination")
-@Tag(name = "Combination", description = "조합 관련 API")
+@Tag(name = "Combination", description = "조합 API")
 public class CombinationController {
 
     private final CombinationService combinationService;
 
-    @PostMapping("/create")
-    @Operation(summary = "조합을 생성하는 기능")
+    @PostMapping
+    @Operation(summary = "조합 저장")
     public ResponseEntity<CombinationIdResponse> create(
             @AuthenticationPrincipal LoginMember loginMember, @RequestBody CombinationRequest request) {
 
@@ -31,7 +31,7 @@ public class CombinationController {
     }
 
     @GetMapping("/{combinationId}")
-    @Operation(summary = "조합을 선택했을 때 보여주는 기능")
+    @Operation(summary = "combinationId에 해당하는 조합 조회")
     public ResponseEntity<CombinationDetailResponse> detail(
             @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long combinationId) {
 
@@ -39,8 +39,8 @@ public class CombinationController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{combinationId}/edit")
-    @Operation(summary = "조합 수정 기능")
+    @PatchMapping("/{combinationId}")
+    @Operation(summary = "combinationId에 해당하는 조합 수정")
     public ResponseEntity<CombinationIdResponse> edit(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long combinationId, @RequestBody CombinationRequest request) {
