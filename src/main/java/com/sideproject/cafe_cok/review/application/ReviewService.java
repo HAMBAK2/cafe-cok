@@ -35,6 +35,7 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,7 +97,7 @@ public class ReviewService {
     public ReviewResponse detail(final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
-        List<Image> findReviewImages = imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW);
+        List<Image> findReviewImages = imageRepository.findByReviewId(reviewId);
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
         return ReviewResponse.of(findReview, findReviewImages, CategoryKeywords);
     }
@@ -127,7 +128,7 @@ public class ReviewService {
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
             List<ImageUrlDto> findImageUrlDtoList
-                    = imageRepository.findImageUrlDtoListByReviewIdAndImageType(review.getId(), ImageType.REVIEW);
+                    = imageRepository.findImageUrlDtoListByReviewId(review.getId());
             List<KeywordDto> findKeywords = keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU);
             if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
                 findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
@@ -179,7 +180,7 @@ public class ReviewService {
     @Transactional
     public void deleteByIds(final List<Long> ids) {
 
-        List<Image> findImages = imageRepository.findImageByIdIn(ids);
+        List<Image> findImages = imageRepository.findAllByIdIn(ids);
         for (Image findImage : findImages) {
             s3Uploader.delete(findImage.getOrigin());
             s3Uploader.delete(findImage.getThumbnail());
@@ -248,9 +249,10 @@ public class ReviewService {
             List<String> recommendMenus = keywordRepository
                     .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
 
-            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT);
+            Sort sort = Sort.by(Sort.Order.desc("id"));
+            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
             List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(cafeId, review.getId(), pageable);
+                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
 
             cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
         }

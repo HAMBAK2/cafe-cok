@@ -6,15 +6,19 @@ import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
+import com.sideproject.cafe_cok.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sideproject.cafe_cok.utils.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +30,11 @@ public class ImageService {
     public static final Integer CAFE_DETAIL_IMAGE_SIZE = 8;
     private static final Boolean HAS_NEXT_PAGE = true;
     private static final Boolean NO_NEXT_PAGE = false;
-    public static final Integer CAFE_DETAIL_CAFE_IMAGE_MAX_CNT = 3;
 
     public ImagePageResponse findByCafeId(final Long cafeId,
                                           final Long cursor) {
 
         List<ImageUrlDto> images = new ArrayList<>();
-
-        Pageable pageable;
         Integer cafeDetailImageSize = CAFE_DETAIL_IMAGE_SIZE;
 
         if(cursor == null) {
@@ -42,12 +43,13 @@ public class ImageService {
             images.addAll(findCafeImageUrlDtoList);
         }
 
+        Sort sort = Sort.by(Sort.Order.desc("id"));
         List<ImageUrlCursorDto> findReviewImageUrlCursorDtoList = imageRepository
-                .findImageUrlCursorDtoListByCafeIdAndImageTypeOrderByIdDesc(
+                .findImageUrlCursorDtoListByCafeIdAndImageType(
                         cafeId,
                         cursor,
                         ImageType.REVIEW,
-                        PageRequest.of(0, cafeDetailImageSize));
+                        PageRequest.of(0, cafeDetailImageSize, sort));
 
         if(findReviewImageUrlCursorDtoList.size() < cafeDetailImageSize) {
             images.addAll(convertFromImageUrlCursorDtoToImageUrlDto(findReviewImageUrlCursorDtoList));
@@ -75,7 +77,7 @@ public class ImageService {
         return imageRepository
                 .findCafeImageUrlDtoListByCafeId(
                         cafeId,
-                        PageRequest.of(0, CAFE_DETAIL_CAFE_IMAGE_MAX_CNT));
+                        PageRequest.of(0, CAFE_DETAIL_IMAGE_PAGE_CNT));
     }
 
     private List<ImageUrlDto> convertFromImageUrlCursorDtoToImageUrlDto(final List<ImageUrlCursorDto> dtoList) {

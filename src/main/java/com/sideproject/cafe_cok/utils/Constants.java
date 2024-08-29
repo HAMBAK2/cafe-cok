@@ -34,6 +34,9 @@ public class Constants {
     public static final Integer MAX_RADIUS_TIME = 30;
 
 
+    public static final Integer CAFE_DETAIL_IMAGE_PAGE_CNT = 3;
+    public static final Integer CAFE_DETAIL_BASIC_INFO_IMAGE_PAGE_CNT = 6;
+    public static final Integer CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT = 2;
 
 
 }

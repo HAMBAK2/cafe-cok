@@ -53,14 +53,22 @@ public class Review extends BaseEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 
+    public Review(final String content,
+                  final String specialNote,
+                  final Integer starRating,
+                  final Cafe cafe,
+                  final Member member) {
+        this.content = content;
+        this.specialNote = specialNote;
+        this.starRating = starRating;
+        this.cafe = cafe;
+        if(member != null) changeMember(member);
+    }
+
     public Review(final ReviewCreateRequest request,
                   final Cafe cafe,
                   final Member member) {
-        this.content = request.getContent();
-        this.specialNote = request.getSpecialNote();
-        this.starRating = request.getStarRating();
-        this.cafe = cafe;
-        if(member != null) changeMember(member);
+        this(request.getContent(), request.getSpecialNote(), request.getStarRating(), cafe, member);
     }
 
     public void setContent(String content) {

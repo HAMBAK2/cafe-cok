@@ -25,6 +25,7 @@ public class TestConstants {
     public static final BigDecimal CAFE_LONGITUDE = new BigDecimal("126.9780");
     public static final BigDecimal CAFE_LATITUDE = new BigDecimal("37.5665");
 
+
     /* BOOKMARK FOLDER */
     public static final String BOOKMARK_FOLDER_NAME_1 = "bookmark folder name1";
     public static final String BOOKMARK_FOLDER_COLOR_1 = "bookmark folder color1";
@@ -46,6 +47,10 @@ public class TestConstants {
     public static final String IMAGE_THUMBNAIL_URL_1 = "image thumbnail url1";
     public static final String IMAGE_ORIGIN_URL_2 = "image origin url2";
     public static final String IMAGE_THUMBNAIL_URL_2 = "image thumbnail url2";
+    public static final Integer IMAGE_PAGE_CNT = 2;
 
-    
+    /* REVIEW */
+    public static final String REVIEW_CONTENT = "review content";
+    public static final String REVIEW_SPECIAL_NOTE = "review special note";
+    public static final Integer REVIEW_STAR_RATING = 5;
 }
