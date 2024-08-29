@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.auth.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -28,6 +29,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/admin/**").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/cafe").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/api/cafe/{cafeId}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/menu/{menuId}").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

@@ -71,18 +71,6 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<Cafe> findWithinRadiusCafeList(final BigDecimal latitude,
-                                               final BigDecimal longitude) {
-        return queryFactory
-                .select(cafe)
-                .from(cafe)
-                .leftJoin(image).on(cafe.id.eq(image.cafe.id))
-                .where(isWithinRadius(latitude, longitude, MAX_RADIUS_TIME))
-                .fetch();
-
-    }
-
-    @Override
     public List<Cafe> findByPlanIdAndMatchType(final Long planId,
                                                final PlanCafeMatchType matchType) {
 
@@ -128,11 +116,6 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
                 .orderBy(cafe.starRating.desc())
                 .limit(limit)
                 .fetch();
-    }
-
-
-    private BooleanExpression imageTypeEq(final ImageType imageType) {
-        return isEmpty(imageType) ? null : image.imageType.eq(imageType);
     }
 
     private BooleanExpression matchTypeEq(final PlanCafeMatchType matchType) {

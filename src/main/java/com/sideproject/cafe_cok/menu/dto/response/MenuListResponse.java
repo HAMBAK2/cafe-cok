@@ -1,17 +1,16 @@
-package com.sideproject.cafe_cok.cafe.dto.response;
+package com.sideproject.cafe_cok.menu.dto.response;
 
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class CafeDetailMenuResponse {
+public class MenuListResponse {
 
     private List<MenuImageUrlDto> menus;
 
-    public CafeDetailMenuResponse(final List<MenuImageUrlDto> menus) {
+    public MenuListResponse(final List<MenuImageUrlDto> menus) {
         this.menus = menus;
     }
 }

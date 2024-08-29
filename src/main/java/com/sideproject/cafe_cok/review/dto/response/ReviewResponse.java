@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class ReviewDetailResponse {
+public class ReviewResponse {
 
     private Long cafeId;
     private String cafeName;
@@ -23,11 +23,11 @@ public class ReviewDetailResponse {
     private List<ImageDto> images;
     private CategoryKeywordsDto categoryKeywords;
 
-    public static ReviewDetailResponse of(final Review review,
-                                          final List<Image> images,
-                                          final CategoryKeywordsDto categoryKeywords) {
+    public static ReviewResponse of(final Review review,
+                                    final List<Image> images,
+                                    final CategoryKeywordsDto categoryKeywords) {
 
-        return ReviewDetailResponse.builder()
+        return ReviewResponse.builder()
                 .cafeId(review.getCafe().getId())
                 .cafeName(review.getCafe().getName())
                 .reviewId(review.getId())

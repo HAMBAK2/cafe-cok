@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.admin.application.AdminService;
 import com.sideproject.cafe_cok.admin.dto.AdminCafeDto;
 import com.sideproject.cafe_cok.admin.dto.AdminSuggestionDto;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -25,6 +26,8 @@ public class AdminController {
 
     private final AdminService adminService;
     private final List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
+    @Value("${oauth.kakao.client-id}")
+    private String kakaoApiKey;
 
     @GetMapping()
     public String home() {
@@ -69,5 +72,12 @@ public class AdminController {
     public String cafeRegisterForm(Model model) {
         model.addAttribute("daysOfWeek", daysOfWeek);
         return "page/cafe/add";
+    }
+
+    @GetMapping("/app-key")
+    @ResponseBody
+    @Hidden
+    public String getAppKey() {
+        return kakaoApiKey;
     }
 }

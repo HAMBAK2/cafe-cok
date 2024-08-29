@@ -73,7 +73,7 @@ function deleteMenu(menuId, idx) {
 
     if(menuId !== null) {
         let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', '/admin/menu/' + menuId, true);
+        xhr.open('DELETE', '/api/menu/' + menuId, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onreadystatechange = function () {

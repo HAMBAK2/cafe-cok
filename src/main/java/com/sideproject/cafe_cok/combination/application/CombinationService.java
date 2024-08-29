@@ -3,15 +3,17 @@ package com.sideproject.cafe_cok.combination.application;
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.combination.domain.repository.CombinationKeywordRepository;
 import com.sideproject.cafe_cok.combination.domain.repository.CombinationRepository;
+import com.sideproject.cafe_cok.combination.dto.CombinationDto;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
+import com.sideproject.cafe_cok.combination.dto.response.CombinationListResponse;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.combination.domain.CombinationKeyword;
 import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationIdResponse;
-import com.sideproject.cafe_cok.combination.dto.response.CombinationDetailResponse;
+import com.sideproject.cafe_cok.combination.dto.response.CombinationResponse;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +44,12 @@ public class CombinationService {
     }
 
 
-    public CombinationDetailResponse detail(final Long combinationId) {
+    public CombinationResponse detail(final Long combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
         List<Keyword> findKeywords = keywordRepository.findByCombinationId(combinationId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-        return CombinationDetailResponse.of(findCombination, categoryKeywords);
+        return CombinationResponse.of(findCombination, categoryKeywords);
     }
 
     @Transactional
@@ -63,6 +65,13 @@ public class CombinationService {
         combinationKeywordRepository.deleteByCombinationId(combinationId);
         saveCombinationKeywordsByCombinationAndKeywordNames(findCombination, request.getKeywords());
         return CombinationIdResponse.of(findCombination.getId());
+    }
+
+    public CombinationListResponse combination(final LoginMember loginMember) {
+
+        List<CombinationDto> findCombinations = combinationRepository.findDtoByMemberId(loginMember.getId());
+        if(findCombinations.isEmpty()) return new CombinationListResponse();
+        return new CombinationListResponse(findCombinations);
     }
 
     private void saveCombinationKeywordsByCombinationAndKeywordNames(

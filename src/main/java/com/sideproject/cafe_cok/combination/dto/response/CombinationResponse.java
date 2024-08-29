@@ -8,16 +8,16 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CombinationDetailResponse {
+public class CombinationResponse {
 
     private Long id;
     private String name;
     private String icon;
     private CategoryKeywordsDto categoryKeywords;
 
-    public static CombinationDetailResponse of(final Combination combination, final CategoryKeywordsDto categoryKeywords) {
+    public static CombinationResponse of(final Combination combination, final CategoryKeywordsDto categoryKeywords) {
 
-        return CombinationDetailResponse.builder()
+        return CombinationResponse.builder()
                 .id(combination.getId())
                 .name(combination.getName())
                 .icon(combination.getIcon())

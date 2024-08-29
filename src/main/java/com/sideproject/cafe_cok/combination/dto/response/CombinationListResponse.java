@@ -1,4 +1,4 @@
-package com.sideproject.cafe_cok.member.dto.response;
+package com.sideproject.cafe_cok.combination.dto.response;
 
 
 import com.sideproject.cafe_cok.combination.dto.CombinationDto;
@@ -11,11 +11,11 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class MyPageCombinationResponse {
+public class CombinationListResponse {
 
     private List<CombinationDto> combinations = new ArrayList<>();
 
-    public MyPageCombinationResponse(final List<CombinationDto> combinations) {
+    public CombinationListResponse(final List<CombinationDto> combinations) {
         this.combinations = combinations;
     }
 }

@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MyPageProfileEditResponse {
+public class MemberResponse {
 
     private String nickname;
     private String picture;
 
-    public static MyPageProfileEditResponse from(final Member member) {
-        return MyPageProfileEditResponse
+    public static MemberResponse from(final Member member) {
+        return MemberResponse
                 .builder()
                 .nickname(member.getNickname())
                 .picture(member.getPicture())
