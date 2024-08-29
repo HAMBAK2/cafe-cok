@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.cafe.application;
 
 import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
-import com.sideproject.cafe_cok.admin.dto.AdminOperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuRequestDto;
@@ -29,7 +29,6 @@ import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.review.domain.Review;
-import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -201,7 +200,7 @@ public class CafeService {
             }
         }
 
-        List<AdminOperationHourDto> hours = request.getHours();
+        List<OperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
 
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
@@ -260,7 +259,7 @@ public class CafeService {
             savedImage.add(imageRepository.save(newImage));
         }
 
-        List<AdminOperationHourDto> hours = request.getHours();
+        List<OperationHourDto> hours = request.getHours();
         operationHourRepository.deleteByCafeId(id);
         if(checkoutInputHours(hours)) saveOperationHours(hours, findCafe);
 
@@ -305,9 +304,9 @@ public class CafeService {
         return cafeRepository.existsByKakaoId(id);
     }
 
-    private void saveOperationHours(final List<AdminOperationHourDto> hours, final Cafe cafe) {
+    private void saveOperationHours(final List<OperationHourDto> hours, final Cafe cafe) {
         List<OperationHour> newOperationHours = new ArrayList<>();
-        for (AdminOperationHourDto hour : hours) {
+        for (OperationHourDto hour : hours) {
             DayOfWeek day = getDyaOfWeekByKoreanDay(hour.getDay());
             LocalTime startTime = LocalTime.of(hour.getStartHour(), hour.getStartMinute());
             LocalTime endTime = LocalTime.of(hour.getEndHour(), hour.getEndMinute());
@@ -321,9 +320,9 @@ public class CafeService {
         operationHourRepository.saveAll(newOperationHours);
     }
 
-    private boolean checkoutInputHours(List<AdminOperationHourDto> hours) {
+    private boolean checkoutInputHours(List<OperationHourDto> hours) {
 
-        for (AdminOperationHourDto hour : hours) {
+        for (OperationHourDto hour : hours) {
             if(hour.getStartHour() != 0) return true;
             if(hour.getStartMinute() != 0) return true;
             if(hour.getEndHour() != 0) return true;

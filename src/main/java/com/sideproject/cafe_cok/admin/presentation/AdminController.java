@@ -1,20 +1,15 @@
 package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.application.AdminService;
-import com.sideproject.cafe_cok.admin.dto.AdminCafeDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeDetailDto;
 import com.sideproject.cafe_cok.admin.dto.AdminSuggestionDto;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,14 +47,14 @@ public class AdminController {
 
     @GetMapping("/cafes")
     public String getCafes(Model model) {
-        List<AdminCafeDto> findCafes = adminService.findCafes();
+        List<CafeDetailDto> findCafes = adminService.findCafes();
         model.addAttribute("cafes", findCafes);
         return "page/cafe/list";
     }
 
     @GetMapping("/cafe/{id}")
     public String getCafeById(@PathVariable Long id, Model model) {
-        AdminCafeDto findCafe = adminService.findCafeById(id);
+        CafeDetailDto findCafe = adminService.findCafeById(id);
         model.addAttribute("cafe", findCafe);
         model.addAttribute("daysOfWeek", daysOfWeek);
         if (model.containsAttribute("message")) {

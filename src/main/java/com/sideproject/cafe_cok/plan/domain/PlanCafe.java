@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.plan.domain;
 
 
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
-import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
+import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -33,11 +33,11 @@ public class PlanCafe extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "match_type", nullable = false)
-    private PlanCafeMatchType matchType;
+    private MatchType matchType;
 
     public PlanCafe(final Plan plan,
                     final Cafe cafe,
-                    final PlanCafeMatchType matchType) {
+                    final MatchType matchType) {
 
         if(plan != null) changePlan(plan);
         this.cafe = cafe;

@@ -1,7 +1,6 @@
 package com.sideproject.cafe_cok.bookmark.domain.repository;
 
 
-import com.sideproject.cafe_cok.TestConstants;
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.bookmark.exception.NoSuchBookmarkException;
@@ -14,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static com.sideproject.cafe_cok.TestConstants.*;
-import static com.sideproject.cafe_cok.TestConstants.CAFE_PHONE_NUMBER;
-import static com.sideproject.cafe_cok.TestConstants.CAFE_ROAD_ADDRESS;
+import static com.sideproject.cafe_cok.constant.TestConstants.*;
+import static com.sideproject.cafe_cok.constant.TestConstants.CAFE_PHONE_NUMBER;
+import static com.sideproject.cafe_cok.constant.TestConstants.CAFE_ROAD_ADDRESS;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -39,7 +38,7 @@ class BookmarkRepositoryTest {
     void get_by_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);

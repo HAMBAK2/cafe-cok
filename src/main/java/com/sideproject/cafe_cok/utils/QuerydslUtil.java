@@ -9,17 +9,33 @@ import com.sideproject.cafe_cok.image.domain.QImage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuerydslUtil {
 
-    public static OrderSpecifier<?> getOrderSpecifier(Sort.Order order, NumberPath<Long> path) {
+    public static OrderSpecifier<?> getOrderSpecifier(Sort.Order order, NumberPath<?> path) {
         Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
         return new OrderSpecifier<>(direction, path);
     }
 
-    public static List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable, NumberPath<Long> path) {
+    public static List<OrderSpecifier<?>> getOrderSpecifiers(Sort sort,
+                                                             NumberPath<BigDecimal> path) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        if (!sort.isEmpty()) {
+            for (Sort.Order order : sort) {
+                OrderSpecifier<?> orderSpecifier = getOrderSpecifier(order, path);
+                orderSpecifiers.add(orderSpecifier);
+            }
+        }
+
+        return orderSpecifiers;
+    }
+
+    public static List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable,
+                                                             NumberPath<Long> path) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
         if (!pageable.getSort().isEmpty()) {

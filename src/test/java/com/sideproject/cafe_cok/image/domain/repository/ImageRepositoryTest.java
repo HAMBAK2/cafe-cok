@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.image.domain.repository;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
+import com.sideproject.cafe_cok.constant.TestConstants;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
@@ -23,7 +24,7 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.sideproject.cafe_cok.TestConstants.*;
+import static com.sideproject.cafe_cok.constant.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -49,7 +50,7 @@ class ImageRepositoryTest {
     void find_image_by_cafe_image_type() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image savedImage = imageRepository.save(image);
@@ -69,7 +70,7 @@ class ImageRepositoryTest {
     void find_image_by_non_existent_cafe_image_type() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
 
         //when & then
@@ -83,7 +84,7 @@ class ImageRepositoryTest {
     void delete_all_by_id_in() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
@@ -106,7 +107,7 @@ class ImageRepositoryTest {
     void find_by_review_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
@@ -133,7 +134,7 @@ class ImageRepositoryTest {
     void find_by_menu() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Menu menu = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
         Menu savedMenu = menuRepository.save(menu);
@@ -159,7 +160,7 @@ class ImageRepositoryTest {
     void find_all_by_id_in() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
@@ -187,7 +188,7 @@ class ImageRepositoryTest {
     void find_cafe_image_url_dto_list_by_cafe_id_pageable() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
@@ -215,7 +216,7 @@ class ImageRepositoryTest {
     void find_image_url_dto_list_by_review_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
@@ -242,7 +243,7 @@ class ImageRepositoryTest {
     void find_cafe_image_url_dto_list_by_cafe_id_image_type() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
@@ -265,7 +266,7 @@ class ImageRepositoryTest {
     void find_cafe_image_url_dto_list_by_cafe_id_image_type_pageable() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
@@ -294,7 +295,7 @@ class ImageRepositoryTest {
     void find_image_url_dto_list_by_review_id_pageable_sort() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
@@ -326,7 +327,7 @@ class ImageRepositoryTest {
     void find_cafe_image_url_dto_list_by_cafe_id_image_type_pageable_cursor() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);

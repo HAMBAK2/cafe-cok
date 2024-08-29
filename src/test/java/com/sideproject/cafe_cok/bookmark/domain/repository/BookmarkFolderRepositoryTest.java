@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.TestConstants.*;
+import static com.sideproject.cafe_cok.constant.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -115,7 +115,7 @@ class BookmarkFolderRepositoryTest {
                 BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
         BookmarkFolder savedBookmarkFolder1 = bookmarkFolderRepository.save(bookmarkFolder1);
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Bookmark bookmark = new Bookmark(savedCafe, savedBookmarkFolder1);
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);

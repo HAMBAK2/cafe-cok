@@ -12,15 +12,11 @@ public interface CafeRepository extends JpaRepository<Cafe, Long>, CafeRepositor
 
     default Cafe getById(final Long id) {
         return findById(id)
-                .orElseThrow(NoSuchCafeException::new);
+                .orElseThrow(() ->
+                        new NoSuchCafeException("[ID : " + id + "] 에 해당하는 카페가 존재하지 않습니다."));
     }
-
-    Optional<Cafe> findByLatitudeAndLongitude(final BigDecimal latitude,
-                                              final BigDecimal longitude);
 
     List<Cafe> findAllByOrderByIdDesc();
 
-    boolean existsByKakaoId(Long kakaoId);
-
-
+    boolean existsByKakaoId(final Long kakaoId);
 }

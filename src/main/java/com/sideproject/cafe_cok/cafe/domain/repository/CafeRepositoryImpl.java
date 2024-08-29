@@ -1,29 +1,26 @@
 package com.sideproject.cafe_cok.cafe.domain.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sideproject.cafe_cok.cafe.condition.CafeSearchCondition;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
-import com.sideproject.cafe_cok.cafe.dto.CafeDto;
-import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
+import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
+import com.sideproject.cafe_cok.utils.QuerydslUtil;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.cafe.domain.QCafe.*;
 import static com.sideproject.cafe_cok.cafe.domain.QOperationHour.*;
-import static com.sideproject.cafe_cok.image.domain.QImage.*;
-import static com.sideproject.cafe_cok.keword.domain.QCafeReviewKeyword.*;
-import static com.sideproject.cafe_cok.keword.domain.QKeyword.*;
 import static com.sideproject.cafe_cok.plan.domain.QPlanCafe.*;
 import static com.sideproject.cafe_cok.utils.Constants.*;
 import static com.sideproject.cafe_cok.utils.GeometricUtils.*;
@@ -38,29 +35,34 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<Cafe> findByDateAndTimeOrderByStarRatingDesc(final CreatePlanRequest request) {
+    public List<Cafe> findByDateAndTime(final CafeSearchCondition searchCondition,
+                                        final Sort sort) {
+
         BooleanBuilder conditions = new BooleanBuilder();
-        conditions.and(dateEq(request.getDate()));
-        conditions.and(openingTimeLoe(request.getStartTime()));
-        if(!request.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(request.getEndTime()));
+        conditions.and(dateEq(searchCondition.getDate()));
+        conditions.and(openingTimeLoe(searchCondition.getStartTime()));
+        if(!searchCondition.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(searchCondition.getEndTime()));
+
+        NumberPath<BigDecimal> starRatingPath = cafe.starRating;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(sort, starRatingPath);
 
         return queryFactory
                 .select(cafe)
                 .from(cafe)
                 .leftJoin(cafe.operationHours, operationHour)
                 .where(conditions)
-                .orderBy(cafe.starRating.desc())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();
     }
 
 
     @Override
-    public List<Cafe> findByDateAndTimeAndDistance(final CreatePlanRequest request) {
+    public List<Cafe> findByDateAndTimeAndMinutes(final CafeSearchCondition searchCondition) {
         BooleanBuilder conditions = new BooleanBuilder();
-        conditions.and(dateEq(request.getDate()));
-        conditions.and(openingTimeLoe(request.getStartTime()));
-        if(!request.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(request.getEndTime()));
-        conditions.and(isWithinRadius(request.getLatitude(), request.getLongitude(), request.getMinutes()));
+        conditions.and(dateEq(searchCondition.getDate()));
+        conditions.and(openingTimeLoe(searchCondition.getStartTime()));
+        if(!searchCondition.getEndTime().equals(LocalTime.MIDNIGHT)) conditions.and(closingTimeGoe(searchCondition.getEndTime()));
+        conditions.and(isWithinRadius(searchCondition.getLatitude(), searchCondition.getLongitude(), searchCondition.getMinutes()));
 
         return queryFactory
                 .select(cafe)
@@ -72,13 +74,12 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
 
     @Override
     public List<Cafe> findByPlanIdAndMatchType(final Long planId,
-                                               final PlanCafeMatchType matchType) {
+                                               final MatchType matchType) {
 
         return queryFactory
                 .select(cafe)
                 .from(planCafe)
                 .leftJoin(planCafe.cafe, cafe)
-                .leftJoin(image).on(cafe.id.eq(image.cafe.id))
                 .where(planIdEq(planId),
                         matchTypeEq(matchType))
                 .fetch();
@@ -102,11 +103,14 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
     }
 
     @Override
-    public List<Cafe> findDateAndLimit(final LocalDate date,
-                                       final Integer limit) {
+    public List<Cafe> findByDate(final LocalDate date,
+                                 final Sort sort,
+                                 final Integer limit) {
 
         BooleanBuilder conditions = new BooleanBuilder();
         conditions.and(dateEq(date));
+        NumberPath<BigDecimal> starRatingPath = cafe.starRating;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(sort, starRatingPath);
 
         return queryFactory
                 .select(cafe)
@@ -118,7 +122,7 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression matchTypeEq(final PlanCafeMatchType matchType) {
+    private BooleanExpression matchTypeEq(final MatchType matchType) {
         return isEmpty(matchType) ? null : planCafe.matchType.eq(matchType);
     }
 

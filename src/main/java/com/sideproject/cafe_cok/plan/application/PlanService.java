@@ -18,7 +18,6 @@ import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.PlanCafe;
 import com.sideproject.cafe_cok.plan.domain.PlanKeyword;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
-import com.sideproject.cafe_cok.plan.domain.enums.PlanCafeMatchType;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanCafeRepository;
@@ -98,7 +97,9 @@ public class PlanService {
                     }).collect(Collectors.toList());
         }
         else {
-            findCafes = cafeRepository.findByDateAndTimeOrderByStarRatingDesc(request);
+            Sort sort = Sort.by(Sort.Order.desc("starRating"));
+            findCafes = cafeRepository
+                    .findByDateAndTime(request.toCondition(), sort);
             List<String> findPurposeNames = keywordRepository.findKeywordNamesByCategory(request.getKeywords(), Category.PURPOSE);
             matchCafes = findCafes.stream()
                     .filter(cafe -> {
@@ -129,7 +130,7 @@ public class PlanService {
 
     private List<Cafe> findCafesWhenDestinationIsPresent(final CreatePlanRequest request) {
 
-        List<Cafe> findCafes = cafeRepository.findByDateAndTimeAndDistance(request);
+        List<Cafe> findCafes = cafeRepository.findByDateAndTimeAndMinutes(request.toCondition());
         Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
 
         return findCafes.stream()
@@ -214,16 +215,16 @@ public class PlanService {
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
 
         List<CafeDto> findSimilarCafes =
-                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.SIMILAR);
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, MatchType.SIMILAR);
         List<CafeDto> findMatchCafes =
-                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, PlanCafeMatchType.MATCH);
+                getCafeDtoListByPlanIdAndMatchTypeAndImageType(loginMember.getId(), planId, MatchType.MATCH);
 
         return new PlanResponse(findPlan, categoryKeywords, findSimilarCafes, findMatchCafes);
     }
 
     public List<CafeDto> getCafeDtoListByPlanIdAndMatchTypeAndImageType(final Long memberId,
                                                                         final Long planId,
-                                                                        final PlanCafeMatchType matchType) {
+                                                                        final MatchType matchType) {
         List<Cafe> findCafeList = cafeRepository.findByPlanIdAndMatchType(planId, matchType);
         List<CafeDto> cafeDtoList = findCafeList.stream()
                 .map(cafe -> {
@@ -256,7 +257,10 @@ public class PlanService {
         List<Cafe> recommendCafes;
         if(request.getLocationName() != null && !request.getLocationName().isEmpty())
             recommendCafes = cafeRepository.findNearestCafes(request.getLatitude(), request.getLongitude());
-        else recommendCafes = cafeRepository.findDateAndLimit(request.getDate(), 10);
+        else {
+            Sort sort = Sort.by(Sort.Order.desc("starRating"));
+            recommendCafes = cafeRepository.findByDate(request.getDate(), sort, 10);
+        }
 
         return SavePlanResponse.builder()
                 .matchType(MatchType.MISMATCH)
@@ -328,9 +332,9 @@ public class PlanService {
 
         Plan savedPlan = planRepository.save(plan);
         if(!similarCafes.isEmpty())
-            savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, similarCafes, PlanCafeMatchType.SIMILAR);
+            savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, similarCafes, MatchType.SIMILAR);
         if(!matchCafes.isEmpty())
-            savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, matchCafes, PlanCafeMatchType.MATCH);
+            savePlanCafeAllByPlanAndCafeDtosAndMatchType(savedPlan, matchCafes, MatchType.MATCH);
 
         savePlanKeywordAllByPlanAndKeywordNames(savedPlan, request.getKeywords());
         return savedPlan.getId();
@@ -338,7 +342,7 @@ public class PlanService {
 
     private void savePlanCafeAllByPlanAndCafeDtosAndMatchType(final Plan plan,
                                                               final List<Cafe> cafes,
-                                                              final PlanCafeMatchType matchType) {
+                                                              final MatchType matchType) {
 
         List<PlanCafe> planCafes = cafes.stream()
                 .map(cafe -> new PlanCafe(plan, cafe, matchType))

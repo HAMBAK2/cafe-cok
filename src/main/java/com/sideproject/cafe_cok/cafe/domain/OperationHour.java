@@ -42,8 +42,11 @@ public class OperationHour extends BaseEntity {
     private Cafe cafe;
 
 
-    public OperationHour(final DayOfWeek date, final LocalTime openingTime, final LocalTime closingTime,
-                         final boolean isClosed, final Cafe cafe) {
+    public OperationHour(final DayOfWeek date,
+                         final LocalTime openingTime,
+                         final LocalTime closingTime,
+                         final boolean isClosed,
+                         final Cafe cafe) {
         this.date = date;
         this.openingTime = openingTime;
         this.closingTime = closingTime;

@@ -7,10 +7,7 @@ import java.util.List;
 
 public interface OperationHourRepository extends JpaRepository<OperationHour, Long> {
 
-
     List<OperationHour> findByCafeId(final Long cafeId);
 
     void deleteByCafeId(final Long cafeId);
-
-
 }

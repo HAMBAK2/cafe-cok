@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.TestConstants.*;
+import static com.sideproject.cafe_cok.constant.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -34,7 +34,7 @@ class MenuRepositoryTest {
     void find_menu_list_by_cafe_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Menu menu1 = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
         Menu menu2 = new Menu(MENU_NAME_2, MENU_PRICE_2, savedCafe);
@@ -55,7 +55,7 @@ class MenuRepositoryTest {
     void find_menu_image_url_dto_list_by_cafe_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE);
+        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
         Menu menu1 = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
         Menu menu2 = new Menu(MENU_NAME_2, MENU_PRICE_2, savedCafe);

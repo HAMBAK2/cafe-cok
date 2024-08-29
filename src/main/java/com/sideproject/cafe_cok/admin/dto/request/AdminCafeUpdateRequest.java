@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.admin.dto.request;
 
 import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
-import com.sideproject.cafe_cok.admin.dto.AdminOperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,5 +16,5 @@ public class AdminCafeUpdateRequest {
     private AdminImageDto image;
     private List<AdminImageDto> otherImages;
     private List<AdminMenuRequestDto> menus;
-    private List<AdminOperationHourDto> hours;
+    private List<OperationHourDto> hours;
 }

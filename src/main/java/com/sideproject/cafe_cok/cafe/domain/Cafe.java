@@ -78,8 +78,9 @@ public class Cafe extends BaseEntity {
                 final String phoneNumber,
                 final String roadAddress,
                 final BigDecimal longitude,
-                final BigDecimal latitude) {
-        validatePhoneNumber(phoneNumber);
+                final BigDecimal latitude,
+                final Long kakaoId) {
+        validatePhoneNumber(convertFormatPhoneNumber(phoneNumber));
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.roadAddress = roadAddress;
@@ -87,18 +88,16 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
         this.starRating = BigDecimal.ZERO;
         this.reviewCount = 0L;
+        this.kakaoId = kakaoId;
     }
 
     public Cafe(final AdminCafeSaveRequest request) {
-        validatePhoneNumber(convertFormatPhoneNumber(request.getPhone()));
-        this.name = request.getName();
-        this.phoneNumber = convertFormatPhoneNumber(request.getPhone());
-        this.roadAddress = request.getAddress();
-        this.longitude = request.getLongitude();
-        this.latitude = request.getLatitude();
-        this.kakaoId = request.getKakaoId();
-        this.starRating = BigDecimal.ZERO;
-        this.reviewCount = 0L;
+        this(request.getName(),
+                request.getPhone(),
+                request.getAddress(),
+                request.getLongitude(),
+                request.getLatitude(),
+                request.getKakaoId());
     }
 
     public void changeCafe(final String name,
@@ -142,5 +141,7 @@ public class Cafe extends BaseEntity {
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
-
+    public void changeStarRating(final Integer starRating) {
+        this.starRating = BigDecimal.valueOf(starRating);
+    }
 }

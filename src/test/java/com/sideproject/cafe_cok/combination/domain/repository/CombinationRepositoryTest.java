@@ -1,11 +1,9 @@
 package com.sideproject.cafe_cok.combination.domain.repository;
 
-import com.sideproject.cafe_cok.TestConstants;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.combination.dto.CombinationDto;
 import com.sideproject.cafe_cok.combination.exception.NoSuchCombinationException;
 import com.sideproject.cafe_cok.member.domain.Member;
-import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.TestConstants.*;
+import static com.sideproject.cafe_cok.constant.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
 
