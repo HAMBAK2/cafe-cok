@@ -81,7 +81,7 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/by-cafe/{cafeId}")
+    @GetMapping("/cafe/{cafeId}")
     @Operation(summary = "cafeId에 해당하는 리뷰 조회(페이징)")
     public ResponseEntity<ReviewPageResponse> findByCafeId(@PathVariable Long cafeId,
                                                            @RequestParam(required = false) Long cursor) {
@@ -90,7 +90,7 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/by-cafe/{cafeId}/all")
+    @GetMapping("/cafe/{cafeId}/all")
     @Operation(summary = "cafeId에 해당하는 리뷰 조회(전체)")
     public ResponseEntity<ReviewAllResponse> findByCafeIdAll(@PathVariable Long cafeId) {
 

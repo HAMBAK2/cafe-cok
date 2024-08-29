@@ -32,5 +32,20 @@ public class TestConstants {
     public static final String BOOKMARK_FOLDER_COLOR_2 = "bookmark folder color2";
     public static final Boolean BOOKMARK_IS_VISIBLE = true;
     public static final Boolean BOOKMARK_IS_DEFAULT_FOLDER = true;
+
+    /* MENU */
+    public static final String MENU_NAME_1 = "menu name1";
+    public static final Integer MENU_PRICE_1 = 10000;
+    public static final String MENU_NAME_2 = "menu name2";
+    public static final Integer MENU_PRICE_2 = 20000;
+    public static final String MENU_IMAGE_URL_DTO_PRICE_1 = "10,000원";
+    public static final String MENU_IMAGE_URL_DTO_PRICE_2 = "20,000원";
+
+    /* IMAGE */
+    public static final String IMAGE_ORIGIN_URL_1 = "image origin url1";
+    public static final String IMAGE_THUMBNAIL_URL_1 = "image thumbnail url1";
+    public static final String IMAGE_ORIGIN_URL_2 = "image origin url2";
+    public static final String IMAGE_THUMBNAIL_URL_2 = "image thumbnail url2";
+
     
 }

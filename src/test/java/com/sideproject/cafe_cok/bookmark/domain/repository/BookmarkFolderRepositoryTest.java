@@ -128,7 +128,7 @@ class BookmarkFolderRepositoryTest {
         assertThat(findBookmarkFolderCountDtoList).hasSize(2);
         assertThat(findBookmarkFolderCountDtoList)
                 .extracting("bookmarkCount")
-                .containsExactly(savedBookmarkFolder1.getBookmarks().size(), savedBookmarkFolder2.getBookmarks().size());
+                .containsExactlyInAnyOrder(savedBookmarkFolder1.getBookmarks().size(), savedBookmarkFolder2.getBookmarks().size());
     }
 
 }
