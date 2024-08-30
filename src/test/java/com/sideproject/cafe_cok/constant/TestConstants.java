@@ -83,6 +83,10 @@ public class TestConstants {
     public static final String REVIEW_CONTENT = "review content";
     public static final String REVIEW_SPECIAL_NOTE = "review special note";
     public static final Integer REVIEW_STAR_RATING = 5;
+    public static final String REVIEW_CONTENT_2 = "review content2";
+    public static final String REVIEW_SPECIAL_NOTE_2 = "review special note2";
+    public static final Integer REVIEW_STAR_RATING_2 = 4;
+    public static final Integer REVIEW_PAGE_CNT = 2;
 
     /* PLAN */
     public static final String PLAN_LOCATION_NAME = "plan location name";

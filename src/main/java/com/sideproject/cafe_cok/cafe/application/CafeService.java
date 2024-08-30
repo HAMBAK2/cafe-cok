@@ -65,8 +65,9 @@ public class CafeService {
 
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
-        Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 

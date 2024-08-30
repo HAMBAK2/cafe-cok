@@ -26,6 +26,7 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
 import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewIdResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewResponse;
+import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
@@ -62,7 +63,6 @@ public class ReviewService {
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private static final String KEYWORD = "keyword";
-    public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
     private static final Boolean HAS_NEXT_PAGE = true;
     public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
 
@@ -194,11 +194,12 @@ public class ReviewService {
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<CafeDetailReviewDto> reviews;
 
+        Sort sort = Sort.by(Sort.Order.desc("id"));
         List<Review> findReviews = reviewRepository
-                .findByCafeIdAndCursorOrderByIdDesc(
+                .findByCafeId(
                         cafeId,
                         cursor,
-                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT));
+                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT, sort));
         reviews = convertReviewsToCafeDetailReviewDtoList(cafeId, findReviews);
 
         if(reviews.size() == CAFE_DETAIL_REVIEW_CNT) {
@@ -217,8 +218,9 @@ public class ReviewService {
 
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
-        Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 
