@@ -11,8 +11,10 @@ import java.time.LocalTime;
 public class TestConstants {
 
     /* MEMBER */
-    public static final String MEMBER_EMAIL = "test@test.com";
+    public static final String MEMBER_EMAIL = "member@member.com";
+    public static final String MEMBER_EMAIL_2 = "member2@member.com";
     public static final String MEMBER_NICKNAME = "nickname";
+    public static final String MEMBER_NOT_EXIST_NICKNAME = "not exist nickname";
     public static final SocialType MEMBER_SOCIAL_TYPE = SocialType.KAKAO;
 
     /* COMBINATION */
@@ -91,5 +93,11 @@ public class TestConstants {
     public static final MatchType PLAN_MATCH_TYPE = MatchType.MATCH;
     public static final Boolean PLAN_IS_SAVED = false;
     public static final Boolean PLAN_IS_SHARED = false;
+
+    /* FEEDBACK */
+    public static final String FEEDBACK_EMAIL = MEMBER_EMAIL;
+    public static final String FEEDBACK_CONTENT = "feedback content";
+    public static final String FEEDBACK_EMAIL_2 = MEMBER_EMAIL_2;
+    public static final String FEEDBACK_CONTENT_2 = "feedback content2";
 
 }

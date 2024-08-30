@@ -100,13 +100,14 @@ public class AuthService {
 
     private Member findMember(final OAuthMember oAuthMember) {
         String email = oAuthMember.getEmail();
-        if(memberRepository.existsByEmailAndDeletedAtIsNull(email)) {
-            return memberRepository.getByEmailAndDeletedAtIsNull(email);
-        }
 
-        if(memberRepository.existsByEmailAndDeletedAtIsNotNull(email)) {
-            Member foundMember = memberRepository.getByEmailAndDeletedAtIsNotNull(email);
-            LocalDateTime deletedAt = foundMember.getDeletedAt();
+        Optional<Member> findOptionalMember = memberRepository.findByEmailAndDeletedAtIsNull(email);
+        if(findOptionalMember.isPresent()) return findOptionalMember.get();
+
+        findOptionalMember = memberRepository.findByEmailAndDeletedAtIsNotNull(email);
+        if(findOptionalMember.isPresent()) {
+            Member findMember = findOptionalMember.get();
+            LocalDateTime deletedAt = findMember.getDeletedAt();
             if(isMoreThanSevenDaysAgo(deletedAt)) throw new InvalidRestoreMemberException(deletedAt);
         }
 
