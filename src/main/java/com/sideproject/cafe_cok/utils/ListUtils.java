@@ -18,12 +18,4 @@ public class ListUtils {
 
         return sortedList1.equals(sortedList2);
     }
-
-    public static <T> List<T> getEquals(List<T> first, List<T> second) {
-
-        return first.stream()
-                .filter(second::contains)
-                .collect(Collectors.toList());
-    }
-
 }

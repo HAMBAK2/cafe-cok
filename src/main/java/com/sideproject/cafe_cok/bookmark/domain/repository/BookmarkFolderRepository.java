@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface BookmarkFolderRepository extends JpaRepository<BookmarkFolder, Long>, BookmarkFolderRepositoryCustom {
 
-    Long countByMemberId(Long memberId);
-    List<BookmarkFolder> findByMemberId(Long memberId);
+    List<BookmarkFolder> findByMemberId(final Long memberId);
 
     default BookmarkFolder getById(final Long id) {
         return findById(id)
-                .orElseThrow(NoSuchFolderException::new);
+                .orElseThrow(() ->
+                        new NoSuchFolderException("[ID : " + id + "] 에 해당하는 북마크 폴더가 존재하지 않습니다."));
     }
-
 }

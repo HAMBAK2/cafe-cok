@@ -1,19 +1,21 @@
 package com.sideproject.cafe_cok.image.domain.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlDto;
+import com.sideproject.cafe_cok.utils.QuerydslUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 import static com.sideproject.cafe_cok.image.domain.QImage.*;
-import static com.sideproject.cafe_cok.review.domain.QReview.review;
 import static org.springframework.util.StringUtils.isEmpty;
 
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
@@ -43,8 +45,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
     }
 
     @Override
-    public List<ImageUrlDto> findImageUrlDtoListByReviewIdAndImageType(final Long reviewId,
-                                                                       final ImageType imageType) {
+    public List<ImageUrlDto> findImageUrlDtoListByReviewId(final Long reviewId) {
 
         return queryFactory
                 .select(new QImageUrlDto(
@@ -52,8 +53,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                         image.thumbnail
                 ))
                 .from(image)
-                .where(image.review.id.eq(reviewId),
-                        image.imageType.eq(imageType))
+                .where(image.review.id.eq(reviewId))
                 .fetch();
     }
 
@@ -68,15 +68,14 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType),
-                        memberDeletedAtIsNull())
+                        image.imageType.eq(imageType))
                 .fetch();
     }
 
     @Override
-    public List<ImageUrlDto> findImageUrlDtoListByCafeIdImageTypeAndPageable(final Long cafeId,
-                                                                             final ImageType imageType,
-                                                                             final Pageable pageable) {
+    public List<ImageUrlDto> findImageUrlDtoListByCafeIdImageType(final Long cafeId,
+                                                                  final ImageType imageType,
+                                                                  final Pageable pageable) {
         return queryFactory
                 .select(new QImageUrlDto(
                         image.origin,
@@ -84,38 +83,39 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType),
-                        memberDeletedAtIsNull())
+                        image.imageType.eq(imageType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<ImageUrlDto> findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(final Long cafeId,
-                                                                                 final Long reviewId,
+    public List<ImageUrlDto> findImageUrlDtoListByReviewId(final Long reviewId,
+                                                           final Pageable pageable) {
+
+        NumberPath<Long> idPath = image.id;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
+
+        return queryFactory
+                .select(new QImageUrlDto(
+                        image.origin,
+                        image.thumbnail
+                ))
+                .from(image)
+                .where(image.review.id.eq(reviewId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+                .fetch();
+    }
+
+    @Override
+    public List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageType(final Long cafeId,
+                                                                                 final Long cursor,
+                                                                                 final ImageType imageType,
                                                                                  final Pageable pageable) {
-
-        return queryFactory
-                .select(new QImageUrlDto(
-                        image.origin,
-                        image.thumbnail
-                ))
-                .from(image)
-                .where(cafeIdEq(cafeId),
-                        image.review.id.eq(reviewId),
-                        memberDeletedAtIsNull())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(image.id.desc())
-                .fetch();
-    }
-
-    @Override
-    public List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageTypeOrderByIdDesc(final Long cafeId,
-                                                                                              final Long cursor,
-                                                                                              final ImageType imageType,
-                                                                                              final Pageable pageable) {
+        NumberPath<Long> idPath = image.id;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
 
         return queryFactory
                 .select(new QImageUrlCursorDto(
@@ -126,11 +126,10 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .from(image)
                 .where(cafeIdEq(cafeId),
                         image.imageType.eq(imageType),
-                        imageIdLt(cursor),
-                        memberDeletedAtIsNull())
+                        imageIdLt(cursor))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(image.id.desc())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();
     }
 
@@ -140,9 +139,5 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
     private BooleanExpression imageIdLt(final Long cursor) {
         return isEmpty(cursor) ? null : image.id.lt(cursor);
-    }
-
-    private BooleanExpression memberDeletedAtIsNull() {
-        return image.review.member.deletedAt.isNull();
     }
 }

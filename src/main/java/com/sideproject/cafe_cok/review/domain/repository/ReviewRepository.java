@@ -12,11 +12,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
     List<Review> findByMemberId(final Long memberId);
 
-    @Query("SELECT COUNT (r) FROM Review r WHERE r.member.id = :memberId")
-    Long countReviewsByMemberId(final Long memberId);
-
     default Review getById(final Long reviewId) {
         return findById(reviewId)
-                .orElseThrow(NoSuchReviewException::new);
+                .orElseThrow(() ->
+                        new NoSuchReviewException("[ID : " + reviewId + "] 에 해당하는 리뷰가 존재하지 않습니다."));
     }
 }

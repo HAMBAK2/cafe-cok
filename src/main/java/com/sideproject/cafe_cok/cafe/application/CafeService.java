@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.cafe.application;
 
 import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
-import com.sideproject.cafe_cok.admin.dto.AdminOperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuRequestDto;
@@ -33,6 +33,7 @@ import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,14 +63,11 @@ public class CafeService {
     private final OperationHourRepository operationHourRepository;
     private final S3Uploader s3Uploader;
 
-    public static final Integer CAFE_DETAIL_CAFE_IMAGE_MAX_CNT = 3;
-    public static final Integer CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT = 6;
-    public static final Integer CAFE_DETAIL_BASIC_REVIEW_CNT = 2;
-
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
-        Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 
@@ -82,9 +80,11 @@ public class CafeService {
             List<String> recommendMenus = keywordRepository
                     .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
 
-            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT);
+            Sort sort = Sort.by(Sort.Order.desc("id"));
+            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
+
             List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(cafeId, review.getId(), pageable);
+                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
 
             cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
         }
@@ -158,7 +158,7 @@ public class CafeService {
         List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
-        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_CNT);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
 
         return new CafeDetailBasicInfoResponse(
                 findCafe, openStatus, businessHours, closedDay,
@@ -201,7 +201,7 @@ public class CafeService {
             }
         }
 
-        List<AdminOperationHourDto> hours = request.getHours();
+        List<OperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
 
         return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
@@ -260,7 +260,7 @@ public class CafeService {
             savedImage.add(imageRepository.save(newImage));
         }
 
-        List<AdminOperationHourDto> hours = request.getHours();
+        List<OperationHourDto> hours = request.getHours();
         operationHourRepository.deleteByCafeId(id);
         if(checkoutInputHours(hours)) saveOperationHours(hours, findCafe);
 
@@ -305,9 +305,9 @@ public class CafeService {
         return cafeRepository.existsByKakaoId(id);
     }
 
-    private void saveOperationHours(final List<AdminOperationHourDto> hours, final Cafe cafe) {
+    private void saveOperationHours(final List<OperationHourDto> hours, final Cafe cafe) {
         List<OperationHour> newOperationHours = new ArrayList<>();
-        for (AdminOperationHourDto hour : hours) {
+        for (OperationHourDto hour : hours) {
             DayOfWeek day = getDyaOfWeekByKoreanDay(hour.getDay());
             LocalTime startTime = LocalTime.of(hour.getStartHour(), hour.getStartMinute());
             LocalTime endTime = LocalTime.of(hour.getEndHour(), hour.getEndMinute());
@@ -321,9 +321,9 @@ public class CafeService {
         operationHourRepository.saveAll(newOperationHours);
     }
 
-    private boolean checkoutInputHours(List<AdminOperationHourDto> hours) {
+    private boolean checkoutInputHours(List<OperationHourDto> hours) {
 
-        for (AdminOperationHourDto hour : hours) {
+        for (OperationHourDto hour : hours) {
             if(hour.getStartHour() != 0) return true;
             if(hour.getStartMinute() != 0) return true;
             if(hour.getEndHour() != 0) return true;
@@ -338,12 +338,12 @@ public class CafeService {
 
         List<ImageUrlDto> imageUrlDtoList = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_CAFE_IMAGE_MAX_CNT);
+        Pageable pageable = PageRequest.of(0, CAFE_DETAIL_IMAGE_PAGE_CNT);
         List<ImageUrlDto> findCafeImageUrlDtoList = imageRepository.findCafeImageUrlDtoListByCafeId(cafeId, pageable);
 
-        pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_IMAGE_MAX_CNT - findCafeImageUrlDtoList.size());
+        pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_IMAGE_PAGE_CNT - findCafeImageUrlDtoList.size());
         List<ImageUrlDto> findReviewImageUrlDtoList =
-                imageRepository.findImageUrlDtoListByCafeIdImageTypeAndPageable(cafeId, ImageType.REVIEW, pageable);
+                imageRepository.findImageUrlDtoListByCafeIdImageType(cafeId, ImageType.REVIEW, pageable);
 
         imageUrlDtoList.addAll(findCafeImageUrlDtoList);
         imageUrlDtoList.addAll(findReviewImageUrlDtoList);

@@ -1,8 +1,8 @@
-package com.sideproject.cafe_cok.admin.dto;
+package com.sideproject.cafe_cok.cafe.dto;
 
+import com.sideproject.cafe_cok.menu.dto.MenuDetailDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class AdminCafeDto {
+public class CafeDetailDto {
 
     private Long id;
     private String name;
@@ -19,10 +19,10 @@ public class AdminCafeDto {
     private BigDecimal latitude;
     private BigDecimal longitude;
     private List<ImageDto> images;
-    private List<AdminMenuDto> menus;
-    private List<AdminOperationHourDto> hours = new ArrayList<>();
+    private List<MenuDetailDto> menus;
+    private List<OperationHourDto> hours = new ArrayList<>();
 
-    public AdminCafeDto(final Cafe cafe) {
+    public CafeDetailDto(final Cafe cafe) {
         this.id = cafe.getId();
         this.name = cafe.getName();
         this.address = cafe.getRoadAddress();
@@ -31,10 +31,10 @@ public class AdminCafeDto {
         this.longitude = cafe.getLongitude();
     }
 
-    public AdminCafeDto(final Cafe cafe,
-                        final List<ImageDto> images,
-                        final List<AdminMenuDto> menus,
-                        final List<AdminOperationHourDto> hours) {
+    public CafeDetailDto(final Cafe cafe,
+                         final List<ImageDto> images,
+                         final List<MenuDetailDto> menus,
+                         final List<OperationHourDto> hours) {
         this(cafe);
         this.images = images;
         this.menus = menus;

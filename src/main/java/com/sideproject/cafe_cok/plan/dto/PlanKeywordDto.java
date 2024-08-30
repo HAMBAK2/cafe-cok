@@ -23,7 +23,7 @@ public class PlanKeywordDto {
     public PlanKeywordDto(final Long id,
                           final String location,
                           final LocalDate visitDate,
-                          final LocalTime  visitStartTime,
+                          final LocalTime visitStartTime,
                           final String keywordName) {
         this.id = id;
         this.location = location;

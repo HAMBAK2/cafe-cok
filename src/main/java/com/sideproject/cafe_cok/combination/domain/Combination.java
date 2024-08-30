@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

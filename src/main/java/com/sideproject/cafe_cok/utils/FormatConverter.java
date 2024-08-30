@@ -145,27 +145,6 @@ public class FormatConverter {
         return originPath.replace(originDirName, newDirName);
     }
 
-    public static List<List<String>> convertOperationHoursToListString(final List<OperationHour> operationHours){
-        List<List<String>> hours = new ArrayList<>();
-
-        for (OperationHour operationHour : operationHours) {
-            List<String> innerList = new ArrayList<>();
-            LocalTime openingTime = operationHour.getOpeningTime();
-            LocalTime closingTime = operationHour.getClosingTime();
-
-            if(openingTime.equals(LocalTime.of(0, 0))
-                    && closingTime.equals(LocalTime.of(0, 0))) {
-                innerList.add("");
-                innerList.add("");
-            } else {
-                innerList.add(openingTime.toString());
-                innerList.add(closingTime.toString());
-            }
-            hours.add(innerList);
-        }
-        return hours;
-    }
-
     public static String convertOperationHourToString(final OperationHour operationHour) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String date = getKoreanDayOfWeek(operationHour.getDate());

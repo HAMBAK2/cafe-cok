@@ -1,13 +1,10 @@
-package com.sideproject.cafe_cok.admin.dto;
+package com.sideproject.cafe_cok.cafe.dto;
 
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
-import com.sideproject.cafe_cok.utils.FormatConverter;
 import lombok.Getter;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
-
 @Getter
-public class AdminOperationHourDto {
+public class OperationHourDto {
 
     private String day;
     private Integer startHour;
@@ -15,7 +12,7 @@ public class AdminOperationHourDto {
     private Integer endHour;
     private Integer endMinute;
 
-    public AdminOperationHourDto(String day) {
+    public OperationHourDto(String day) {
         this.day = day;
         this.startHour = 0;
         this.startMinute = 0;
@@ -23,11 +20,11 @@ public class AdminOperationHourDto {
         this.endMinute = 0;
     }
 
-    public AdminOperationHourDto(String day,
-                                 Integer startHour,
-                                 Integer startMinute,
-                                 Integer endHour,
-                                 Integer endMinute) {
+    public OperationHourDto(String day,
+                            Integer startHour,
+                            Integer startMinute,
+                            Integer endHour,
+                            Integer endMinute) {
         this.day = day;
         this.startHour = startHour;
         this.startMinute = startMinute;

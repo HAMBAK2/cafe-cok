@@ -1,13 +1,17 @@
 package com.sideproject.cafe_cok.review.domain.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.review.domain.Review;
+import com.sideproject.cafe_cok.utils.QuerydslUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+import static com.sideproject.cafe_cok.image.domain.QImage.image;
 import static com.sideproject.cafe_cok.review.domain.QReview.*;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -20,9 +24,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public List<Review> findByCafeIdAndCursorOrderByIdDesc(final Long cafeId,
-                                                           final Long cursor,
-                                                           final Pageable pageable) {
+    public List<Review> findByCafeId(final Long cafeId,
+                                     final Long cursor,
+                                     final Pageable pageable) {
+
+        NumberPath<Long> idPath = review.id;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
 
         return queryFactory
                 .select(review)
@@ -30,22 +37,25 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
                 .where(review.cafe.id.eq(cafeId),
                         reviewIdLt(cursor),
                         memberDeletedAtIsNull())
-                .orderBy(review.id.desc())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<Review> findByCafeIdOrderByIdDesc(final Long cafeId,
-                                                  final Pageable pageable) {
+    public List<Review> findByCafeId(final Long cafeId,
+                                     final Pageable pageable) {
+
+        NumberPath<Long> idPath = review.id;
+        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
 
         return queryFactory
                 .select(review)
                 .from(review)
                 .where(review.cafe.id.eq(cafeId),
                         memberDeletedAtIsNull())
-                .orderBy(review.id.desc())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -8,10 +8,9 @@ import java.util.List;
 
 public interface CombinationRepository extends JpaRepository<Combination, Long>, CombinationRepositoryCustom{
 
-    List<Combination> findByMemberId(final Long memberId);
-
     default Combination getById(final Long combinationId) {
         return findById(combinationId)
-                .orElseThrow(NoSuchCombinationException::new);
+                .orElseThrow(() ->
+                        new NoSuchCombinationException("[ID : " + combinationId + "] 에 해당하는 조합이 존재하지 않습니다."));
     }
 }

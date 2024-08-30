@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CombinationRepositoryCustom {
 
-    List<CombinationDto> findDtoByMemberId(final Long memberId);
+    List<CombinationDto> findByMemberId(final Long memberId);
 }

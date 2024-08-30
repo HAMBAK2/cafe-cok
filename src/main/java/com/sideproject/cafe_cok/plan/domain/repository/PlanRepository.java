@@ -26,8 +26,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositor
 
     default Plan getById(final Long id) {
         return findById(id)
-                .orElseThrow(NoSuchPlanException::new);
+                .orElseThrow(() ->
+                        new NoSuchPlanException("[ID : " + id + "] 에 해당하는 계획이 존재하지 않습니다."));
     }
-
-
 }

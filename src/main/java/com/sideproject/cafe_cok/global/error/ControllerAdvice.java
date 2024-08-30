@@ -10,7 +10,6 @@ import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.review.exception.NoSuchReviewException;
 import com.sideproject.cafe_cok.utils.S3.exception.FileUploadException;
 import com.sideproject.cafe_cok.utils.tmap.exception.TmapException;
-import com.sideproject.cafe_cok.auth.exception.*;
 import com.sideproject.cafe_cok.bookmark.exception.DefaultFolderUpdateNotAllowedException;
 import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
@@ -110,7 +109,7 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchCafeException.class, NoSuchTokenException.class,
+            NoSuchCafeException.class, NoSuchRefreshTokenException.class,
             NoSuchFolderException.class, NoSuchFolderException.class,
             NoSuchMemberException.class, NoSuchCategoryException.class,
             NoSuchBookmarkException.class, NoResourceFoundException.class,

@@ -1,5 +1,6 @@
 package com.sideproject.cafe_cok.plan.dto.request;
 
+import com.sideproject.cafe_cok.cafe.condition.CafeSearchCondition;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
@@ -48,6 +49,10 @@ public class CreatePlanRequest {
         return new Plan(
                 member, locationName, date, startTime, endTime,
                 minutes, matchType, false, false);
+    }
+
+    public CafeSearchCondition toCondition() {
+        return new CafeSearchCondition(this);
     }
 
     public void validate() {

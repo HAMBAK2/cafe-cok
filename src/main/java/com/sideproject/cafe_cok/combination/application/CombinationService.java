@@ -62,14 +62,14 @@ public class CombinationService {
         if(ListUtils.areListEqual(request.getKeywords(), findKeywords))
             return CombinationIdResponse.of(findCombination.getId());
 
-        combinationKeywordRepository.deleteByCombinationId(combinationId);
+        combinationKeywordRepository.deleteById(combinationId);
         saveCombinationKeywordsByCombinationAndKeywordNames(findCombination, request.getKeywords());
         return CombinationIdResponse.of(findCombination.getId());
     }
 
     public CombinationListResponse combination(final LoginMember loginMember) {
 
-        List<CombinationDto> findCombinations = combinationRepository.findDtoByMemberId(loginMember.getId());
+        List<CombinationDto> findCombinations = combinationRepository.findByMemberId(loginMember.getId());
         if(findCombinations.isEmpty()) return new CombinationListResponse();
         return new CombinationListResponse(findCombinations);
     }

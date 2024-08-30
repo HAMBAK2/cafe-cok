@@ -26,6 +26,7 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
 import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewIdResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewResponse;
+import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
@@ -35,6 +36,7 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,7 +63,6 @@ public class ReviewService {
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
     private static final String KEYWORD = "keyword";
-    public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
     private static final Boolean HAS_NEXT_PAGE = true;
     public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
 
@@ -96,7 +97,7 @@ public class ReviewService {
     public ReviewResponse detail(final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
-        List<Image> findReviewImages = imageRepository.findByReviewIdAndImageType(reviewId, ImageType.REVIEW);
+        List<Image> findReviewImages = imageRepository.findByReviewId(reviewId);
         CategoryKeywordsDto CategoryKeywords = new CategoryKeywordsDto(keywordRepository.findByReviewId(reviewId));
         return ReviewResponse.of(findReview, findReviewImages, CategoryKeywords);
     }
@@ -127,7 +128,7 @@ public class ReviewService {
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
             List<ImageUrlDto> findImageUrlDtoList
-                    = imageRepository.findImageUrlDtoListByReviewIdAndImageType(review.getId(), ImageType.REVIEW);
+                    = imageRepository.findImageUrlDtoListByReviewId(review.getId());
             List<KeywordDto> findKeywords = keywordRepository.findByReviewIdAndCategory(review.getId(), Category.MENU);
             if(findKeywords.size() > RECOMMEND_MENU_MAX_CNT)
                 findKeywords = findKeywords.subList(0, RECOMMEND_MENU_MAX_CNT);
@@ -179,7 +180,7 @@ public class ReviewService {
     @Transactional
     public void deleteByIds(final List<Long> ids) {
 
-        List<Image> findImages = imageRepository.findImageByIdIn(ids);
+        List<Image> findImages = imageRepository.findAllByIdIn(ids);
         for (Image findImage : findImages) {
             s3Uploader.delete(findImage.getOrigin());
             s3Uploader.delete(findImage.getThumbnail());
@@ -193,11 +194,12 @@ public class ReviewService {
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<CafeDetailReviewDto> reviews;
 
+        Sort sort = Sort.by(Sort.Order.desc("id"));
         List<Review> findReviews = reviewRepository
-                .findByCafeIdAndCursorOrderByIdDesc(
+                .findByCafeId(
                         cafeId,
                         cursor,
-                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT));
+                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT, sort));
         reviews = convertReviewsToCafeDetailReviewDtoList(cafeId, findReviews);
 
         if(reviews.size() == CAFE_DETAIL_REVIEW_CNT) {
@@ -216,8 +218,9 @@ public class ReviewService {
 
     private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
                                                                  final Integer reviewCnt) {
-        Pageable pageable = PageRequest.of(0, reviewCnt);
-        List<Review> reviews = reviewRepository.findByCafeIdOrderByIdDesc(cafeId, pageable);
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
         return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
     }
 
@@ -248,9 +251,10 @@ public class ReviewService {
             List<String> recommendMenus = keywordRepository
                     .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
 
-            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT);
+            Sort sort = Sort.by(Sort.Order.desc("id"));
+            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
             List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(cafeId, review.getId(), pageable);
+                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
 
             cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
         }

@@ -12,22 +12,19 @@ public interface ImageRepositoryCustom {
     List<ImageUrlDto> findCafeImageUrlDtoListByCafeId(final Long cafeId,
                                                       final Pageable pageable);
 
-    List<ImageUrlDto> findImageUrlDtoListByReviewIdAndImageType(final Long reviewId,
-                                                                final ImageType imageType);
+    List<ImageUrlDto> findImageUrlDtoListByReviewId(final Long reviewId);
+    List<ImageUrlDto> findImageUrlDtoListByReviewId(final Long reviewId,
+                                                    final Pageable pageable);
 
     List<ImageUrlDto> findImageUrlDtoListByCafeIdImageType(final Long cafeId,
                                                            final ImageType imageType);
 
-    List<ImageUrlDto> findImageUrlDtoListByCafeIdImageTypeAndPageable(final Long cafeId,
-                                                                      final ImageType imageType,
-                                                                      final Pageable pageable);
+    List<ImageUrlDto> findImageUrlDtoListByCafeIdImageType(final Long cafeId,
+                                                           final ImageType imageType,
+                                                           final Pageable pageable);
 
-    List<ImageUrlDto> findImageUrlDtoListByCafeIdAndReviewIdOrderByIdDesc(final Long cafeId,
-                                                                          final Long reviewId,
+    List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageType(final Long cafeId,
+                                                                          final Long cursor,
+                                                                          final ImageType imageType,
                                                                           final Pageable pageable);
-
-    List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageTypeOrderByIdDesc(final Long cafeId,
-                                                                                       final Long cursor,
-                                                                                       final ImageType imageType,
-                                                                                       final Pageable pageable);
 }

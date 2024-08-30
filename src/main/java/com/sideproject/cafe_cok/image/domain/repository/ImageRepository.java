@@ -15,25 +15,21 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Long>, ImageRepositoryCustom {
 
-    Optional<Image> findImageByCafeAndImageType(final Cafe cafe, final ImageType imageType);
+    Optional<Image> findImageByCafeAndImageType(final Cafe cafe,
+                                                final ImageType imageType);
 
-    default Image getImageByCafeAndImageType(final Cafe cafe, final ImageType imageType) {
+    default Image getImageByCafeAndImageType(final Cafe cafe,
+                                             final ImageType imageType) {
         return findImageByCafeAndImageType(cafe, imageType)
-                .orElseThrow(NoSuchImageException::new);
+                .orElseThrow(() ->
+                        new NoSuchImageException("입력하신 Cafe, ImageType에 해당하는 이미지가 존재하지 않습니다."));
     }
-
-    List<Image> findImageByCafe(final Cafe cafe);
 
     void deleteAllByIdIn(final List<Long> ids);
 
-    void deleteByMenu(final Menu menu);
-
-    List<Image> findByReviewIdAndImageType(final Long reviewId, final ImageType imageType);
+    List<Image> findByReviewId(final Long reviewId);
 
     List<Image> findByMenu(final Menu menu);
 
-    @Query("SELECT i " +
-            "FROM Image i " +
-            "WHERE i.id IN (:ids)")
-    List<Image> findImageByIdIn(final List<Long> ids);
+    List<Image> findAllByIdIn(final List<Long> ids);
 }
