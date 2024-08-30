@@ -95,13 +95,28 @@ public class TestConstants {
     public static final LocalTime PLAN_VISIT_END_TIME = LocalTime.of(12, 0);
     public static final Integer PLAN_MINUTES = 30;
     public static final MatchType PLAN_MATCH_TYPE = MatchType.MATCH;
-    public static final Boolean PLAN_IS_SAVED = false;
-    public static final Boolean PLAN_IS_SHARED = false;
+    public static final Boolean PLAN_IS_SAVED_TRUE = true;
+    public static final Boolean PLAN_IS_SHARED_TRUE = true;
+    public static final Boolean PLAN_IS_SAVED_FALSE = false;
+    public static final Boolean PLAN_IS_SHARED_FALSE = false;
+    public static final String PLAN_LOCATION_NAME_2 = "plan location name2";
+    public static final LocalDate PLAN_VISIT_DATE_2 = LocalDate.of(2024, 10, 2);
+    public static final LocalTime PLAN_VISIT_START_TIME_2 = LocalTime.of(20, 0);
+    public static final LocalTime PLAN_VISIT_END_TIME_2 = LocalTime.of(22, 0);
+    public static final Integer PLAN_MINUTES_2 = 30;
+    public static final MatchType PLAN_MATCH_TYPE_2 = MatchType.MATCH;
+    public static final Integer PLAN_PAGE_SIZE = 2;
+
 
     /* FEEDBACK */
     public static final String FEEDBACK_EMAIL = MEMBER_EMAIL;
     public static final String FEEDBACK_CONTENT = "feedback content";
     public static final String FEEDBACK_EMAIL_2 = MEMBER_EMAIL_2;
     public static final String FEEDBACK_CONTENT_2 = "feedback content2";
+
+    /* KEYWORD */
+    public static final String KEYWORD_NAME = "keyword name";
+    public static final String KEYWORD_NAME_2 = "keyword name2";
+
 
 }

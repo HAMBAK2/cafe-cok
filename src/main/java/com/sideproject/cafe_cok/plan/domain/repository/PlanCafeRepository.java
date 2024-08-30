@@ -8,5 +8,4 @@ import java.util.List;
 public interface PlanCafeRepository extends JpaRepository<PlanCafe, Long> {
 
 
-    void deleteByPlanId(final Long planId);
 }

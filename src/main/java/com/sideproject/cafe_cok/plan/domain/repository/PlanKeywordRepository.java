@@ -11,6 +11,4 @@ import java.util.Optional;
 public interface PlanKeywordRepository extends JpaRepository<PlanKeyword, Long> {
 
     List<PlanKeyword> findByPlanId(final Long planId);
-
-    void deleteByPlanId(final Long planId);
 }

@@ -189,7 +189,7 @@ class CafeRepositoryTest {
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
         Plan plan = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED, PLAN_IS_SHARED);
+                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
         Plan savedPlan = planRepository.save(plan);
         PlanCafe savedPlanCafe1 = new PlanCafe(savedPlan, savedCafe1, PLAN_MATCH_TYPE);
         PlanCafe savedPlanCafe2 = new PlanCafe(savedPlan, savedCafe2, PLAN_MATCH_TYPE);

@@ -11,6 +11,7 @@ import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
+import com.sideproject.cafe_cok.plan.domain.condition.PlanSearchCondition;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
@@ -39,6 +40,7 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanKeywordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -171,7 +173,7 @@ public class PlanService {
 
     @Transactional
     public PlanIdResponse delete(final PlanStatus status,
-                                     final Long planId) {
+                                 final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
         if(status.equals(PlanStatus.SAVED)) findPlan.changeIsSaved(false);
@@ -187,10 +189,11 @@ public class PlanService {
                                      final Integer page,
                                      final Integer size) {
 
-        Sort sortBy = getSortBy(planSortBy);
-        PageRequest pageRequest = PageRequest.of(page-1, size, sortBy);
-        List<PlanKeywordDto> plans = planRepository
-                .findPlansByMemberIdAndCategory(loginMember.getId(), Category.PURPOSE, planSortBy, status, pageRequest);
+        PlanSearchCondition planSearchCondition
+                = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
+        Sort sort = getSort(planSortBy);
+        Pageable pageable = PageRequest.of(page-1, size, sort);
+        List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
 
         return new PlanPageResponse(page, plans);
     }
@@ -199,10 +202,11 @@ public class PlanService {
                                        final PlanSortBy planSortBy,
                                        final PlanStatus status) {
 
-        Sort sortBy = getSortBy(planSortBy);
-        PageRequest pageRequest = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sortBy);
-        List<PlanKeywordDto> plans = planRepository
-                .findPlansByMemberIdAndCategory(loginMember.getId(), Category.PURPOSE, planSortBy, status, pageRequest);
+        PlanSearchCondition planSearchCondition
+                = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
+        Sort sort = getSort(planSortBy);
+        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sort);
+        List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
 
         return new PlanAllResponse(plans);
     }
@@ -239,15 +243,15 @@ public class PlanService {
         return cafeDtoList;
     }
 
-    private Sort getSortBy(final PlanSortBy planSortBy) {
-        Sort sortBy;
+    private Sort getSort(final PlanSortBy planSortBy) {
+        Sort sort;
         switch (planSortBy){
-            case RECENT -> sortBy = by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
-            case UPCOMING -> sortBy = by(Sort.Direction.ASC, PlanSortBy.UPCOMING.getValue(), "visitStartTime", "id");
+            case RECENT -> sort = by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
+            case UPCOMING -> sort = by(Sort.Direction.ASC, PlanSortBy.UPCOMING.getValue(), "visitStartTime", "id");
             default -> throw new NoSuchPlanSortException();
         }
 
-        return sortBy;
+        return sort;
     }
 
     private SavePlanResponse createMisMatchPlan(final CreatePlanRequest request,

@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.image.domain.QImage.*;
-import static com.sideproject.cafe_cok.review.domain.QReview.review;
 import static org.springframework.util.StringUtils.isEmpty;
 
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
