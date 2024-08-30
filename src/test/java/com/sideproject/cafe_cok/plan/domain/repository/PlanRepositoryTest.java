@@ -1,7 +1,6 @@
 package com.sideproject.cafe_cok.plan.domain.repository;
 
 import com.sideproject.cafe_cok.config.JpaTestConfig;
-import com.sideproject.cafe_cok.global.config.JpaConfig;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;

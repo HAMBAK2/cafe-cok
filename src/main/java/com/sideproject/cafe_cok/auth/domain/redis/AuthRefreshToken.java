@@ -13,7 +13,8 @@ public class AuthRefreshToken {
 
     private String refreshToken;
 
-    public AuthRefreshToken(final String memberId, final String refreshToken) {
+    public AuthRefreshToken(final String memberId,
+                            final String refreshToken) {
         this.memberId = memberId;
         this.refreshToken = refreshToken;
     }

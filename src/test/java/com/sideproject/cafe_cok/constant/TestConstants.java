@@ -10,6 +10,10 @@ import java.time.LocalTime;
 
 public class TestConstants {
 
+    public static final String REDIS_EXISTENT_ID = "1";
+    public static final Long NON_EXISTENT_ID = 999L;
+    public static final String REFRESH_TOKEN = "refresh token";
+
     /* MEMBER */
     public static final String MEMBER_EMAIL = "member@member.com";
     public static final String MEMBER_EMAIL_2 = "member2@member.com";
@@ -22,7 +26,6 @@ public class TestConstants {
     public static final String COMBINATION_NAME_2 = "combination_name_2";
     public static final String COMBINATION_ICON_1 = "combination_icon_1";
     public static final String COMBINATION_ICON_2 = "combination_icon_2";
-    public static final Long NON_EXISTENT_ID = 999L;
 
     /* OPERATION HOUR */
     public static final LocalDate OPERATION_HOUR_DATE = LocalDate.of(2024, 10, 1);
@@ -117,6 +120,4 @@ public class TestConstants {
     /* KEYWORD */
     public static final String KEYWORD_NAME = "keyword name";
     public static final String KEYWORD_NAME_2 = "keyword name2";
-
-
 }
