@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/combination")
+@RequestMapping("/api/v1/combinations")
 @Tag(name = "Combination", description = "조합 API")
 public class CombinationController {
 

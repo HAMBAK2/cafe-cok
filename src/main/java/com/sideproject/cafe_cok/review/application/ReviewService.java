@@ -2,8 +2,6 @@ package com.sideproject.cafe_cok.review.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
-import com.sideproject.cafe_cok.review.dto.response.ReviewAllResponse;
-import com.sideproject.cafe_cok.review.dto.response.ReviewPageResponse;
 import com.sideproject.cafe_cok.global.error.exception.MissingRequiredValueException;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
@@ -14,11 +12,9 @@ import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.CafeReviewKeywordRepository;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
-import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
-import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
-import com.sideproject.cafe_cok.review.dto.response.ReviewListResponse;
+import com.sideproject.cafe_cok.review.dto.response.ReviewsResponse;
 import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
 import com.sideproject.cafe_cok.review.dto.ReviewDto;
@@ -26,22 +22,17 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
 import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewIdResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewResponse;
-import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.member.domain.Member;
-import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.cafe_cok.review.dto.request.ReviewSaveRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,12 +53,8 @@ public class ReviewService {
     private final KeywordRepository keywordRepository;
     private final CafeReviewKeywordRepository cafeReviewKeywordRepository;
 
-    private static final String KEYWORD = "keyword";
-    private static final Boolean HAS_NEXT_PAGE = true;
-    public static final Integer ALL_LIST_CNT = Integer.MAX_VALUE;
-
     @Transactional
-    public ReviewSaveResponse save(final ReviewCreateRequest request,
+    public ReviewSaveResponse save(final ReviewSaveRequest request,
                                    final LoginMember loginMember,
                                    final List<MultipartFile> files) {
 
@@ -80,7 +67,7 @@ public class ReviewService {
         Review review = new Review(request, findCafe, findMember);
         Review savedReview = reviewRepository.save(review);
 
-        if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
+        if(request.getKeywords() == null) throw new MissingRequiredValueException("keyword");
         else saveByReviewAndKeywordNames(savedReview, request.getKeywords());
         saveReviewImages(savedReview, savedImageUrls);
 
@@ -115,7 +102,7 @@ public class ReviewService {
         if(request.getStarRating() != null) findReview.setStarRating(request.getStarRating());
         if(request.getDeletedImageIds() != null) deleteByIds(request.getDeletedImageIds());
 
-        if(request.getKeywords() == null) throw new MissingRequiredValueException(KEYWORD);
+        if(request.getKeywords() == null) throw new MissingRequiredValueException("keyword");
         else changeByReviewAndKeywordNames(findReview, request.getKeywords());
 
         saveReviewImages(findReview, savedImageUrls);
@@ -123,7 +110,7 @@ public class ReviewService {
         return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewListResponse getReviews(final LoginMember loginMember) {
+    public ReviewsResponse getReviews(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
@@ -135,7 +122,7 @@ public class ReviewService {
             return new ReviewDto(review, findImageUrlDtoList, findKeywords);
         }).collect(Collectors.toList());
 
-        return new ReviewListResponse(findReviewDtoList);
+        return new ReviewsResponse(findReviewDtoList);
     }
 
     private void saveByReviewAndKeywordNames(final Review review,
@@ -188,48 +175,6 @@ public class ReviewService {
         imageRepository.deleteAllByIdIn(ids);
     }
 
-    public ReviewPageResponse findByCafeId(final Long cafeId,
-                                           final Long cursor) {
-
-        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
-        List<CafeDetailReviewDto> reviews;
-
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        List<Review> findReviews = reviewRepository
-                .findByCafeId(
-                        cafeId,
-                        cursor,
-                        PageRequest.of(0, CAFE_DETAIL_REVIEW_CNT, sort));
-        reviews = convertReviewsToCafeDetailReviewDtoList(cafeId, findReviews);
-
-        if(reviews.size() == CAFE_DETAIL_REVIEW_CNT) {
-            Long newCursor = reviews.get(reviews.size() - 1).getId();;
-            return ReviewPageResponse.of(userChoiceKeywords, reviews, newCursor, HAS_NEXT_PAGE);
-        }
-
-        return ReviewPageResponse.of(userChoiceKeywords, reviews);
-    }
-
-    public ReviewAllResponse findByCafeIdAll(final Long cafeId) {
-        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
-        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, ALL_LIST_CNT);;
-        return ReviewAllResponse.of(userChoiceKeywords, reviews);
-    }
-
-    private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
-                                                                 final Integer reviewCnt) {
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
-        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
-        return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
-    }
-
-    private List<KeywordCountDto> getUserChoiceKeywordCounts(final Long cafeId) {
-        return keywordRepository.findKeywordCountDtoListByCafeIdOrderByCountDesc(
-                cafeId, PageRequest.of(0, USER_CHOICE_KEYWORD_CNT));
-    }
-
-
     private List<String> uploadImageToS3(final List<MultipartFile> files) {
 
         if(files == null || files.isEmpty()) return null;
@@ -240,24 +185,5 @@ public class ReviewService {
         if(savedImageUrls.isEmpty()) return savedImageUrls;
         s3Uploader.isExistObject(savedImageUrls);
         return savedImageUrls;
-    }
-
-    private List<CafeDetailReviewDto> convertReviewsToCafeDetailReviewDtoList(final Long cafeId,
-                                                                              final List<Review> reviews) {
-        List<CafeDetailReviewDto> cafeDetailReviewDtoList = new ArrayList<>();
-        for (Review review : reviews) {
-
-            Pageable pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT);
-            List<String> recommendMenus = keywordRepository
-                    .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
-
-            Sort sort = Sort.by(Sort.Order.desc("id"));
-            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
-            List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
-
-            cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
-        }
-        return cafeDetailReviewDtoList;
     }
 }

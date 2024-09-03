@@ -1,6 +1,6 @@
 package com.sideproject.cafe_cok.cafe.condition;
 
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
+import com.sideproject.cafe_cok.plan.dto.request.PlanSaveRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,7 +19,7 @@ public class CafeSearchCondition {
     private BigDecimal longitude;
     private int minutes;
 
-    public CafeSearchCondition(final CreatePlanRequest request) {
+    public CafeSearchCondition(final PlanSaveRequest request) {
         this.date = request.getDate();
         this.startTime = request.getStartTime();
         this.endTime = request.getEndTime();

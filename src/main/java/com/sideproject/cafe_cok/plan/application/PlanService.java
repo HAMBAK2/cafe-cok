@@ -11,26 +11,18 @@ import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
-import com.sideproject.cafe_cok.plan.domain.condition.PlanSearchCondition;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
-import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
-import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.PlanCafe;
 import com.sideproject.cafe_cok.plan.domain.PlanKeyword;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
-import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanCafeRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
-import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SavePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SharePlanRequest;
+import com.sideproject.cafe_cok.plan.dto.request.PlanSaveRequest;
 import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
-import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.utils.Constants;
 import com.sideproject.cafe_cok.utils.ListUtils;
 import com.sideproject.cafe_cok.utils.tmap.client.TmapClient;
@@ -39,8 +31,6 @@ import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanKeywordException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +39,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sideproject.cafe_cok.utils.FormatConverter.convertLocalDateLocalTimeToString;
-import static org.springframework.data.domain.Sort.by;
-
 
 @Service
 @RequiredArgsConstructor
@@ -68,11 +56,8 @@ public class PlanService {
     private final BookmarkRepository bookmarkRepository;
     private final ImageRepository imageRepository;
 
-    private final Integer FIRST_PAGE_NUMBER = 0;
-    private final Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;
-
     @Transactional
-    public SavePlanResponse doPlan(final CreatePlanRequest request,
+    public SavePlanResponse doPlan(final PlanSaveRequest request,
                                    final Long memberId) {
 
         request.validate();
@@ -130,7 +115,7 @@ public class PlanService {
         return createMatchPlan(request, categoryKeywords, similarCafes, matchCafes, memberId);
     }
 
-    private List<Cafe> findCafesWhenDestinationIsPresent(final CreatePlanRequest request) {
+    private List<Cafe> findCafesWhenDestinationIsPresent(final PlanSaveRequest request) {
 
         List<Cafe> findCafes = cafeRepository.findByDateAndTimeAndMinutes(request.toCondition());
         Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
@@ -148,25 +133,15 @@ public class PlanService {
                 .collect(Collectors.toList());
     }
 
-
     @Transactional
-    public PlanIdResponse save(final SavePlanRequest request,
-                                 final LoginMember loginMember) {
+    public PlanIdResponse edit(final PlanStatus status,
+                               final Long planId,
+                               final LoginMember loginMember) {
 
-        Plan findPlan = planRepository.getById(request.getPlanId());
+        Plan findPlan = planRepository.getById(planId);
         Member findMember = memberRepository.getById(loginMember.getId());
-        findPlan.changeIsSaved(true);
-        findPlan.changeMember(findMember);
-        return new PlanIdResponse(findPlan.getId());
-    }
-
-    @Transactional
-    public PlanIdResponse share(final SharePlanRequest request,
-                                final LoginMember loginMember) {
-
-        Plan findPlan = planRepository.getById(request.getPlanId());
-        Member findMember = memberRepository.getById(loginMember.getId());
-        findPlan.changeIsShared(true);
+        if(status.equals(PlanStatus.SAVED)) findPlan.changeIsSaved(true);
+        if(status.equals(PlanStatus.SHARED)) findPlan.changeIsShared(true);
         findPlan.changeMember(findMember);
         return new PlanIdResponse(findPlan.getId());
     }
@@ -181,34 +156,6 @@ public class PlanService {
 
         if(!findPlan.getIsSaved() && !findPlan.getIsShared()) planRepository.delete(findPlan);
         return new PlanIdResponse(findPlan.getId());
-    }
-
-    public PlanPageResponse getPlans(final LoginMember loginMember,
-                                     final PlanSortBy planSortBy,
-                                     final PlanStatus status,
-                                     final Integer page,
-                                     final Integer size) {
-
-        PlanSearchCondition planSearchCondition
-                = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
-        Sort sort = getSort(planSortBy);
-        Pageable pageable = PageRequest.of(page-1, size, sort);
-        List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
-
-        return new PlanPageResponse(page, plans);
-    }
-
-    public PlanAllResponse getPlansAll(final LoginMember loginMember,
-                                       final PlanSortBy planSortBy,
-                                       final PlanStatus status) {
-
-        PlanSearchCondition planSearchCondition
-                = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
-        Sort sort = getSort(planSortBy);
-        Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sort);
-        List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
-
-        return new PlanAllResponse(plans);
     }
 
     public PlanResponse findPlan(final LoginMember loginMember,
@@ -243,18 +190,7 @@ public class PlanService {
         return cafeDtoList;
     }
 
-    private Sort getSort(final PlanSortBy planSortBy) {
-        Sort sort;
-        switch (planSortBy){
-            case RECENT -> sort = by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
-            case UPCOMING -> sort = by(Sort.Direction.ASC, PlanSortBy.UPCOMING.getValue(), "visitStartTime", "id");
-            default -> throw new NoSuchPlanSortException();
-        }
-
-        return sort;
-    }
-
-    private SavePlanResponse createMisMatchPlan(final CreatePlanRequest request,
+    private SavePlanResponse createMisMatchPlan(final PlanSaveRequest request,
                                                 final CategoryKeywordsDto categoryKeywords,
                                                 final Long memberId) {
 
@@ -276,7 +212,7 @@ public class PlanService {
                 .build();
     }
 
-    private SavePlanResponse createMatchPlan(final CreatePlanRequest request,
+    private SavePlanResponse createMatchPlan(final PlanSaveRequest request,
                                              final CategoryKeywordsDto categoryKeywords,
                                              final List<Cafe> similarCafes,
                                              final List<Cafe> matchCafes,
@@ -314,7 +250,7 @@ public class PlanService {
     private Long createPlan(final MatchType matchType,
                             final List<Cafe> similarCafes,
                             final List<Cafe> matchCafes,
-                            final CreatePlanRequest request) {
+                            final PlanSaveRequest request) {
 
         Member findMember = memberRepository.getById(Constants.NO_MEMBER_ID);
 

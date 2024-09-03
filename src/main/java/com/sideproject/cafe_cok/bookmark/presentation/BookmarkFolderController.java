@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bookmark-folder")
+@RequestMapping("/api/v1/bookmark-folders")
 @Tag(name = "Bookmark Folder", description = "북마크 폴더 API")
 public class BookmarkFolderController {
 
