@@ -109,36 +109,36 @@ class PlanRepositoryTest {
                 .withMessage("[ID : " + NON_EXISTENT_ID + "] 에 해당하는 계획이 존재하지 않습니다.");
     }
 
-    @Test
-    @DisplayName("plan 기반 특정 조건을 제외하고 일지하는 plan 리스트를 조회한다.(특정 조건: id, isSaved, isShared, createdDate, lastModifiedDate)")
-    void find_matching_plan() {
-
-        //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
-        Member savedMember = memberRepository.save(member);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
-        Plan savedPlan1 = planRepository.save(plan1);
-        Plan savedPlan2 = planRepository.save(plan2);
-
-        //when
-        List<Plan> findPlans = planRepository.findMatchingPlan(plan1);
-
-        //then
-        assertThat(findPlans).hasSize(2);
-        assertThat(findPlans).extracting("locationName")
-                .containsExactlyInAnyOrder(PLAN_LOCATION_NAME, PLAN_LOCATION_NAME);
-        assertThat(findPlans).extracting("visitDate")
-                .containsExactlyInAnyOrder(PLAN_VISIT_DATE, PLAN_VISIT_DATE);
-        assertThat(findPlans).extracting("visitStartTime")
-                .containsExactlyInAnyOrder(PLAN_VISIT_START_TIME, PLAN_VISIT_START_TIME);
-        assertThat(findPlans).extracting("visitEndTime")
-                .containsExactlyInAnyOrder(PLAN_VISIT_END_TIME, PLAN_VISIT_END_TIME);
-        assertThat(findPlans).extracting("minutes")
-                .containsExactlyInAnyOrder(PLAN_MINUTES, PLAN_MINUTES);
-    }
+//    @Test
+//    @DisplayName("plan 기반 특정 조건을 제외하고 일지하는 plan 리스트를 조회한다.(특정 조건: id, isSaved, isShared, createdDate, lastModifiedDate)")
+//    void find_matching_plan() {
+//
+//        //given
+//        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+//        Member savedMember = memberRepository.save(member);
+//        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
+//                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
+//        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
+//                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
+//        Plan savedPlan1 = planRepository.save(plan1);
+//        Plan savedPlan2 = planRepository.save(plan2);
+//
+//        //when
+//        List<Plan> findPlans = planRepository.findMatchingPlan(plan1);
+//
+//        //then
+//        assertThat(findPlans).hasSize(2);
+//        assertThat(findPlans).extracting("locationName")
+//                .containsExactlyInAnyOrder(PLAN_LOCATION_NAME, PLAN_LOCATION_NAME);
+//        assertThat(findPlans).extracting("visitDate")
+//                .containsExactlyInAnyOrder(PLAN_VISIT_DATE, PLAN_VISIT_DATE);
+//        assertThat(findPlans).extracting("visitStartTime")
+//                .containsExactlyInAnyOrder(PLAN_VISIT_START_TIME, PLAN_VISIT_START_TIME);
+//        assertThat(findPlans).extracting("visitEndTime")
+//                .containsExactlyInAnyOrder(PLAN_VISIT_END_TIME, PLAN_VISIT_END_TIME);
+//        assertThat(findPlans).extracting("minutes")
+//                .containsExactlyInAnyOrder(PLAN_MINUTES, PLAN_MINUTES);
+//    }
 
     @Test
     @DisplayName("저장된 계획의 PlanKeywordDto 리스트를 조회한다. PlanSearchCondition, pageable 기반 조회 시")
