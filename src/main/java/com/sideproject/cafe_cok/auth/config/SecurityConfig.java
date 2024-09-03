@@ -29,9 +29,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/admin/**").authenticated()
-                                .requestMatchers(HttpMethod.POST, "/api/cafe").authenticated()
-                                .requestMatchers(HttpMethod.PUT, "/api/cafe/{cafeId}").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/api/menu/{menuId}").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/cafe").authenticated()
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/cafe/{cafeId}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/menu/{menuId}").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
