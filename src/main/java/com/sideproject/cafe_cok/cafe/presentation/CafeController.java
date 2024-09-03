@@ -10,7 +10,6 @@ import com.sideproject.cafe_cok.auth.presentation.AuthorizationExtractor;
 import com.sideproject.cafe_cok.cafe.dto.response.*;
 import com.sideproject.cafe_cok.cafe.application.CafeService;
 import com.sideproject.cafe_cok.member.exception.NoSuchMemberException;
-import com.sideproject.cafe_cok.menu.dto.response.MenuListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
