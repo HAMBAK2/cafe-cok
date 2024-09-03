@@ -12,7 +12,6 @@ import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.plan.domain.condition.PlanSearchCondition;
-import com.sideproject.cafe_cok.plan.dto.request.PlanEditRequest;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
@@ -26,9 +25,7 @@ import com.sideproject.cafe_cok.plan.domain.repository.PlanCafeRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanKeywordRepository;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SavePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SharePlanRequest;
+import com.sideproject.cafe_cok.plan.dto.request.PlanSaveRequest;
 import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
@@ -73,7 +70,7 @@ public class PlanService {
     private final Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;
 
     @Transactional
-    public SavePlanResponse doPlan(final CreatePlanRequest request,
+    public SavePlanResponse doPlan(final PlanSaveRequest request,
                                    final Long memberId) {
 
         request.validate();
@@ -131,7 +128,7 @@ public class PlanService {
         return createMatchPlan(request, categoryKeywords, similarCafes, matchCafes, memberId);
     }
 
-    private List<Cafe> findCafesWhenDestinationIsPresent(final CreatePlanRequest request) {
+    private List<Cafe> findCafesWhenDestinationIsPresent(final PlanSaveRequest request) {
 
         List<Cafe> findCafes = cafeRepository.findByDateAndTimeAndMinutes(request.toCondition());
         Map<Cafe, Integer> walkingTimeMap = new HashMap<>();
@@ -245,7 +242,7 @@ public class PlanService {
         return sort;
     }
 
-    private SavePlanResponse createMisMatchPlan(final CreatePlanRequest request,
+    private SavePlanResponse createMisMatchPlan(final PlanSaveRequest request,
                                                 final CategoryKeywordsDto categoryKeywords,
                                                 final Long memberId) {
 
@@ -267,7 +264,7 @@ public class PlanService {
                 .build();
     }
 
-    private SavePlanResponse createMatchPlan(final CreatePlanRequest request,
+    private SavePlanResponse createMatchPlan(final PlanSaveRequest request,
                                              final CategoryKeywordsDto categoryKeywords,
                                              final List<Cafe> similarCafes,
                                              final List<Cafe> matchCafes,
@@ -305,7 +302,7 @@ public class PlanService {
     private Long createPlan(final MatchType matchType,
                             final List<Cafe> similarCafes,
                             final List<Cafe> matchCafes,
-                            final CreatePlanRequest request) {
+                            final PlanSaveRequest request) {
 
         Member findMember = memberRepository.getById(Constants.NO_MEMBER_ID);
 

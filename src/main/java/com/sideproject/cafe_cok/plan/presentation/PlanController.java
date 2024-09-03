@@ -6,7 +6,6 @@ import com.sideproject.cafe_cok.auth.exception.EmptyAuthorizationHeaderException
 import com.sideproject.cafe_cok.auth.exception.InvalidTokenException;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.cafe_cok.auth.presentation.AuthorizationExtractor;
-import com.sideproject.cafe_cok.plan.dto.request.PlanEditRequest;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
@@ -14,9 +13,7 @@ import com.sideproject.cafe_cok.member.exception.NoSuchMemberException;
 import com.sideproject.cafe_cok.plan.application.PlanService;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
-import com.sideproject.cafe_cok.plan.dto.request.CreatePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SavePlanRequest;
-import com.sideproject.cafe_cok.plan.dto.request.SharePlanRequest;
+import com.sideproject.cafe_cok.plan.dto.request.PlanSaveRequest;
 import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +34,7 @@ public class PlanController {
 
     @PostMapping
     @Operation(summary = "계획 저장 및 조회")
-    public ResponseEntity<SavePlanResponse> plan(@RequestBody CreatePlanRequest request,
+    public ResponseEntity<SavePlanResponse> plan(@RequestBody PlanSaveRequest request,
                                                  HttpServletRequest servletRequest) {
 
         Long memberId = getMemberId(servletRequest);

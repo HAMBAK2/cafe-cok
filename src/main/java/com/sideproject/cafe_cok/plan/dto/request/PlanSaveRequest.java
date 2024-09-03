@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreatePlanRequest {
+public class PlanSaveRequest {
 
     private String locationName;
     private BigDecimal latitude;
@@ -26,14 +26,14 @@ public class CreatePlanRequest {
     private LocalTime endTime;
     private List<String> keywords;
 
-    public CreatePlanRequest(final String locationName,
-                             final BigDecimal latitude,
-                             final BigDecimal longitude,
-                             final Integer minutes,
-                             final LocalDate date,
-                             final LocalTime startTime,
-                             final LocalTime endTime,
-                             final List<String> keywords) {
+    public PlanSaveRequest(final String locationName,
+                           final BigDecimal latitude,
+                           final BigDecimal longitude,
+                           final Integer minutes,
+                           final LocalDate date,
+                           final LocalTime startTime,
+                           final LocalTime endTime,
+                           final List<String> keywords) {
         this.locationName = locationName;
         this.latitude = latitude;
         this.longitude = longitude;
