@@ -1,4 +1,4 @@
 FROM openjdk:17-jdk
-ARG JAR_FILE=build/libs/cafe-cok-dev-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} cafe-cok-dev.jar
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "-Duser.timezone=Asia/Seoul", "cafe-cok-dev.jar"]
+ARG JAR_FILE=build/libs/cafe-cok-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} cafe-cok.jar
+CMD ["java", "-jar", "-Dspring.profiles.active=dev", "-Duser.timezone=Asia/Seoul", "cafe-cok.jar"]
