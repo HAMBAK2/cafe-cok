@@ -9,15 +9,15 @@ import java.util.List;
 
 @Getter
 @Builder
-public class ReviewAllResponse {
+public class CafeReviewsResponse {
 
     private List<KeywordCountDto> userChoiceKeywords;
     private List<CafeDetailReviewDto> reviews;
 
-    public static ReviewAllResponse of(
+    public static CafeReviewsResponse of(
             final List<KeywordCountDto> userChoiceKeywords, final List<CafeDetailReviewDto> reviews){
 
-        return ReviewAllResponse.builder()
+        return CafeReviewsResponse.builder()
                 .userChoiceKeywords(userChoiceKeywords)
                 .reviews(reviews)
                 .build();

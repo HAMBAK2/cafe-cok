@@ -6,11 +6,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ReviewListResponse {
+public class ReviewsResponse {
 
     private List<ReviewDto> reviews;
 
-    public ReviewListResponse(final List<ReviewDto> reviews) {
+    public ReviewsResponse(final List<ReviewDto> reviews) {
         this.reviews = reviews;
     }
 }

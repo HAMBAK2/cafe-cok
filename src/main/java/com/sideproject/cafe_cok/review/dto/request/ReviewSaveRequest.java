@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ReviewCreateRequest {
+public class ReviewSaveRequest {
 
     private Long cafeId;
     private String content;
@@ -14,7 +14,7 @@ public class ReviewCreateRequest {
     private List<String> keywords;
     private Integer starRating;
 
-    public ReviewCreateRequest(
+    public ReviewSaveRequest(
             final Long cafeId, final String content, final String specialNote,
             final List<String> keywords, final Integer starRating) {
         this.cafeId = cafeId;

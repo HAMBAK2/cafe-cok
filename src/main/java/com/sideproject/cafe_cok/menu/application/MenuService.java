@@ -3,7 +3,7 @@ package com.sideproject.cafe_cok.menu.application;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
-import com.sideproject.cafe_cok.menu.dto.response.MenuListResponse;
+import com.sideproject.cafe_cok.menu.dto.response.MenusResponse;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
@@ -22,12 +22,6 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
-
-    public MenuListResponse findByCafeId(final Long cafeId) {
-
-        List<MenuImageUrlDto> findMenus = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
-        return new MenuListResponse(findMenus);
-    }
 
     @Transactional
     public boolean delete(final Long id) {

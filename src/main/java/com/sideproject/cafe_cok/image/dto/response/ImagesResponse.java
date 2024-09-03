@@ -8,12 +8,12 @@ import java.util.List;
 
 @Getter
 @Builder
-public class ImageAllResponse {
+public class ImagesResponse {
 
     private List<ImageUrlDto> imageUrls;
 
-    public static ImageAllResponse from(final List<ImageUrlDto> imageUrls) {
-        return ImageAllResponse.builder()
+    public static ImagesResponse from(final List<ImageUrlDto> imageUrls) {
+        return ImagesResponse.builder()
                 .imageUrls(imageUrls)
                 .build();
     }

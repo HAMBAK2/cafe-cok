@@ -6,11 +6,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class MenuListResponse {
+public class MenusResponse {
 
     private List<MenuImageUrlDto> menus;
 
-    public MenuListResponse(final List<MenuImageUrlDto> menus) {
+    public MenusResponse(final List<MenuImageUrlDto> menus) {
         this.menus = menus;
     }
 }

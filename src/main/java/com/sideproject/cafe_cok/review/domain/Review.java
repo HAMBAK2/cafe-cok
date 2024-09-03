@@ -5,15 +5,12 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import com.sideproject.cafe_cok.member.domain.Member;
-import com.sideproject.cafe_cok.review.dto.request.ReviewCreateRequest;
+import com.sideproject.cafe_cok.review.dto.request.ReviewSaveRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +62,7 @@ public class Review extends BaseEntity {
         if(member != null) changeMember(member);
     }
 
-    public Review(final ReviewCreateRequest request,
+    public Review(final ReviewSaveRequest request,
                   final Cafe cafe,
                   final Member member) {
         this(request.getContent(), request.getSpecialNote(), request.getStarRating(), cafe, member);

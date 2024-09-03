@@ -17,6 +17,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
+import com.sideproject.cafe_cok.image.dto.response.ImagesResponse;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
@@ -24,11 +25,13 @@ import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.response.MenusResponse;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
 import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.review.domain.Review;
+import com.sideproject.cafe_cok.review.dto.response.CafeReviewsResponse;
 import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -62,34 +65,6 @@ public class CafeService {
     private final BookmarkRepository bookmarkRepository;
     private final OperationHourRepository operationHourRepository;
     private final S3Uploader s3Uploader;
-
-    private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
-                                                                 final Integer reviewCnt) {
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
-        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
-        return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
-    }
-
-    private List<CafeDetailReviewDto> convertReviewsToCafeDetailReviewDtoList(final Long cafeId,
-                                                                              final List<Review> reviews) {
-        List<CafeDetailReviewDto> cafeDetailReviewDtoList = new ArrayList<>();
-        for (Review review : reviews) {
-
-            Pageable pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT);
-            List<String> recommendMenus = keywordRepository
-                    .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
-
-            Sort sort = Sort.by(Sort.Order.desc("id"));
-            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
-
-            List<ImageUrlDto> findImageUrlDtoList = imageRepository
-                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
-
-            cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
-        }
-        return cafeDetailReviewDtoList;
-    }
 
     public CafeListResponse getNearestCafes(final BigDecimal latitude,
                                             final BigDecimal longitude,
@@ -305,6 +280,38 @@ public class CafeService {
         return cafeRepository.existsByKakaoId(id);
     }
 
+    public CafeReviewsResponse findReviews(final Long cafeId) {
+        List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
+        List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, Integer.MAX_VALUE);;
+        return CafeReviewsResponse.of(userChoiceKeywords, reviews);
+    }
+
+    public ImagesResponse findImages(final Long cafeId) {
+
+        List<ImageUrlDto> images = new ArrayList<>();
+        List<ImageUrlDto> findCafeImageUrlDtoList = getCafeImageUrlDtoList(cafeId);
+        List<ImageUrlDto> findReviewImageUrlDtoList =
+                imageRepository.findImageUrlDtoListByCafeIdImageType(cafeId, ImageType.REVIEW);
+
+        images.addAll(findCafeImageUrlDtoList);
+        images.addAll(findReviewImageUrlDtoList);
+        return ImagesResponse.from(images);
+    }
+
+    public MenusResponse findMenus(final Long cafeId) {
+
+        List<MenuImageUrlDto> findMenus = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
+        return new MenusResponse(findMenus);
+    }
+
+    private List<ImageUrlDto> getCafeImageUrlDtoList(final Long cafeId) {
+        return imageRepository
+                .findCafeImageUrlDtoListByCafeId(
+                        cafeId,
+                        PageRequest.of(0, CAFE_DETAIL_IMAGE_PAGE_CNT));
+    }
+
+
     private void saveOperationHours(final List<OperationHourDto> hours, final Cafe cafe) {
         List<OperationHour> newOperationHours = new ArrayList<>();
         for (OperationHourDto hour : hours) {
@@ -385,4 +392,33 @@ public class CafeService {
                 }).collect(Collectors.toList());
         return cafeDtoList;
     }
+
+    private List<CafeDetailReviewDto> getCafeDetailReviewDtoList(final Long cafeId,
+                                                                 final Integer reviewCnt) {
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(0, reviewCnt, sort);
+        List<Review> reviews = reviewRepository.findByCafeId(cafeId, pageable);
+        return convertReviewsToCafeDetailReviewDtoList(cafeId, reviews);
+    }
+
+    private List<CafeDetailReviewDto> convertReviewsToCafeDetailReviewDtoList(final Long cafeId,
+                                                                              final List<Review> reviews) {
+        List<CafeDetailReviewDto> cafeDetailReviewDtoList = new ArrayList<>();
+        for (Review review : reviews) {
+
+            Pageable pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_KEYWORD_CNT);
+            List<String> recommendMenus = keywordRepository
+                    .findNamesByReviewIdAndCategory(review.getId(), Category.MENU, pageable);
+
+            Sort sort = Sort.by(Sort.Order.desc("id"));
+            pageable = PageRequest.of(0, CAFE_DETAIL_BASIC_INFO_REVIEW_IMG_CNT, sort);
+
+            List<ImageUrlDto> findImageUrlDtoList = imageRepository
+                    .findImageUrlDtoListByReviewId(review.getId(), pageable);
+
+            cafeDetailReviewDtoList.add(new CafeDetailReviewDto(review, findImageUrlDtoList, recommendMenus));
+        }
+        return cafeDetailReviewDtoList;
+    }
+
 }
