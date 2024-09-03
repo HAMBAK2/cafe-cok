@@ -39,4 +39,7 @@ public class Constants {
     public static final Integer CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT = 2;
     public static final Integer CAFE_DETAIL_REVIEW_CNT = 5;
 
+    public static final Integer FIRST_PAGE_NUMBER = 0;
+    public static final Integer MAX_PAGE_SIZE = Integer.MAX_VALUE;
+
 }
