@@ -1,4 +1,4 @@
-name: DEV CD
+name: PROD CI/CD
 
 env:
   DOCKER_HUB_REPOSITORY: hambak/cafe-cok
@@ -65,7 +65,7 @@ jobs:
             COLLECTOR_IP=${{ secrets.DOCKER_COLLECTOR_IP }}
 
   backend-docker-pull-and-run:
-    runs-on: [self-hosted, dev]
+    runs-on: [self-hosted, prod]
     if: ${{ needs.backend-docker-build-and-push.result == 'success' }}
     needs: [ backend-docker-build-and-push ]
     steps:
