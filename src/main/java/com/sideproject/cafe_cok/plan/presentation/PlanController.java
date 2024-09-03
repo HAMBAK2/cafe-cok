@@ -6,6 +6,7 @@ import com.sideproject.cafe_cok.auth.exception.EmptyAuthorizationHeaderException
 import com.sideproject.cafe_cok.auth.exception.InvalidTokenException;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.cafe_cok.auth.presentation.AuthorizationExtractor;
+import com.sideproject.cafe_cok.plan.dto.request.PlanEditRequest;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
@@ -26,7 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/plan")
+@RequestMapping("/api/v1/plans")
 @RequiredArgsConstructor
 @Tag(name = "Plan", description = "계획 관련 API")
 public class PlanController {
@@ -53,21 +54,13 @@ public class PlanController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping
-    @Operation(summary = "계획 상태 저장으로 수정")
-    public ResponseEntity<PlanIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
-                                                 @RequestBody SavePlanRequest request) {
+    @PatchMapping("/{planId}")
+    @Operation(summary = "planId에 해당하는 계획 수정")
+    public ResponseEntity<PlanIdResponse> edit(@AuthenticationPrincipal LoginMember loginMember,
+                                               @PathVariable Long planId,
+                                               @RequestParam PlanStatus status) {
 
-        PlanIdResponse response = planService.save(request, loginMember);
-        return ResponseEntity.ok(response);
-    }
-
-    @PatchMapping("/share")
-    @Operation(summary = "계획 상태 공유로 수정")
-    public ResponseEntity<PlanIdResponse> share(@AuthenticationPrincipal LoginMember loginMember,
-                                                @RequestBody SharePlanRequest request) {
-
-        PlanIdResponse response = planService.share(request, loginMember);
+        PlanIdResponse response = planService.edit(status, planId, loginMember);
         return ResponseEntity.ok(response);
     }
 

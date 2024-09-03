@@ -12,6 +12,7 @@ import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.plan.domain.condition.PlanSearchCondition;
+import com.sideproject.cafe_cok.plan.dto.request.PlanEditRequest;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanPageResponse;
@@ -148,25 +149,15 @@ public class PlanService {
                 .collect(Collectors.toList());
     }
 
-
     @Transactional
-    public PlanIdResponse save(final SavePlanRequest request,
-                                 final LoginMember loginMember) {
+    public PlanIdResponse edit(final PlanStatus status,
+                               final Long planId,
+                               final LoginMember loginMember) {
 
-        Plan findPlan = planRepository.getById(request.getPlanId());
+        Plan findPlan = planRepository.getById(planId);
         Member findMember = memberRepository.getById(loginMember.getId());
-        findPlan.changeIsSaved(true);
-        findPlan.changeMember(findMember);
-        return new PlanIdResponse(findPlan.getId());
-    }
-
-    @Transactional
-    public PlanIdResponse share(final SharePlanRequest request,
-                                final LoginMember loginMember) {
-
-        Plan findPlan = planRepository.getById(request.getPlanId());
-        Member findMember = memberRepository.getById(loginMember.getId());
-        findPlan.changeIsShared(true);
+        if(status.equals(PlanStatus.SAVED)) findPlan.changeIsSaved(true);
+        if(status.equals(PlanStatus.SHARED)) findPlan.changeIsShared(true);
         findPlan.changeMember(findMember);
         return new PlanIdResponse(findPlan.getId());
     }
