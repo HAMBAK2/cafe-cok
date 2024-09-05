@@ -4,8 +4,3 @@ spring:
   config:
     import:
       - security/application.yml
-
-
-docs:
-  swagger:
-    base-uri: http://localhost:8080/swagger-ui/index.html#/
