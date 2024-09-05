@@ -8,10 +8,12 @@ import com.sideproject.cafe_cok.auth.application.OAuthClient;
 import com.sideproject.cafe_cok.auth.dto.request.TokenRenewalRequest;
 import com.sideproject.cafe_cok.auth.dto.response.AccessAndRefreshTokenResponse;
 import com.sideproject.cafe_cok.auth.dto.response.AccessTokenResponse;
+import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @RestController
-@Tag(name = "Auth", description = "사용자 인증 관련 API")
+@Tag(name = "auth", description = "사용자 인증 관련 API")
 public class AuthController {
 
     private final AuthService authService;
     private final OAuthClient oAuthClient;
+    private final HttpHeadersUtil httpHeadersUtil;
 
     @GetMapping("/login")
     @Operation(summary = "소셜 로그인 기능")
@@ -31,8 +34,8 @@ public class AuthController {
 
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code);
         AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(oAuthMember);
-
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/login");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PostMapping("/refresh")
@@ -41,7 +44,8 @@ public class AuthController {
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
 
         AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/refresh");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PostMapping("/logout")
@@ -49,7 +53,8 @@ public class AuthController {
     public ResponseEntity<Void> logout(@AuthenticationPrincipal LoginMember loginMember) {
 
         authService.logout(loginMember);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/logout");
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/withdrawal")
@@ -58,6 +63,7 @@ public class AuthController {
                                            @RequestParam("reason") final String reason) {
 
         authService.withdrawal(loginMember, reason);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/withdrawal");
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 }

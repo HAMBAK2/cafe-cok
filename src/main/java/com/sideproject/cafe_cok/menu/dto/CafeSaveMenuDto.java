@@ -3,13 +3,9 @@ package com.sideproject.cafe_cok.menu.dto;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
-import com.sideproject.cafe_cok.utils.FormatConverter;
+import com.sideproject.cafe_cok.util.FormatConverter;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
 
 @Getter
 @Builder

@@ -10,7 +10,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.cafe.condition.CafeSearchCondition;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
-import com.sideproject.cafe_cok.utils.QuerydslUtil;
+import com.sideproject.cafe_cok.util.QuerydslUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Sort;
 
@@ -22,8 +22,8 @@ import java.util.List;
 import static com.sideproject.cafe_cok.cafe.domain.QCafe.*;
 import static com.sideproject.cafe_cok.cafe.domain.QOperationHour.*;
 import static com.sideproject.cafe_cok.plan.domain.QPlanCafe.*;
-import static com.sideproject.cafe_cok.utils.Constants.*;
-import static com.sideproject.cafe_cok.utils.GeometricUtils.*;
+import static com.sideproject.cafe_cok.util.Constants.*;
+import static com.sideproject.cafe_cok.util.GeometricUtil.*;
 import static org.springframework.util.StringUtils.isEmpty;
 
 public class CafeRepositoryImpl implements CafeRepositoryCustom {

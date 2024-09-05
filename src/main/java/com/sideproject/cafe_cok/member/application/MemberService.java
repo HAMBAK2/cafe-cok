@@ -16,7 +16,7 @@ import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
-import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
+import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.utils.Constants.*;
+import static com.sideproject.cafe_cok.util.Constants.*;
 import static org.springframework.data.domain.Sort.by;
 
 @Service
@@ -41,9 +41,9 @@ public class MemberService {
     private final PlanRepository planRepository;
 
     @Transactional
-    public MemberResponse edit(final LoginMember loginMember,
-                               final String nickname,
-                               final MultipartFile file) {
+    public MemberResponse update(final LoginMember loginMember,
+                                 final String nickname,
+                                 final MultipartFile file) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         if(nickname != null) findMember.changeNickname(nickname);
@@ -73,9 +73,9 @@ public class MemberService {
         return MemberResponse.from(findMember);
     }
 
-    public PlanAllResponse findPlans(final LoginMember loginMember,
-                                     final PlanSortBy planSortBy,
-                                     final PlanStatus status) {
+    public PlanAllResponse findPlanList(final LoginMember loginMember,
+                                        final PlanSortBy planSortBy,
+                                        final PlanStatus status) {
 
         PlanSearchCondition planSearchCondition
                 = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);

@@ -22,8 +22,8 @@ import com.sideproject.cafe_cok.review.dto.request.ReviewEditRequest;
 import com.sideproject.cafe_cok.review.dto.response.ReviewSaveResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewIdResponse;
 import com.sideproject.cafe_cok.review.dto.response.ReviewResponse;
-import com.sideproject.cafe_cok.utils.ListUtils;
-import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
+import com.sideproject.cafe_cok.util.ListUtil;
+import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.member.domain.Member;
@@ -36,8 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.sideproject.cafe_cok.utils.Constants.*;
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.Constants.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +81,7 @@ public class ReviewService {
         return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewResponse detail(final Long reviewId) {
+    public ReviewResponse find(final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
         List<Image> findReviewImages = imageRepository.findByReviewId(reviewId);
@@ -90,7 +90,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewIdResponse edit(final ReviewEditRequest request,
+    public ReviewIdResponse update(final ReviewEditRequest request,
                                    final List<MultipartFile> files,
                                    final Long reviewId) {
 
@@ -110,7 +110,7 @@ public class ReviewService {
         return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewsResponse getReviews(final LoginMember loginMember) {
+    public ReviewsResponse findList(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
@@ -138,7 +138,7 @@ public class ReviewService {
     private void changeByReviewAndKeywordNames(final Review review,
                                                final List<String> keywordNames) {
         List<String> findKeywordNames = keywordRepository.findNamesByReviewId(review.getId());
-        if(!ListUtils.areListEqual(findKeywordNames, keywordNames)) {
+        if(!ListUtil.areListEqual(findKeywordNames, keywordNames)) {
             cafeReviewKeywordRepository.deleteByReviewId(review.getId());
             saveByReviewAndKeywordNames(review, keywordNames);
         }

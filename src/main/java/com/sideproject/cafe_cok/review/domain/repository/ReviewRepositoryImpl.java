@@ -5,13 +5,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.review.domain.Review;
-import com.sideproject.cafe_cok.utils.QuerydslUtil;
+import com.sideproject.cafe_cok.util.QuerydslUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.image.domain.QImage.image;
 import static com.sideproject.cafe_cok.review.domain.QReview.*;
 import static org.springframework.util.StringUtils.isEmpty;
 

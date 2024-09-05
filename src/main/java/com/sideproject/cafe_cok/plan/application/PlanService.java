@@ -23,9 +23,9 @@ import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
 import com.sideproject.cafe_cok.plan.dto.request.PlanSaveRequest;
 import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
-import com.sideproject.cafe_cok.utils.Constants;
-import com.sideproject.cafe_cok.utils.ListUtils;
-import com.sideproject.cafe_cok.utils.tmap.client.TmapClient;
+import com.sideproject.cafe_cok.util.Constants;
+import com.sideproject.cafe_cok.util.ListUtil;
+import com.sideproject.cafe_cok.util.tmap.client.TmapClient;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.convertLocalDateLocalTimeToString;
+import static com.sideproject.cafe_cok.util.FormatConverter.convertLocalDateLocalTimeToString;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +57,8 @@ public class PlanService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public SavePlanResponse doPlan(final PlanSaveRequest request,
-                                   final Long memberId) {
+    public SavePlanResponse save(final PlanSaveRequest request,
+                                 final Long memberId) {
 
         request.validate();
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
@@ -134,9 +134,9 @@ public class PlanService {
     }
 
     @Transactional
-    public PlanIdResponse edit(final PlanStatus status,
-                               final Long planId,
-                               final LoginMember loginMember) {
+    public PlanIdResponse update(final PlanStatus status,
+                                 final Long planId,
+                                 final LoginMember loginMember) {
 
         Plan findPlan = planRepository.getById(planId);
         Member findMember = memberRepository.getById(loginMember.getId());
@@ -158,8 +158,8 @@ public class PlanService {
         return new PlanIdResponse(findPlan.getId());
     }
 
-    public PlanResponse findPlan(final LoginMember loginMember,
-                                 final Long planId) {
+    public PlanResponse find(final LoginMember loginMember,
+                             final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
         List<Keyword> findKeywords = keywordRepository.findKeywordByPlanId(planId);
@@ -262,7 +262,7 @@ public class PlanService {
                         List<String> findKeywordNames = planKeywordRepository.findByPlanId(matchingPlan.getId())
                                 .stream().map(planKeyword -> planKeyword.getKeyword().getName())
                                 .collect(Collectors.toList());
-                        return ListUtils.areListEqual(request.getKeywords(), findKeywordNames);
+                        return ListUtil.areListEqual(request.getKeywords(), findKeywordNames);
                     })
                     .map(Plan::getId)
                     .findFirst();

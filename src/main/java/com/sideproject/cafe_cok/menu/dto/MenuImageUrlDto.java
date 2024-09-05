@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

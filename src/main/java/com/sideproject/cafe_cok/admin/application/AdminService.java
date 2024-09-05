@@ -5,8 +5,8 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
-import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
-import com.sideproject.cafe_cok.cafe.dto.CafeDetailDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeOperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeAdminDto;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
@@ -16,7 +16,7 @@ import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import com.sideproject.cafe_cok.member.domain.repository.FeedbackRepository;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuDetailDto;
-import com.sideproject.cafe_cok.utils.FormatConverter;
+import com.sideproject.cafe_cok.util.FormatConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,15 +45,15 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    public List<CafeDetailDto> findCafes() {
+    public List<CafeAdminDto> findCafes() {
 
         List<Cafe> findCafes = cafeRepository.findAllByOrderByIdDesc();
         return findCafes.stream()
-                .map(cafe -> new CafeDetailDto(cafe))
+                .map(cafe -> new CafeAdminDto(cafe))
                 .collect(Collectors.toList());
     }
 
-    public CafeDetailDto findCafeById(final Long id) {
+    public CafeAdminDto findCafeById(final Long id) {
         Cafe findCafe = cafeRepository.getById(id);
         List<Image> filteredImage = findCafe.getImages().stream()
                 .filter(image -> image.getImageType().equals(ImageType.CAFE) || image.getImageType().equals(ImageType.CAFE_MAIN))
@@ -69,8 +69,8 @@ public class AdminService {
 
 
         List<OperationHour> findOperationHourList = operationHourRepository.findByCafeId(findCafe.getId());
-        List<OperationHourDto> hours = generateHours();
-        for (OperationHourDto hour : hours) {
+        List<CafeOperationHourDto> hours = generateHours();
+        for (CafeOperationHourDto hour : hours) {
             String day = hour.getDay();
             for (OperationHour operationHour : findOperationHourList) {
                 if(day.equals(FormatConverter.getKoreanDayOfWeek(operationHour.getDate()))) {
@@ -79,15 +79,15 @@ public class AdminService {
             }
         }
 
-        return new CafeDetailDto(findCafe, images, findMenus, hours);
+        return new CafeAdminDto(findCafe, images, findMenus, hours);
     }
 
-    private List<OperationHourDto> generateHours() {
+    private List<CafeOperationHourDto> generateHours() {
 
         List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
-        List<OperationHourDto> hours = new ArrayList<>();
+        List<CafeOperationHourDto> hours = new ArrayList<>();
         for (String day : daysOfWeek) {
-            hours.add(new OperationHourDto(day));
+            hours.add(new CafeOperationHourDto(day));
         }
 
         return hours;

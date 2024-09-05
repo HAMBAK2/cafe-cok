@@ -7,9 +7,12 @@ import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationResponse;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationIdResponse;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationListResponse;
+import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,45 +20,50 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/combinations")
-@Tag(name = "Combination", description = "조합 API")
+@Tag(name = "combinations", description = "조합 API")
 public class CombinationController {
 
     private final CombinationService combinationService;
+    private final HttpHeadersUtil httpHeadersUtil;
 
     @GetMapping
     @Operation(summary = "조합 목록 조회")
-    public ResponseEntity<CombinationListResponse> combination(@AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<CombinationListResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
 
         CombinationListResponse response = combinationService.combination(loginMember);
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/findList");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PostMapping
     @Operation(summary = "조합 저장")
-    public ResponseEntity<CombinationIdResponse> create(
-            @AuthenticationPrincipal LoginMember loginMember, @RequestBody CombinationRequest request) {
+    public ResponseEntity<CombinationIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
+                                                      @RequestBody CombinationRequest request) {
 
-        CombinationIdResponse response = combinationService.create(request, loginMember);
-        return ResponseEntity.ok(response);
+        CombinationIdResponse response = combinationService.save(request, loginMember);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/save");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{combinationId}")
     @Operation(summary = "combinationId에 해당하는 조합 조회")
-    public ResponseEntity<CombinationResponse> detail(
-            @AuthenticationPrincipal LoginMember loginMember, @PathVariable Long combinationId) {
+    public ResponseEntity<CombinationResponse> find(@AuthenticationPrincipal LoginMember loginMember,
+                                                    @PathVariable Long combinationId) {
 
-        CombinationResponse response = combinationService.detail(combinationId);
-        return ResponseEntity.ok(response);
+        CombinationResponse response = combinationService.find(combinationId);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/find");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PatchMapping("/{combinationId}")
     @Operation(summary = "combinationId에 해당하는 조합 수정")
-    public ResponseEntity<CombinationIdResponse> edit(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @PathVariable Long combinationId, @RequestBody CombinationRequest request) {
+    public ResponseEntity<CombinationIdResponse> update(@AuthenticationPrincipal LoginMember loginMember,
+                                                      @PathVariable Long combinationId,
+                                                      @RequestBody CombinationRequest request) {
 
-        CombinationIdResponse response = combinationService.edit(request, combinationId);
-        return ResponseEntity.ok(response);
+        CombinationIdResponse response = combinationService.update(request, combinationId);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/update");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
 }
