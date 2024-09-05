@@ -81,7 +81,7 @@ public class ReviewService {
         return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewResponse detail(final Long reviewId) {
+    public ReviewResponse find(final Long reviewId) {
 
         Review findReview = reviewRepository.getById(reviewId);
         List<Image> findReviewImages = imageRepository.findByReviewId(reviewId);
@@ -90,7 +90,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewIdResponse edit(final ReviewEditRequest request,
+    public ReviewIdResponse update(final ReviewEditRequest request,
                                    final List<MultipartFile> files,
                                    final Long reviewId) {
 
@@ -110,7 +110,7 @@ public class ReviewService {
         return new ReviewIdResponse(reviewId);
     }
 
-    public ReviewsResponse getReviews(final LoginMember loginMember) {
+    public ReviewsResponse findList(final LoginMember loginMember) {
 
         List<Review> findReviews = reviewRepository.findByMemberId(loginMember.getId());
         List<ReviewDto> findReviewDtoList = findReviews.stream().map(review -> {
