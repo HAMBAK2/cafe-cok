@@ -7,11 +7,12 @@ import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
 @Getter
-public class CafeBasicResponse {
+public class CafeBasicResponse extends RepresentationModel<CafeBasicResponse> {
 
     private String roadAddress;
     private String phoneNumber;
