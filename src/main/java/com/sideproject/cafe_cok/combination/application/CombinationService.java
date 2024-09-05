@@ -8,7 +8,7 @@ import com.sideproject.cafe_cok.keword.domain.repository.KeywordRepository;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationListResponse;
-import com.sideproject.cafe_cok.utils.ListUtils;
+import com.sideproject.cafe_cok.util.ListUtil;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.combination.domain.CombinationKeyword;
 import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
@@ -59,7 +59,7 @@ public class CombinationService {
         findCombination.changeByRequest(request);
 
         List<String> findKeywords = keywordRepository.findNamesByCombinationId(combinationId);
-        if(ListUtils.areListEqual(request.getKeywords(), findKeywords))
+        if(ListUtil.areListEqual(request.getKeywords(), findKeywords))
             return CombinationIdResponse.of(findCombination.getId());
 
         combinationKeywordRepository.deleteById(combinationId);

@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.admin.presentation;
 
 import com.sideproject.cafe_cok.admin.application.AdminService;
-import com.sideproject.cafe_cok.cafe.dto.CafeDetailDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeAdminDto;
 import com.sideproject.cafe_cok.admin.dto.AdminSuggestionDto;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -21,6 +21,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
+
     @Value("${oauth.kakao.client-id}")
     private String kakaoApiKey;
 
@@ -47,14 +48,14 @@ public class AdminController {
 
     @GetMapping("/cafes")
     public String getCafes(Model model) {
-        List<CafeDetailDto> findCafes = adminService.findCafes();
+        List<CafeAdminDto> findCafes = adminService.findCafes();
         model.addAttribute("cafes", findCafes);
         return "page/cafe/list";
     }
 
     @GetMapping("/cafe/{id}")
     public String getCafeById(@PathVariable Long id, Model model) {
-        CafeDetailDto findCafe = adminService.findCafeById(id);
+        CafeAdminDto findCafe = adminService.findCafeById(id);
         model.addAttribute("cafe", findCafe);
         model.addAttribute("daysOfWeek", daysOfWeek);
         if (model.containsAttribute("message")) {

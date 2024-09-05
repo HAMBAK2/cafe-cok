@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.convertLocalDateLocalTimeToString;
+import static com.sideproject.cafe_cok.util.FormatConverter.convertLocalDateLocalTimeToString;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -26,7 +26,7 @@ import java.util.List;
 
 import static com.sideproject.cafe_cok.constant.TestConstants.*;
 import static com.sideproject.cafe_cok.constant.TestConstants.PLAN_MATCH_TYPE;
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest

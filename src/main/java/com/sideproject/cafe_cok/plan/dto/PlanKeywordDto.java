@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

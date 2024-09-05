@@ -3,7 +3,6 @@ package com.sideproject.cafe_cok.plan.domain.repository;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,18 +13,14 @@ import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import com.sideproject.cafe_cok.plan.dto.QPlanKeywordDto;
-import com.sideproject.cafe_cok.utils.QuerydslUtil;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.sideproject.cafe_cok.image.domain.QImage.image;
 import static com.sideproject.cafe_cok.keword.domain.QKeyword.*;
 import static com.sideproject.cafe_cok.member.domain.QMember.*;
 import static com.sideproject.cafe_cok.plan.domain.QPlan.*;

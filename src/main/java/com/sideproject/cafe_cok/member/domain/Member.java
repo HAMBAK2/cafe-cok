@@ -1,6 +1,5 @@
 package com.sideproject.cafe_cok.member.domain;
 
-import com.sideproject.cafe_cok.auth.domain.OAuthToken;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
 import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
@@ -8,7 +7,7 @@ import com.sideproject.cafe_cok.member.domain.enums.SocialType;
 import com.sideproject.cafe_cok.member.exception.InvalidMemberException;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.review.domain.Review;
-import com.sideproject.cafe_cok.utils.Constants;
+import com.sideproject.cafe_cok.util.Constants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

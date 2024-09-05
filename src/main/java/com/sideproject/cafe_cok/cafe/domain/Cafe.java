@@ -5,7 +5,6 @@ import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
-import com.sideproject.cafe_cok.utils.FormatConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 

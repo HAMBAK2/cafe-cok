@@ -16,7 +16,7 @@ import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
-import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
+import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.sideproject.cafe_cok.utils.Constants.*;
+import static com.sideproject.cafe_cok.util.Constants.*;
 import static org.springframework.data.domain.Sort.by;
 
 @Service

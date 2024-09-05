@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.admin.dto.request;
 
 
-import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeOperationHourDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +24,5 @@ public class AdminCafeSaveRequest {
     private String mainImage;
     private List<String> otherImages;
     private List<AdminMenuRequestDto> menus;
-    private List<OperationHourDto> hours;
+    private List<CafeOperationHourDto> hours;
 }

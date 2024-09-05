@@ -9,7 +9,7 @@ import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlDto;
-import com.sideproject.cafe_cok.utils.QuerydslUtil;
+import com.sideproject.cafe_cok.util.QuerydslUtil;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 

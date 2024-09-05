@@ -1,11 +1,11 @@
 package com.sideproject.cafe_cok.cafe.application;
 
 import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
-import com.sideproject.cafe_cok.cafe.dto.OperationHourDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeOperationHourDto;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuRequestDto;
-import com.sideproject.cafe_cok.admin.dto.response.AdminSuccessAndRedirectResponse;
+import com.sideproject.cafe_cok.cafe.dto.response.CafeSaveResponse;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
@@ -32,7 +32,7 @@ import com.sideproject.cafe_cok.cafe.domain.OperationHour;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.review.dto.response.CafeReviewsResponse;
-import com.sideproject.cafe_cok.utils.S3.component.S3Uploader;
+import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,9 +48,9 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sideproject.cafe_cok.utils.Constants.*;
-import static com.sideproject.cafe_cok.utils.FormatConverter.*;
-import static com.sideproject.cafe_cok.utils.FormatConverter.getKoreanDayOfWeek;
+import static com.sideproject.cafe_cok.util.Constants.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.*;
+import static com.sideproject.cafe_cok.util.FormatConverter.getKoreanDayOfWeek;
 
 @Service
 @RequiredArgsConstructor
@@ -66,18 +66,18 @@ public class CafeService {
     private final OperationHourRepository operationHourRepository;
     private final S3Uploader s3Uploader;
 
-    public CafeListResponse getNearestCafes(final BigDecimal latitude,
-                                            final BigDecimal longitude,
-                                            final Long memberId) {
+    public CafesResponse getNearestCafes(final BigDecimal latitude,
+                                         final BigDecimal longitude,
+                                         final Long memberId) {
 
         List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
-        return new CafeListResponse(findCafes);
+        return new CafesResponse(findCafes);
     }
 
-    public CafeListResponse findCafeByKeyword(final BigDecimal latitude,
-                                              final BigDecimal longitude,
-                                              final List<String> keywords,
-                                              final Long memberId) {
+    public CafesResponse findCafeByKeyword(final BigDecimal latitude,
+                                           final BigDecimal longitude,
+                                           final List<String> keywords,
+                                           final Long memberId) {
 
         List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
@@ -90,11 +90,11 @@ public class CafeService {
             }
         }
 
-        return new CafeListResponse(filteredWithinRadiusCafes);
+        return new CafesResponse(filteredWithinRadiusCafes);
     }
 
-    public CafeDetailTopResponse detailTop(final Long cafeId,
-                                           final Long memberId) {
+    public CafeTopResponse detailTop(final Long cafeId,
+                                     final Long memberId) {
 
         Cafe findCafe = cafeRepository.getById(cafeId);
         Image findImage = imageRepository.getImageByCafeAndImageType(findCafe, ImageType.CAFE_MAIN);
@@ -105,12 +105,12 @@ public class CafeService {
         if(memberId != null) {
             List<BookmarkIdDto> findBookmarkIdDtoList
                     = bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafeId, memberId);
-            return new CafeDetailTopResponse(findCafe, findImage, findKeywordDtoList, findBookmarkIdDtoList);
+            return new CafeTopResponse(findCafe, findImage, findKeywordDtoList, findBookmarkIdDtoList);
         }
-        return new CafeDetailTopResponse(findCafe, findImage, findKeywordDtoList);
+        return new CafeTopResponse(findCafe, findImage, findKeywordDtoList);
     }
 
-    public CafeDetailBasicInfoResponse detailBasicInfo(final Long cafeId) {
+    public CafeBasicResponse detailBasicInfo(final Long cafeId) {
 
         Cafe findCafe = cafeRepository.getById(cafeId);
         List<OperationHour> findOperationHours = operationHourRepository.findByCafeId(cafeId);
@@ -135,13 +135,13 @@ public class CafeService {
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
 
-        return new CafeDetailBasicInfoResponse(
+        return new CafeBasicResponse(
                 findCafe, openStatus, businessHours, closedDay,
                 findMenuImageUrlDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
     }
 
     @Transactional
-    public AdminSuccessAndRedirectResponse save(final AdminCafeSaveRequest request) {
+    public CafeSaveResponse save(final AdminCafeSaveRequest request) {
 
         Cafe newCafe = new Cafe(request);
         Cafe savedCafe = cafeRepository.save(newCafe);
@@ -176,15 +176,15 @@ public class CafeService {
             }
         }
 
-        List<OperationHourDto> hours = request.getHours();
+        List<CafeOperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
 
-        return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
+        return new CafeSaveResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
     }
 
     @Transactional
-    public AdminSuccessAndRedirectResponse update(final Long id,
-                                                  final AdminCafeUpdateRequest request) {
+    public CafeSaveResponse update(final Long id,
+                                   final AdminCafeUpdateRequest request) {
 
         Cafe findCafe = cafeRepository.getById(id);
         findCafe.setName(request.getName());
@@ -235,7 +235,7 @@ public class CafeService {
             savedImage.add(imageRepository.save(newImage));
         }
 
-        List<OperationHourDto> hours = request.getHours();
+        List<CafeOperationHourDto> hours = request.getHours();
         operationHourRepository.deleteByCafeId(id);
         if(checkoutInputHours(hours)) saveOperationHours(hours, findCafe);
 
@@ -273,7 +273,7 @@ public class CafeService {
             }
         }
 
-        return new AdminSuccessAndRedirectResponse("Update successful", "/admin/cafe/" + id);
+        return new CafeSaveResponse("Update successful", "/admin/cafe/" + id);
     }
 
     public boolean isExistByKakaoId(final Long id) {
@@ -312,9 +312,9 @@ public class CafeService {
     }
 
 
-    private void saveOperationHours(final List<OperationHourDto> hours, final Cafe cafe) {
+    private void saveOperationHours(final List<CafeOperationHourDto> hours, final Cafe cafe) {
         List<OperationHour> newOperationHours = new ArrayList<>();
-        for (OperationHourDto hour : hours) {
+        for (CafeOperationHourDto hour : hours) {
             DayOfWeek day = getDyaOfWeekByKoreanDay(hour.getDay());
             LocalTime startTime = LocalTime.of(hour.getStartHour(), hour.getStartMinute());
             LocalTime endTime = LocalTime.of(hour.getEndHour(), hour.getEndMinute());
@@ -328,9 +328,9 @@ public class CafeService {
         operationHourRepository.saveAll(newOperationHours);
     }
 
-    private boolean checkoutInputHours(List<OperationHourDto> hours) {
+    private boolean checkoutInputHours(List<CafeOperationHourDto> hours) {
 
-        for (OperationHourDto hour : hours) {
+        for (CafeOperationHourDto hour : hours) {
             if(hour.getStartHour() != 0) return true;
             if(hour.getStartMinute() != 0) return true;
             if(hour.getEndHour() != 0) return true;
