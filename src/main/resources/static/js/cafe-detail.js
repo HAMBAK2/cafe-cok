@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 hours: generateHours()
             };
 
-            fetch(`/api/v1/cafe/${cafeId}`, {
+            fetch(`/api/v1/cafes/${cafeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
