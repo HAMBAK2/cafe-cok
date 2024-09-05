@@ -22,10 +22,10 @@ public class MenuService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public boolean delete(final Long id) {
+    public void delete(final Long id) {
 
         Optional<Menu> optionalMenu = menuRepository.findById(id);
-        if(optionalMenu.isEmpty()) return true;
+        if(optionalMenu.isEmpty()) return;
 
         Menu findMenu = optionalMenu.get();
         List<Image> findMenuImages = imageRepository.findByMenu(findMenu);
@@ -35,6 +35,5 @@ public class MenuService {
         }
         imageRepository.deleteAll(findMenuImages);
         menuRepository.delete(findMenu);
-        return true;
     }
 }
