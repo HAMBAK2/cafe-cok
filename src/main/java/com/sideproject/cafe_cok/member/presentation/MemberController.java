@@ -8,9 +8,12 @@ import com.sideproject.cafe_cok.member.dto.response.MemberResponse;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
+import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,26 +25,29 @@ import java.io.IOException;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
-@Tag(name = "Member", description = "회원 관련 API")
+@Tag(name = "members", description = "회원 관련 API")
 public class MemberController {
 
     private final MemberService memberService;
+    private final HttpHeadersUtil httpHeadersUtil;
 
     @GetMapping
     @Operation(summary = "회원 조회")
     public ResponseEntity<MemberResponse> find(@AuthenticationPrincipal LoginMember loginMember) {
         MemberResponse response = memberService.find(loginMember);
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/find");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 수정")
-    public ResponseEntity<MemberResponse> edit(@AuthenticationPrincipal LoginMember loginMember,
+    public ResponseEntity<MemberResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                       @RequestPart(value = "file", required = false) MultipartFile file,
                                                       @RequestParam("nickname") String nickname) throws IOException {
 
-        MemberResponse response = memberService.edit(loginMember, nickname, file);
-        return ResponseEntity.ok(response);
+        MemberResponse response = memberService.update(loginMember, nickname, file);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/update");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PostMapping("/feedbacks")
@@ -50,16 +56,18 @@ public class MemberController {
                                              @RequestBody MemberFeedbackRequest request) {
 
         memberService.saveFeedback(loginMember, request);
-        return ResponseEntity.noContent().build();
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/saveFeedback");
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/plans")
     @Operation(summary = "회원의 모든 계획 조회")
-    public ResponseEntity<PlanAllResponse> findPlans(@AuthenticationPrincipal LoginMember loginMember,
-                                                     @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
-                                                     @RequestParam(defaultValue = "SAVED") PlanStatus status) {
+    public ResponseEntity<PlanAllResponse> findPlanList(@AuthenticationPrincipal LoginMember loginMember,
+                                                        @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
+                                                        @RequestParam(defaultValue = "SAVED") PlanStatus status) {
 
-        PlanAllResponse response = memberService.findPlans(loginMember, sortBy, status);
-        return ResponseEntity.ok(response);
+        PlanAllResponse response = memberService.findPlanList(loginMember, sortBy, status);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/findPlanList");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 }

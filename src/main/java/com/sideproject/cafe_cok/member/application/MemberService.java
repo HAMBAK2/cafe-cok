@@ -41,9 +41,9 @@ public class MemberService {
     private final PlanRepository planRepository;
 
     @Transactional
-    public MemberResponse edit(final LoginMember loginMember,
-                               final String nickname,
-                               final MultipartFile file) {
+    public MemberResponse update(final LoginMember loginMember,
+                                 final String nickname,
+                                 final MultipartFile file) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         if(nickname != null) findMember.changeNickname(nickname);
@@ -73,9 +73,9 @@ public class MemberService {
         return MemberResponse.from(findMember);
     }
 
-    public PlanAllResponse findPlans(final LoginMember loginMember,
-                                     final PlanSortBy planSortBy,
-                                     final PlanStatus status) {
+    public PlanAllResponse findPlanList(final LoginMember loginMember,
+                                        final PlanSortBy planSortBy,
+                                        final PlanStatus status) {
 
         PlanSearchCondition planSearchCondition
                 = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
