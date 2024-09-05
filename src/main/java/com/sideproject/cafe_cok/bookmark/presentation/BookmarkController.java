@@ -36,9 +36,8 @@ public class BookmarkController {
 
     @DeleteMapping("/{bookmarkId}")
     @Operation(summary = "북마크 삭제")
-    public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> deleteBookmark(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @PathVariable Long bookmarkId) {
+    public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
+                                                                      @PathVariable Long bookmarkId) {
 
         BookmarkFolderAndBookmarkIdResponse response = bookmarkService.delete(bookmarkId);
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmarks/delete");

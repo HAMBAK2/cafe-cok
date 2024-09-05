@@ -8,7 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
 @Getter
-public class MenusResponse extends RepresentationModel<CafeTopResponse> {
+public class MenusResponse extends RepresentationModel<MenusResponse> {
 
     private List<MenuImageUrlDto> menus;
 

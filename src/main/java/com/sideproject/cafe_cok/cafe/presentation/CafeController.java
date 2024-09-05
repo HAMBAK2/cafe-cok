@@ -128,6 +128,7 @@ public class CafeController {
     public ResponseEntity<CafeReviewsResponse> findReviews(@PathVariable Long cafeId) {
 
         CafeReviewsResponse response = cafeService.findReviews(cafeId);
+        response.add(linkTo(methodOn(CafeController.class).findReviews(cafeId)).withSelfRel());
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findReviews");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
