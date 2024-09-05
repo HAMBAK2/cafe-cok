@@ -14,6 +14,7 @@ import com.sideproject.cafe_cok.member.exception.NoSuchMemberException;
 import com.sideproject.cafe_cok.menu.dto.response.MenusResponse;
 import com.sideproject.cafe_cok.review.dto.response.CafeReviewsResponse;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/cafes")
 @RequiredArgsConstructor
-@Tag(name = "cafe", description = "카페 API")
+@Tag(name = "cafes", description = "카페 API")
 public class CafeController {
 
     private final CafeService cafeService;
@@ -39,21 +40,21 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "cafeId에 해당하는 카페의 상단 정보 조회")
-    public ResponseEntity<CafeTopResponse> top(@PathVariable Long cafeId,
-                                               HttpServletRequest servletRequest){
+    public ResponseEntity<CafeTopResponse> findTop(@PathVariable Long cafeId,
+                                                   HttpServletRequest servletRequest){
 
         Long memberId = getMemberId(servletRequest);
         CafeTopResponse response = cafeService.detailTop(cafeId, memberId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/top");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findTop");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{cafeId}/basic")
     @Operation(summary = "cafeId에 해당하는 카페의 기본 정보 조회")
-    public ResponseEntity<CafeBasicResponse> basic(@PathVariable Long cafeId) {
+    public ResponseEntity<CafeBasicResponse> findBasic(@PathVariable Long cafeId) {
 
         CafeBasicResponse response = cafeService.detailBasicInfo(cafeId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/basic");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findBasic");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -65,7 +66,7 @@ public class CafeController {
 
         Long memberId = getMemberId(servletRequest);
         CafesResponse response = cafeService.getNearestCafes(latitude, longitude, memberId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/findByCoordinates");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findByCoordinates");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -78,7 +79,7 @@ public class CafeController {
 
         Long memberId = getMemberId(servletRequest);
         CafesResponse response = cafeService.findCafeByKeyword(latitude, longitude, keywords, memberId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/findByCoordinatesAndKeyword");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findByCoordinatesAndKeyword");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -86,7 +87,7 @@ public class CafeController {
     @Operation(summary = "카페 저장")
     public ResponseEntity<CafeSaveResponse> save(@RequestBody AdminCafeSaveRequest request) {
         CafeSaveResponse response = cafeService.save(request);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/save");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -96,34 +97,34 @@ public class CafeController {
                                                    @RequestBody AdminCafeUpdateRequest request) {
 
         CafeSaveResponse response = cafeService.update(cafeId, request);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/update");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/update");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{cafeId}/reviews")
     @Operation(summary = "cafeId에 해당하는 모든 리뷰 조회")
-    public ResponseEntity<CafeReviewsResponse> reviews(@PathVariable Long cafeId) {
+    public ResponseEntity<CafeReviewsResponse> findReviews(@PathVariable Long cafeId) {
 
         CafeReviewsResponse response = cafeService.findReviews(cafeId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/reviews");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findReviews");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{cafeId}/images")
     @Operation(summary = "cafeId에 해당하는 모든 이미지 조회")
-    public ResponseEntity<ImagesResponse> images(@PathVariable Long cafeId) {
+    public ResponseEntity<ImagesResponse> findImages(@PathVariable Long cafeId) {
 
         ImagesResponse response = cafeService.findImages(cafeId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/images");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findImages");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{cafeId}/menus")
     @Operation(summary = "cafeId에 해당하는 모든 메뉴 조회")
-    public ResponseEntity<MenusResponse> menus(@PathVariable Long cafeId) {
+    public ResponseEntity<MenusResponse> findMenus(@PathVariable Long cafeId) {
 
         MenusResponse response = cafeService.findMenus(cafeId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafe/menus");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findMenus");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
