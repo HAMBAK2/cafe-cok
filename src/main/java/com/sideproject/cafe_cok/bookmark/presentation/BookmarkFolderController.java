@@ -30,9 +30,9 @@ public class BookmarkFolderController {
 
     @GetMapping
     @Operation(summary = "북마크 폴더 목록 조회")
-    public ResponseEntity<BookmarkFoldersResponse> bookmarkFolders(@AuthenticationPrincipal LoginMember loginMember) {
+    public ResponseEntity<BookmarkFoldersResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
         BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/list");
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/findList");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -78,11 +78,12 @@ public class BookmarkFolderController {
 
     @GetMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 조회")
-    public ResponseEntity<BookmarksResponse> bookmark(@AuthenticationPrincipal LoginMember loginMember,
-                                                      @PathVariable Long folderId) {
+    public ResponseEntity<BookmarksResponse> find(@AuthenticationPrincipal LoginMember loginMember,
+                                                  @PathVariable Long folderId) {
 
         BookmarksResponse response = bookmarkFolderService.bookmarks(folderId);
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/find");
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
 
