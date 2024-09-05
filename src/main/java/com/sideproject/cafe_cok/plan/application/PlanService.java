@@ -57,8 +57,8 @@ public class PlanService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public SavePlanResponse doPlan(final PlanSaveRequest request,
-                                   final Long memberId) {
+    public SavePlanResponse save(final PlanSaveRequest request,
+                                 final Long memberId) {
 
         request.validate();
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(keywordRepository.findByNameIn(request.getKeywords()));
@@ -134,9 +134,9 @@ public class PlanService {
     }
 
     @Transactional
-    public PlanIdResponse edit(final PlanStatus status,
-                               final Long planId,
-                               final LoginMember loginMember) {
+    public PlanIdResponse update(final PlanStatus status,
+                                 final Long planId,
+                                 final LoginMember loginMember) {
 
         Plan findPlan = planRepository.getById(planId);
         Member findMember = memberRepository.getById(loginMember.getId());
@@ -158,8 +158,8 @@ public class PlanService {
         return new PlanIdResponse(findPlan.getId());
     }
 
-    public PlanResponse findPlan(final LoginMember loginMember,
-                                 final Long planId) {
+    public PlanResponse find(final LoginMember loginMember,
+                             final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
         List<Keyword> findKeywords = keywordRepository.findKeywordByPlanId(planId);
