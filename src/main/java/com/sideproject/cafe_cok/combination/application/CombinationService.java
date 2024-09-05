@@ -34,7 +34,8 @@ public class CombinationService {
     private final CombinationKeywordRepository combinationKeywordRepository;
 
     @Transactional
-    public CombinationIdResponse create(final CombinationRequest request, final LoginMember loginMember) {
+    public CombinationIdResponse save(final CombinationRequest request,
+                                      final LoginMember loginMember) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
         Combination combination = request.toEntity(findMember);
@@ -44,7 +45,7 @@ public class CombinationService {
     }
 
 
-    public CombinationResponse detail(final Long combinationId) {
+    public CombinationResponse find(final Long combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
         List<Keyword> findKeywords = keywordRepository.findByCombinationId(combinationId);
@@ -53,7 +54,7 @@ public class CombinationService {
     }
 
     @Transactional
-    public CombinationIdResponse edit(final CombinationRequest request, final Long  combinationId) {
+    public CombinationIdResponse update(final CombinationRequest request, final Long  combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
         findCombination.changeByRequest(request);
