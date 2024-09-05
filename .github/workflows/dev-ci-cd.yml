@@ -64,11 +64,11 @@ jobs:
           build-args: |
             COLLECTOR_IP=${{ secrets.DOCKER_COLLECTOR_IP }}
 
-#  backend-docker-pull-and-run:
-#    runs-on: [self-hosted, dev]
-#    if: ${{ needs.backend-docker-build-and-push.result == 'success' }}
-#    needs: [ backend-docker-build-and-push ]
-#    steps:
-#      - name: 배포 스크립트 실행
-#        run: |
-#          sh /home/ec2-user/deploy.sh
+  backend-docker-pull-and-run:
+    runs-on: [self-hosted, dev]
+    if: ${{ needs.backend-docker-build-and-push.result == 'success' }}
+    needs: [ backend-docker-build-and-push ]
+    steps:
+      - name: 배포 스크립트 실행
+        run: |
+          sh /home/ec2-user/deploy.sh
