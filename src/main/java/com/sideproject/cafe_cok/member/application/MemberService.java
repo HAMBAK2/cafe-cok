@@ -14,7 +14,7 @@ import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanStatus;
 import com.sideproject.cafe_cok.plan.domain.repository.PlanRepository;
 import com.sideproject.cafe_cok.plan.dto.PlanKeywordDto;
-import com.sideproject.cafe_cok.plan.dto.response.PlanAllResponse;
+import com.sideproject.cafe_cok.member.dto.response.MemberPlansResponse;
 import com.sideproject.cafe_cok.plan.exception.NoSuchPlanSortException;
 import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +53,11 @@ public class MemberService {
             findMember.changePicture(picture);
         }
 
-        return MemberResponse.from(findMember);
+        return new MemberResponse(findMember);
     }
 
     @Transactional
-    public void saveFeedback(final LoginMember loginMember,
+    public MemberResponse saveFeedback(final LoginMember loginMember,
                              final MemberFeedbackRequest request) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
@@ -66,16 +66,17 @@ public class MemberService {
                 FeedbackCategory.IMPROVEMENT_SUGGESTION,
                 request.getContent());
         feedbackRepository.save(newFeedback);
+        return new MemberResponse(findMember);
     }
 
     public MemberResponse find(final LoginMember loginMember) {
         Member findMember = memberRepository.getById(loginMember.getId());
-        return MemberResponse.from(findMember);
+        return new MemberResponse(findMember);
     }
 
-    public PlanAllResponse findPlanList(final LoginMember loginMember,
-                                        final PlanSortBy planSortBy,
-                                        final PlanStatus status) {
+    public MemberPlansResponse findPlanList(final LoginMember loginMember,
+                                            final PlanSortBy planSortBy,
+                                            final PlanStatus status) {
 
         PlanSearchCondition planSearchCondition
                 = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
@@ -83,7 +84,7 @@ public class MemberService {
         Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sort);
         List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
 
-        return new PlanAllResponse(plans);
+        return new MemberPlansResponse(plans);
     }
 
     private Sort getSort(final PlanSortBy planSortBy) {
