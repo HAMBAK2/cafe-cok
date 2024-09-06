@@ -1,9 +1,10 @@
 package com.sideproject.cafe_cok.auth.dto.response;
 
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
-public class AccessTokenResponse {
+public class AccessTokenResponse extends RepresentationModel<AccessTokenResponse> {
 
     private String accessToken;
 

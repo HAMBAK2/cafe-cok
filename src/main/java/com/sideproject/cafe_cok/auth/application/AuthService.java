@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.auth.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.dto.OAuthMember;
+import com.sideproject.cafe_cok.auth.dto.response.AuthEmptyResponse;
 import com.sideproject.cafe_cok.auth.exception.InvalidRestoreMemberException;
 import com.sideproject.cafe_cok.member.domain.Feedback;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
@@ -72,17 +73,19 @@ public class AuthService {
     }
 
     @Transactional
-    public void logout(final LoginMember loginMember) {
+    public AuthEmptyResponse logout(final LoginMember loginMember) {
 
         Optional<OAuthToken> findOAuthToken = oAuthTokenRepository.findByMemberId(loginMember.getId());
         if(findOAuthToken.isPresent()) oAuthTokenRepository.delete(findOAuthToken.get());
 
         Optional<AuthRefreshToken> findRefreshToken = authRefreshTokenRepository.findById(loginMember.getId());
         if(findRefreshToken.isPresent()) authRefreshTokenRepository.delete(findRefreshToken.get());
+
+        return new AuthEmptyResponse();
     }
 
     @Transactional
-    public void withdrawal(final LoginMember loginMember,
+    public AuthEmptyResponse withdrawal(final LoginMember loginMember,
                            final String reason) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
@@ -96,6 +99,7 @@ public class AuthService {
         List<Review> findReviews = findMember.getReviews();
         findReviews.stream()
                 .forEach(review -> review.getCafe().minusReviewCountAndCalculateStarRating(review.getStarRating()));
+        return new AuthEmptyResponse();
     }
 
     private Member findMember(final OAuthMember oAuthMember) {

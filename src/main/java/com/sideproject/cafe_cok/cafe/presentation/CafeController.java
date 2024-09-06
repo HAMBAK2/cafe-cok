@@ -80,7 +80,7 @@ public class CafeController {
                 .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafe-images").withType("GET"))
                 .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafe-reviews").withType("POST"))
                 .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null))
-                        .withRel("search-with-keyword").withType("GET"));
+                        .withRel("search").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findByCoordinates");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
