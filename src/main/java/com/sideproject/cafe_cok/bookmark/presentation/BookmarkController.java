@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks")
@@ -30,6 +33,8 @@ public class BookmarkController {
                                                                     @RequestBody BookmarkSaveRequest request) {
 
         BookmarkFolderAndBookmarkIdResponse response = bookmarkService.save(request);
+        response.add(linkTo(methodOn(BookmarkController.class).save(loginMember, request)).withSelfRel().withType("POST"))
+                .add(linkTo(methodOn(BookmarkController.class).delete(null, null)).withRel("delete").withType("DELETE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmarks/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -40,6 +45,8 @@ public class BookmarkController {
                                                                       @PathVariable Long bookmarkId) {
 
         BookmarkFolderAndBookmarkIdResponse response = bookmarkService.delete(bookmarkId);
+        response.add(linkTo(methodOn(BookmarkController.class).delete(loginMember, bookmarkId)).withSelfRel().withType("DELETE"))
+                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmarks/delete");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
