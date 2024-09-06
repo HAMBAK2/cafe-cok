@@ -74,9 +74,11 @@ public class BookmarkFolderController {
                                                                   @PathVariable Long folderId){
 
         BookmarkFolderIdResponse response = bookmarkFolderService.updateFolderVisible(folderId);
-        response.add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, folderId)).withSelfRel().withType("PATCH"));
+        response.add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, folderId)).withSelfRel().withType("PATCH"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).findList(null)).withRel("list").withType("GET"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).detail(null, null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/updateVisible");
-        return new ResponseEntity<>(response, headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{folderId}")
