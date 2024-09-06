@@ -38,7 +38,7 @@ public class BookmarkFolderController {
                 .add(linkTo(methodOn(BookmarkFolderController.class).detail(loginMember, null)).withRel("detail").withType("GET"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).save(loginMember, null)).withRel("save").withType("POST"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, null)).withRel("update").withType("PUT"))
-                .add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, null)).withRel("update-visible").withType("PATCH"));
+                .add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, null)).withRel("update").withType("PATCH"));
 
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/findList");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
@@ -102,7 +102,7 @@ public class BookmarkFolderController {
         response.add(linkTo(methodOn(BookmarkFolderController.class).detail(loginMember, folderId)).withSelfRel().withType("GET"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, null)).withRel("update").withType("PUT"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).delete(loginMember, null)).withRel("delete").withType("DELETE"))
-                .add(linkTo(methodOn(BookmarkController.class).delete(loginMember, null)).withRel("delete-bookmark").withType("DELETE"));
+                .add(linkTo(methodOn(BookmarkController.class).delete(loginMember, null)).withRel("delete").withType("DELETE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

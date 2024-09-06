@@ -42,7 +42,7 @@ public class MemberController {
         MemberResponse response = memberService.find(loginMember);
         response.add(linkTo(methodOn(MemberController.class).detail(loginMember)).withSelfRel().withType("GET"))
                 .add(linkTo(methodOn(MemberController.class).update(null, null, null)).withRel("update").withType("PATCH"))
-                .add(linkTo(methodOn(MemberController.class).saveFeedback(null, null)).withRel("save-feedback").withType("POST"));
+                .add(linkTo(methodOn(MemberController.class).saveFeedback(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -80,7 +80,7 @@ public class MemberController {
 
         MemberPlansResponse response = memberService.findPlanList(loginMember, sortBy, status);
         response.add(linkTo(methodOn(MemberController.class).findPlanList(loginMember, sortBy, status)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(PlanController.class).detail(null, null)).withRel("plan-detail").withType("GET"));
+                .add(linkTo(methodOn(PlanController.class).detail(null, null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("members/findPlanList");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

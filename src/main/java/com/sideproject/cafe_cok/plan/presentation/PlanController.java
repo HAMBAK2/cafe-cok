@@ -48,12 +48,12 @@ public class PlanController {
         SavePlanResponse response = planService.save(request, memberId);
         response.add(linkTo(methodOn(PlanController.class).save(request, servletRequest)).withSelfRel().withType("POST"))
                 .add(linkTo(methodOn(PlanController.class).update(null, null, null)).withRel("update").withType("UPDATE"))
-                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("cafes-top").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("cafes-basic").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafes-menus").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafes-images").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafes-reviews").withType("GET"))
-                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("save-bookmark").withType("POST"));
+                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

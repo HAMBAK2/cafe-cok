@@ -58,11 +58,11 @@ public class ReviewController {
 
         ReviewSaveResponse response = reviewService.save(request, loginMember, files);
         response.add(linkTo(methodOn(ReviewController.class).save(loginMember, request, files)).withSelfRel().withType("POST"))
-                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("cafe-top").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("cafe-basic").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafe-menus").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafe-images").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafe-reviews").withType("GET"));
+                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("reviews/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

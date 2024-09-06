@@ -27,8 +27,8 @@ public class MenuController {
     public ResponseEntity<MenuIdResponse> delete(@PathVariable Long menuId) {
         MenuIdResponse response = menuService.delete(menuId);
         response.add(linkTo(methodOn(MenuController.class).delete(menuId)).withSelfRel().withType("DELETE"))
-                .add(linkTo(methodOn(CafeController.class).save(null)).withRel("cafe-save").withType("POST"))
-                .add(linkTo(methodOn(CafeController.class).update(null, null)).withRel("cafe-update").withType("UPDATE"));
+                .add(linkTo(methodOn(CafeController.class).save(null)).withRel("save").withType("POST"))
+                .add(linkTo(methodOn(CafeController.class).update(null, null)).withRel("update").withType("UPDATE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("menus/delete");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

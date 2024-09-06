@@ -42,10 +42,10 @@ public class AuthController {
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code);
         AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(oAuthMember);
         response.add(linkTo(methodOn(AuthController.class).login(code)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail-member").withType("GET"))
-                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save-plan").withType("POST"));
+                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/login");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -67,10 +67,10 @@ public class AuthController {
         AuthEmptyResponse response = authService.logout(loginMember);
         response.add(linkTo(methodOn(AuthController.class).logout(loginMember)).withSelfRel().withType("POST"))
                 .add(linkTo(methodOn(AuthController.class).login(null)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail-member").withType("GET"))
-                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save-plan").withType("POST"));
+                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/logout");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -83,10 +83,10 @@ public class AuthController {
         AuthEmptyResponse response = authService.withdrawal(loginMember, reason);
         response.add(linkTo(methodOn(AuthController.class).withdrawal(loginMember, reason)).withSelfRel().withType("POST"))
                 .add(linkTo(methodOn(AuthController.class).login(null)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search-cafe").withType("GET"))
-                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail-member").withType("GET"))
-                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save-plan").withType("POST"));
+                .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null)).withRel("search").withType("GET"))
+                .add(linkTo(methodOn(MemberController.class).detail(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(PlanController.class).save(null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("auth/withdrawal");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

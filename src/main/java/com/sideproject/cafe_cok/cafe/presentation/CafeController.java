@@ -49,7 +49,7 @@ public class CafeController {
         Long memberId = getMemberId(servletRequest);
         CafeTopResponse response = cafeService.detailTop(cafeId, memberId);
         response.add(linkTo(methodOn(CafeController.class).findTop(cafeId, servletRequest)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save-review").withType("POST"));
+                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findTop");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class CafeController {
 
         CafeBasicResponse response = cafeService.findBasic(cafeId);
         response.add(linkTo(methodOn(CafeController.class).findBasic(cafeId)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save-review").withType("POST"));
+                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findBasic");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -74,11 +74,11 @@ public class CafeController {
         Long memberId = getMemberId(servletRequest);
         CafesResponse response = cafeService.findByCoordinates(latitude, longitude, memberId);
         response.add(linkTo(methodOn(CafeController.class).findByCoordinates(latitude, longitude, servletRequest)).withSelfRel())
-                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("cafe-top").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("cafe-basic").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafe-menus").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafe-images").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafe-reviews").withType("POST"))
+                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("detail").withType("POST"))
                 .add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(null, null, null, null))
                         .withRel("search").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findByCoordinates");
@@ -96,11 +96,11 @@ public class CafeController {
         CafesResponse response = cafeService.findByCoordinatesAndKeyword(latitude, longitude, keywords, memberId);
         response.add(linkTo(methodOn(CafeController.class).findByCoordinatesAndKeyword(latitude, longitude, keywords, servletRequest)).withSelfRel().withType("GET"))
                 .add(linkTo(methodOn(CafeController.class).findByCoordinates(null, null, null)).withRel("search").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("cafe-top").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("cafe-basic").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafe-menus").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafe-images").withType("GET"))
-                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafe-reviews").withType("GET"));
+                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findByCoordinatesAndKeyword");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -122,7 +122,7 @@ public class CafeController {
         CafeSaveResponse response = cafeService.update(cafeId, request);
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/update");
         response.add(linkTo(methodOn(CafeController.class).update(cafeId, request)).withSelfRel().withType("POST"))
-                .add(linkTo(methodOn(MenuController.class).delete(null)).withRel("menu-delete").withType("DELETE"));
+                .add(linkTo(methodOn(MenuController.class).delete(null)).withRel("delete").withType("DELETE"));
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -132,7 +132,7 @@ public class CafeController {
 
         CafeReviewsResponse response = cafeService.findReviews(cafeId);
         response.add(linkTo(methodOn(CafeController.class).findReviews(cafeId)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save-review").withType("POST"));
+                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findReviews");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -143,7 +143,7 @@ public class CafeController {
 
         ImagesResponse response = cafeService.findImages(cafeId);
         response.add(linkTo(methodOn(CafeController.class).findImages(cafeId)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save-review").withType("POST"));
+                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findImages");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -154,7 +154,7 @@ public class CafeController {
 
         MenusResponse response = cafeService.findMenus(cafeId);
         response.add(linkTo(methodOn(CafeController.class).findMenus(cafeId)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save-review").withType("POST"));
+                .add(linkTo(methodOn(ReviewController.class).save(null, null, null)).withRel("save").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("cafes/findMenus");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
