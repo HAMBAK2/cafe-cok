@@ -53,7 +53,7 @@ public class PlanController {
                 .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafes-menus").withType("GET"))
                 .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafes-images").withType("GET"))
                 .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafes-reviews").withType("GET"))
-                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("bookmarks").withType("POST"));
+                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("save-bookmark").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -65,8 +65,8 @@ public class PlanController {
 
         PlanResponse response = planService.find(loginMember, planId);
         response.add(linkTo(methodOn(PlanController.class).detail(loginMember, planId)).withSelfRel().withType("GET"))
-                .add(linkTo(methodOn(PlanController.class).delete(null, null, null)).withSelfRel().withType("DELETE"))
-                .add(linkTo(methodOn(PlanController.class).update(null, null, null)).withSelfRel().withType("UPDATE"));
+                .add(linkTo(methodOn(PlanController.class).delete(null, null, null)).withRel("delete").withType("DELETE"))
+                .add(linkTo(methodOn(PlanController.class).update(null, null, null)).withRel("update").withType("UPDATE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -78,6 +78,7 @@ public class PlanController {
                                                  @RequestParam PlanStatus status) {
 
         PlanIdResponse response = planService.update(status, planId, loginMember);
+        response.add(linkTo(methodOn(PlanController.class).update(loginMember, planId, status)).withSelfRel().withType("UPDATE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/update");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -89,6 +90,7 @@ public class PlanController {
                                                  @RequestParam PlanStatus status){
 
         PlanIdResponse response = planService.delete(status, planId);
+        response.add(linkTo(methodOn(PlanController.class).delete(loginMember, planId, status)).withSelfRel().withType("DELETE"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/delete");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
