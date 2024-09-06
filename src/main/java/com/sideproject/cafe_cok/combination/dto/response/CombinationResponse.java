@@ -5,10 +5,11 @@ import com.sideproject.cafe_cok.combination.domain.Combination;
 import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
 @Builder
-public class CombinationResponse {
+public class CombinationResponse extends RepresentationModel<CombinationResponse> {
 
     private Long id;
     private String name;
