@@ -96,7 +96,7 @@ public class BookmarkFolderController {
     public ResponseEntity<BookmarksResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                     @PathVariable Long folderId) {
 
-        BookmarksResponse response = bookmarkFolderService.bookmarks(folderId);
+        BookmarksResponse response = bookmarkFolderService.find(folderId);
         response.add(linkTo(methodOn(BookmarkFolderController.class).detail(loginMember, folderId)).withSelfRel().withType("GET"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, null)).withRel("update").withType("PUT"))
                 .add(linkTo(methodOn(BookmarkFolderController.class).delete(loginMember, null)).withRel("delete").withType("DELETE"))

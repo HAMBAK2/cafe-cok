@@ -29,7 +29,7 @@ public class BookmarkFolderService {
     private final MemberRepository memberRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
 
-    public BookmarksResponse bookmarks(final Long folderId){
+    public BookmarksResponse find(final Long folderId){
 
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
         List<BookmarkCafeDto> findBookmarkCafeDtoList

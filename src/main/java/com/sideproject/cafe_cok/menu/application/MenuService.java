@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
+import com.sideproject.cafe_cok.menu.dto.response.MenuIdResponse;
 import com.sideproject.cafe_cok.util.S3.component.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,10 @@ public class MenuService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public void delete(final Long id) {
+    public MenuIdResponse delete(final Long id) {
 
         Optional<Menu> optionalMenu = menuRepository.findById(id);
-        if(optionalMenu.isEmpty()) return;
+        if(optionalMenu.isEmpty()) return new MenuIdResponse(id);
 
         Menu findMenu = optionalMenu.get();
         List<Image> findMenuImages = imageRepository.findByMenu(findMenu);
@@ -35,5 +36,7 @@ public class MenuService {
         }
         imageRepository.deleteAll(findMenuImages);
         menuRepository.delete(findMenu);
+
+        return new MenuIdResponse(id);
     }
 }

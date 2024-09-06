@@ -6,6 +6,9 @@ import com.sideproject.cafe_cok.auth.exception.EmptyAuthorizationHeaderException
 import com.sideproject.cafe_cok.auth.exception.InvalidTokenException;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
 import com.sideproject.cafe_cok.auth.presentation.AuthorizationExtractor;
+import com.sideproject.cafe_cok.bookmark.presentation.BookmarkController;
+import com.sideproject.cafe_cok.bookmark.presentation.BookmarkFolderController;
+import com.sideproject.cafe_cok.cafe.presentation.CafeController;
 import com.sideproject.cafe_cok.plan.dto.response.PlanResponse;
 import com.sideproject.cafe_cok.member.exception.NoSuchMemberException;
 import com.sideproject.cafe_cok.plan.application.PlanService;
@@ -22,6 +25,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/plans")
@@ -40,17 +46,28 @@ public class PlanController {
 
         Long memberId = getMemberId(servletRequest);
         SavePlanResponse response = planService.save(request, memberId);
+        response.add(linkTo(methodOn(PlanController.class).save(request, servletRequest)).withSelfRel().withType("POST"))
+                .add(linkTo(methodOn(PlanController.class).update(null, null, null)).withRel("update").withType("UPDATE"))
+                .add(linkTo(methodOn(CafeController.class).findTop(null, null)).withRel("cafes-top").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findBasic(null)).withRel("cafes-basic").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findMenus(null)).withRel("cafes-menus").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findImages(null)).withRel("cafes-images").withType("GET"))
+                .add(linkTo(methodOn(CafeController.class).findReviews(null)).withRel("cafes-reviews").withType("GET"))
+                .add(linkTo(methodOn(BookmarkController.class).save(null, null)).withRel("bookmarks").withType("POST"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{planId}")
     @Operation(summary = "planId에 해당하는 계획 조회")
-    public ResponseEntity<PlanResponse> find(@AuthenticationPrincipal LoginMember loginMember,
-                                             @PathVariable Long planId){
+    public ResponseEntity<PlanResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
+                                               @PathVariable Long planId){
 
         PlanResponse response = planService.find(loginMember, planId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/find");
+        response.add(linkTo(methodOn(PlanController.class).detail(loginMember, planId)).withSelfRel().withType("GET"))
+                .add(linkTo(methodOn(PlanController.class).delete(null, null, null)).withSelfRel().withType("DELETE"))
+                .add(linkTo(methodOn(PlanController.class).update(null, null, null)).withSelfRel().withType("UPDATE"));
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("plans/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

@@ -72,21 +72,25 @@ function deleteMenu(menuId, idx) {
     }
 
     if(menuId !== null) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', '/api/v1/menus/' + menuId, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        xhr.onreadystatechange = function () {
-            if(xhr.readyState === 4) {
-                if(xhr.status === 200) {
-                    alert(xhr.responseText);
-                } else {
-                    alert('메뉴 삭제 중 오류가 발생했습니다.')
-                }
+        fetch(`/api/v1/menus/${menuId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
             }
-        };
-
-        xhr.send();
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // 응답이 성공적일 경우 JSON으로 변환
+                } else {
+                    throw new Error('메뉴 삭제 중 오류가 발생했습니다.');
+                }
+            })
+            .then(data => {
+                alert("메뉴 삭제 완료"); // JSON 응답 데이터를 출력
+            })
+            .catch(error => {
+                alert(error.message);
+            });
     }
 
     const rowDiv = buttonElement.closest('.row.mb-3');
