@@ -1,9 +1,10 @@
 package com.sideproject.cafe_cok.review.dto.response;
 
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter
-public class ReviewIdResponse {
+public class ReviewIdResponse extends RepresentationModel<ReviewIdResponse> {
 
     private Long reviewId;
 
