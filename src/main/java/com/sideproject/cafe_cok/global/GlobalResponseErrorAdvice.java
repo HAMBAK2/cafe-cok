@@ -41,7 +41,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import javax.naming.NoPermissionException;
 
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GlobalResponseErrorAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalResponseErrorAdvice.class);
