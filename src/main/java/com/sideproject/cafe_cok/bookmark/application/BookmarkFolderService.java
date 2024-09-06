@@ -5,7 +5,7 @@ import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
-import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderDeleteResponse;
+import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderIdResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarksResponse;
 import com.sideproject.cafe_cok.bookmark.exception.DefaultFolderDeletionNotAllowedException;
@@ -29,7 +29,7 @@ public class BookmarkFolderService {
     private final MemberRepository memberRepository;
     private final BookmarkFolderRepository bookmarkFolderRepository;
 
-    public BookmarksResponse bookmarks(final Long folderId){
+    public BookmarksResponse find(final Long folderId){
 
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
         List<BookmarkCafeDto> findBookmarkCafeDtoList
@@ -47,35 +47,38 @@ public class BookmarkFolderService {
     }
 
     @Transactional
-    public void save(final BookmarkFolderSaveRequest request,
-                     final LoginMember loginMember){
+    public BookmarkFolderIdResponse save(final BookmarkFolderSaveRequest request,
+                                         final LoginMember loginMember){
 
         Member findMember = memberRepository.getById(loginMember.getId());
         BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
-        bookmarkFolderRepository.save(bookmarkFolder);
+        BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
+        return new BookmarkFolderIdResponse(savedBookmarkFolder.getId());
     }
 
     @Transactional
-    public void update(final BookmarkFolderUpdateRequest request){
+    public BookmarkFolderIdResponse update(final BookmarkFolderUpdateRequest request){
 
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
         if(findFolder.getIsDefaultFolder()) throw new DefaultFolderUpdateNotAllowedException();
         findFolder.change(request);
+        return new BookmarkFolderIdResponse(findFolder.getId());
     }
 
     @Transactional
-    public void updateFolderVisible(final Long folderId) {
+    public BookmarkFolderIdResponse updateFolderVisible(final Long folderId) {
 
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
         findFolder.changeVisible();
+        return new BookmarkFolderIdResponse(folderId);
     }
 
     @Transactional
-    public BookmarkFolderDeleteResponse delete(final Long folderId) {
+    public BookmarkFolderIdResponse delete(final Long folderId) {
 
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
         if(findFolder.getIsDefaultFolder()) throw new DefaultFolderDeletionNotAllowedException();
         bookmarkFolderRepository.deleteById(folderId);
-        return new BookmarkFolderDeleteResponse(folderId);
+        return new BookmarkFolderIdResponse(folderId);
     }
 }

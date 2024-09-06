@@ -7,6 +7,7 @@ import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import static com.sideproject.cafe_cok.util.FormatConverter.convertLocalDateLoca
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlanResponse {
+public class PlanResponse extends RepresentationModel<PlanResponse> {
 
     private Long planId;
     private MatchType matchType;

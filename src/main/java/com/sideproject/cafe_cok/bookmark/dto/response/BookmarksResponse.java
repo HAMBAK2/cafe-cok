@@ -5,13 +5,14 @@ import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookmarksResponse {
+public class BookmarksResponse extends RepresentationModel<BookmarksResponse> {
 
     private Long folderId;
     private String folderName;

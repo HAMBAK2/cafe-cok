@@ -7,12 +7,13 @@ import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.review.domain.Review;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
 @Getter
 @Builder
-public class ReviewResponse {
+public class ReviewResponse extends RepresentationModel<ReviewResponse> {
 
     private Long cafeId;
     private String cafeName;
