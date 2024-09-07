@@ -136,7 +136,12 @@ class ImageRepositoryTest {
         //given
         Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
-        Menu menu = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
+
+        Menu menu = Menu.builder()
+                .name(MENU_NAME_1)
+                .price(MENU_PRICE_1)
+                .cafe(savedCafe)
+                .build();
         Menu savedMenu = menuRepository.save(menu);
         Image image1 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedMenu);
         Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu);

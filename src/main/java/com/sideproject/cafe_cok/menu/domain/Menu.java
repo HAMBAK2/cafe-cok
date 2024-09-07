@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Getter
 @Table(name = "menus")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Menu extends BaseEntity {
 
     @Id
@@ -33,9 +34,12 @@ public class Menu extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
-    public Menu(final String name,
+    @Builder
+    public Menu(final Long id,
+                final String name,
                 final Integer price,
                 final Cafe cafe) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.cafe = cafe;
