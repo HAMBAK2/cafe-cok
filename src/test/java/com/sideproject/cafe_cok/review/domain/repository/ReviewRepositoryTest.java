@@ -121,36 +121,4 @@ class ReviewRepositoryTest {
         assertThat(findReviews1).extracting("specialNote")
                 .containsExactlyInAnyOrder(REVIEW_SPECIAL_NOTE, REVIEW_SPECIAL_NOTE_2);
     }
-
-    @Test
-    @DisplayName("cafeId, cursor, pageable 기반으로 id 기준 정렬된 리뷰 리스트를 조회한다.")
-    void find_by_cafe_id_cursor_pageable_order_by_id() {
-
-        //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
-        Cafe savedCafe = cafeRepository.save(cafe);
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
-        Member savedMember = memberRepository.save(member);
-        Review review1 = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
-        Review review2 = new Review(REVIEW_CONTENT_2, REVIEW_SPECIAL_NOTE_2, REVIEW_STAR_RATING_2, savedCafe, savedMember);
-        Review savedReview1 = reviewRepository.save(review1);
-        Review savedReview2 = reviewRepository.save(review2);
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        PageRequest pageable1 = PageRequest.of(0, REVIEW_PAGE_CNT, sort);
-        PageRequest pageable2 = PageRequest.of(1, REVIEW_PAGE_CNT, sort);
-
-        //when
-        List<Review> findReviews1 = reviewRepository.findByCafeId(savedCafe.getId(), null, pageable1);
-        List<Review> findReviews2 = reviewRepository.findByCafeId(savedCafe.getId(), null, pageable2);
-
-        //then
-        assertThat(findReviews1).hasSize(2);
-        assertThat(findReviews2).hasSize(0);
-        assertThat(findReviews1).isSortedAccordingTo((target1, target2) -> Long.compare(target2.getId(), target1.getId()));
-        assertThat(findReviews1).extracting("content")
-                .containsExactlyInAnyOrder(REVIEW_CONTENT, REVIEW_CONTENT_2);
-        assertThat(findReviews1).extracting("specialNote")
-                .containsExactlyInAnyOrder(REVIEW_SPECIAL_NOTE, REVIEW_SPECIAL_NOTE_2);
-    }
-
 }

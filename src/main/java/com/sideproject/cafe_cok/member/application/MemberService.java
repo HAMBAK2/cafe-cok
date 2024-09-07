@@ -82,7 +82,7 @@ public class MemberService {
                 = new PlanSearchCondition(loginMember.getId(), Category.PURPOSE, planSortBy, status);
         Sort sort = getSort(planSortBy);
         Pageable pageable = PageRequest.of(FIRST_PAGE_NUMBER, MAX_PAGE_SIZE, sort);
-        List<PlanKeywordDto> plans = planRepository.findPlanKeywordDtoList(planSearchCondition, pageable);
+        List<PlanKeywordDto> plans = planRepository.findPlanKeywords(planSearchCondition, pageable);
 
         return new MemberPlansResponse(plans);
     }

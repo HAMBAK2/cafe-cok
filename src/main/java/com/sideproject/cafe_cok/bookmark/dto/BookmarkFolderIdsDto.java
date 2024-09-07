@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookmarkIdDto {
+public class BookmarkFolderIdsDto {
 
     private Long bookmarkId;
     private Long folderId;
 
     @QueryProjection
-    public BookmarkIdDto(final Long bookmarkId,
-                         final Long folderId) {
+    public BookmarkFolderIdsDto(final Long bookmarkId,
+                                final Long folderId) {
         this.bookmarkId = bookmarkId;
         this.folderId = folderId;
     }

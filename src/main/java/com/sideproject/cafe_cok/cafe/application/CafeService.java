@@ -1,13 +1,13 @@
 package com.sideproject.cafe_cok.cafe.application;
 
 import com.sideproject.cafe_cok.admin.dto.AdminImageDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
 import com.sideproject.cafe_cok.cafe.dto.CafeOperationHourDto;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminCafeUpdateRequest;
 import com.sideproject.cafe_cok.admin.dto.request.AdminMenuRequestDto;
 import com.sideproject.cafe_cok.cafe.dto.response.CafeSaveResponse;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.domain.repository.OperationHourRepository;
@@ -103,9 +103,9 @@ public class CafeService {
                         cafeId, PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT));
 
         if(memberId != null) {
-            List<BookmarkIdDto> findBookmarkIdDtoList
-                    = bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafeId, memberId);
-            return new CafeTopResponse(findCafe, findImage, findKeywordDtoList, findBookmarkIdDtoList);
+            List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList
+                    = bookmarkRepository.getBookmarkFolderIds(cafeId, memberId);
+            return new CafeTopResponse(findCafe, findImage, findKeywordDtoList, findBookmarkFolderIdsDtoList);
         }
         return new CafeTopResponse(findCafe, findImage, findKeywordDtoList);
     }
@@ -130,7 +130,7 @@ public class CafeService {
             businessHours.add(convertOperationHourToString(findOperationHour));
         }
 
-        List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
+        List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.getMenuImageUrls(cafeId);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
@@ -300,7 +300,7 @@ public class CafeService {
 
     public MenusResponse findMenus(final Long cafeId) {
 
-        List<MenuImageUrlDto> findMenus = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
+        List<MenuImageUrlDto> findMenus = menuRepository.getMenuImageUrls(cafeId);
         return new MenusResponse(findMenus);
     }
 
@@ -385,10 +385,10 @@ public class CafeService {
                     String findImageUrl =
                             imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN).getThumbnail();
 
-                    List<BookmarkIdDto> findBookmarkIdDtoList = null;
-                    if(memberId != null) findBookmarkIdDtoList =
-                            bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafe.getId(), memberId);
-                    return new CafeDto(cafe, findImageUrl, findBookmarkIdDtoList);
+                    List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList = null;
+                    if(memberId != null) findBookmarkFolderIdsDtoList =
+                            bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId);
+                    return new CafeDto(cafe, findImageUrl, findBookmarkFolderIdsDtoList);
                 }).collect(Collectors.toList());
         return cafeDtoList;
     }

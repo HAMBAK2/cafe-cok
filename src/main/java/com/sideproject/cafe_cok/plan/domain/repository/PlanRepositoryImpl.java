@@ -36,8 +36,8 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom{
     }
 
     @Override
-    public List<PlanKeywordDto> findPlanKeywordDtoList(final PlanSearchCondition searchCondition,
-                                                       final Pageable pageable) {
+    public List<PlanKeywordDto> findPlanKeywords(final PlanSearchCondition searchCondition,
+                                                 final Pageable pageable) {
 
         JPAQuery<PlanKeywordDto> query = queryFactory
                 .select(new QPlanKeywordDto(
