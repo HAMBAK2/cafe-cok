@@ -5,13 +5,14 @@ import com.sideproject.cafe_cok.combination.dto.CombinationDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class CombinationListResponse {
+public class CombinationListResponse extends RepresentationModel<CombinationListResponse> {
 
     private List<CombinationDto> combinations = new ArrayList<>();
 

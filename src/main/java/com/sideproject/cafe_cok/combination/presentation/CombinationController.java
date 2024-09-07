@@ -2,6 +2,7 @@ package com.sideproject.cafe_cok.combination.presentation;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
+import com.sideproject.cafe_cok.cafe.presentation.CafeController;
 import com.sideproject.cafe_cok.combination.application.CombinationService;
 import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import com.sideproject.cafe_cok.combination.dto.response.CombinationResponse;
@@ -17,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/combinations")
@@ -31,6 +35,8 @@ public class CombinationController {
     public ResponseEntity<CombinationListResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
 
         CombinationListResponse response = combinationService.combination(loginMember);
+        response.add(linkTo(methodOn(CombinationController.class).findList(loginMember)).withSelfRel().withType("GET"))
+                .add(linkTo(methodOn(CombinationController.class).detail(null, null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/findList");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -41,17 +47,21 @@ public class CombinationController {
                                                       @RequestBody CombinationRequest request) {
 
         CombinationIdResponse response = combinationService.save(request, loginMember);
+        response.add(linkTo(methodOn(CombinationController.class).save(loginMember, request)).withSelfRel().withType("POST"))
+                .add(linkTo(methodOn(CombinationController.class).findList(loginMember)).withRel("list").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/save");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{combinationId}")
     @Operation(summary = "combinationId에 해당하는 조합 조회")
-    public ResponseEntity<CombinationResponse> find(@AuthenticationPrincipal LoginMember loginMember,
-                                                    @PathVariable Long combinationId) {
+    public ResponseEntity<CombinationResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
+                                                      @PathVariable Long combinationId) {
 
         CombinationResponse response = combinationService.find(combinationId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/find");
+        response.add(linkTo(methodOn(CombinationController.class).detail(loginMember, combinationId)).withSelfRel().withType("GET"))
+                .add(linkTo(methodOn(CombinationController.class).update(null, null, null)).withRel("update").withType("PATCH"));
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -62,6 +72,9 @@ public class CombinationController {
                                                       @RequestBody CombinationRequest request) {
 
         CombinationIdResponse response = combinationService.update(request, combinationId);
+        response.add(linkTo(methodOn(CombinationController.class).update(loginMember, combinationId, request)).withSelfRel().withType("PATCH"))
+                .add(linkTo(methodOn(CombinationController.class).detail(null, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(CombinationController.class).findList(null)).withRel("list").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("combinations/update");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

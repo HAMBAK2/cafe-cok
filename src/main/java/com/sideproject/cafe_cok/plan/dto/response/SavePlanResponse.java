@@ -5,12 +5,13 @@ import com.sideproject.cafe_cok.keword.dto.CategoryKeywordsDto;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
 @Getter
 @Builder
-public class SavePlanResponse {
+public class SavePlanResponse extends RepresentationModel<SavePlanResponse> {
 
     private Long planId;
     private MatchType matchType;

@@ -3,11 +3,10 @@ package com.sideproject.cafe_cok.bookmark.presentation;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.auth.presentation.AuthenticationPrincipal;
-import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderDeleteResponse;
+import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderIdResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFoldersResponse;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarksResponse;
 import com.sideproject.cafe_cok.bookmark.application.BookmarkFolderService;
-import com.sideproject.cafe_cok.bookmark.application.BookmarkService;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
@@ -18,6 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,57 +34,76 @@ public class BookmarkFolderController {
     @Operation(summary = "북마크 폴더 목록 조회")
     public ResponseEntity<BookmarkFoldersResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
         BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).findList(loginMember)).withSelfRel().withType("GET"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).detail(loginMember, null)).withRel("detail").withType("GET"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).save(loginMember, null)).withRel("save").withType("POST"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, null)).withRel("update").withType("PUT"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, null)).withRel("update").withType("PATCH"));
+
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/findList");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PostMapping
     @Operation(summary = "북마크 폴더 저장")
-    public ResponseEntity<Void> save(@AuthenticationPrincipal LoginMember loginMember,
-                                     @RequestBody BookmarkFolderSaveRequest request) {
+    public ResponseEntity<BookmarkFolderIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
+                                                         @RequestBody BookmarkFolderSaveRequest request) {
 
-        bookmarkFolderService.save(request, loginMember);
+        BookmarkFolderIdResponse response = bookmarkFolderService.save(request, loginMember);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).save(loginMember, request)).withSelfRel().withType("POST"));
+        response.add(linkTo(methodOn(BookmarkFolderController.class).findList(loginMember)).withRel("list").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/save");
-        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PutMapping
     @Operation(summary = "북마크 폴더 수정")
-    public ResponseEntity<Void> update(@AuthenticationPrincipal LoginMember loginMember,
-                                       @RequestBody BookmarkFolderUpdateRequest request) {
+    public ResponseEntity<BookmarkFolderIdResponse> update(@AuthenticationPrincipal LoginMember loginMember,
+                                                           @RequestBody BookmarkFolderUpdateRequest request) {
 
-        bookmarkFolderService.update(request);
+        BookmarkFolderIdResponse response = bookmarkFolderService.update(request);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, request)).withSelfRel().withType("PUT"));
+        response.add(linkTo(methodOn(BookmarkFolderController.class).findList(loginMember)).withRel("list").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/update");
-        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @PatchMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더의 지도 노출 여부 수정")
-    public ResponseEntity<Void> updateVisible(@AuthenticationPrincipal LoginMember loginMember,
-                                              @PathVariable Long folderId){
+    public ResponseEntity<BookmarkFolderIdResponse> updateVisible(@AuthenticationPrincipal LoginMember loginMember,
+                                                                  @PathVariable Long folderId){
 
-        bookmarkFolderService.updateFolderVisible(folderId);
+        BookmarkFolderIdResponse response = bookmarkFolderService.updateFolderVisible(folderId);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).updateVisible(loginMember, folderId)).withSelfRel().withType("PATCH"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).findList(null)).withRel("list").withType("GET"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).detail(null, null)).withRel("detail").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/updateVisible");
-        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 삭제")
-    public ResponseEntity<BookmarkFolderDeleteResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
-                                                               @PathVariable Long folderId){
+    public ResponseEntity<BookmarkFolderIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
+                                                           @PathVariable Long folderId){
 
-        BookmarkFolderDeleteResponse response = bookmarkFolderService.delete(folderId);
+        BookmarkFolderIdResponse response = bookmarkFolderService.delete(folderId);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).delete(loginMember, folderId)).withSelfRel().withType("DELETE"));
+        response.add(linkTo(methodOn(BookmarkFolderController.class).findList(loginMember)).withRel("list").withType("GET"));
         HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/delete");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
     @GetMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 조회")
-    public ResponseEntity<BookmarksResponse> find(@AuthenticationPrincipal LoginMember loginMember,
-                                                  @PathVariable Long folderId) {
+    public ResponseEntity<BookmarksResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
+                                                    @PathVariable Long folderId) {
 
-        BookmarksResponse response = bookmarkFolderService.bookmarks(folderId);
-        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/find");
+        BookmarksResponse response = bookmarkFolderService.find(folderId);
+        response.add(linkTo(methodOn(BookmarkFolderController.class).detail(loginMember, folderId)).withSelfRel().withType("GET"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).update(loginMember, null)).withRel("update").withType("PUT"))
+                .add(linkTo(methodOn(BookmarkFolderController.class).delete(loginMember, null)).withRel("delete").withType("DELETE"))
+                .add(linkTo(methodOn(BookmarkController.class).delete(loginMember, null)).withRel("delete").withType("DELETE"));
+        HttpHeaders headers = httpHeadersUtil.createLinkHeaders("bookmark-folders/detail");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

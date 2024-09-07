@@ -66,18 +66,18 @@ public class CafeService {
     private final OperationHourRepository operationHourRepository;
     private final S3Uploader s3Uploader;
 
-    public CafesResponse getNearestCafes(final BigDecimal latitude,
-                                         final BigDecimal longitude,
-                                         final Long memberId) {
+    public CafesResponse findByCoordinates(final BigDecimal latitude,
+                                           final BigDecimal longitude,
+                                           final Long memberId) {
 
         List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
         return new CafesResponse(findCafes);
     }
 
-    public CafesResponse findCafeByKeyword(final BigDecimal latitude,
-                                           final BigDecimal longitude,
-                                           final List<String> keywords,
-                                           final Long memberId) {
+    public CafesResponse findByCoordinatesAndKeyword(final BigDecimal latitude,
+                                                     final BigDecimal longitude,
+                                                     final List<String> keywords,
+                                                     final Long memberId) {
 
         List<CafeDto> findCafes = findNearestCafes(latitude, longitude, memberId);
         List<CafeDto> filteredWithinRadiusCafes = new ArrayList<>();
@@ -110,7 +110,7 @@ public class CafeService {
         return new CafeTopResponse(findCafe, findImage, findKeywordDtoList);
     }
 
-    public CafeBasicResponse detailBasicInfo(final Long cafeId) {
+    public CafeBasicResponse findBasic(final Long cafeId) {
 
         Cafe findCafe = cafeRepository.getById(cafeId);
         List<OperationHour> findOperationHours = operationHourRepository.findByCafeId(cafeId);
