@@ -67,7 +67,7 @@ class MenuRepositoryTest {
         Image savedImage2 = imageRepository.save(image2);
 
         //when
-        List<MenuImageUrlDto> findList = menuRepository.findMenuImageUrlDtoListByCafeId(savedCafe.getId());
+        List<MenuImageUrlDto> findList = menuRepository.getMenuImageUrls(savedCafe.getId());
 
         //then
         assertThat(findList).hasSize(2);

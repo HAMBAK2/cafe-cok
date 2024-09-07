@@ -25,9 +25,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom{
     }
 
     @Override
-    public List<MenuImageUrlDto> findMenuImageUrlDtoListByCafeId(final Long cafeId) {
+    public List<MenuImageUrlDto> getMenuImageUrls(final Long cafeId) {
         return queryFactory
-                .select(new QMenuImageUrlDto(menu, image))
+                .select(new QMenuImageUrlDto(menu.name, menu.price, image.origin, image.thumbnail))
                 .from(menu)
                 .leftJoin(image).on(image.menu.id.eq(menu.id))
                 .where(menu.cafe.id.eq(cafeId))

@@ -130,7 +130,7 @@ public class CafeService {
             businessHours.add(convertOperationHourToString(findOperationHour));
         }
 
-        List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
+        List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.getMenuImageUrls(cafeId);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
@@ -300,7 +300,7 @@ public class CafeService {
 
     public MenusResponse findMenus(final Long cafeId) {
 
-        List<MenuImageUrlDto> findMenus = menuRepository.findMenuImageUrlDtoListByCafeId(cafeId);
+        List<MenuImageUrlDto> findMenus = menuRepository.getMenuImageUrls(cafeId);
         return new MenusResponse(findMenus);
     }
 

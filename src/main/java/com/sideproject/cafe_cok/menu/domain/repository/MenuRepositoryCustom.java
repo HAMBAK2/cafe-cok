@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MenuRepositoryCustom {
 
-    List<MenuImageUrlDto> findMenuImageUrlDtoListByCafeId(final Long cafeId);
+    List<MenuImageUrlDto> getMenuImageUrls(final Long cafeId);
 
 }
