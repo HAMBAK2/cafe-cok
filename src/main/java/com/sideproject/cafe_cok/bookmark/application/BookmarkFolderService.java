@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.bookmark.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkCafeDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderDetailDto;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkFolderDeleteResponse;
@@ -41,9 +41,9 @@ public class BookmarkFolderService {
 
     public BookmarkFoldersResponse bookmarkFolders(final LoginMember loginMember) {
 
-        List<BookmarkFolderCountDto> findBookmarkFolderCountDtoList =
-                bookmarkFolderRepository.findBookmarkFolderCountDtoListByMemberId(loginMember.getId());
-        return new BookmarkFoldersResponse(findBookmarkFolderCountDtoList);
+        List<BookmarkFolderDetailDto> findBookmarkFolderDetailDtoList =
+                bookmarkFolderRepository.getBookmarkFolderDetailsByMemberId(loginMember.getId());
+        return new BookmarkFoldersResponse(findBookmarkFolderDetailDtoList);
     }
 
     @Transactional

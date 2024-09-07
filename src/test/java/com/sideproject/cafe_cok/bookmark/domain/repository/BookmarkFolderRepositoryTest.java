@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.bookmark.domain.repository;
 
 import com.sideproject.cafe_cok.bookmark.domain.Bookmark;
 import com.sideproject.cafe_cok.bookmark.domain.BookmarkFolder;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderDetailDto;
 import com.sideproject.cafe_cok.bookmark.exception.NoSuchFolderException;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
@@ -121,12 +121,12 @@ class BookmarkFolderRepositoryTest {
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
 
         //when
-        List<BookmarkFolderCountDto> findBookmarkFolderCountDtoList
-                = bookmarkFolderRepository.findBookmarkFolderCountDtoListByMemberId(savedMember.getId());
+        List<BookmarkFolderDetailDto> findBookmarkFolderDetailDtoList
+                = bookmarkFolderRepository.getBookmarkFolderDetailsByMemberId(savedMember.getId());
 
         //then
-        assertThat(findBookmarkFolderCountDtoList).hasSize(2);
-        assertThat(findBookmarkFolderCountDtoList)
+        assertThat(findBookmarkFolderDetailDtoList).hasSize(2);
+        assertThat(findBookmarkFolderDetailDtoList)
                 .extracting("bookmarkCount")
                 .containsExactlyInAnyOrder(savedBookmarkFolder1.getBookmarks().size(), savedBookmarkFolder2.getBookmarks().size());
     }

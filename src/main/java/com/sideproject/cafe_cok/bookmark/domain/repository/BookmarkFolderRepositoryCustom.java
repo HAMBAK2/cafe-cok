@@ -1,10 +1,10 @@
 package com.sideproject.cafe_cok.bookmark.domain.repository;
 
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderCountDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderDetailDto;
 
 import java.util.List;
 
 public interface BookmarkFolderRepositoryCustom {
 
-    List<BookmarkFolderCountDto> findBookmarkFolderCountDtoListByMemberId(final Long memberId);
+    List<BookmarkFolderDetailDto> getBookmarkFolderDetailsByMemberId(final Long memberId);
 }
