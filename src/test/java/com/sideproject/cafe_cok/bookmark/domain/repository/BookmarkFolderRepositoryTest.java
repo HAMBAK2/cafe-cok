@@ -42,7 +42,7 @@ class BookmarkFolderRepositoryTest {
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
         BookmarkFolder bookmarkFolder = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, true, savedMember);
         BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
 
         //when
@@ -76,9 +76,9 @@ class BookmarkFolderRepositoryTest {
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
         BookmarkFolder bookmarkFolder1 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, true, savedMember);
         BookmarkFolder bookmarkFolder2 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_2, BOOKMARK_FOLDER_COLOR_2,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, false, savedMember);
         BookmarkFolder savedBookmarkFolder1 = bookmarkFolderRepository.save(bookmarkFolder1);
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
 
@@ -103,16 +103,16 @@ class BookmarkFolderRepositoryTest {
     }
 
     @Test
-    @DisplayName("memberId를 기반으로 BookmarkFolderCountDto의 리스트를 조회한다.")
-    void find_bookmark_folder_count_dto_list_by_member_id() {
+    @DisplayName("memberId를 기반으로 BookmarkFolderDetail의 리스트를 조회한다.")
+    void find_bookmark_folder_Detail_list_by_member_id() {
 
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
         BookmarkFolder bookmarkFolder1 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, true, savedMember);
         BookmarkFolder bookmarkFolder2 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_2, BOOKMARK_FOLDER_COLOR_2,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, false, savedMember);
         BookmarkFolder savedBookmarkFolder1 = bookmarkFolderRepository.save(bookmarkFolder1);
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
         Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
@@ -128,7 +128,7 @@ class BookmarkFolderRepositoryTest {
         assertThat(findBookmarkFolderDetailDtoList).hasSize(2);
         assertThat(findBookmarkFolderDetailDtoList)
                 .extracting("bookmarkCount")
-                .containsExactlyInAnyOrder(savedBookmarkFolder1.getBookmarks().size(), savedBookmarkFolder2.getBookmarks().size());
+                .containsExactlyInAnyOrder(1L, 0L);
     }
 
 }

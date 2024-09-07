@@ -31,6 +31,7 @@ public class BookmarkFolderRepositoryImpl implements BookmarkFolderRepositoryCus
                 .from(bookmarkFolder)
                 .leftJoin(bookmarkFolder.bookmarks, bookmark)
                 .where(bookmarkFolder.member.id.eq(memberId))
+                .groupBy(bookmarkFolder)
                 .fetch();
     }
 
