@@ -3,7 +3,7 @@ package com.sideproject.cafe_cok.cafe.dto.response;
 
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class CafeTopResponse extends RepresentationModel<CafeTopResponse> {
     private String originUrl;
     private String thumbnailUrl;
     private List<KeywordDto> keywords;
-    private List<BookmarkIdDto> bookmarks;
+    private List<BookmarkFolderIdsDto> bookmarks;
 
 
     public CafeTopResponse(final Cafe cafe,
@@ -48,7 +48,7 @@ public class CafeTopResponse extends RepresentationModel<CafeTopResponse> {
     public CafeTopResponse(final Cafe cafe,
                            final Image image,
                            final List<KeywordDto> keywords,
-                           final List<BookmarkIdDto> bookmarks) {
+                           final List<BookmarkFolderIdsDto> bookmarks) {
         this(cafe, image, keywords);
         this.bookmarks = bookmarks;
     }

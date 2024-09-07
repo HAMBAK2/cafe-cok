@@ -42,7 +42,7 @@ public class BookmarkFolderService {
     public BookmarkFoldersResponse bookmarkFolders(final LoginMember loginMember) {
 
         List<BookmarkFolderDetailDto> findBookmarkFolderDetailDtoList =
-                bookmarkFolderRepository.getBookmarkFolderDetailsByMemberId(loginMember.getId());
+                bookmarkFolderRepository.getBookmarkFolderDetails(loginMember.getId());
         return new BookmarkFoldersResponse(findBookmarkFolderDetailDtoList);
     }
 

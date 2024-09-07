@@ -1,7 +1,7 @@
 package com.sideproject.cafe_cok.cafe.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,12 +23,12 @@ public class CafeDto {
     private BigDecimal starRating;
     private Long reviewCount;
     private String imageUrl;
-    private List<BookmarkIdDto> bookmarks;
+    private List<BookmarkFolderIdsDto> bookmarks;
 
     @QueryProjection
     public CafeDto(final Cafe cafe,
                    final String imageUrl,
-                   final List<BookmarkIdDto> bookmarks) {
+                   final List<BookmarkFolderIdsDto> bookmarks) {
         this.id = cafe.getId();
         this.name = cafe.getName();
         this.phoneNumber = cafe.getPhoneNumber();
@@ -54,7 +54,7 @@ public class CafeDto {
         this.imageUrl = imageUrl;
     }
 
-    public void setBookmarks(final List<BookmarkIdDto> bookmarks) {
+    public void setBookmarks(final List<BookmarkFolderIdsDto> bookmarks) {
         this.bookmarks = bookmarks;
     }
 

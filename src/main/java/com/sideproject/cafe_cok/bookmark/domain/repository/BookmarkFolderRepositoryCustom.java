@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BookmarkFolderRepositoryCustom {
 
-    List<BookmarkFolderDetailDto> getBookmarkFolderDetailsByMemberId(final Long memberId);
+    List<BookmarkFolderDetailDto> getBookmarkFolderDetails(final Long memberId);
 }

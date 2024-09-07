@@ -18,7 +18,7 @@ public class BookmarkFolderRepositoryImpl implements BookmarkFolderRepositoryCus
     }
 
     @Override
-    public List<BookmarkFolderDetailDto> getBookmarkFolderDetailsByMemberId(final Long memberId) {
+    public List<BookmarkFolderDetailDto> getBookmarkFolderDetails(final Long memberId) {
 
         return queryFactory
                 .select(new QBookmarkFolderDetailDto(

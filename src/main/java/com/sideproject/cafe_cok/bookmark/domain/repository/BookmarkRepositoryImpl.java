@@ -1,13 +1,11 @@
 package com.sideproject.cafe_cok.bookmark.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sideproject.cafe_cok.bookmark.domain.QBookmark;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
-import com.sideproject.cafe_cok.bookmark.dto.QBookmarkIdDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
+import com.sideproject.cafe_cok.bookmark.dto.QBookmarkFolderIdsDto;
 import jakarta.persistence.EntityManager;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.sideproject.cafe_cok.bookmark.domain.QBookmark.*;
@@ -22,11 +20,11 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom{
 
 
     @Override
-    public List<BookmarkIdDto> findBookmarkIdDtoListByCafeIdAndMemberId(final Long cafeId,
-                                                                        final Long memberId) {
+    public List<BookmarkFolderIdsDto> getBookmarkFolderIds(final Long cafeId,
+                                                           final Long memberId) {
 
         return queryFactory
-                .select(new QBookmarkIdDto(
+                .select(new QBookmarkFolderIdsDto(
                         bookmark.id,
                         bookmark.bookmarkFolder.id
                 ))

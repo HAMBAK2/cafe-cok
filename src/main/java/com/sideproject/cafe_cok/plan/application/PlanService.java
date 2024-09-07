@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.plan.application;
 
 import com.sideproject.cafe_cok.auth.dto.LoginMember;
 import com.sideproject.cafe_cok.bookmark.domain.repository.BookmarkRepository;
-import com.sideproject.cafe_cok.bookmark.dto.BookmarkIdDto;
+import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
@@ -182,10 +182,10 @@ public class PlanService {
                     String findImageUrl =
                             imageRepository.getImageByCafeAndImageType(cafe, ImageType.CAFE_MAIN).getThumbnail();
 
-                    List<BookmarkIdDto> findBookmarkIdDtoList = null;
-                    if (memberId != null) findBookmarkIdDtoList =
-                            bookmarkRepository.findBookmarkIdDtoListByCafeIdAndMemberId(cafe.getId(), memberId);
-                    return new CafeDto(cafe, findImageUrl, findBookmarkIdDtoList);
+                    List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList = null;
+                    if (memberId != null) findBookmarkFolderIdsDtoList =
+                            bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId);
+                    return new CafeDto(cafe, findImageUrl, findBookmarkFolderIdsDtoList);
                 }).collect(Collectors.toList());
         return cafeDtoList;
     }
@@ -240,8 +240,7 @@ public class PlanService {
                 .map(cafe -> {
                     CafeDto newCafeDto = new CafeDto(cafe, cafe.getImages().get(0).getThumbnail());
                     if(memberId != null) {
-                        newCafeDto.setBookmarks(bookmarkRepository
-                                .findBookmarkIdDtoListByCafeIdAndMemberId(cafe.getId(), memberId));
+                        newCafeDto.setBookmarks(bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId));
                     }
                     return newCafeDto;
                 }).collect(Collectors.toList());

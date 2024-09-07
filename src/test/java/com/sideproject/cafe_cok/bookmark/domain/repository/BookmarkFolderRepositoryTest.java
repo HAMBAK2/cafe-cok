@@ -122,7 +122,7 @@ class BookmarkFolderRepositoryTest {
 
         //when
         List<BookmarkFolderDetailDto> findBookmarkFolderDetailDtoList
-                = bookmarkFolderRepository.getBookmarkFolderDetailsByMemberId(savedMember.getId());
+                = bookmarkFolderRepository.getBookmarkFolderDetails(savedMember.getId());
 
         //then
         assertThat(findBookmarkFolderDetailDtoList).hasSize(2);
