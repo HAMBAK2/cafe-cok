@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface PlanRepositoryCustom {
 
-    List<PlanKeywordDto> findPlanKeywordDtoList(final PlanSearchCondition searchCondition,
-                                                final Pageable pageable);
+    List<PlanKeywordDto> findPlanKeywords(final PlanSearchCondition searchCondition,
+                                          final Pageable pageable);
 }

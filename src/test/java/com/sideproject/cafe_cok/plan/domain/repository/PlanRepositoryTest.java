@@ -167,7 +167,7 @@ class PlanRepositoryTest {
                 = new PlanSearchCondition(savedMember.getId(), Category.PURPOSE, PlanSortBy.RECENT, PlanStatus.SAVED);
 
         //when
-        List<PlanKeywordDto> findList = planRepository.findPlanKeywordDtoList(searchCondition, pageable);
+        List<PlanKeywordDto> findList = planRepository.findPlanKeywords(searchCondition, pageable);
 
         //then
         assertThat(findList).hasSize(1);
@@ -205,7 +205,7 @@ class PlanRepositoryTest {
                 = new PlanSearchCondition(savedMember.getId(), Category.PURPOSE, PlanSortBy.RECENT, PlanStatus.SHARED);
 
         //when
-        List<PlanKeywordDto> findList = planRepository.findPlanKeywordDtoList(searchCondition, pageable);
+        List<PlanKeywordDto> findList = planRepository.findPlanKeywords(searchCondition, pageable);
 
         //then
         assertThat(findList).hasSize(1);
@@ -243,7 +243,7 @@ class PlanRepositoryTest {
                 = new PlanSearchCondition(savedMember.getId(), Category.PURPOSE, PlanSortBy.RECENT, PlanStatus.SAVED);
 
         //when
-        List<PlanKeywordDto> findList = planRepository.findPlanKeywordDtoList(searchCondition, pageable);
+        List<PlanKeywordDto> findList = planRepository.findPlanKeywords(searchCondition, pageable);
 
         //then
         assertThat(findList).hasSize(2);
@@ -282,7 +282,7 @@ class PlanRepositoryTest {
                 = new PlanSearchCondition(savedMember.getId(), Category.PURPOSE, PlanSortBy.RECENT, PlanStatus.SAVED);
 
         //when
-        List<PlanKeywordDto> findList = planRepository.findPlanKeywordDtoList(searchCondition, pageable);
+        List<PlanKeywordDto> findList = planRepository.findPlanKeywords(searchCondition, pageable);
 
         //then
         assertThat(findList).hasSize(2);

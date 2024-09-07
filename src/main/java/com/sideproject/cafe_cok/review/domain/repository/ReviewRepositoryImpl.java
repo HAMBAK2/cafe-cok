@@ -24,26 +24,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
     @Override
     public List<Review> findByCafeId(final Long cafeId,
-                                     final Long cursor,
-                                     final Pageable pageable) {
-
-        NumberPath<Long> idPath = review.id;
-        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
-
-        return queryFactory
-                .select(review)
-                .from(review)
-                .where(review.cafe.id.eq(cafeId),
-                        reviewIdLt(cursor),
-                        memberDeletedAtIsNull())
-                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-    }
-
-    @Override
-    public List<Review> findByCafeId(final Long cafeId,
                                      final Pageable pageable) {
 
         NumberPath<Long> idPath = review.id;

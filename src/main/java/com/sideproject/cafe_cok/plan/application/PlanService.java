@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sideproject.cafe_cok.util.Constants.*;
 import static com.sideproject.cafe_cok.util.FormatConverter.convertLocalDateLocalTimeToString;
 
 @Service
@@ -251,7 +252,7 @@ public class PlanService {
                             final List<Cafe> matchCafes,
                             final PlanSaveRequest request) {
 
-        Member findMember = memberRepository.getById(Constants.NO_MEMBER_ID);
+        Member findMember = memberRepository.getById(NO_MEMBER_ID);
 
         Plan plan = request.toEntity(findMember, matchType);
         List<Plan> matchingPlans = planRepository.findMatchingPlan(plan);

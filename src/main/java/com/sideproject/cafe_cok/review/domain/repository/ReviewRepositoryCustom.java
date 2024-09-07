@@ -8,9 +8,5 @@ import java.util.List;
 public interface ReviewRepositoryCustom {
 
     List<Review> findByCafeId(final Long cafeId,
-                              final Long cursor,
-                              final Pageable pageable);
-
-    List<Review> findByCafeId(final Long cafeId,
                               final Pageable pageable);
 }
