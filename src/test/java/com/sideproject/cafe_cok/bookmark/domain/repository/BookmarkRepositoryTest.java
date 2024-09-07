@@ -43,7 +43,7 @@ class BookmarkRepositoryTest {
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
         BookmarkFolder bookmarkFolder = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                BOOKMARK_IS_VISIBLE, BOOKMARK_IS_DEFAULT_FOLDER, savedMember);
+                true, true, savedMember);
         BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
         Bookmark bookmark = new Bookmark(savedCafe, savedBookmarkFolder);
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);

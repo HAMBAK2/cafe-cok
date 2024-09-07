@@ -64,8 +64,6 @@ public class TestConstants {
     public static final String BOOKMARK_FOLDER_COLOR_1 = "bookmark folder color1";
     public static final String BOOKMARK_FOLDER_NAME_2 = "bookmark folder name2";
     public static final String BOOKMARK_FOLDER_COLOR_2 = "bookmark folder color2";
-    public static final Boolean BOOKMARK_IS_VISIBLE = true;
-    public static final Boolean BOOKMARK_IS_DEFAULT_FOLDER = true;
 
     /* MENU */
     public static final String MENU_NAME_1 = "menu name1";
