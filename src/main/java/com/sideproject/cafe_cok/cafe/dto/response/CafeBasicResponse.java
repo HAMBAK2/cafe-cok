@@ -2,7 +2,7 @@ package com.sideproject.cafe_cok.cafe.dto.response;
 
 import com.sideproject.cafe_cok.cafe.domain.enums.OpenStatus;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
 import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
@@ -19,7 +19,7 @@ public class CafeBasicResponse extends RepresentationModel<CafeBasicResponse> {
     private String openStatus;
     private List<String> businessHours;
     private List<String> closedDay;
-    private List<MenuImageUrlDto> menus;
+    private List<MenuImageDto> menus;
     private List<ImageUrlDto> imageUrls;
     private List<KeywordCountDto> userChoiceKeywords;
     private List<CafeDetailReviewDto> reviews;
@@ -28,7 +28,7 @@ public class CafeBasicResponse extends RepresentationModel<CafeBasicResponse> {
                              final OpenStatus openStatus,
                              final List<String> businessHours,
                              final List<String> closedDay,
-                             final List<MenuImageUrlDto> menus,
+                             final List<MenuImageDto> menus,
                              final List<ImageUrlDto> imageUrls,
                              final List<KeywordCountDto> userChoiceKeywords,
                              final List<CafeDetailReviewDto> reviews) {

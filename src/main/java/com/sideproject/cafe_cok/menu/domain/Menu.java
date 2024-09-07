@@ -3,6 +3,10 @@ package com.sideproject.cafe_cok.menu.domain;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 
+import com.sideproject.cafe_cok.image.domain.Image;
+import com.sideproject.cafe_cok.image.dto.ImageDto;
+import com.sideproject.cafe_cok.menu.dto.MenuDetailDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,6 +47,23 @@ public class Menu extends BaseEntity {
         this.name = name;
         this.price = price;
         this.cafe = cafe;
+    }
+
+    public MenuDetailDto toMenuDetailDto() {
+        return MenuDetailDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .price(this.price)
+                .build();
+    }
+
+    public MenuDetailDto toMenuDetailDto(final ImageDto imageDto) {
+        return MenuDetailDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .price(this.price)
+                .image(imageDto)
+                .build();
     }
 
     public void changeName(final String name) {

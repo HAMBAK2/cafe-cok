@@ -24,7 +24,7 @@ import com.sideproject.cafe_cok.keword.dto.KeywordCountDto;
 import com.sideproject.cafe_cok.keword.dto.KeywordDto;
 import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
 import com.sideproject.cafe_cok.menu.dto.response.MenusResponse;
 import com.sideproject.cafe_cok.review.domain.repository.ReviewRepository;
 import com.sideproject.cafe_cok.review.dto.CafeDetailReviewDto;
@@ -130,14 +130,14 @@ public class CafeService {
             businessHours.add(convertOperationHourToString(findOperationHour));
         }
 
-        List<MenuImageUrlDto> findMenuImageUrlDtoList = menuRepository.getMenuImageUrls(cafeId);
+        List<MenuImageDto> findMenuImageDtoList = menuRepository.getMenuImageUrls(cafeId);
         List<KeywordCountDto> userChoiceKeywords = getUserChoiceKeywordCounts(cafeId);
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
 
         return new CafeBasicResponse(
                 findCafe, openStatus, businessHours, closedDay,
-                findMenuImageUrlDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
+                findMenuImageDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
     }
 
     @Transactional
@@ -164,7 +164,11 @@ public class CafeService {
 
         List<AdminMenuRequestDto> menus = request.getMenus();
         for (AdminMenuRequestDto menu : menus) {
-            Menu newMenu = new Menu(menu.getName(), menu.getPrice(), savedCafe);
+            Menu newMenu = Menu.builder()
+                    .name(menu.getName())
+                    .price(menu.getPrice())
+                    .cafe(savedCafe)
+                    .build();
             Menu savedMenu = menuRepository.save(newMenu);
 
             if(menu.getImage() != null && !menu.getImage().isEmpty()) {
@@ -249,8 +253,11 @@ public class CafeService {
                 targetMenu = optionalMenu.get();
                 targetMenu.changeName(menu.getName());
                 targetMenu.changePrice(menu.getPrice());
-            }
-            else  targetMenu = new Menu(menu.getName(), menu.getPrice(), findCafe);
+            } else targetMenu = Menu.builder()
+                    .name(menu.getName())
+                    .price(menu.getPrice())
+                    .cafe(findCafe)
+                    .build();
             menuRepository.save(targetMenu);
 
             if (menu.getImage() != null && !menu.getImage().isEmpty()) {
@@ -300,7 +307,7 @@ public class CafeService {
 
     public MenusResponse findMenus(final Long cafeId) {
 
-        List<MenuImageUrlDto> findMenus = menuRepository.getMenuImageUrls(cafeId);
+        List<MenuImageDto> findMenus = menuRepository.getMenuImageUrls(cafeId);
         return new MenusResponse(findMenus);
     }
 

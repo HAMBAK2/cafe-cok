@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -20,7 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "images")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Image extends BaseEntity {
 
     @Id
@@ -53,6 +54,26 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
+    @Builder
+    public Image(final Long id,
+                 final ImageType imageType,
+                 final String origin,
+                 final String thumbnail,
+                 final String medium,
+                 final Cafe cafe,
+                 final Review review,
+                 final Menu menu) {
+        this.id = id;
+        this.imageType = imageType;
+        this.origin = origin;
+        this.thumbnail = thumbnail;
+        this.medium = medium;
+        this.cafe = cafe;
+        this.review = review;
+        this.menu = menu;
+    }
+
+    @Builder
     public Image(final ImageType imageType,
                  final String origin,
                  final String thumbnail,

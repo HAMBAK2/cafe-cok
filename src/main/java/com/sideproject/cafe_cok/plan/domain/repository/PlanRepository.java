@@ -16,7 +16,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositor
 
     default List<Plan> findMatchingPlan(final Plan plan) {
         ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnorePaths("id", "isSaved", "isShared", "createdDate", "lastModifiedDate")
+                .withIgnorePaths("id", "createdDate", "lastModifiedDate")
                 .withIncludeNullValues()
                 .withIgnoreCase();
 

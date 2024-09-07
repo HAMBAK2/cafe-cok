@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 public class TestConstants {
 
-    public static final String REDIS_EXISTENT_ID = "1";
+    public static final Long ENTITY_ID = 1L;
     public static final Long NON_EXISTENT_ID = 999L;
     public static final String REFRESH_TOKEN = "refresh token";
 

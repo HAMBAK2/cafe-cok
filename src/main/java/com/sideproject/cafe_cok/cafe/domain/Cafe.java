@@ -26,7 +26,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Setter
 @Table(name = "cafes")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Cafe extends BaseEntity {
 
     private static final Pattern PHONE_NUMBER_PATTERN = Pattern.compile("^\\d{2,5}-\\d{3,4}-\\d{4}$");
@@ -97,19 +97,6 @@ public class Cafe extends BaseEntity {
                 request.getLongitude(),
                 request.getLatitude(),
                 request.getKakaoId());
-    }
-
-    public void changeCafe(final String name,
-                           final String phoneNumber,
-                           final String roadAddress,
-                           final BigDecimal longitude,
-                           final BigDecimal latitude) {
-        validatePhoneNumber(phoneNumber);
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.roadAddress = roadAddress;
-        this.longitude = longitude;
-        this.latitude = latitude;
     }
 
     private void validatePhoneNumber(final String phoneNumber) {

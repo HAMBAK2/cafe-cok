@@ -2,12 +2,11 @@ package com.sideproject.cafe_cok.menu.domain.repository;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
-import com.sideproject.cafe_cok.cafe.exception.NoSuchCafeException;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
 import com.sideproject.cafe_cok.menu.exception.NoSuchMenuException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -122,7 +121,7 @@ class MenuRepositoryTest {
         Image savedImage2 = imageRepository.save(image2);
 
         //when
-        List<MenuImageUrlDto> findList = menuRepository.getMenuImageUrls(savedCafe.getId());
+        List<MenuImageDto> findList = menuRepository.getMenuImageUrls(savedCafe.getId());
 
         //then
         assertThat(findList).hasSize(2);
