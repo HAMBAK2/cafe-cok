@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.bookmark.domain;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,7 @@ import static jakarta.persistence.GenerationType.*;
 @Getter
 @Table(name = "bookmarks")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Bookmark {
 
     @Id
@@ -28,12 +29,13 @@ public class Bookmark {
     @JoinColumn(name = "bookmark_folders_id")
     private BookmarkFolder bookmarkFolder;
 
-    public Bookmark(final Cafe cafe,
+    @Builder
+    public Bookmark(final Long id,
+                    final Cafe cafe,
                     final BookmarkFolder bookmarkFolder) {
+        this.id = id;
         this.cafe = cafe;
-        if(bookmarkFolder != null) {
-            changeBookmarkFolder(bookmarkFolder);
-        }
+        if(bookmarkFolder != null) changeBookmarkFolder(bookmarkFolder);
     }
 
     public void changeBookmarkFolder(final BookmarkFolder bookmarkFolder) {

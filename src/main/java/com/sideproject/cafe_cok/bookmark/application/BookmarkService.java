@@ -27,7 +27,10 @@ public class BookmarkService {
 
         Cafe findCafe = cafeRepository.getById(request.getCafeId());
         BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
-        Bookmark savedBookmark = bookmarkRepository.save(new Bookmark(findCafe, findFolder));
+        Bookmark savedBookmark = bookmarkRepository.save(Bookmark.builder()
+                .cafe(findCafe)
+                .bookmarkFolder(findFolder)
+                .build());
         return new BookmarkFolderAndBookmarkIdResponse(
                 savedBookmark.getId(), savedBookmark.getBookmarkFolder().getId());
     }

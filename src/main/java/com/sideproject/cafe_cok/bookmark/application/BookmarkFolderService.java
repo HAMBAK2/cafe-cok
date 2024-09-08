@@ -51,25 +51,21 @@ public class BookmarkFolderService {
                                          final LoginMember loginMember){
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        BookmarkFolder bookmarkFolder = request.toBookmarkFolder(findMember);
+        BookmarkFolder bookmarkFolder = request.toEntity(findMember);
         BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
         return new BookmarkFolderIdResponse(savedBookmarkFolder.getId());
     }
 
     @Transactional
     public BookmarkFolderIdResponse update(final BookmarkFolderUpdateRequest request){
-
-        BookmarkFolder findFolder = bookmarkFolderRepository.getById(request.getFolderId());
-        if(findFolder.getIsDefaultFolder()) throw new DefaultFolderUpdateNotAllowedException();
-        findFolder.change(request);
-        return new BookmarkFolderIdResponse(findFolder.getId());
+        bookmarkFolderRepository.update(request);
+        return new BookmarkFolderIdResponse(request.getFolderId());
     }
 
     @Transactional
     public BookmarkFolderIdResponse updateFolderVisible(final Long folderId) {
 
-        BookmarkFolder findFolder = bookmarkFolderRepository.getById(folderId);
-        findFolder.changeVisible();
+        bookmarkFolderRepository.toggleFolderVisibility(folderId);
         return new BookmarkFolderIdResponse(folderId);
     }
 

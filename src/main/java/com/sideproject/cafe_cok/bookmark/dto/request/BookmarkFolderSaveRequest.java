@@ -22,12 +22,14 @@ public class BookmarkFolderSaveRequest {
         this.isVisible = isVisible;
     }
 
-    public BookmarkFolder toBookmarkFolder(final Member member) {
-        return new BookmarkFolder(
-                this.name,
-                this.color,
-                this.isVisible,
-                false,
-                member);
+    public BookmarkFolder toEntity(final Member member) {
+
+        return BookmarkFolder.builder()
+                .name(this.name)
+                .color(this.color)
+                .isVisible(this.isVisible)
+                .isDefaultFolder(false)
+                .member(member)
+                .build();
     }
 }

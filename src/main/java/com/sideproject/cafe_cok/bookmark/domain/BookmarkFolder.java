@@ -1,9 +1,8 @@
 package com.sideproject.cafe_cok.bookmark.domain;
 
-import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +15,7 @@ import static jakarta.persistence.GenerationType.*;
 @Getter
 @Entity
 @Table(name = "bookmark_folders")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class BookmarkFolder {
 
     @Id
@@ -42,26 +41,19 @@ public class BookmarkFolder {
     @OneToMany(mappedBy = "bookmarkFolder", cascade = CascadeType.ALL)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    public BookmarkFolder(final String name,
+    @Builder
+    public BookmarkFolder(final Long id,
+                          final String name,
                           final String color,
                           final Boolean isVisible,
                           final Boolean isDefaultFolder,
                           final Member member) {
+        this.id = id;
         this.name = name;
         this.color = color;
         this.isVisible = isVisible;
         this.isDefaultFolder = isDefaultFolder;
         if(member != null) changeMember(member);
-    }
-
-    public void change(final BookmarkFolderUpdateRequest request) {
-        this.name = request.getName();
-        this.color = request.getColor();
-        this.isVisible = request.getIsVisible();
-    }
-
-    public void changeVisible() {
-        this.isVisible = !isVisible;
     }
 
     public void changeMember(final Member member) {

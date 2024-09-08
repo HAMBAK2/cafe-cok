@@ -129,10 +129,12 @@ public class AuthService {
         String randomNickname = nicknameService.generateNickname();
         Member targetMember = new Member(oAuthMember.getEmail(), randomNickname, SocialType.KAKAO);
         Member savedMember = memberRepository.save(targetMember);
-        bookmarkFolderRepository
-                .save(new BookmarkFolder(
-                        BASIC_FOLDER_NAME, BASIC_FOLDER_COLOR,
-                        BASIC_FOLDER_VISIBLE, BASIC_FOLDER_DEFAULT, savedMember));
+        bookmarkFolderRepository.save(BookmarkFolder.builder()
+                        .name(BASIC_FOLDER_NAME)
+                        .color(BASIC_FOLDER_COLOR)
+                        .isVisible(BASIC_FOLDER_VISIBLE)
+                        .isDefaultFolder(BASIC_FOLDER_DEFAULT)
+                        .build());
         return savedMember;
     }
 

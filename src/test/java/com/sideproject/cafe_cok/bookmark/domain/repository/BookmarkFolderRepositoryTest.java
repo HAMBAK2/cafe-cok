@@ -35,14 +35,19 @@ class BookmarkFolderRepositoryTest {
 
 
     @Test
-    @DisplayName("북마크 폴더 Id를 기반으로 북마크 폴더를 조회한다.")
-    void get_by_id() {
+    void 북마크_폴더_ID로_북마크_폴더를_조회한다() {
 
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        BookmarkFolder bookmarkFolder = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                true, true, savedMember);
+
+        BookmarkFolder bookmarkFolder = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_1)
+                .color(BOOKMARK_FOLDER_COLOR_1)
+                .isVisible(true)
+                .isDefaultFolder(true)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
 
         //when
@@ -69,17 +74,28 @@ class BookmarkFolderRepositoryTest {
     }
 
     @Test
-    @DisplayName("memberId를 기반으로 북마크 폴더의 목록을 조회한다.")
-    void find_bookmark_folder_list_by_member_id() {
+    void 회원_ID로_북마크_폴더_목록을_조회한다() {
 
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        BookmarkFolder bookmarkFolder1 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                true, true, savedMember);
-        BookmarkFolder bookmarkFolder2 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_2, BOOKMARK_FOLDER_COLOR_2,
-                true, false, savedMember);
+
+        BookmarkFolder bookmarkFolder1 = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_1)
+                .color(BOOKMARK_FOLDER_COLOR_1)
+                .isVisible(true)
+                .isDefaultFolder(true)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder1 = bookmarkFolderRepository.save(bookmarkFolder1);
+
+        BookmarkFolder bookmarkFolder2 = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_2)
+                .color(BOOKMARK_FOLDER_COLOR_2)
+                .isVisible(true)
+                .isDefaultFolder(false)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
 
         //when
@@ -103,21 +119,37 @@ class BookmarkFolderRepositoryTest {
     }
 
     @Test
-    @DisplayName("memberId를 기반으로 BookmarkFolderDetail의 리스트를 조회한다.")
-    void find_bookmark_folder_Detail_list_by_member_id() {
+    void 회원_ID로_북마크_폴더_상세_목록을_조회한다() {
 
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        BookmarkFolder bookmarkFolder1 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                true, true, savedMember);
-        BookmarkFolder bookmarkFolder2 = new BookmarkFolder(BOOKMARK_FOLDER_NAME_2, BOOKMARK_FOLDER_COLOR_2,
-                true, false, savedMember);
+
+        BookmarkFolder bookmarkFolder1 = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_1)
+                .color(BOOKMARK_FOLDER_COLOR_1)
+                .isVisible(true)
+                .isDefaultFolder(true)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder1 = bookmarkFolderRepository.save(bookmarkFolder1);
+
+        BookmarkFolder bookmarkFolder2 = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_2)
+                .color(BOOKMARK_FOLDER_COLOR_2)
+                .isVisible(true)
+                .isDefaultFolder(false)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
+
         Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
         Cafe savedCafe = cafeRepository.save(cafe);
-        Bookmark bookmark = new Bookmark(savedCafe, savedBookmarkFolder1);
+
+        Bookmark bookmark = Bookmark.builder()
+                .cafe(savedCafe)
+                .bookmarkFolder(savedBookmarkFolder1)
+                .build();
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
 
         //when
