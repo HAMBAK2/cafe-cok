@@ -147,8 +147,13 @@ class PlanRepositoryTest {
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
+
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword = keywordRepository.save(keyword);
+
         Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
                 PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
         Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
@@ -185,19 +190,26 @@ class PlanRepositoryTest {
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
+
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword = keywordRepository.save(keyword);
+
         Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
                 PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_TRUE);
+        Plan savedPlan1 = planRepository.save(plan1);
+
         Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
                 PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_FALSE);
-        Plan savedPlan1 = planRepository.save(plan1);
         Plan savedPlan2 = planRepository.save(plan2);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
-        planKeywordRepository.save(planKeyword1);
-        planKeywordRepository.save(planKeyword2);
 
+        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
+        planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
+        planKeywordRepository.save(planKeyword2);
 
         Sort sort = Sort.by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
         Pageable pageable = PageRequest.of(0, PLAN_PAGE_SIZE, sort);
@@ -223,7 +235,10 @@ class PlanRepositoryTest {
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword = keywordRepository.save(keyword);
         Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
                 PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
@@ -262,7 +277,10 @@ class PlanRepositoryTest {
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword = keywordRepository.save(keyword);
         Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME,
                 PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
@@ -300,10 +318,19 @@ class PlanRepositoryTest {
         //given
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
-        Keyword keyword1 = new Keyword(KEYWORD_NAME, Category.PURPOSE);
-        Keyword keyword2 = new Keyword(KEYWORD_NAME_2, Category.PURPOSE);
+
+        Keyword keyword1 = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword1 = keywordRepository.save(keyword1);
+
+        Keyword keyword2 = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword2 = keywordRepository.save(keyword2);
+
         Plan plan = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME,
                 PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
         Plan savedPlan = planRepository.save(plan);

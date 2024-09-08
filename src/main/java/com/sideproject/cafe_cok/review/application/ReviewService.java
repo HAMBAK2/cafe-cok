@@ -130,7 +130,11 @@ public class ReviewService {
 
         List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
         List<CafeReviewKeyword> cafeReviewKeywords = findKeywords.stream()
-                .map(keyword -> new CafeReviewKeyword(review.getCafe(), review, keyword))
+                .map(keyword -> CafeReviewKeyword.builder()
+                        .cafe(review.getCafe())
+                        .review(review)
+                        .keyword(keyword)
+                        .build())
                 .collect(Collectors.toList());
         cafeReviewKeywordRepository.saveAll(cafeReviewKeywords);
     }

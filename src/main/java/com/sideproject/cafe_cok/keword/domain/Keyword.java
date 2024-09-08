@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "keywords")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Keyword extends BaseEntity {
 
     @Id
@@ -29,8 +30,11 @@ public class Keyword extends BaseEntity {
     @Column(name = "category", nullable = false)
     private Category category;
 
-    public Keyword(final String name,
+    @Builder
+    public Keyword(final Long id,
+                   final String name,
                    final Category category) {
+        this.id = id;
         this.name = name;
         this.category = category;
     }

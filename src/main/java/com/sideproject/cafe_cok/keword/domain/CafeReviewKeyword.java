@@ -5,19 +5,15 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 @Table(name = "cafe_review_keywords")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CafeReviewKeyword extends BaseEntity {
 
     @Id
@@ -37,12 +33,15 @@ public class CafeReviewKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    public CafeReviewKeyword(final Cafe cafe,
+    @Builder
+    public CafeReviewKeyword(final Long id,
+                             final Cafe cafe,
                              final Review review,
                              final Keyword keyword) {
+        this.id = id;
+        this.keyword = keyword;
         if(cafe != null) changeCafe(cafe);
         if(review != null) changeReview(review);
-        this.keyword = keyword;
     }
 
     public void changeReview(final Review review) {
