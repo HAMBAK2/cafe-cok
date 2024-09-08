@@ -176,16 +176,27 @@ public class CafeService {
 
         File converted = convertBase64StringToFile(request.getMainImage());
         String originImageUrl = s3Uploader.upload(converted, CAFE_MAIN_ORIGIN_IMAGE_DIR);
-        String thumbnailImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR);
+        String thumbnailImageUrl = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR);
         String midImageDir = changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR);
-        Image mainImage = new Image(ImageType.CAFE_MAIN, originImageUrl, thumbnailImageDir, midImageDir, savedCafe);
+        Image mainImage = Image.builder()
+                .imageType(ImageType.CAFE_MAIN)
+                .origin(originImageUrl)
+                .thumbnail(thumbnailImageUrl)
+                .medium(midImageDir)
+                .cafe(savedCafe)
+                .build();
         savedImages.add(imageRepository.save(mainImage));
 
         for (String otherImage : request.getOtherImages()) {
             converted = convertBase64StringToFile(otherImage);
             originImageUrl = s3Uploader.upload(converted, CAFE_ORIGIN_IMAGE_DIR);
-            thumbnailImageDir = changePath(originImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR);
-            Image othreImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageDir, savedCafe);
+            thumbnailImageUrl = changePath(originImageUrl, CAFE_ORIGIN_IMAGE_DIR, CAFE_THUMBNAIL_IMAGE_DIR);
+            Image othreImage = Image.builder()
+                    .imageType(ImageType.CAFE)
+                    .origin(originImageUrl)
+                    .thumbnail(thumbnailImageUrl)
+                    .cafe(savedCafe)
+                    .build();
             savedImages.add(imageRepository.save(othreImage));
         }
 
@@ -201,8 +212,14 @@ public class CafeService {
             if(menu.getImage() != null && !menu.getImage().isEmpty()) {
                 converted = convertBase64StringToFile(menu.getImage());
                 originImageUrl = s3Uploader.upload(converted, MENU_ORIGIN_IMAGE_DIR);
-                thumbnailImageDir = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
-                Image menuImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageDir, savedCafe, savedMenu);
+                thumbnailImageUrl = changePath(originImageUrl, MENU_ORIGIN_IMAGE_DIR, MENU_THUMBNAIL_IMAGE_DIR);
+                Image menuImage =  Image.builder()
+                        .imageType(ImageType.MENU)
+                        .origin(originImageUrl)
+                        .thumbnail(thumbnailImageUrl)
+                        .cafe(savedCafe)
+                        .menu(savedMenu)
+                        .build();
                 savedImages.add(imageRepository.save(menuImage));
             }
         }
@@ -223,7 +240,7 @@ public class CafeService {
         findCafe.setPhoneNumber(request.getPhoneNumber());
         cafeRepository.save(findCafe);
 
-        List<Image> savedImage = new ArrayList<>();
+        List<Image> updatedImage = new ArrayList<>();
 
         if(request.getImage().getImageBase64() != null) {
 
@@ -236,10 +253,11 @@ public class CafeService {
                 s3Uploader.delete(findImage.getOrigin());
                 s3Uploader.delete(findImage.getMedium());
                 s3Uploader.delete(findImage.getThumbnail());
-                findImage.changeOrigin(originImageUrl);
-                findImage.changMedium(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR));
-                findImage.changeThumbnail(changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR));
-                savedImage.add(imageRepository.save(findImage));
+                imageRepository.update(
+                        findImage.getId(),
+                        originImageUrl,
+                        changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_MEDIUM_IMAGE_DIR),
+                        changePath(originImageUrl, CAFE_MAIN_ORIGIN_IMAGE_DIR, CAFE_MAIN_THUMBNAIL_DIR));
             }
         }
 
@@ -255,15 +273,21 @@ public class CafeService {
                     Image findImage = optionalImage.get();
                     s3Uploader.delete(findImage.getThumbnail());
                     s3Uploader.delete(findImage.getOrigin());
-                    findImage.changeOrigin(originImageUrl);
-                    findImage.changeThumbnail(thumbnailImageUrl);
-                    savedImage.add(imageRepository.save(findImage));
+                    imageRepository.update(
+                            findImage.getId(),
+                            originImageUrl,
+                            thumbnailImageUrl);
                 }
                 continue;
             }
 
-            Image newImage = new Image(ImageType.CAFE, originImageUrl, thumbnailImageUrl, findCafe);
-            savedImage.add(imageRepository.save(newImage));
+            Image newImage = Image.builder()
+                    .imageType(ImageType.CAFE)
+                    .origin(originImageUrl)
+                    .thumbnail(thumbnailImageUrl)
+                    .cafe(findCafe)
+                    .build();
+            imageRepository.save(newImage);
         }
 
         List<CafeOperationHourDto> hours = request.getHours();
@@ -296,14 +320,18 @@ public class CafeService {
                 List<Image> findImages = imageRepository.findByMenu(targetMenu);
                 Image targetImage;
                 if(findImages.isEmpty()) {
-                    targetImage = new Image(ImageType.MENU, originImageUrl, thumbnailImageUrl, findCafe, targetMenu);
+                    targetImage = Image.builder()
+                            .imageType(ImageType.MENU)
+                            .origin(originImageUrl)
+                            .thumbnail(thumbnailImageUrl)
+                            .cafe(findCafe)
+                            .menu(targetMenu)
+                            .build();
+                    imageRepository.save(targetImage);
                 } else {
                     targetImage = findImages.get(0);
-                    targetImage.changeOrigin(originImageUrl);
-                    targetImage.changeThumbnail(thumbnailImageUrl);
+                    imageRepository.update(targetImage.getId(), originImageUrl, thumbnailImageUrl);
                 }
-
-                savedImage.add(imageRepository.save(targetImage));
             }
         }
 
@@ -329,7 +357,7 @@ public class CafeService {
 
         images.addAll(findCafeImageUrlDtoList);
         images.addAll(findReviewImageUrlDtoList);
-        return ImagesResponse.from(images);
+        return new ImagesResponse(images);
     }
 
     public MenusResponse findMenus(final Long cafeId) {

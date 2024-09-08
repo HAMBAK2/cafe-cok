@@ -151,14 +151,15 @@ public class ReviewService {
 
         Cafe cafe = review.getCafe();
         List<Image> reviewImages = imageUrls.stream()
-                .map(imageUrl -> {
-                    String convertedUrl = changePath(imageUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR);
-                    return new Image(
-                            ImageType.REVIEW,
-                            imageUrl,
-                            convertedUrl,
-                            cafe,
-                            review);
+                .map(originUrl -> {
+                    String thumbnailUrl = changePath(originUrl, REVIEW_ORIGIN_IMAGE_DIR, REVIEW_THUMBNAIL_IMAGE_DIR);
+                    return Image.builder()
+                            .imageType(ImageType.REVIEW)
+                            .origin(originUrl)
+                            .thumbnail(thumbnailUrl)
+                            .cafe(cafe)
+                            .review(review)
+                            .build();
                 })
                 .collect(Collectors.toList());
         List<Image> savedImages = imageRepository.saveAll(reviewImages);

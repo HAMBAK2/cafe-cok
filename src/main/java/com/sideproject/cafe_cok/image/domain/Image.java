@@ -68,46 +68,8 @@ public class Image extends BaseEntity {
         this.origin = origin;
         this.thumbnail = thumbnail;
         this.medium = medium;
-        this.cafe = cafe;
-        this.review = review;
-        this.menu = menu;
-    }
-
-    @Builder
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final Cafe cafe) {
-        this.imageType = imageType;
-        this.origin = origin;
-        this.thumbnail = thumbnail;
         if(cafe != null) changeCafe(cafe);
-    }
-
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final String medium,
-                 final Cafe cafe) {
-        this(imageType, origin, thumbnail, cafe);
-        this.medium = medium;
-    }
-
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final Cafe cafe,
-                 final Review review) {
-        this(imageType, origin, thumbnail, cafe);
         if(review != null) changeReview(review);
-    }
-
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final Cafe cafe,
-                 final Menu menu) {
-        this(imageType, origin, thumbnail, cafe);
         this.menu = menu;
     }
 
@@ -119,17 +81,5 @@ public class Image extends BaseEntity {
     public void changeCafe(final Cafe cafe) {
         this.cafe = cafe;
         cafe.getImages().add(this);
-    }
-
-    public void changeOrigin(final String origin) {
-        this.origin = origin;
-    }
-
-    public void changMedium(final String medium) {
-        this.medium = medium;
-    }
-
-    public void changeThumbnail(final String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 }

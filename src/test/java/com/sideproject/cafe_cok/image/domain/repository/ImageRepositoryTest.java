@@ -2,10 +2,8 @@ package com.sideproject.cafe_cok.image.domain.repository;
 
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
-import com.sideproject.cafe_cok.constant.TestConstants;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
 import com.sideproject.cafe_cok.image.exception.NoSuchImageException;
 import com.sideproject.cafe_cok.member.domain.Member;
@@ -59,7 +57,12 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage = imageRepository.save(image);
 
         //when
@@ -107,11 +110,22 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image1 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
+        Image image2 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
+
         List<Long> idList = Arrays.asList(savedImage1.getId(), savedImage2.getId());
 
         //when
@@ -145,10 +159,22 @@ class ImageRepositoryTest {
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
 
-        Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
+        Image image1 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
+        Image image2 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();;
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -183,10 +209,22 @@ class ImageRepositoryTest {
                 .build();
         Menu savedMenu = menuRepository.save(menu);
 
-        Image image1 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedMenu);
+        Image image1 = Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .menu(savedMenu)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu);
+        Image image2 = Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .menu(savedMenu)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -215,10 +253,20 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image1 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
+        Image image2 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
         List<Long> idList = Arrays.asList(savedImage1.getId(), savedImage2.getId());
 
@@ -252,10 +300,20 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image1 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
+        Image image2 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT);
@@ -295,10 +353,22 @@ class ImageRepositoryTest {
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
 
-        Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
+        Image image1 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
+        Image image2 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();;
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -327,10 +397,20 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image1 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
+        Image image2 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -358,10 +438,20 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
+        Image image1 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
+        Image image2 = Image.builder()
+                .imageType(ImageType.CAFE)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT);
@@ -402,10 +492,22 @@ class ImageRepositoryTest {
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
 
-        Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
+        Image image1 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
 
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
+        Image image2 = Image.builder()
+                .imageType(ImageType.REVIEW)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .review(savedReview)
+                .build();;
         Image savedImage2 = imageRepository.save(image2);
 
         Sort sort = Sort.by(Sort.Order.desc("id"));

@@ -136,9 +136,22 @@ class MenuRepositoryTest {
                 .build();
         Menu savedMenu2 = menuRepository.save(menu2);
 
-        Image image1 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedMenu1);
-        Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu2);
+        Image image1 =  Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .menu(savedMenu1)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .menu(savedMenu2)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         //when

@@ -5,9 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
-import com.sideproject.cafe_cok.image.dto.QImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlDto;
 import com.sideproject.cafe_cok.util.QuerydslUtil;
 import jakarta.persistence.EntityManager;
@@ -24,6 +22,33 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
     public ImageRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public void update(final Long imageId,
+                       final String origin,
+                       final String medium,
+                       final String thumbnail) {
+
+        queryFactory.update(image)
+                .set(image.origin, origin)
+                .set(image.medium, medium)
+                .set(image.thumbnail, thumbnail)
+                .where(image.id.eq(imageId))
+                .execute();
+
+    }
+
+    @Override
+    public void update(final Long imageId,
+                       final String origin,
+                       final String thumbnail) {
+
+        queryFactory.update(image)
+                .set(image.origin, origin)
+                .set(image.thumbnail, thumbnail)
+                .where(image.id.eq(imageId))
+                .execute();
     }
 
     public List<ImageUrlDto> findCafeImageUrlDtoListByCafeId(final Long cafeId,

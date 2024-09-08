@@ -44,11 +44,19 @@ class MenuServiceTest {
 
         //given
         Cafe cafe = new Cafe();
+
         Menu menu = Menu.builder()
                 .id(ENTITY_ID)
                 .cafe(cafe)
                 .build();
-        Image image = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, cafe, menu);
+
+        Image image = Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(cafe)
+                .menu(menu)
+                .build();;
 
         //mocking
         given(menuRepository.getById(anyLong())).willReturn(menu);
