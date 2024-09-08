@@ -186,7 +186,18 @@ public class PlanService {
                     List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList = null;
                     if (memberId != null) findBookmarkFolderIdsDtoList =
                             bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId);
-                    return new CafeDto(cafe, findImageUrl, findBookmarkFolderIdsDtoList);
+                    return CafeDto.builder()
+                            .id(cafe.getId())
+                            .name(cafe.getName())
+                            .phoneNumber(cafe.getPhoneNumber())
+                            .roadAddress(cafe.getRoadAddress())
+                            .latitude(cafe.getLatitude())
+                            .longitude(cafe.getLongitude())
+                            .starRating(cafe.getStarRating())
+                            .reviewCount(cafe.getReviewCount())
+                            .imageUrl(findImageUrl)
+                            .bookmarks(findBookmarkFolderIdsDtoList)
+                            .build();
                 }).collect(Collectors.toList());
         return cafeDtoList;
     }
@@ -239,7 +250,17 @@ public class PlanService {
                                                        final Long memberId) {
         return cafeList.stream()
                 .map(cafe -> {
-                    CafeDto newCafeDto = new CafeDto(cafe, cafe.getImages().get(0).getThumbnail());
+                    CafeDto newCafeDto = CafeDto.builder()
+                            .id(cafe.getId())
+                            .name(cafe.getName())
+                            .phoneNumber(cafe.getPhoneNumber())
+                            .roadAddress(cafe.getRoadAddress())
+                            .latitude(cafe.getLatitude())
+                            .longitude(cafe.getLongitude())
+                            .starRating(cafe.getStarRating())
+                            .reviewCount(cafe.getReviewCount())
+                            .imageUrl(cafe.getImages().get(0).getThumbnail())
+                            .build();
                     if(memberId != null) {
                         newCafeDto.setBookmarks(bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId));
                     }

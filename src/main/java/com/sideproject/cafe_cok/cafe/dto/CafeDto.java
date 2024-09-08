@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import com.sideproject.cafe_cok.bookmark.dto.BookmarkFolderIdsDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,33 +26,29 @@ public class CafeDto {
     private String imageUrl;
     private List<BookmarkFolderIdsDto> bookmarks;
 
+
+    @Builder
     @QueryProjection
-    public CafeDto(final Cafe cafe,
+    public CafeDto(final Long id,
+                   final String name,
+                   final String phoneNumber,
+                   final String roadAddress,
+                   final BigDecimal latitude,
+                   final BigDecimal longitude,
+                   final BigDecimal starRating,
+                   final Long reviewCount,
                    final String imageUrl,
                    final List<BookmarkFolderIdsDto> bookmarks) {
-        this.id = cafe.getId();
-        this.name = cafe.getName();
-        this.phoneNumber = cafe.getPhoneNumber();
-        this.roadAddress = cafe.getRoadAddress();
-        this.latitude = cafe.getLatitude();
-        this.longitude = cafe.getLongitude();
-        this.starRating = cafe.getStarRating();
-        this.reviewCount = cafe.getReviewCount();
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.roadAddress = roadAddress;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.starRating = starRating;
+        this.reviewCount = reviewCount;
         this.imageUrl = imageUrl;
         this.bookmarks = bookmarks;
-    }
-
-    public CafeDto(final Cafe cafe,
-                   final String imageUrl) {
-        this.id = cafe.getId();
-        this.name = cafe.getName();
-        this.phoneNumber = cafe.getPhoneNumber();
-        this.roadAddress = cafe.getRoadAddress();
-        this.latitude = cafe.getLatitude();
-        this.longitude = cafe.getLongitude();
-        this.starRating = cafe.getStarRating();
-        this.reviewCount = cafe.getReviewCount();
-        this.imageUrl = imageUrl;
     }
 
     public void setBookmarks(final List<BookmarkFolderIdsDto> bookmarks) {

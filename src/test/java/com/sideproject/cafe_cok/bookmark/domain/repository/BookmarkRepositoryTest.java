@@ -37,7 +37,14 @@ class BookmarkRepositoryTest {
     void ID를_기반으로_북마크를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);

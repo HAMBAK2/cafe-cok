@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.cafe.dto;
 import com.sideproject.cafe_cok.menu.dto.MenuDetailDto;
 import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.image.dto.ImageDto;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -22,20 +23,22 @@ public class CafeAdminDto {
     private List<MenuDetailDto> menus;
     private List<CafeOperationHourDto> hours = new ArrayList<>();
 
-    public CafeAdminDto(final Cafe cafe) {
-        this.id = cafe.getId();
-        this.name = cafe.getName();
-        this.address = cafe.getRoadAddress();
-        this.phoneNumber = cafe.getPhoneNumber();
-        this.latitude = cafe.getLatitude();
-        this.longitude = cafe.getLongitude();
-    }
-
-    public CafeAdminDto(final Cafe cafe,
+    @Builder
+    public CafeAdminDto(final Long id,
+                        final String name,
+                        final String address,
+                        final String phoneNumber,
+                        final BigDecimal latitude,
+                        final BigDecimal longitude,
                         final List<ImageDto> images,
                         final List<MenuDetailDto> menus,
                         final List<CafeOperationHourDto> hours) {
-        this(cafe);
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.images = images;
         this.menus = menus;
         this.hours = hours;

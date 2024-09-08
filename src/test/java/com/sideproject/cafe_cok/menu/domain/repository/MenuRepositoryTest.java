@@ -34,7 +34,14 @@ class MenuRepositoryTest {
     void 메뉴_ID를_기반으로_메뉴를_조회한다(){
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Menu menu = Menu.builder()
@@ -67,7 +74,14 @@ class MenuRepositoryTest {
     void 카페_ID를_기반으로_메뉴_리스트를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Menu menu1 = Menu.builder()
@@ -98,7 +112,14 @@ class MenuRepositoryTest {
     void 카페_ID를_기반으로_MENU_IMAGE_URL_DTO_리스트를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Menu menu1 = Menu.builder()

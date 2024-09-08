@@ -48,6 +48,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sideproject.cafe_cok.cafe.dto.response.CafeTopResponse.*;
 import static com.sideproject.cafe_cok.util.Constants.*;
 import static com.sideproject.cafe_cok.util.FormatConverter.*;
 import static com.sideproject.cafe_cok.util.FormatConverter.getKoreanDayOfWeek;
@@ -102,12 +103,24 @@ public class CafeService {
                 keywordRepository.findKeywordDtoListByCafeIdOrderByCountDesc(
                         cafeId, PageRequest.of(0, CAFE_DETAIL_TOP_KEYWORD_MAX_CNT));
 
+        CafeTopResponseBuilder responseBuilder = builder()
+                .cafeId(findCafe.getId())
+                .cafeName(findCafe.getName())
+                .roadAddress(findCafe.getRoadAddress())
+                .latitude(findCafe.getLatitude())
+                .longitude(findCafe.getLongitude())
+                .starRating(findCafe.getStarRating())
+                .reviewCount(findCafe.getReviewCount())
+                .originUrl(findImage.getOrigin())
+                .thumbnailUrl(findImage.getThumbnail())
+                .keywords(findKeywordDtoList);
+
         if(memberId != null) {
             List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList
                     = bookmarkRepository.getBookmarkFolderIds(cafeId, memberId);
-            return new CafeTopResponse(findCafe, findImage, findKeywordDtoList, findBookmarkFolderIdsDtoList);
+            responseBuilder.bookmarks(findBookmarkFolderIdsDtoList).build();
         }
-        return new CafeTopResponse(findCafe, findImage, findKeywordDtoList);
+        return responseBuilder.build();
     }
 
     public CafeBasicResponse findBasic(final Long cafeId) {
@@ -135,15 +148,29 @@ public class CafeService {
         List<ImageUrlDto> imageUrlDtoList = getImageUrlDtoListByCafeId(cafeId);
         List<CafeDetailReviewDto> reviews = getCafeDetailReviewDtoList(cafeId, CAFE_DETAIL_BASIC_REVIEW_PAGE_CNT);
 
-        return new CafeBasicResponse(
-                findCafe, openStatus, businessHours, closedDay,
-                findMenuImageDtoList, imageUrlDtoList, userChoiceKeywords, reviews);
+        return CafeBasicResponse.builder()
+                .roadAddress(findCafe.getRoadAddress())
+                .phoneNumber(findCafe.getPhoneNumber())
+                .openStatus(openStatus)
+                .businessHours(businessHours)
+                .closedDay(closedDay)
+                .menus(findMenuImageDtoList)
+                .imageUrls(imageUrlDtoList)
+                .userChoiceKeywords(userChoiceKeywords)
+                .reviews(reviews)
+                .build();
     }
 
     @Transactional
     public CafeSaveResponse save(final AdminCafeSaveRequest request) {
 
-        Cafe newCafe = new Cafe(request);
+        Cafe newCafe = Cafe.builder()
+                .name(request.getName())
+                .roadAddress(request.getAddress())
+                .longitude(request.getLongitude())
+                .latitude(request.getLatitude())
+                .kakaoId(request.getKakaoId())
+                .build();
         Cafe savedCafe = cafeRepository.save(newCafe);
         List<Image> savedImages = new ArrayList<>();
 
@@ -328,7 +355,13 @@ public class CafeService {
             boolean isClosed = false;
 
             if(startTime.equals(LocalTime.MIDNIGHT) && endTime.equals(LocalTime.MIDNIGHT)) isClosed = true;
-            OperationHour newOperationHour = new OperationHour(day, startTime, endTime, isClosed, cafe);
+            OperationHour newOperationHour = OperationHour.builder()
+                    .date(day)
+                    .openingTime(startTime)
+                    .closingTime(endTime)
+                    .isClosed(isClosed)
+                    .cafe(cafe)
+                    .build();
             newOperationHours.add(newOperationHour);
         }
 
@@ -395,7 +428,18 @@ public class CafeService {
                     List<BookmarkFolderIdsDto> findBookmarkFolderIdsDtoList = null;
                     if(memberId != null) findBookmarkFolderIdsDtoList =
                             bookmarkRepository.getBookmarkFolderIds(cafe.getId(), memberId);
-                    return new CafeDto(cafe, findImageUrl, findBookmarkFolderIdsDtoList);
+                    return CafeDto.builder()
+                            .id(cafe.getId())
+                            .name(cafe.getName())
+                            .phoneNumber(cafe.getPhoneNumber())
+                            .roadAddress(cafe.getRoadAddress())
+                            .latitude(cafe.getLatitude())
+                            .longitude(cafe.getLongitude())
+                            .starRating(cafe.getStarRating())
+                            .reviewCount(cafe.getReviewCount())
+                            .imageUrl(findImageUrl)
+                            .bookmarks(findBookmarkFolderIdsDtoList)
+                            .build();
                 }).collect(Collectors.toList());
         return cafeDtoList;
     }

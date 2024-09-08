@@ -1,15 +1,13 @@
 package com.sideproject.cafe_cok.cafe.domain;
 
-import com.sideproject.cafe_cok.admin.dto.request.AdminCafeSaveRequest;
+import com.sideproject.cafe_cok.cafe.dto.CafeAdminDto;
+import com.sideproject.cafe_cok.cafe.dto.CafeDto;
 import com.sideproject.cafe_cok.cafe.exception.InvalidCafeException;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -56,10 +54,10 @@ public class Cafe extends BaseEntity {
     private BigDecimal latitude;
 
     @Column(name = "star_rating", precision = 2, scale = 1)
-    private BigDecimal starRating;
+    private BigDecimal starRating = BigDecimal.ZERO;
 
     @Column(name = "review_count")
-    private Long reviewCount;
+    private Long reviewCount = 0L;
 
     @Column(name = "kakao_id")
     private Long kakaoId;
@@ -73,38 +71,26 @@ public class Cafe extends BaseEntity {
     @OneToMany(mappedBy = "cafe")
     private List<Image> images = new ArrayList<>();
 
-    public Cafe(final String name,
+    @Builder
+    public Cafe(final Long id,
+                final String name,
                 final String phoneNumber,
-                final String roadAddress,
+                final  String roadAddress,
                 final BigDecimal longitude,
                 final BigDecimal latitude,
+                final BigDecimal starRating,
+                final Long reviewCount,
                 final Long kakaoId) {
         validatePhoneNumber(convertFormatPhoneNumber(phoneNumber));
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.roadAddress = roadAddress;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.starRating = BigDecimal.ZERO;
-        this.reviewCount = 0L;
+        this.starRating = starRating;
+        this.reviewCount = reviewCount;
         this.kakaoId = kakaoId;
-    }
-
-    public Cafe(final AdminCafeSaveRequest request) {
-        this(request.getName(),
-                request.getPhone(),
-                request.getAddress(),
-                request.getLongitude(),
-                request.getLatitude(),
-                request.getKakaoId());
-    }
-
-    private void validatePhoneNumber(final String phoneNumber) {
-        if(phoneNumber == null || phoneNumber.isEmpty()) return;
-        Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
-        if(!matcher.matches()) {
-            throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
-        }
     }
 
     public void addReviewCountAndCalculateStarRating(final Integer starRating) {
@@ -127,7 +113,12 @@ public class Cafe extends BaseEntity {
         this.starRating = totalScore.divide(newReviewCount, 2, RoundingMode.HALF_UP);
     }
 
-    public void changeStarRating(final Integer starRating) {
-        this.starRating = BigDecimal.valueOf(starRating);
+    private void validatePhoneNumber(final String phoneNumber) {
+        if(phoneNumber == null || phoneNumber.isEmpty()) return;
+        Matcher matcher = PHONE_NUMBER_PATTERN.matcher(phoneNumber);
+        if(!matcher.matches()) {
+            throw new InvalidCafeException("전화번호 형식이 올바르지 않습니다.");
+        }
     }
+
 }

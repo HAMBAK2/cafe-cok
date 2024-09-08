@@ -50,7 +50,13 @@ public class AdminService {
 
         List<Cafe> findCafes = cafeRepository.findAllByOrderByIdDesc();
         return findCafes.stream()
-                .map(cafe -> new CafeAdminDto(cafe))
+                .map(cafe -> CafeAdminDto.builder()
+                        .id(cafe.getId())
+                        .name(cafe.getName())
+                        .address(cafe.getRoadAddress())
+                        .latitude(cafe.getLatitude())
+                        .longitude(cafe.getLongitude())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +86,17 @@ public class AdminService {
             }
         }
 
-        return new CafeAdminDto(findCafe, images, findMenus, hours);
+        return CafeAdminDto.builder()
+                .id(findCafe.getId())
+                .name(findCafe.getName())
+                .address(findCafe.getRoadAddress())
+                .phoneNumber(findCafe.getPhoneNumber())
+                .latitude(findCafe.getLatitude())
+                .longitude(findCafe.getLongitude())
+                .images(images)
+                .menus(findMenus)
+                .hours(hours)
+                .build();
     }
 
     private List<CafeOperationHourDto> generateHours() {
@@ -88,7 +104,9 @@ public class AdminService {
         List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
         List<CafeOperationHourDto> hours = new ArrayList<>();
         for (String day : daysOfWeek) {
-            hours.add(new CafeOperationHourDto(day));
+            hours.add(CafeOperationHourDto.builder()
+                    .day(day)
+                    .build());
         }
 
         return hours;

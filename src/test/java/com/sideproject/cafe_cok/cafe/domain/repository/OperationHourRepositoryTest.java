@@ -29,14 +29,32 @@ class OperationHourRepositoryTest {
 
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        OperationHour operationHour1 = new OperationHour(OPERATION_HOUR_DATE.getDayOfWeek(),
-                OPERATION_HOUR_START_TIME, OPERATION_HOUR_END_TIME, OPERATION_IS_CLOSED, savedCafe);
-        OperationHour operationHour2 = new OperationHour(OPERATION_HOUR_DATE_2.getDayOfWeek(),
-                OPERATION_HOUR_START_TIME_2, OPERATION_HOUR_END_TIME_2, OPERATION_IS_CLOSED_2, savedCafe);
+        OperationHour operationHour1 = OperationHour.builder()
+                .date(OPERATION_HOUR_DATE.getDayOfWeek())
+                .openingTime(OPERATION_HOUR_START_TIME)
+                .closingTime(OPERATION_HOUR_END_TIME)
+                .isClosed(OPERATION_IS_CLOSED)
+                .cafe(savedCafe)
+                .build();
         OperationHour savedOperationHour1 = operationHourRepository.save(operationHour1);
+
+        OperationHour operationHour2 = OperationHour.builder()
+                .date(OPERATION_HOUR_DATE_2.getDayOfWeek())
+                .openingTime(OPERATION_HOUR_START_TIME_2)
+                .closingTime(OPERATION_HOUR_END_TIME_2)
+                .isClosed(OPERATION_IS_CLOSED_2)
+                .cafe(savedCafe)
+                .build();
         OperationHour savedOperationHour2 = operationHourRepository.save(operationHour2);
 
         //when
@@ -57,14 +75,32 @@ class OperationHourRepositoryTest {
     void delete_by_cafe_id() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        OperationHour operationHour1 = new OperationHour(OPERATION_HOUR_DATE.getDayOfWeek(),
-                OPERATION_HOUR_START_TIME, OPERATION_HOUR_END_TIME, OPERATION_IS_CLOSED, savedCafe);
-        OperationHour operationHour2 = new OperationHour(OPERATION_HOUR_DATE_2.getDayOfWeek(),
-                OPERATION_HOUR_START_TIME_2, OPERATION_HOUR_END_TIME_2, OPERATION_IS_CLOSED_2, savedCafe);
+        OperationHour operationHour1 = OperationHour.builder()
+                .date(OPERATION_HOUR_DATE.getDayOfWeek())
+                .openingTime(OPERATION_HOUR_START_TIME)
+                .closingTime(OPERATION_HOUR_END_TIME)
+                .isClosed(OPERATION_IS_CLOSED)
+                .cafe(savedCafe)
+                .build();
         OperationHour savedOperationHour1 = operationHourRepository.save(operationHour1);
+
+        OperationHour operationHour2 = OperationHour.builder()
+                .date(OPERATION_HOUR_DATE_2.getDayOfWeek())
+                .openingTime(OPERATION_HOUR_START_TIME_2)
+                .closingTime(OPERATION_HOUR_END_TIME_2)
+                .isClosed(OPERATION_IS_CLOSED_2)
+                .cafe(savedCafe)
+                .build();
         OperationHour savedOperationHour2 = operationHourRepository.save(operationHour2);
 
         //when

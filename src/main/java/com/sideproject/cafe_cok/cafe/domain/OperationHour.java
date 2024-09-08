@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.cafe.domain;
 import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,6 +42,21 @@ public class OperationHour extends BaseEntity {
     @JoinColumn(name = "cafes_id")
     private Cafe cafe;
 
+
+    @Builder
+    public OperationHour(final Long id,
+                         final DayOfWeek date,
+                         final LocalTime openingTime,
+                         final LocalTime closingTime,
+                         final boolean isClosed,
+                         final Cafe cafe) {
+        this.id = id;
+        this.date = date;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.isClosed = isClosed;
+        if(cafe != null) changeCafe(cafe);
+    }
 
     public OperationHour(final DayOfWeek date,
                          final LocalTime openingTime,

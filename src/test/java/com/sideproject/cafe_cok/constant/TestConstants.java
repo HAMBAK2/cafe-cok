@@ -43,17 +43,17 @@ public class TestConstants {
     public static final String CAFE_ROAD_ADDRESS = "cafe road address";
     public static final BigDecimal CAFE_LONGITUDE = new BigDecimal("126.98055287409800");
     public static final BigDecimal CAFE_LATITUDE = new BigDecimal("37.57061772252790");
-    public static final Integer CAFE_STAR_RATING = 1;
+    public static final BigDecimal CAFE_STAR_RATING = BigDecimal.valueOf(1L);
     public static final Long CAFE_KAKAO_ID = 1L;
     public static final String CAFE_NAME_2 = "cafe name2";
     public static final String CAFE_PHONE_NUMBER_2 = "010-000-0002";
     public static final String CAFE_ROAD_ADDRESS_2 = "cafe road address2";
-    public static final BigDecimal CAFE_LONGITUDE_2 = new BigDecimal("126.98055287409800");
+    public static final BigDecimal CAFE_LONGITUDE_2 = new BigDecimal("126.18055287409800");
     public static final BigDecimal CAFE_LATITUDE_2 = new BigDecimal("37.57061772252790");
     public static final BigDecimal CAFE_LONGITUDE_OUT_OF_RANGE = new BigDecimal("126.90002764094500");
     public static final BigDecimal CAFE_LATITUDE_OUT_OF_RANGE = new BigDecimal("37.55172454590180");
     public static final Long CAFE_KAKAO_ID_2 = 2L;
-    public static final Integer CAFE_STAR_RATING_2 = 2;
+    public static final BigDecimal CAFE_STAR_RATING_2 = BigDecimal.valueOf(2L);
     public static final CafeSearchCondition CAFE_SEARCH_CONDITION =
             new CafeSearchCondition(OPERATION_HOUR_DATE, OPERATION_HOUR_START_TIME,
                     OPERATION_HOUR_END_TIME, CAFE_LATITUDE, CAFE_LONGITUDE, 30);

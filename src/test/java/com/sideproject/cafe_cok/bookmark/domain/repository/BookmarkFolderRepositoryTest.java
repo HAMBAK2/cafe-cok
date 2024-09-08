@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.cafe.domain.Cafe;
 import com.sideproject.cafe_cok.cafe.domain.repository.CafeRepository;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.member.domain.repository.MemberRepository;
+import lombok.Builder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +144,14 @@ class BookmarkFolderRepositoryTest {
                 .build();
         BookmarkFolder savedBookmarkFolder2 = bookmarkFolderRepository.save(bookmarkFolder2);
 
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Bookmark bookmark = Bookmark.builder()

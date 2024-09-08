@@ -1,30 +1,24 @@
 package com.sideproject.cafe_cok.cafe.dto;
 
 import com.sideproject.cafe_cok.cafe.domain.OperationHour;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class CafeOperationHourDto {
 
     private String day;
-    private Integer startHour;
-    private Integer startMinute;
-    private Integer endHour;
-    private Integer endMinute;
+    private Integer startHour = 0;
+    private Integer startMinute = 0;
+    private Integer endHour = 0;
+    private Integer endMinute = 0;
 
-    public CafeOperationHourDto(String day) {
-        this.day = day;
-        this.startHour = 0;
-        this.startMinute = 0;
-        this.endHour = 0;
-        this.endMinute = 0;
-    }
-
-    public CafeOperationHourDto(String day,
-                                Integer startHour,
-                                Integer startMinute,
-                                Integer endHour,
-                                Integer endMinute) {
+    @Builder
+    public CafeOperationHourDto(final String day,
+                                final Integer startHour,
+                                final Integer startMinute,
+                                final Integer endHour,
+                                final Integer endMinute) {
         this.day = day;
         this.startHour = startHour;
         this.startMinute = startMinute;

@@ -46,12 +46,19 @@ class ImageRepositoryTest {
     private MenuRepository menuRepository;
 
     @Test
-    @DisplayName("Cafe, ImageType 기반으로 Image를 조회한다.")
-    void find_image_by_cafe_image_type() {
+    void 카페와_이미지타입으로_이미지를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
         Image savedImage = imageRepository.save(image);
 
@@ -66,11 +73,17 @@ class ImageRepositoryTest {
     }
 
     @Test
-    @DisplayName("Cafe, ImageType 기반으로 Image를 조회 시 잘못된 Cafe, Image로 조회하면 에러를 발생시킨다.")
-    void find_image_by_non_existent_cafe_image_type() {
+    void 카페_이미지타입으로_이미지_조회_시_잘못된_카페나_이미지로_조회하면_에러가_발생한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
         //when & then
@@ -81,14 +94,23 @@ class ImageRepositoryTest {
 
     @Test
     @DisplayName("이미지 id의 리스트로 해당하는 이미지를 삭제한다.")
-    void delete_all_by_id_in() {
+    void 이미지_ID의_리스트로_이미지를_삭제한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage2 = imageRepository.save(image2);
         List<Long> idList = Arrays.asList(savedImage1.getId(), savedImage2.getId());
 
@@ -104,18 +126,29 @@ class ImageRepositoryTest {
 
     @Test
     @DisplayName("reviewId를 기반으로 Image의 리스트를 조회한다.")
-    void find_by_review_id() {
+    void 리뷰ID로_이미지의_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
+
         Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -130,11 +163,17 @@ class ImageRepositoryTest {
     }
 
     @Test
-    @DisplayName("menu를 기반으로 Image의 리스트를 조회한다.")
-    void find_by_menu() {
+    void 메뉴로_이미지의_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
         Menu menu = Menu.builder()
@@ -143,9 +182,11 @@ class ImageRepositoryTest {
                 .cafe(savedCafe)
                 .build();
         Menu savedMenu = menuRepository.save(menu);
+
         Image image1 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedMenu);
-        Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu);
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -161,15 +202,23 @@ class ImageRepositoryTest {
 
 
     @Test
-    @DisplayName("이미지 id의 리스트로 해당하는 이미지를 조회한다.")
-    void find_all_by_id_in() {
+    void 이미지_ID의_리스트로_이미지의_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage2 = imageRepository.save(image2);
         List<Long> idList = Arrays.asList(savedImage1.getId(), savedImage2.getId());
 
@@ -190,15 +239,25 @@ class ImageRepositoryTest {
 
     @Test
     @DisplayName("cafeId, Pageable 기반으로 ImageUrlDto의 리스트를 조회한다(페이징)")
-    void find_cafe_image_url_dto_list_by_cafe_id_pageable() {
+    void 카페_ID와_pageable로_이미지의_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage2 = imageRepository.save(image2);
+
         PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT);
         PageRequest pageable2 = PageRequest.of(1, IMAGE_PAGE_CNT);
 
@@ -217,19 +276,29 @@ class ImageRepositoryTest {
 
 
     @Test
-    @DisplayName("reviewId를 기반으로 ImageUrlDto의 리스트를 조회한다.")
-    void find_image_url_dto_list_by_review_id() {
+    void 리뷰ID로_이미지_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
+
         Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -245,14 +314,23 @@ class ImageRepositoryTest {
 
     @Test
     @DisplayName("cafeId와 ImageType을 기반으로 ImageUrlDto의 리스트를 조회한다")
-    void find_cafe_image_url_dto_list_by_cafe_id_image_type() {
+    void 카페ID와_이미지타입으로_이미지URL_리스트를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage2 = imageRepository.save(image2);
 
         //when
@@ -267,16 +345,25 @@ class ImageRepositoryTest {
     }
 
     @Test
-    @DisplayName("cafeId, ImageType, Pageable 기반으로 ImageUrlDto의 리스트를 조회한다(페이징)")
-    void find_cafe_image_url_dto_list_by_cafe_id_image_type_pageable() {
+    void 카페ID_이미지타입_pageable로_이미지_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
         Image savedImage2 = imageRepository.save(image2);
+
         PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT);
         PageRequest pageable2 = PageRequest.of(1, IMAGE_PAGE_CNT);
 
@@ -296,20 +383,31 @@ class ImageRepositoryTest {
     }
 
     @Test
-    @DisplayName("reviewId, pageable을 기반으로 ImageUrlDto의 정렬된(내림차순) 리스트를 조회한다.")
-    void find_image_url_dto_list_by_review_id_pageable_sort() {
+    void 리뷰_ID_pageable로_정렬된_리뷰_이미지_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
+
         Image image1 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedReview);
-        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = new Image(ImageType.REVIEW, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedReview);
         Image savedImage2 = imageRepository.save(image2);
+
         Sort sort = Sort.by(Sort.Order.desc("id"));
         PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT, sort);
         PageRequest pageable2 = PageRequest.of(1, IMAGE_PAGE_CNT, sort);
@@ -326,37 +424,4 @@ class ImageRepositoryTest {
         assertThat(findList1).extracting("thumbnailUrl")
                 .containsExactly(image2.getThumbnail(), image1.getThumbnail());
     }
-
-    @Test
-    @DisplayName("cafeId, ImageType, Pageable, cursor 기반으로 ImageUrlCursorDto의 리스트를 조회한다(페이징)")
-    void find_cafe_image_url_dto_list_by_cafe_id_image_type_pageable_cursor() {
-
-        //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
-        Cafe savedCafe = cafeRepository.save(cafe);
-        Image image1 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe);
-        Image image2 = new Image(ImageType.CAFE, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe);
-        Image savedImage1 = imageRepository.save(image1);
-        Image savedImage2 = imageRepository.save(image2);
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        PageRequest pageable1 = PageRequest.of(0, IMAGE_PAGE_CNT, sort);
-        PageRequest pageable2 = PageRequest.of(1, IMAGE_PAGE_CNT, sort);
-
-        //when
-        List<ImageUrlCursorDto> findList1 =
-                imageRepository.findImageUrlCursorDtoListByCafeIdAndImageType(savedCafe.getId(),  null, ImageType.CAFE, pageable1);
-        List<ImageUrlCursorDto> findList2 =
-                imageRepository.findImageUrlCursorDtoListByCafeIdAndImageType(savedCafe.getId(), null, ImageType.CAFE, pageable2);
-
-        //then
-        assertThat(findList1).hasSize(2);
-        assertThat(findList2).hasSize(0);
-        assertThat(findList1).extracting("originUrl")
-                .containsExactly(image2.getOrigin(), image1.getOrigin());
-        assertThat(findList1).extracting("thumbnailUrl")
-                .containsExactly(image2.getThumbnail(), image1.getThumbnail());
-    }
-
-
-
 }

@@ -109,30 +109,6 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 .fetch();
     }
 
-    @Override
-    public List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageType(final Long cafeId,
-                                                                                 final Long cursor,
-                                                                                 final ImageType imageType,
-                                                                                 final Pageable pageable) {
-        NumberPath<Long> idPath = image.id;
-        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
-
-        return queryFactory
-                .select(new QImageUrlCursorDto(
-                        image.origin,
-                        image.thumbnail,
-                        image.id
-                ))
-                .from(image)
-                .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType),
-                        imageIdLt(cursor))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-                .fetch();
-    }
-
     private BooleanExpression cafeIdEq(final Long cafeId) {
         return isEmpty(cafeId) ? null : image.cafe.id.eq((cafeId));
     }

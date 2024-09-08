@@ -22,9 +22,4 @@ public interface ImageRepositoryCustom {
     List<ImageUrlDto> findImageUrlDtoListByCafeIdImageType(final Long cafeId,
                                                            final ImageType imageType,
                                                            final Pageable pageable);
-
-    List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageType(final Long cafeId,
-                                                                          final Long cursor,
-                                                                          final ImageType imageType,
-                                                                          final Pageable pageable);
 }

@@ -34,14 +34,22 @@ class ReviewRepositoryTest {
     private CafeRepository cafeRepository;
 
     @Test
-    @DisplayName("memberId 기반으로 review 리스트를 조회한다.")
-    void find_by_member_id() {
+    void 회원_ID로_리뷰_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review1 = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review review2 = new Review(REVIEW_CONTENT_2, REVIEW_SPECIAL_NOTE_2, REVIEW_STAR_RATING_2, savedCafe, savedMember);
         Review savedReview1 = reviewRepository.save(review1);
@@ -59,14 +67,22 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    @DisplayName("reviewId를 기반으로 리뷰를 조회한다.")
-    void get_by_id() {
+    void 리뷰_ID로_리뷰를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review savedReview = reviewRepository.save(review);
 
@@ -92,14 +108,22 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    @DisplayName("cafeId, pageable 기반으로 id 기준 정렬된 리뷰 리스트를 조회한다.")
-    void find_by_cafe_id_pageable_order_by_id() {
+    void 카페_ID_pageable을_사용하여_정렬된_리뷰_목록을_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
+
         Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
         Member savedMember = memberRepository.save(member);
+
         Review review1 = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
         Review review2 = new Review(REVIEW_CONTENT_2, REVIEW_SPECIAL_NOTE_2, REVIEW_STAR_RATING_2, savedCafe, savedMember);
         Review savedReview1 = reviewRepository.save(review1);
