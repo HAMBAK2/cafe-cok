@@ -89,12 +89,14 @@ public class AuthService {
                            final String reason) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        findMember.changeDeletedAt(LocalDateTime.now());
+        memberRepository.update(findMember.getId(), LocalDateTime.now());
 
-        Feedback newFeedback = new Feedback(
-                findMember.getEmail(),
-                FeedbackCategory.WITHDRAWAL_REASON,
-                reason);
+        Feedback newFeedback = Feedback.builder()
+                .email(findMember.getEmail())
+                .category(FeedbackCategory.WITHDRAWAL_REASON)
+                .content(reason)
+                .build();
+
         feedbackRepository.save(newFeedback);
         List<Review> findReviews = findMember.getReviews();
         findReviews.stream()
@@ -127,7 +129,12 @@ public class AuthService {
     private Member saveMember(final OAuthMember oAuthMember) {
 
         String randomNickname = nicknameService.generateNickname();
-        Member targetMember = new Member(oAuthMember.getEmail(), randomNickname, SocialType.KAKAO);
+        Member targetMember = Member.builder()
+                .email(oAuthMember.getEmail())
+                .nickname(randomNickname)
+                .socialType(SocialType.KAKAO)
+                .build();
+
         Member savedMember = memberRepository.save(targetMember);
         bookmarkFolderRepository.save(BookmarkFolder.builder()
                         .name(BASIC_FOLDER_NAME)

@@ -26,7 +26,11 @@ class OAuthTokenRepositoryTest {
     void exists_by_member_id() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
         OAuthToken oAuthToken = new OAuthToken(savedMember, REFRESH_TOKEN);
         OAuthToken savedOAuthToken = oAuthTokenRepository.save(oAuthToken);
@@ -45,7 +49,11 @@ class OAuthTokenRepositoryTest {
     void get_by_member_id() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();;
         Member savedMember = memberRepository.save(member);
         OAuthToken oAuthToken = new OAuthToken(savedMember, REFRESH_TOKEN);
         OAuthToken savedOAuthToken = oAuthTokenRepository.save(oAuthToken);

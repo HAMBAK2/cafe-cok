@@ -10,6 +10,7 @@ import com.sideproject.cafe_cok.review.domain.Review;
 import com.sideproject.cafe_cok.util.Constants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,7 @@ import java.util.regex.Matcher;
 @Getter
 @Entity
 @Table(name = "members")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member extends BaseEntity {
 
     @Id
@@ -57,14 +58,23 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
-    public Member(final String email,
+    @Builder
+    public Member(final Long id,
+                  final String email,
+                  final String picture,
                   final String nickname,
-                  final SocialType socialType) {
+                  final SocialType socialType,
+                  final LocalDateTime deletedAt) {
 
-        validateEmail(email);
-        this.email = email;
+        this.id = id;
         this.nickname = nickname;
+        this.picture = picture;
         this.socialType = socialType;
+        this.deletedAt = deletedAt;
+        if(email != null) {
+            validateEmail(email);
+            this.email = email;
+        }
     }
 
     private void validateEmail(final String email) {
@@ -74,20 +84,4 @@ public class Member extends BaseEntity {
             throw new InvalidMemberException("이메일 형식이 올바르지 않습니다.");
         }
     }
-
-    public void changeNickname(final String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void changePicture(final String picture) {
-        this.picture = picture;
-    }
-
-
-    public void changeDeletedAt(final LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-
-
 }

@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.keword.domain.CafeReviewKeyword;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -81,16 +82,20 @@ public class Cafe extends BaseEntity {
                 final BigDecimal starRating,
                 final Long reviewCount,
                 final Long kakaoId) {
-        validatePhoneNumber(convertFormatPhoneNumber(phoneNumber));
+
         this.id = id;
         this.name = name;
-        this.phoneNumber = phoneNumber;
         this.roadAddress = roadAddress;
         this.longitude = longitude;
         this.latitude = latitude;
         this.starRating = starRating;
         this.reviewCount = reviewCount;
         this.kakaoId = kakaoId;
+
+        if(phoneNumber != null) {
+            validatePhoneNumber(convertFormatPhoneNumber(phoneNumber));
+            this.phoneNumber = phoneNumber;
+        }
     }
 
     public void addReviewCountAndCalculateStarRating(final Integer starRating) {

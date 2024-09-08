@@ -47,7 +47,11 @@ class BookmarkRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         BookmarkFolder bookmarkFolder = BookmarkFolder.builder()

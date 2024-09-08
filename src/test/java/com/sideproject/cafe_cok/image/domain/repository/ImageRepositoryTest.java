@@ -153,7 +153,11 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
@@ -347,7 +351,11 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
@@ -486,7 +494,11 @@ class ImageRepositoryTest {
                 .build();
         Cafe savedCafe = cafeRepository.save(cafe);
 
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);

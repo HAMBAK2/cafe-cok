@@ -9,7 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class MemberPlansResponse extends RepresentationModel<MemberPlansResponse> {
 
     private List<PlanKeywordDto> plans;

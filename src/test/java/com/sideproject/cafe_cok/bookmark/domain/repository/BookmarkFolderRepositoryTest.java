@@ -39,7 +39,11 @@ class BookmarkFolderRepositoryTest {
     void 북마크_폴더_ID로_북마크_폴더를_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         BookmarkFolder bookmarkFolder = BookmarkFolder.builder()
@@ -78,7 +82,11 @@ class BookmarkFolderRepositoryTest {
     void 회원_ID로_북마크_폴더_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         BookmarkFolder bookmarkFolder1 = BookmarkFolder.builder()
@@ -123,7 +131,11 @@ class BookmarkFolderRepositoryTest {
     void 회원_ID로_북마크_폴더_상세_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         BookmarkFolder bookmarkFolder1 = BookmarkFolder.builder()

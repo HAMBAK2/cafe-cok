@@ -46,13 +46,16 @@ public class MemberService {
                                  final MultipartFile file) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        if(nickname != null) findMember.changeNickname(nickname);
+        String updateNickname = findMember.getNickname();
+        String updatePicture = findMember.getPicture();
+
+        if(nickname != null) updateNickname = nickname;
         if(file != null) {
             if(findMember.getPicture() != null) s3Uploader.delete(findMember.getPicture());
-            String picture = s3Uploader.upload(file, MEMBER_ORIGIN_IMAGE_DIR);
-            findMember.changePicture(picture);
+            updatePicture = s3Uploader.upload(file, MEMBER_ORIGIN_IMAGE_DIR);
         }
 
+        memberRepository.update(findMember.getId(), updateNickname, updatePicture);
         return new MemberResponse(findMember);
     }
 
@@ -61,10 +64,12 @@ public class MemberService {
                              final MemberFeedbackRequest request) {
 
         Member findMember = memberRepository.getById(loginMember.getId());
-        Feedback newFeedback = new Feedback(
-                findMember.getEmail(),
-                FeedbackCategory.IMPROVEMENT_SUGGESTION,
-                request.getContent());
+        Feedback newFeedback = Feedback.builder()
+                .email(findMember.getEmail())
+                .category(FeedbackCategory.IMPROVEMENT_SUGGESTION)
+                .content(request.getContent())
+                .build();
+
         feedbackRepository.save(newFeedback);
         return new MemberResponse(findMember);
     }
