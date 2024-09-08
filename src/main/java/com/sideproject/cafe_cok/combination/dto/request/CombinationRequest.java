@@ -9,21 +9,26 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class CombinationRequest {
 
     private String name;
     private String icon;
     private List<String> keywords;
 
-
-    public CombinationRequest(final String name, final String icon, final List<String> keywords) {
+    public CombinationRequest(final String name,
+                              final String icon,
+                              final List<String> keywords) {
         this.name = name;
         this.icon = icon;
         this.keywords = keywords;
     }
 
     public Combination toEntity(final Member member) {
-        return new Combination(name, icon, member);
+        return Combination.builder()
+                .name(this.name)
+                .icon(this.icon)
+                .member(member)
+                .build();
     }
 }

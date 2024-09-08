@@ -3,10 +3,7 @@ package com.sideproject.cafe_cok.combination.domain;
 import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import com.sideproject.cafe_cok.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,17 +35,15 @@ public class Combination {
     @OneToMany(mappedBy = "combination", cascade = CascadeType.ALL)
     private List<CombinationKeyword> combinationKeywords = new ArrayList<>();
 
-    public Combination(final String name,
+    @Builder
+    public Combination(final Long id,
+                       final String name,
                        final String icon,
                        final Member member) {
+        this.id = id;
         this.name = name;
         this.icon = icon;
         if(member != null) changeMember(member);
-    }
-
-    public void changeByRequest(final CombinationRequest request) {
-        this.name = request.getName();
-        this.icon = request.getIcon();
     }
 
     public void changeMember(final Member member) {
