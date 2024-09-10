@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.review.dto.request.ReviewSaveRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -50,7 +51,9 @@ public class Review extends BaseEntity {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<CafeReviewKeyword> cafeReviewKeywords = new ArrayList<>();
 
-    public Review(final String content,
+    @Builder
+    public Review(final Long id,
+                  final String content,
                   final String specialNote,
                   final Integer starRating,
                   final Cafe cafe,
@@ -62,25 +65,7 @@ public class Review extends BaseEntity {
         if(member != null) changeMember(member);
     }
 
-    public Review(final ReviewSaveRequest request,
-                  final Cafe cafe,
-                  final Member member) {
-        this(request.getContent(), request.getSpecialNote(), request.getStarRating(), cafe, member);
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setSpecialNote(String specialNote) {
-        this.specialNote = specialNote;
-    }
-
-    public void setStarRating(Integer starRating) {
-        this.starRating = starRating;
-    }
-
-    public void changeMember(final Member member) {
+    private void changeMember(final Member member) {
         this.member = member;
         member.getReviews().add(this);
     }

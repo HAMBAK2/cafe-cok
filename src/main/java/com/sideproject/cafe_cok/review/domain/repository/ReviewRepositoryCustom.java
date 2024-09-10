@@ -7,6 +7,11 @@ import java.util.List;
 
 public interface ReviewRepositoryCustom {
 
+    void update(final Long reviewId,
+                final String content,
+                final String specialNote,
+                Integer starRating);
+
     List<Review> findByCafeId(final Long cafeId,
                               final Pageable pageable);
 }

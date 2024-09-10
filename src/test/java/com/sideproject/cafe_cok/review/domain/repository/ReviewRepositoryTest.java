@@ -54,9 +54,22 @@ class ReviewRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review1 = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
-        Review review2 = new Review(REVIEW_CONTENT_2, REVIEW_SPECIAL_NOTE_2, REVIEW_STAR_RATING_2, savedCafe, savedMember);
+        Review review1 = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview1 = reviewRepository.save(review1);
+
+        Review review2 = Review.builder()
+                .content(REVIEW_CONTENT_2)
+                .specialNote(REVIEW_SPECIAL_NOTE_2)
+                .starRating(REVIEW_STAR_RATING_2)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview2 = reviewRepository.save(review2);
 
         //when
@@ -91,7 +104,13 @@ class ReviewRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
+        Review review = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview = reviewRepository.save(review);
 
         //when
@@ -136,10 +155,24 @@ class ReviewRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review1 = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
-        Review review2 = new Review(REVIEW_CONTENT_2, REVIEW_SPECIAL_NOTE_2, REVIEW_STAR_RATING_2, savedCafe, savedMember);
+        Review review1 = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview1 = reviewRepository.save(review1);
+
+        Review review2 = Review.builder()
+                .content(REVIEW_CONTENT_2)
+                .specialNote(REVIEW_SPECIAL_NOTE_2)
+                .starRating(REVIEW_STAR_RATING_2)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview2 = reviewRepository.save(review2);
+
         Sort sort = Sort.by(Sort.Order.desc("id"));
         PageRequest pageable1 = PageRequest.of(0, REVIEW_PAGE_CNT, sort);
         PageRequest pageable2 = PageRequest.of(1, REVIEW_PAGE_CNT, sort);

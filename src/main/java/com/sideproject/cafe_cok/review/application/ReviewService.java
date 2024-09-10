@@ -64,7 +64,13 @@ public class ReviewService {
         findCafe.addReviewCountAndCalculateStarRating(request.getStarRating());
         Member findMember = memberRepository.getById(loginMember.getId());
 
-        Review review = new Review(request, findCafe, findMember);
+        Review review = Review.builder()
+                .content(request.getContent())
+                .specialNote(request.getSpecialNote())
+                .starRating(request.getStarRating())
+                .cafe(findCafe)
+                .member(findMember)
+                .build();
         Review savedReview = reviewRepository.save(review);
 
         if(request.getKeywords() == null) throw new MissingRequiredValueException("keyword");
@@ -94,17 +100,20 @@ public class ReviewService {
                                    final List<MultipartFile> files,
                                    final Long reviewId) {
 
+        if(request.getKeywords() == null) throw new MissingRequiredValueException("keyword");
         List<String> savedImageUrls = uploadImageToS3(files);
 
         Review findReview = reviewRepository.getById(reviewId);
-        if(request.getContent() != null) findReview.setContent(request.getContent());
-        if(request.getSpecialNote() != null) findReview.setSpecialNote(request.getSpecialNote());
-        if(request.getStarRating() != null) findReview.setStarRating(request.getStarRating());
+        String content = findReview.getContent();
+        String specialNote = findReview.getSpecialNote();
+        int starRating = findReview.getStarRating();
+        if(request.getContent() != null) content = request.getContent();
+        if(request.getSpecialNote() != null) specialNote = request.getSpecialNote();
+        if(request.getStarRating() != null) starRating = request.getStarRating();
         if(request.getDeletedImageIds() != null) deleteByIds(request.getDeletedImageIds());
+        reviewRepository.update(findReview.getId(), content, specialNote, starRating);
 
-        if(request.getKeywords() == null) throw new MissingRequiredValueException("keyword");
-        else changeByReviewAndKeywordNames(findReview, request.getKeywords());
-
+        changeByReviewAndKeywordNames(findReview, request.getKeywords());
         saveReviewImages(findReview, savedImageUrls);
 
         return new ReviewIdResponse(reviewId);

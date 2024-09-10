@@ -160,7 +160,13 @@ class ImageRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
+        Review review = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview = reviewRepository.save(review);
 
         Image image1 = Image.builder()
@@ -358,7 +364,13 @@ class ImageRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
+        Review review = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview = reviewRepository.save(review);
 
         Image image1 = Image.builder()
@@ -501,7 +513,13 @@ class ImageRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Review review = new Review(REVIEW_CONTENT, REVIEW_SPECIAL_NOTE, REVIEW_STAR_RATING, savedCafe, savedMember);
+        Review review = Review.builder()
+                .content(REVIEW_CONTENT)
+                .specialNote(REVIEW_SPECIAL_NOTE)
+                .starRating(REVIEW_STAR_RATING)
+                .cafe(savedCafe)
+                .member(savedMember)
+                .build();
         Review savedReview = reviewRepository.save(review);
 
         Image image1 = Image.builder()
