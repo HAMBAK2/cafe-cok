@@ -14,6 +14,11 @@ import com.sideproject.cafe_cok.member.presentation.MemberController;
 import com.sideproject.cafe_cok.plan.presentation.PlanController;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +42,8 @@ public class AuthController {
 
     @GetMapping("/login")
     @Operation(summary = "소셜 로그인 기능")
+    @Parameter(name = "code", description = "카카오 로그인 API를 통해 전달받은 code값")
+    @ApiResponse(responseCode = "200", description = "로그인 성공")
     public ResponseEntity<AccessAndRefreshTokenResponse> login(@RequestParam("code") final String code) {
 
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code);
@@ -52,8 +59,8 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "access Token 갱신")
-    public ResponseEntity<AccessTokenResponse> refresh(
-            @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
+    @ApiResponse(responseCode = "200", description = "액세스 토큰 갱신 성공")
+    public ResponseEntity<AccessTokenResponse> refresh(@Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
 
         AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
         response.add(linkTo(methodOn(AuthController.class).refresh(tokenRenewalRequest)).withSelfRel().withType("POST"));
@@ -63,6 +70,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃")
+    @ApiResponse(responseCode = "200", description = "로그아웃 성공")
     public ResponseEntity<AuthEmptyResponse> logout(@AuthenticationPrincipal LoginMember loginMember) {
         AuthEmptyResponse response = authService.logout(loginMember);
         response.add(linkTo(methodOn(AuthController.class).logout(loginMember)).withSelfRel().withType("POST"))
@@ -77,6 +85,8 @@ public class AuthController {
 
     @PostMapping("/withdrawal")
     @Operation(summary = "회원탈퇴")
+    @Parameter(name = "reason", description = "회원 탈퇴 사유")
+    @ApiResponse(responseCode = "200", description = "회원탈퇴 성공")
     public ResponseEntity<AuthEmptyResponse> withdrawal(@AuthenticationPrincipal LoginMember loginMember,
                                                         @RequestParam("reason") final String reason) {
 
