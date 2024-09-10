@@ -6,7 +6,8 @@ import com.sideproject.cafe_cok.image.domain.Image;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
 import com.sideproject.cafe_cok.image.domain.repository.ImageRepository;
 import com.sideproject.cafe_cok.menu.domain.Menu;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
+import com.sideproject.cafe_cok.menu.exception.NoSuchMenuException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,71 @@ class MenuRepositoryTest {
     private ImageRepository imageRepository;
 
     @Test
-    @DisplayName("카페 id를 기반으로 메뉴 리스트를 조회한다.")
-    void find_menu_list_by_cafe_id() {
+    void 메뉴_ID를_기반으로_메뉴를_조회한다(){
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
-        Menu menu1 = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
-        Menu menu2 = new Menu(MENU_NAME_2, MENU_PRICE_2, savedCafe);
+
+        Menu menu = Menu.builder()
+                .name(MENU_NAME_1)
+                .price(MENU_PRICE_1)
+                .cafe(savedCafe)
+                .build();
+        Menu savedMenu = menuRepository.save(menu);
+
+        //when
+        Menu findMenu = menuRepository.getById(savedMenu.getId());
+
+        //then
+        assertThat(findMenu.getName()).isEqualTo(MENU_NAME_1);
+        assertThat(findMenu.getPrice()).isEqualTo(MENU_PRICE_1);
+        assertThat(findMenu.getCafe()).isEqualTo(savedCafe);
+    }
+
+    @Test
+    void 존재하지_않는_메뉴_ID로_메뉴_조회_시_에러를_발생시킨다() {
+
+        //when & then
+        assertThatExceptionOfType(NoSuchMenuException.class)
+                .isThrownBy(() -> menuRepository.getById(NON_EXISTENT_ID))
+                .withMessage("[ID : " + NON_EXISTENT_ID + "] 에 해당하는 메뉴가 존재하지 않습니다.");
+    }
+
+
+    @Test
+    void 카페_ID를_기반으로_메뉴_리스트를_조회한다() {
+
+        //given
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
+        Cafe savedCafe = cafeRepository.save(cafe);
+
+        Menu menu1 = Menu.builder()
+                .name(MENU_NAME_1)
+                .price(MENU_PRICE_1)
+                .cafe(savedCafe)
+                .build();
         Menu savedMenu1 = menuRepository.save(menu1);
+
+        Menu menu2 = Menu.builder()
+                .name(MENU_NAME_2)
+                .price(MENU_PRICE_2)
+                .cafe(savedCafe)
+                .build();
         Menu savedMenu2 = menuRepository.save(menu2);
 
         //when
@@ -52,22 +109,53 @@ class MenuRepositoryTest {
 
     @Test
     @DisplayName("카페 id를 기반으로 MenuImageUrlDto의 리스트를 조회한다.")
-    void find_menu_image_url_dto_list_by_cafe_id() {
+    void 카페_ID를_기반으로_MENU_IMAGE_URL_DTO_리스트를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();;
         Cafe savedCafe = cafeRepository.save(cafe);
-        Menu menu1 = new Menu(MENU_NAME_1, MENU_PRICE_1, savedCafe);
-        Menu menu2 = new Menu(MENU_NAME_2, MENU_PRICE_2, savedCafe);
+
+        Menu menu1 = Menu.builder()
+                .name(MENU_NAME_1)
+                .price(MENU_PRICE_1)
+                .cafe(savedCafe)
+                .build();
         Menu savedMenu1 = menuRepository.save(menu1);
+
+        Menu menu2 = Menu.builder()
+                .name(MENU_NAME_2)
+                .price(MENU_PRICE_2)
+                .cafe(savedCafe)
+                .build();
         Menu savedMenu2 = menuRepository.save(menu2);
-        Image image1 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_1, IMAGE_THUMBNAIL_URL_1, savedCafe, savedMenu1);
-        Image image2 = new Image(ImageType.MENU, IMAGE_ORIGIN_URL_2, IMAGE_THUMBNAIL_URL_2, savedCafe, savedMenu2);
+
+        Image image1 =  Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_1)
+                .thumbnail(IMAGE_THUMBNAIL_URL_1)
+                .cafe(savedCafe)
+                .menu(savedMenu1)
+                .build();
         Image savedImage1 = imageRepository.save(image1);
+
+        Image image2 = Image.builder()
+                .imageType(ImageType.MENU)
+                .origin(IMAGE_ORIGIN_URL_2)
+                .thumbnail(IMAGE_THUMBNAIL_URL_2)
+                .cafe(savedCafe)
+                .menu(savedMenu2)
+                .build();
         Image savedImage2 = imageRepository.save(image2);
 
         //when
-        List<MenuImageUrlDto> findList = menuRepository.getMenuImageUrls(savedCafe.getId());
+        List<MenuImageDto> findList = menuRepository.getMenuImageUrls(savedCafe.getId());
 
         //then
         assertThat(findList).hasSize(2);

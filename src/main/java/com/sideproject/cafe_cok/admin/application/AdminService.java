@@ -14,6 +14,7 @@ import com.sideproject.cafe_cok.image.dto.ImageDto;
 import com.sideproject.cafe_cok.member.domain.Feedback;
 import com.sideproject.cafe_cok.member.domain.enums.FeedbackCategory;
 import com.sideproject.cafe_cok.member.domain.repository.FeedbackRepository;
+import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.menu.domain.repository.MenuRepository;
 import com.sideproject.cafe_cok.menu.dto.MenuDetailDto;
 import com.sideproject.cafe_cok.util.FormatConverter;
@@ -49,7 +50,13 @@ public class AdminService {
 
         List<Cafe> findCafes = cafeRepository.findAllByOrderByIdDesc();
         return findCafes.stream()
-                .map(cafe -> new CafeAdminDto(cafe))
+                .map(cafe -> CafeAdminDto.builder()
+                        .id(cafe.getId())
+                        .name(cafe.getName())
+                        .address(cafe.getRoadAddress())
+                        .latitude(cafe.getLatitude())
+                        .longitude(cafe.getLongitude())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -63,8 +70,8 @@ public class AdminService {
         List<MenuDetailDto> findMenus = menuRepository.findByCafeId(id).stream()
                 .map(menu -> {
                     List<Image> findMenuImages = imageRepository.findByMenu(menu);
-                    if (findMenuImages.isEmpty()) return new MenuDetailDto(menu);
-                    return new MenuDetailDto(menu, ImageDto.from(findMenuImages.get(0)));
+                    if (findMenuImages.isEmpty()) return menu.toMenuDetailDto();
+                    return menu.toMenuDetailDto(ImageDto.from(findMenuImages.get(0)));
                 }).collect(Collectors.toList());
 
 
@@ -79,7 +86,17 @@ public class AdminService {
             }
         }
 
-        return new CafeAdminDto(findCafe, images, findMenus, hours);
+        return CafeAdminDto.builder()
+                .id(findCafe.getId())
+                .name(findCafe.getName())
+                .address(findCafe.getRoadAddress())
+                .phoneNumber(findCafe.getPhoneNumber())
+                .latitude(findCafe.getLatitude())
+                .longitude(findCafe.getLongitude())
+                .images(images)
+                .menus(findMenus)
+                .hours(hours)
+                .build();
     }
 
     private List<CafeOperationHourDto> generateHours() {
@@ -87,7 +104,9 @@ public class AdminService {
         List<String> daysOfWeek = Arrays.asList("월", "화", "수", "목", "금", "토", "일");
         List<CafeOperationHourDto> hours = new ArrayList<>();
         for (String day : daysOfWeek) {
-            hours.add(new CafeOperationHourDto(day));
+            hours.add(CafeOperationHourDto.builder()
+                    .day(day)
+                    .build());
         }
 
         return hours;

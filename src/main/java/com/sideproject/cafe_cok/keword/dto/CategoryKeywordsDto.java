@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class CategoryKeywordsDto {
 
     private List<String> purpose = new ArrayList<>();

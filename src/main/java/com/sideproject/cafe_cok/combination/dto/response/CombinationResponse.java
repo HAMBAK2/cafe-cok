@@ -8,7 +8,6 @@ import lombok.Getter;
 import org.springframework.hateoas.RepresentationModel;
 
 @Getter
-@Builder
 public class CombinationResponse extends RepresentationModel<CombinationResponse> {
 
     private Long id;
@@ -16,13 +15,13 @@ public class CombinationResponse extends RepresentationModel<CombinationResponse
     private String icon;
     private CategoryKeywordsDto categoryKeywords;
 
-    public static CombinationResponse of(final Combination combination, final CategoryKeywordsDto categoryKeywords) {
+    public CombinationResponse(final Combination combination,
+                               final CategoryKeywordsDto categoryKeywords) {
 
-        return CombinationResponse.builder()
-                .id(combination.getId())
-                .name(combination.getName())
-                .icon(combination.getIcon())
-                .categoryKeywords(categoryKeywords)
-                .build();
+        this.id = combination.getId();
+        this.name = combination.getName();
+        this.icon = combination.getIcon();
+        this.categoryKeywords = categoryKeywords;
+
     }
 }

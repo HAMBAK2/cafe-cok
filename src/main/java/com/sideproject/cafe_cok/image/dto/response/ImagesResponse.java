@@ -8,15 +8,11 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
 @Getter
-@Builder
 public class ImagesResponse extends RepresentationModel<ImagesResponse> {
 
     private List<ImageUrlDto> imageUrls;
 
-    public static ImagesResponse from(final List<ImageUrlDto> imageUrls) {
-        return ImagesResponse.builder()
-                .imageUrls(imageUrls)
-                .build();
+    public ImagesResponse(final List<ImageUrlDto> imageUrls) {
+        this.imageUrls = imageUrls;
     }
-
 }

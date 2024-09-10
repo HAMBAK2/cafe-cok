@@ -25,7 +25,11 @@ class MemberRepositoryTest {
     void find_by_email_and_deleted_at_is_null() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         //when
@@ -41,8 +45,12 @@ class MemberRepositoryTest {
     void find_by_email_and_deleted_at_is_not_null() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
-        member.changeDeletedAt(LocalDateTime.now());
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .deletedAt(LocalDateTime.now())
+                .build();
         Member savedMember = memberRepository.save(member);
 
         //when
@@ -58,7 +66,11 @@ class MemberRepositoryTest {
     void exists_by_nickname() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         //when
@@ -75,7 +87,11 @@ class MemberRepositoryTest {
     void get_by_id() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
         //when

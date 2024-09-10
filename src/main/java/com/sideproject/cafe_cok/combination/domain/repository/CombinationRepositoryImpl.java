@@ -3,7 +3,9 @@ package com.sideproject.cafe_cok.combination.domain.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.combination.dto.CombinationDto;
 import com.sideproject.cafe_cok.combination.dto.QCombinationDto;
+import com.sideproject.cafe_cok.combination.dto.request.CombinationRequest;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -15,6 +17,16 @@ public class CombinationRepositoryImpl implements CombinationRepositoryCustom{
 
     public CombinationRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+
+    @Override
+    public void update(final CombinationRequest request) {
+
+        queryFactory.update(combination)
+                .set(combination.name, request.getName())
+                .set(combination.icon, request.getIcon())
+                .execute();
     }
 
     @Override

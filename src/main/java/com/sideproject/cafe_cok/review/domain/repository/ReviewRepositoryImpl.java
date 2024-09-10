@@ -23,6 +23,20 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
+    public void update(final Long reviewId,
+                       final String content,
+                       final String specialNote,
+                       final Integer starRating) {
+
+        queryFactory.update(review)
+                .set(review.content, content)
+                .set(review.specialNote, specialNote)
+                .set(review.starRating, starRating)
+                .where(review.id.eq(reviewId))
+                .execute();
+    }
+
+    @Override
     public List<Review> findByCafeId(final Long cafeId,
                                      final Pageable pageable) {
 

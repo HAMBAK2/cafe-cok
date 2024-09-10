@@ -5,6 +5,7 @@ import com.sideproject.cafe_cok.global.entity.BaseEntity;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,9 +13,9 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
-@Table(name = "plan_keywords")
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@Table(name = "plan_keywords")
 public class PlanKeyword extends BaseEntity {
 
     @Id
@@ -30,14 +31,17 @@ public class PlanKeyword extends BaseEntity {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-    public PlanKeyword(final Plan plan,
+    @Builder
+    public PlanKeyword(final Long id,
+                       final Plan plan,
                        final Keyword keyword) {
 
         if(plan != null) changePlan(plan);
         this.keyword = keyword;
+        this.id = id;
     }
 
-    public void changePlan(final Plan plan) {
+    private void changePlan(final Plan plan) {
         this.plan = plan;
         plan.getPlanKeywords().add(this);
     }

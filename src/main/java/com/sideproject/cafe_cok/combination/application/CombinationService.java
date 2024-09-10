@@ -41,7 +41,7 @@ public class CombinationService {
         Combination combination = request.toEntity(findMember);
         Combination savedCombination = combinationRepository.save(combination);
         saveCombinationKeywordsByCombinationAndKeywordNames(savedCombination, request.getKeywords());
-        return CombinationIdResponse.of(savedCombination.getId());
+        return new CombinationIdResponse(savedCombination.getId());
     }
 
 
@@ -50,22 +50,22 @@ public class CombinationService {
         Combination findCombination = combinationRepository.getById(combinationId);
         List<Keyword> findKeywords = keywordRepository.findByCombinationId(combinationId);
         CategoryKeywordsDto categoryKeywords = new CategoryKeywordsDto(findKeywords);
-        return CombinationResponse.of(findCombination, categoryKeywords);
+        return new CombinationResponse(findCombination, categoryKeywords);
     }
 
     @Transactional
     public CombinationIdResponse update(final CombinationRequest request, final Long  combinationId) {
 
         Combination findCombination = combinationRepository.getById(combinationId);
-        findCombination.changeByRequest(request);
+        combinationRepository.update(request);
 
         List<String> findKeywords = keywordRepository.findNamesByCombinationId(combinationId);
         if(ListUtil.areListEqual(request.getKeywords(), findKeywords))
-            return CombinationIdResponse.of(findCombination.getId());
+            return new CombinationIdResponse(findCombination.getId());
 
         combinationKeywordRepository.deleteById(combinationId);
         saveCombinationKeywordsByCombinationAndKeywordNames(findCombination, request.getKeywords());
-        return CombinationIdResponse.of(findCombination.getId());
+        return new CombinationIdResponse(findCombination.getId());
     }
 
     public CombinationListResponse combination(final LoginMember loginMember) {
@@ -80,7 +80,10 @@ public class CombinationService {
 
         List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
         List<CombinationKeyword> combinationKeywords = findKeywords.stream()
-                .map(keyword -> new CombinationKeyword(combination, keyword))
+                .map(keyword -> CombinationKeyword.builder()
+                        .combination(combination)
+                        .keyword((keyword))
+                        .build())
                 .collect(Collectors.toList());
 
         combinationKeywordRepository.saveAll(combinationKeywords);

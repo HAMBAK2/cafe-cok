@@ -21,13 +21,21 @@ class FeedbackRepositoryTest {
     private FeedbackRepository feedbackRepository;
 
     @Test
-    @DisplayName("feedbackCategory 기반으로 id 순으로 내림차순 정렬된 feedback 리스트를 조회한다.")
-    void find_by_category_order_by_id_desc() {
+    void 피드백_카테고리로_ID순_내림차순_정렬된_피드백_목록을_조회한다() {
 
         //given
-        Feedback feedback1 = new Feedback(FEEDBACK_EMAIL, FeedbackCategory.IMPROVEMENT_SUGGESTION, FEEDBACK_CONTENT);
-        Feedback feedback2 = new Feedback(FEEDBACK_EMAIL_2, FeedbackCategory.IMPROVEMENT_SUGGESTION, FEEDBACK_CONTENT_2);
+        Feedback feedback1 = Feedback.builder()
+                .email(FEEDBACK_EMAIL)
+                .category(FeedbackCategory.IMPROVEMENT_SUGGESTION)
+                .content(FEEDBACK_CONTENT)
+                .build();
         Feedback saveFeedback1 = feedbackRepository.save(feedback1);
+
+        Feedback feedback2 = Feedback.builder()
+                .email(FEEDBACK_EMAIL_2)
+                .category(FeedbackCategory.IMPROVEMENT_SUGGESTION)
+                .content(FEEDBACK_CONTENT_2)
+                .build();
         Feedback saveFeedback2 = feedbackRepository.save(feedback2);
 
         //when

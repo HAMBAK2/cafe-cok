@@ -5,9 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.image.dto.ImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.ImageUrlDto;
-import com.sideproject.cafe_cok.image.dto.QImageUrlCursorDto;
 import com.sideproject.cafe_cok.image.dto.QImageUrlDto;
 import com.sideproject.cafe_cok.util.QuerydslUtil;
 import jakarta.persistence.EntityManager;
@@ -24,6 +22,33 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
 
     public ImageRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public void update(final Long imageId,
+                       final String origin,
+                       final String medium,
+                       final String thumbnail) {
+
+        queryFactory.update(image)
+                .set(image.origin, origin)
+                .set(image.medium, medium)
+                .set(image.thumbnail, thumbnail)
+                .where(image.id.eq(imageId))
+                .execute();
+
+    }
+
+    @Override
+    public void update(final Long imageId,
+                       final String origin,
+                       final String thumbnail) {
+
+        queryFactory.update(image)
+                .set(image.origin, origin)
+                .set(image.thumbnail, thumbnail)
+                .where(image.id.eq(imageId))
+                .execute();
     }
 
     public List<ImageUrlDto> findCafeImageUrlDtoListByCafeId(final Long cafeId,
@@ -103,30 +128,6 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
                 ))
                 .from(image)
                 .where(image.review.id.eq(reviewId))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-                .fetch();
-    }
-
-    @Override
-    public List<ImageUrlCursorDto> findImageUrlCursorDtoListByCafeIdAndImageType(final Long cafeId,
-                                                                                 final Long cursor,
-                                                                                 final ImageType imageType,
-                                                                                 final Pageable pageable) {
-        NumberPath<Long> idPath = image.id;
-        List<OrderSpecifier<?>> orderSpecifiers = QuerydslUtil.getOrderSpecifiers(pageable, idPath);
-
-        return queryFactory
-                .select(new QImageUrlCursorDto(
-                        image.origin,
-                        image.thumbnail,
-                        image.id
-                ))
-                .from(image)
-                .where(cafeIdEq(cafeId),
-                        image.imageType.eq(imageType),
-                        imageIdLt(cursor))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))

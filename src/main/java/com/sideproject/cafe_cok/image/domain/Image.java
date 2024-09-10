@@ -8,6 +8,7 @@ import com.sideproject.cafe_cok.menu.domain.Menu;
 import com.sideproject.cafe_cok.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -20,7 +21,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Table(name = "images")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Image extends BaseEntity {
 
     @Id
@@ -53,40 +54,22 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "menus_id")
     private Menu menu;
 
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final Cafe cafe) {
-        this.imageType = imageType;
-        this.origin = origin;
-        this.thumbnail = thumbnail;
-        if(cafe != null) changeCafe(cafe);
-    }
-
-    public Image(final ImageType imageType,
+    @Builder
+    public Image(final Long id,
+                 final ImageType imageType,
                  final String origin,
                  final String thumbnail,
                  final String medium,
-                 final Cafe cafe) {
-        this(imageType, origin, thumbnail, cafe);
-        this.medium = medium;
-    }
-
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
                  final Cafe cafe,
-                 final Review review) {
-        this(imageType, origin, thumbnail, cafe);
-        if(review != null) changeReview(review);
-    }
-
-    public Image(final ImageType imageType,
-                 final String origin,
-                 final String thumbnail,
-                 final Cafe cafe,
+                 final Review review,
                  final Menu menu) {
-        this(imageType, origin, thumbnail, cafe);
+        this.id = id;
+        this.imageType = imageType;
+        this.origin = origin;
+        this.thumbnail = thumbnail;
+        this.medium = medium;
+        if(cafe != null) changeCafe(cafe);
+        if(review != null) changeReview(review);
         this.menu = menu;
     }
 
@@ -98,17 +81,5 @@ public class Image extends BaseEntity {
     public void changeCafe(final Cafe cafe) {
         this.cafe = cafe;
         cafe.getImages().add(this);
-    }
-
-    public void changeOrigin(final String origin) {
-        this.origin = origin;
-    }
-
-    public void changMedium(final String medium) {
-        this.medium = medium;
-    }
-
-    public void changeThumbnail(final String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 }

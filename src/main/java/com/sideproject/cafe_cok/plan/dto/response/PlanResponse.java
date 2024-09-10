@@ -15,7 +15,7 @@ import java.util.List;
 import static com.sideproject.cafe_cok.util.FormatConverter.convertLocalDateLocalTimeToString;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class PlanResponse extends RepresentationModel<PlanResponse> {
 
     private Long planId;

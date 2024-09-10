@@ -25,10 +25,7 @@ public class MenuService {
     @Transactional
     public MenuIdResponse delete(final Long id) {
 
-        Optional<Menu> optionalMenu = menuRepository.findById(id);
-        if(optionalMenu.isEmpty()) return new MenuIdResponse(id);
-
-        Menu findMenu = optionalMenu.get();
+        Menu findMenu = menuRepository.getById(id);
         List<Image> findMenuImages = imageRepository.findByMenu(findMenu);
         for (Image findMenuImage : findMenuImages) {
             s3Uploader.delete(findMenuImage.getThumbnail());

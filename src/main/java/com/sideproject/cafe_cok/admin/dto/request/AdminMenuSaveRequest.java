@@ -27,7 +27,11 @@ public class AdminMenuSaveRequest {
     }
 
     public Menu toEntity(final Cafe cafe) {
-        return new Menu(this.name, this.price, cafe);
+        return Menu.builder()
+                .name(this.name)
+                .price(this.price)
+                .cafe(cafe)
+                .build();
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor
 public class CombinationListResponse extends RepresentationModel<CombinationListResponse> {
 
     private List<CombinationDto> combinations = new ArrayList<>();

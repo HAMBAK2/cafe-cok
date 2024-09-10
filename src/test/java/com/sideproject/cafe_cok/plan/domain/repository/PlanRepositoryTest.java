@@ -46,17 +46,40 @@ class PlanRepositoryTest {
     private KeywordRepository keywordRepository;
 
     @Test
-    @DisplayName("memberId 기반으로 plan 리스트를 조회한다.")
-    void find_by_member_id() {
+    void 회원_ID로_계획의_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
-                PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_FALSE);
+
+        Plan plan1 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(true)
+                .build();
         Plan savedPlan1 = planRepository.save(plan1);
+
+        Plan plan2 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME_2)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME_2)
+                .visitEndTime(PLAN_VISIT_END_TIME_2)
+                .minutes(PLAN_MINUTES_2)
+                .matchType(PLAN_MATCH_TYPE_2)
+                .isSaved(false)
+                .isShared(false)
+                .build();
         Plan savedPlan2 = planRepository.save(plan2);
 
         //when
@@ -78,13 +101,27 @@ class PlanRepositoryTest {
 
     @Test
     @DisplayName("id 기반으로 plan을 조회한다.")
-    void get_by_id() {
+    void 계획_ID로_계획을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Plan plan = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
+
+        Plan plan = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(false)
+                .build();
         Plan savedPlan = planRepository.save(plan);
 
         //when
@@ -101,7 +138,7 @@ class PlanRepositoryTest {
 
     @Test
     @DisplayName("id 기반으로 plan 조회 시 존재하지 않을 경우 에러를 반환한다..")
-    void get_by_non_existent_id() {
+    void 계획_ID_기반으로_조회시_존재하지_않을_경우_에러를_반환한다() {
 
         //when & then
         assertThatExceptionOfType(NoSuchPlanException.class)
@@ -114,7 +151,11 @@ class PlanRepositoryTest {
 //    void find_matching_plan() {
 //
 //        //given
-//        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+//            Member member = Member.builder()
+//                    .email(MEMBER_EMAIL)
+//                    .nickname(MEMBER_NICKNAME)
+//                    .socialType(MEMBER_SOCIAL_TYPE)
+//                    .build();
 //        Member savedMember = memberRepository.save(member);
 //        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
 //                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
@@ -141,23 +182,58 @@ class PlanRepositoryTest {
 //    }
 
     @Test
-    @DisplayName("저장된 계획의 PlanKeywordDto 리스트를 조회한다. PlanSearchCondition, pageable 기반 조회 시")
-    void find_saved_plan_keyword_dto() {
+    void 저장된_계획의_계획_키워드_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
+
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword = keywordRepository.save(keyword);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
-                PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_TRUE);
+
+        Plan plan1 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(false)
+                .build();
         Plan savedPlan1 = planRepository.save(plan1);
+
+        Plan plan2 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME_2)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME_2)
+                .visitEndTime(PLAN_VISIT_END_TIME_2)
+                .minutes(PLAN_MINUTES_2)
+                .matchType(PLAN_MATCH_TYPE_2)
+                .isSaved(false)
+                .isShared(true)
+                .build();
         Plan savedPlan2 = planRepository.save(plan2);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
+
+        PlanKeyword planKeyword1 = PlanKeyword.builder()
+                .plan(savedPlan1)
+                .keyword(savedKeyword)
+                .build();
         planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = PlanKeyword.builder()
+                .plan(savedPlan2)
+                .keyword(savedKeyword)
+                .build();
         planKeywordRepository.save(planKeyword2);
 
 
@@ -179,25 +255,59 @@ class PlanRepositoryTest {
     }
 
     @Test
-    @DisplayName("공유된 계획의 PlanKeywordDto 리스트를 조회한다. PlanSearchCondition, pageable 기반 조회 시")
-    void find_shared_plan_keyword_dto() {
+    void 공유된_계획의_계획_키워드_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
-        Keyword savedKeyword = keywordRepository.save(keyword);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_TRUE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
-                PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_FALSE, PLAN_IS_SHARED_FALSE);
-        Plan savedPlan1 = planRepository.save(plan1);
-        Plan savedPlan2 = planRepository.save(plan2);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
-        planKeywordRepository.save(planKeyword1);
-        planKeywordRepository.save(planKeyword2);
 
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
+        Keyword savedKeyword = keywordRepository.save(keyword);
+
+        Plan plan1 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(false)
+                .isShared(true)
+                .build();
+        Plan savedPlan1 = planRepository.save(plan1);
+
+        Plan plan2 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME_2)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME_2)
+                .visitEndTime(PLAN_VISIT_END_TIME_2)
+                .minutes(PLAN_MINUTES_2)
+                .matchType(PLAN_MATCH_TYPE_2)
+                .isSaved(false)
+                .isShared(false)
+                .build();
+        Plan savedPlan2 = planRepository.save(plan2);
+
+        PlanKeyword planKeyword1 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan1)
+                .build();
+        planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan2)
+                .build();
+        planKeywordRepository.save(planKeyword2);
 
         Sort sort = Sort.by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
         Pageable pageable = PageRequest.of(0, PLAN_PAGE_SIZE, sort);
@@ -217,25 +327,59 @@ class PlanRepositoryTest {
     }
 
     @Test
-    @DisplayName("생성 일시를 기준으로 내림차순 정렬된 PlanKeywordDto 리스트를 조회한다. PlanSearchCondition, pageable 기반 조회 시")
-    void find_plan_keyword_dto_order_by_created_date_desc() {
+    void 생성일시_기준으로_내림차순_정렬된_계획_키워드의_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
-        Keyword savedKeyword = keywordRepository.save(keyword);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME_2,
-                PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
-        Plan savedPlan1 = planRepository.save(plan1);
-        Plan savedPlan2 = planRepository.save(plan2);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
-        planKeywordRepository.save(planKeyword1);
-        planKeywordRepository.save(planKeyword2);
 
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
+        Keyword savedKeyword = keywordRepository.save(keyword);
+
+        Plan plan1 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(false)
+                .build();
+        Plan savedPlan1 = planRepository.save(plan1);
+
+        Plan plan2 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME_2)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME_2)
+                .visitEndTime(PLAN_VISIT_END_TIME_2)
+                .minutes(PLAN_MINUTES_2)
+                .matchType(PLAN_MATCH_TYPE_2)
+                .isSaved(true)
+                .isShared(false)
+                .build();
+        Plan savedPlan2 = planRepository.save(plan2);
+
+        PlanKeyword planKeyword1 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan1)
+                .build();
+        planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan2)
+                .build();
+        planKeywordRepository.save(planKeyword2);
 
         Sort sort = Sort.by(Sort.Direction.DESC, PlanSortBy.RECENT.getValue());
         Pageable pageable = PageRequest.of(0, PLAN_PAGE_SIZE, sort);
@@ -256,25 +400,59 @@ class PlanRepositoryTest {
     }
 
     @Test
-    @DisplayName("다가오는 방문일시 기준 오름차순 정렬된 PlanKeywordDto 리스트를 조회한다. PlanSearchCondition, pageable 기반 조회 시")
-    void find_plan_keyword_dto_order_by_visit_date_asc() {
+    void 방문일시_기준_오름차순_정렬된_계획_키워드_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Keyword keyword = new Keyword(KEYWORD_NAME, Category.PURPOSE);
-        Keyword savedKeyword = keywordRepository.save(keyword);
-        Plan plan1 = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
-        Plan plan2 = new Plan(savedMember, PLAN_LOCATION_NAME_2, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME_2,
-                PLAN_VISIT_END_TIME_2, PLAN_MINUTES_2, PLAN_MATCH_TYPE_2, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
-        Plan savedPlan1 = planRepository.save(plan1);
-        Plan savedPlan2 = planRepository.save(plan2);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan1, savedKeyword);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan2, savedKeyword);
-        planKeywordRepository.save(planKeyword1);
-        planKeywordRepository.save(planKeyword2);
 
+        Keyword keyword = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
+        Keyword savedKeyword = keywordRepository.save(keyword);
+
+        Plan plan1 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(false)
+                .build();
+        Plan savedPlan1 = planRepository.save(plan1);
+
+        Plan plan2 = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME_2)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME_2)
+                .visitEndTime(PLAN_VISIT_END_TIME_2)
+                .minutes(PLAN_MINUTES_2)
+                .matchType(PLAN_MATCH_TYPE_2)
+                .isSaved(true)
+                .isShared(false)
+                .build();
+        Plan savedPlan2 = planRepository.save(plan2);
+
+        PlanKeyword planKeyword1 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan1)
+                .build();
+        planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = PlanKeyword.builder()
+                .keyword(savedKeyword)
+                .plan(savedPlan2)
+                .build();
+        planKeywordRepository.save(planKeyword2);
 
         Sort sort = Sort.by(Sort.Direction.ASC, PlanSortBy.UPCOMING.getValue(), "visitStartTime", "id");
         Pageable pageable = PageRequest.of(0, PLAN_PAGE_SIZE, sort);
@@ -294,22 +472,51 @@ class PlanRepositoryTest {
     }
 
     @Test
-    @DisplayName("planId 기반 PlanKeyword 리스트를 조회한다.")
-    void get_plan_keyword_list_by_plan_id() {
+    void 계획_ID로_계획_키워드의_목록을_조회한다() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Keyword keyword1 = new Keyword(KEYWORD_NAME, Category.PURPOSE);
-        Keyword keyword2 = new Keyword(KEYWORD_NAME_2, Category.PURPOSE);
+
+        Keyword keyword1 = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword1 = keywordRepository.save(keyword1);
+
+        Keyword keyword2 = Keyword.builder()
+                .name(KEYWORD_NAME)
+                .category(Category.PURPOSE)
+                .build();
         Keyword savedKeyword2 = keywordRepository.save(keyword2);
-        Plan plan = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE_2, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_FALSE);
+
+        Plan plan = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE_2)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(true)
+                .isShared(false)
+                .build();
         Plan savedPlan = planRepository.save(plan);
-        PlanKeyword planKeyword1 = new PlanKeyword(savedPlan, savedKeyword1);
-        PlanKeyword planKeyword2 = new PlanKeyword(savedPlan, savedKeyword2);
+
+        PlanKeyword planKeyword1 = PlanKeyword.builder()
+                .keyword(savedKeyword1)
+                .plan(savedPlan)
+                .build();
         PlanKeyword savePlanKeyword1 = planKeywordRepository.save(planKeyword1);
+
+        PlanKeyword planKeyword2 = PlanKeyword.builder()
+                .keyword(savedKeyword2)
+                .plan(savedPlan)
+                .build();
         PlanKeyword savePlanKeyword2 = planKeywordRepository.save(planKeyword2);
 
 

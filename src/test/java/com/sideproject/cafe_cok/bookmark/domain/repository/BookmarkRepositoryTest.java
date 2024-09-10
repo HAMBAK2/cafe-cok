@@ -34,18 +34,39 @@ class BookmarkRepositoryTest {
     private BookmarkFolderRepository bookmarkFolderRepository;
 
     @Test
-    @DisplayName("북마크 id를 기반으로 북마크를 조회한다.")
-    void get_by_id() {
+    void ID를_기반으로_북마크를_조회한다() {
 
         //given
-        Cafe cafe = new Cafe(CAFE_NAME, CAFE_PHONE_NUMBER, CAFE_ROAD_ADDRESS, CAFE_LONGITUDE, CAFE_LATITUDE, CAFE_KAKAO_ID);
+        Cafe cafe = Cafe.builder()
+                .name(CAFE_NAME)
+                .phoneNumber(CAFE_PHONE_NUMBER)
+                .roadAddress(CAFE_ROAD_ADDRESS)
+                .longitude(CAFE_LONGITUDE)
+                .latitude(CAFE_LATITUDE)
+                .kakaoId(CAFE_KAKAO_ID)
+                .build();
         Cafe savedCafe = cafeRepository.save(cafe);
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        BookmarkFolder bookmarkFolder = new BookmarkFolder(BOOKMARK_FOLDER_NAME_1, BOOKMARK_FOLDER_COLOR_1,
-                true, true, savedMember);
+
+        BookmarkFolder bookmarkFolder = BookmarkFolder.builder()
+                .name(BOOKMARK_FOLDER_NAME_1)
+                .color(BOOKMARK_FOLDER_COLOR_1)
+                .isVisible(true)
+                .isDefaultFolder(true)
+                .member(savedMember)
+                .build();
         BookmarkFolder savedBookmarkFolder = bookmarkFolderRepository.save(bookmarkFolder);
-        Bookmark bookmark = new Bookmark(savedCafe, savedBookmarkFolder);
+
+        Bookmark bookmark = Bookmark.builder()
+                .cafe(savedCafe)
+                .bookmarkFolder(savedBookmarkFolder)
+                .build();
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
 
         //when

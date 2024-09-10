@@ -30,9 +30,17 @@ class CombinationRepositoryTest {
     void get_combination_O() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
-        Combination combination = new Combination(COMBINATION_NAME_1, COMBINATION_ICON_1, savedMember);
+        Combination combination = Combination.builder()
+                .name(COMBINATION_NAME_1)
+                .icon(COMBINATION_ICON_1)
+                .member(savedMember)
+                .build();
         Combination savedCombination = combinationRepository.save(combination);
 
         //when
@@ -60,12 +68,25 @@ class CombinationRepositoryTest {
     void find_combination_list_by_member_id_O() {
 
         //given
-        Member member = new Member(MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_SOCIAL_TYPE);
+        Member member = Member.builder()
+                .email(MEMBER_EMAIL)
+                .nickname(MEMBER_NICKNAME)
+                .socialType(MEMBER_SOCIAL_TYPE)
+                .build();
         Member savedMember = memberRepository.save(member);
 
-        Combination combination1 = new Combination(COMBINATION_NAME_1, COMBINATION_ICON_1, savedMember);
-        Combination combination2 = new Combination(COMBINATION_NAME_2, COMBINATION_ICON_2, savedMember);
+        Combination combination1 = Combination.builder()
+                .name(COMBINATION_NAME_1)
+                .icon(COMBINATION_ICON_1)
+                .member(savedMember)
+                .build();
         combinationRepository.save(combination1);
+
+        Combination combination2 = Combination.builder()
+                .name(COMBINATION_NAME_2)
+                .icon(COMBINATION_ICON_2)
+                .member(savedMember)
+                .build();
         combinationRepository.save(combination2);
 
         //when

@@ -46,9 +46,17 @@ public class PlanSaveRequest {
 
     public Plan toEntity(final Member member,
                          final MatchType matchType) {
-        return new Plan(
-                member, locationName, date, startTime, endTime,
-                minutes, matchType, false, false);
+        return Plan.builder()
+                .member(member)
+                .locationName(locationName)
+                .visitDate(date)
+                .visitStartTime(startTime)
+                .visitEndTime(endTime)
+                .minutes(minutes)
+                .matchType(matchType)
+                .isSaved(false)
+                .isShared(false)
+                .build();
     }
 
     public CafeSearchCondition toCondition() {

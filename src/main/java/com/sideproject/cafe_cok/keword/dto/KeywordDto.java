@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class KeywordDto {
 
     private Long id;

@@ -1,20 +1,14 @@
 package com.sideproject.cafe_cok.menu.domain.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sideproject.cafe_cok.image.domain.QImage;
-import com.sideproject.cafe_cok.image.domain.enums.ImageType;
-import com.sideproject.cafe_cok.menu.domain.QMenu;
-import com.sideproject.cafe_cok.menu.dto.MenuImageUrlDto;
-import com.sideproject.cafe_cok.menu.dto.QMenuImageUrlDto;
+import com.sideproject.cafe_cok.menu.dto.MenuImageDto;
+import com.sideproject.cafe_cok.menu.dto.QMenuImageDto;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 import static com.sideproject.cafe_cok.image.domain.QImage.image;
 import static com.sideproject.cafe_cok.menu.domain.QMenu.*;
-import static com.sideproject.cafe_cok.plan.domain.QPlanCafe.planCafe;
-import static org.springframework.util.StringUtils.isEmpty;
 
 public class MenuRepositoryImpl implements MenuRepositoryCustom{
 
@@ -25,9 +19,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom{
     }
 
     @Override
-    public List<MenuImageUrlDto> getMenuImageUrls(final Long cafeId) {
+    public List<MenuImageDto> getMenuImageUrls(final Long cafeId) {
         return queryFactory
-                .select(new QMenuImageUrlDto(menu.name, menu.price, image.origin, image.thumbnail))
+                .select(new QMenuImageDto(menu.name, menu.price, image.origin, image.thumbnail))
                 .from(menu)
                 .leftJoin(image).on(image.menu.id.eq(menu.id))
                 .where(menu.cafe.id.eq(cafeId))

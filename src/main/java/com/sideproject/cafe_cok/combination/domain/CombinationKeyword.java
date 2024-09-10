@@ -3,6 +3,7 @@ package com.sideproject.cafe_cok.combination.domain;
 import com.sideproject.cafe_cok.keword.domain.Keyword;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,9 +29,11 @@ public class CombinationKeyword {
     @JoinColumn(name = "keywords_id")
     private Keyword keyword;
 
-
-    public CombinationKeyword(final Combination combination,
+    @Builder
+    public CombinationKeyword(final Long id,
+                              final Combination combination,
                               final Keyword keyword) {
+        this.id = id;
         if(combination != null) changeCombination(combination);
         this.keyword = keyword;
     }
