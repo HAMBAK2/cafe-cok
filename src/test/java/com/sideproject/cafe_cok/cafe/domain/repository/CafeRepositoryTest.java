@@ -285,12 +285,30 @@ class CafeRepositoryTest {
                 .build();
         Member savedMember = memberRepository.save(member);
 
-        Plan plan = new Plan(savedMember, PLAN_LOCATION_NAME, PLAN_VISIT_DATE, PLAN_VISIT_START_TIME,
-                PLAN_VISIT_END_TIME, PLAN_MINUTES, PLAN_MATCH_TYPE, PLAN_IS_SAVED_TRUE, PLAN_IS_SHARED_TRUE);
+        Plan plan = Plan.builder()
+                .member(savedMember)
+                .locationName(PLAN_LOCATION_NAME)
+                .visitDate(PLAN_VISIT_DATE)
+                .visitStartTime(PLAN_VISIT_START_TIME)
+                .visitEndTime(PLAN_VISIT_END_TIME)
+                .minutes(PLAN_MINUTES)
+                .matchType(PLAN_MATCH_TYPE)
+                .isSaved(PLAN_IS_SAVED_TRUE)
+                .isShared(PLAN_IS_SHARED_TRUE)
+                .build();
         Plan savedPlan = planRepository.save(plan);
 
-        PlanCafe savedPlanCafe1 = new PlanCafe(savedPlan, savedCafe1, PLAN_MATCH_TYPE);
-        PlanCafe savedPlanCafe2 = new PlanCafe(savedPlan, savedCafe2, PLAN_MATCH_TYPE);
+        PlanCafe savedPlanCafe1 = PlanCafe.builder()
+                .plan(savedPlan)
+                .cafe(savedCafe1)
+                .matchType(PLAN_MATCH_TYPE)
+                .build();
+
+        PlanCafe savedPlanCafe2 = PlanCafe.builder()
+                .plan(savedPlan)
+                .cafe(savedCafe2)
+                .matchType(PLAN_MATCH_TYPE)
+                .build(); ;
 
         //when
         List<Cafe> findCafes = cafeRepository.findByPlanIdAndMatchType(savedPlan.getId(), PLAN_MATCH_TYPE);

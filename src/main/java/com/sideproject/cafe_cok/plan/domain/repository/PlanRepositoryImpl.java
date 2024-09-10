@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sideproject.cafe_cok.keword.domain.enums.Category;
+import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.condition.PlanSearchCondition;
 import com.sideproject.cafe_cok.plan.domain.enums.PlanSortBy;
@@ -33,6 +34,27 @@ public class PlanRepositoryImpl implements PlanRepositoryCustom{
 
     public PlanRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public void update(final Long planId,
+                       final Boolean isSaved,
+                       final Boolean isShared) {
+
+        queryFactory.update(plan)
+                .set(plan.isSaved, isSaved)
+                .set(plan.isShared, isShared)
+                .where(plan.id.eq(planId))
+                .execute();
+    }
+
+    @Override
+    public void update(final Long planId,
+                       final Member member) {
+        queryFactory.update(plan)
+                .set(plan.member, member)
+                .where(plan.id.eq(planId))
+                .execute();
     }
 
     @Override

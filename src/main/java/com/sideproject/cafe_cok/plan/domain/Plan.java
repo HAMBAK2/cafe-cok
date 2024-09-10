@@ -6,6 +6,7 @@ import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,8 +20,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "plans")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plan extends BaseEntity {
 
     @Id
@@ -63,7 +64,9 @@ public class Plan extends BaseEntity {
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<PlanKeyword> planKeywords = new ArrayList<>();
 
-    public Plan(final Member member,
+    @Builder
+    public Plan(final Long id,
+                final Member member,
                 final String locationName,
                 final LocalDate visitDate,
                 final LocalTime visitStartTime,
@@ -73,7 +76,7 @@ public class Plan extends BaseEntity {
                 final Boolean isSaved,
                 final Boolean isShared) {
 
-        if(member != null) changeMember(member);
+        this.id = id;
         this.locationName = locationName;
         this.visitDate = visitDate;
         this.visitStartTime = visitStartTime;
@@ -82,17 +85,10 @@ public class Plan extends BaseEntity {
         this.matchType = matchType;
         this.isSaved = isSaved;
         this.isShared = isShared;
+        if(member != null) changeMember(member);
     }
 
-    public void changeIsSaved(final Boolean isSaved) {
-        this.isSaved = isSaved;
-    }
-
-    public void changeIsShared(final Boolean isShared) {
-        this.isShared = isShared;
-    }
-
-    public void changeMember(final Member member) {
+    private void changeMember(final Member member) {
         this.member = member;
         member.getPlans().add(this);
     }

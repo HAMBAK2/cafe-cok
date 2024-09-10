@@ -4,6 +4,7 @@ package com.sideproject.cafe_cok.nickname.domain;
 import com.sideproject.cafe_cok.nickname.enums.NicknameComponentType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +28,12 @@ public class NicknameComponent {
     @Column(name = "type", nullable = false)
     private NicknameComponentType type;
 
-    public NicknameComponent(final String value,
+
+    @Builder
+    public NicknameComponent(final Long id,
+                             final String value,
                              final NicknameComponentType type) {
+        this.id = id;
         this.value = value;
         this.type = type;
     }

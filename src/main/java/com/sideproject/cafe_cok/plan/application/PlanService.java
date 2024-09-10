@@ -141,9 +141,15 @@ public class PlanService {
 
         Plan findPlan = planRepository.getById(planId);
         Member findMember = memberRepository.getById(loginMember.getId());
-        if(status.equals(PlanStatus.SAVED)) findPlan.changeIsSaved(true);
-        if(status.equals(PlanStatus.SHARED)) findPlan.changeIsShared(true);
-        findPlan.changeMember(findMember);
+
+        boolean isSaved = findPlan.getIsSaved();
+        boolean isShared = findPlan.getIsShared();
+
+        if(status.equals(PlanStatus.SAVED)) isSaved = true;
+        if(status.equals(PlanStatus.SHARED)) isShared = true;
+
+        planRepository.update(findPlan.getId(), isSaved, isShared);
+        planRepository.update(findPlan.getId(), findMember);
         return new PlanIdResponse(findPlan.getId());
     }
 
@@ -152,10 +158,15 @@ public class PlanService {
                                  final Long planId) {
 
         Plan findPlan = planRepository.getById(planId);
-        if(status.equals(PlanStatus.SAVED)) findPlan.changeIsSaved(false);
-        else findPlan.changeIsShared(false);
+        boolean isSaved = findPlan.getIsSaved();
+        boolean isShared = findPlan.getIsShared();
 
-        if(!findPlan.getIsSaved() && !findPlan.getIsShared()) planRepository.delete(findPlan);
+        if(status.equals(PlanStatus.SAVED)) isSaved = false;
+        if(status.equals(PlanStatus.SHARED)) isShared = false;
+
+        if(!isSaved && !isShared) planRepository.delete(findPlan);
+        else planRepository.update(findPlan.getId(), isSaved, isShared);
+
         return new PlanIdResponse(findPlan.getId());
     }
 
@@ -306,7 +317,11 @@ public class PlanService {
                                                               final MatchType matchType) {
 
         List<PlanCafe> planCafes = cafes.stream()
-                .map(cafe -> new PlanCafe(plan, cafe, matchType))
+                .map(cafe -> PlanCafe.builder()
+                        .plan(plan)
+                        .cafe(cafe)
+                        .matchType(matchType)
+                        .build())
                 .collect(Collectors.toList());
         planCafeRepository.saveAll(planCafes);
     }
@@ -316,7 +331,10 @@ public class PlanService {
 
         List<Keyword> findKeywords = keywordRepository.findByNameIn(keywordNames);
         List<PlanKeyword> planKeywords = findKeywords.stream()
-                .map(keyword -> new PlanKeyword(plan, keyword))
+                .map(keyword -> PlanKeyword.builder()
+                        .plan(plan)
+                        .keyword(keyword)
+                        .build())
                 .collect(Collectors.toList());
         planKeywordRepository.saveAll(planKeywords);
     }

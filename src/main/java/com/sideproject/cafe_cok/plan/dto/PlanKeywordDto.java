@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import static com.sideproject.cafe_cok.util.FormatConverter.*;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class PlanKeywordDto {
 
     private Long id;
