@@ -11,6 +11,8 @@ import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +34,7 @@ public class BookmarkFolderController {
 
     @GetMapping
     @Operation(summary = "북마크 폴더 목록 조회")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 목록 조회 성공")
     public ResponseEntity<BookmarkFoldersResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
         BookmarkFoldersResponse response = bookmarkFolderService.bookmarkFolders(loginMember);
         response.add(linkTo(methodOn(BookmarkFolderController.class).findList(loginMember)).withSelfRel().withType("GET"))
@@ -46,6 +49,7 @@ public class BookmarkFolderController {
 
     @PostMapping
     @Operation(summary = "북마크 폴더 저장")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 저장 성공")
     public ResponseEntity<BookmarkFolderIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
                                                          @RequestBody BookmarkFolderSaveRequest request) {
 
@@ -58,6 +62,7 @@ public class BookmarkFolderController {
 
     @PutMapping
     @Operation(summary = "북마크 폴더 수정")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 수정 성공")
     public ResponseEntity<BookmarkFolderIdResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                            @RequestBody BookmarkFolderUpdateRequest request) {
 
@@ -70,6 +75,8 @@ public class BookmarkFolderController {
 
     @PatchMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더의 지도 노출 여부 수정")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 지도 노출 여부 수정 성공")
+    @Parameter(name = "folderId", description = "수정하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarkFolderIdResponse> updateVisible(@AuthenticationPrincipal LoginMember loginMember,
                                                                   @PathVariable Long folderId){
 
@@ -83,6 +90,8 @@ public class BookmarkFolderController {
 
     @DeleteMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 삭제")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 삭제 성공")
+    @Parameter(name = "folderId", description = "삭제하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarkFolderIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                            @PathVariable Long folderId){
 
@@ -95,6 +104,8 @@ public class BookmarkFolderController {
 
     @GetMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 조회")
+    @ApiResponse(responseCode = "200", description = "북마크 폴더 조회 성공")
+    @Parameter(name = "folderId", description = "조회하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarksResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                     @PathVariable Long folderId) {
 
