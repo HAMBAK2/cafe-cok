@@ -53,9 +53,7 @@ public class MemberController {
 
     @Operation(summary = "회원 수정")
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Parameters({
-            @Parameter(name = "file", description = "수정하려는 회원 이미지 파일"),
-            @Parameter(name = "nickname", description = "수정하려는 회원 닉네임", example = "수정 닉네임")})
+    @Parameter(name = "nickname", description = "수정하려는 회원 닉네임", example = "수정 닉네임")
     public ResponseEntity<MemberResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                  @RequestPart(value = "file", required = false) MultipartFile file,
                                                  @RequestParam("nickname") String nickname) {
