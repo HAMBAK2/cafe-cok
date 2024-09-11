@@ -4,6 +4,7 @@ import com.sideproject.cafe_cok.cafe.condition.CafeSearchCondition;
 import com.sideproject.cafe_cok.member.domain.Member;
 import com.sideproject.cafe_cok.plan.domain.Plan;
 import com.sideproject.cafe_cok.plan.domain.enums.MatchType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,16 +15,32 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@Schema(description = "계획 저장 요청")
 public class PlanSaveRequest {
 
+    @Schema(description = "계획 장소명", example = "망원역")
     private String locationName;
+
+    @Schema(description = "계획 장소 위도", example = "37.57061772252790")
     private BigDecimal latitude;
+
+    @Schema(description = "계획 장소 경도", example = "126.98055287409800")
     private BigDecimal longitude;
+
+    @Schema(description = "계획한 도보거리", example = "30")
     private Integer minutes;
+
+    @Schema(description = "계획한 방문일자", example = "2024-09-11")
     private LocalDate date;
+
+    @Schema(description = "계획한 방문 시작 시간", example = "10:00")
     private LocalTime startTime;
+
+    @Schema(description = "계획한 방문 종료 시간", example = "12:00")
     private LocalTime endTime;
+
+    @Schema(description = "계획한 키워드 리스트", example = "데이트/모임")
     private List<String> keywords;
 
     public PlanSaveRequest(final String locationName,

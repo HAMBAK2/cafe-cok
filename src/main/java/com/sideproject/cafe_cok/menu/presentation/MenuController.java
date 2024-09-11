@@ -28,7 +28,7 @@ public class MenuController {
     private final HttpHeadersUtil httpHeadersUtil;
 
     @DeleteMapping("/{menuId}")
-    @Parameter(name = "menuId", description = "삭제하려는 메뉴 ID")
+    @Parameter(name = "menuId", description = "삭제하려는 메뉴 ID", example = "1")
     public ResponseEntity<MenuIdResponse> delete(@PathVariable Long menuId) {
         MenuIdResponse response = menuService.delete(menuId);
         response.add(linkTo(methodOn(MenuController.class).delete(menuId)).withSelfRel().withType("DELETE"))
