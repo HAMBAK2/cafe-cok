@@ -12,6 +12,9 @@ import com.sideproject.cafe_cok.member.dto.response.MemberPlansResponse;
 import com.sideproject.cafe_cok.plan.presentation.PlanController;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
 @Tag(name = "members", description = "회원 관련 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class MemberController {
 
     private final MemberService memberService;
@@ -47,8 +51,9 @@ public class MemberController {
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "회원 수정")
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Parameter(name = "nickname", description = "수정하려는 회원 닉네임", example = "수정 닉네임")
     public ResponseEntity<MemberResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                  @RequestPart(value = "file", required = false) MultipartFile file,
                                                  @RequestParam("nickname") String nickname) {
@@ -74,6 +79,9 @@ public class MemberController {
 
     @GetMapping("/plans")
     @Operation(summary = "회원의 모든 계획 조회")
+    @Parameters({
+            @Parameter(name = "sortBy", description = "정렬 방식"),
+            @Parameter(name = "status", description = "계획의 타입")})
     public ResponseEntity<MemberPlansResponse> findPlanList(@AuthenticationPrincipal LoginMember loginMember,
                                                             @RequestParam(defaultValue = "RECENT") PlanSortBy sortBy,
                                                             @RequestParam(defaultValue = "SAVED") PlanStatus status) {

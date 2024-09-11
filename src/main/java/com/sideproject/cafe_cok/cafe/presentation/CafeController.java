@@ -18,6 +18,9 @@ import com.sideproject.cafe_cok.review.presentation.ReviewController;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 @RequestMapping("/api/v1/cafes")
 @RequiredArgsConstructor
 @Tag(name = "cafes", description = "카페 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class CafeController {
 
     private final CafeService cafeService;
@@ -43,6 +47,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/top")
     @Operation(summary = "cafeId에 해당하는 카페의 상단 정보 조회")
+    @Parameter(name = "cafeId", description = "조회하려는 카페의 ID", example = "1")
     public ResponseEntity<CafeTopResponse> findTop(@PathVariable Long cafeId,
                                                    HttpServletRequest servletRequest){
 
@@ -56,6 +61,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/basic")
     @Operation(summary = "cafeId에 해당하는 카페의 기본 정보 조회")
+    @Parameter(name = "cafeId", description = "조회하려는 카페의 ID", example = "1")
     public ResponseEntity<CafeBasicResponse> findBasic(@PathVariable Long cafeId) {
 
         CafeBasicResponse response = cafeService.findBasic(cafeId);
@@ -67,6 +73,9 @@ public class CafeController {
 
     @GetMapping
     @Operation(summary = "좌표 기반 카페 조회")
+    @Parameters({
+            @Parameter(name = "latitude", description = "조회하려는 카페의 위도", example = "37.57061772252790"),
+            @Parameter(name = "longitude", description = "조회하려는 카페의 경도", example = "126.98055287409800")})
     public ResponseEntity<CafesResponse> findByCoordinates(@RequestParam BigDecimal latitude,
                                                            @RequestParam BigDecimal longitude,
                                                            HttpServletRequest servletRequest) {
@@ -87,6 +96,10 @@ public class CafeController {
 
     @GetMapping("/keyword")
     @Operation(summary = "좌표/키워드 기반 카페 조회")
+    @Parameters({
+            @Parameter(name = "latitude", description = "조회하려는 카페의 위도", example = "37.57061772252790"),
+            @Parameter(name = "longitude", description = "조회하려는 카페의 경도", example = "126.98055287409800"),
+            @Parameter(name = "keywords", description = "조회하려는 카페 키워드 목록", example = "데이트/모임")})
     public ResponseEntity<CafesResponse> findByCoordinatesAndKeyword(@RequestParam BigDecimal latitude,
                                                                      @RequestParam BigDecimal longitude,
                                                                      @RequestParam List<String> keywords,
@@ -116,6 +129,7 @@ public class CafeController {
 
     @PutMapping("/{cafeId}")
     @Operation(summary = "cafeId에 해당하는 카페 수정")
+    @Parameter(name = "cafeId", description = "수정하려는 카페의 ID", example = "1")
     public ResponseEntity<CafeSaveResponse> update(@PathVariable Long cafeId,
                                                    @RequestBody AdminCafeUpdateRequest request) {
 
@@ -128,6 +142,8 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/reviews")
     @Operation(summary = "cafeId에 해당하는 모든 리뷰 조회")
+    @ApiResponse(responseCode = "200", description = "카페 리뷰 조회 성공")
+    @Parameter(name = "cafeId", description = "조회하려는 카페의 ID", example = "1")
     public ResponseEntity<CafeReviewsResponse> findReviews(@PathVariable Long cafeId) {
 
         CafeReviewsResponse response = cafeService.findReviews(cafeId);
@@ -139,6 +155,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/images")
     @Operation(summary = "cafeId에 해당하는 모든 이미지 조회")
+    @Parameter(name = "cafeId", description = "조회하려는 카페의 ID", example = "1")
     public ResponseEntity<ImagesResponse> findImages(@PathVariable Long cafeId) {
 
         ImagesResponse response = cafeService.findImages(cafeId);
@@ -150,6 +167,7 @@ public class CafeController {
 
     @GetMapping("/{cafeId}/menus")
     @Operation(summary = "cafeId에 해당하는 모든 메뉴 조회")
+    @Parameter(name = "cafeId", description = "조회하려는 카페의 ID", example = "1")
     public ResponseEntity<MenusResponse> findMenus(@PathVariable Long cafeId) {
 
         MenusResponse response = cafeService.findMenus(cafeId);

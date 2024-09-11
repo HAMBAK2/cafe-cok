@@ -8,6 +8,8 @@ import com.sideproject.cafe_cok.bookmark.dto.response.BookmarkIdResponse;
 import com.sideproject.cafe_cok.bookmark.application.BookmarkService;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks")
 @Tag(name = "bookmarks", description = "Bookmark API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
@@ -41,6 +44,7 @@ public class BookmarkController {
 
     @DeleteMapping("/{bookmarkId}")
     @Operation(summary = "북마크 삭제")
+    @Parameter(name = "bookmarkId", description = "삭제하려는 북마크의 ID", example = "123")
     public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                                       @PathVariable Long bookmarkId) {
 

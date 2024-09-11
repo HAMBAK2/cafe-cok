@@ -18,6 +18,9 @@ import com.sideproject.cafe_cok.plan.dto.response.SavePlanResponse;
 import com.sideproject.cafe_cok.plan.dto.response.PlanIdResponse;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/plans")
 @RequiredArgsConstructor
 @Tag(name = "plans", description = "계획 관련 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class PlanController {
 
     private final PlanService planService;
@@ -60,6 +64,7 @@ public class PlanController {
 
     @GetMapping("/{planId}")
     @Operation(summary = "planId에 해당하는 계획 조회")
+    @Parameter(name = "planId", description = "조회하려는 계획 ID", example = "1")
     public ResponseEntity<PlanResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                @PathVariable Long planId){
 
@@ -73,6 +78,9 @@ public class PlanController {
 
     @PatchMapping("/{planId}")
     @Operation(summary = "planId에 해당하는 계획 수정")
+    @Parameters({
+            @Parameter(name = "planId", description = "수정하려는 계획 ID", example = "1"),
+            @Parameter(name = "status", description = "계획의 타입")})
     public ResponseEntity<PlanIdResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                  @PathVariable Long planId,
                                                  @RequestParam PlanStatus status) {
@@ -85,6 +93,9 @@ public class PlanController {
 
     @DeleteMapping("/{planId}")
     @Operation(summary = "planId에 해당하는 계획 삭제")
+    @Parameters({
+            @Parameter(name = "planId", description = "삭제하려는 계획 ID", example = "1"),
+            @Parameter(name = "status", description = "계획의 타입")})
     public ResponseEntity<PlanIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                  @PathVariable Long planId,
                                                  @RequestParam PlanStatus status){

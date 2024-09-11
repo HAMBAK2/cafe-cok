@@ -11,6 +11,8 @@ import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderSaveRequest;
 import com.sideproject.cafe_cok.bookmark.dto.request.BookmarkFolderUpdateRequest;
 import com.sideproject.cafe_cok.util.HttpHeadersUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmark-folders")
 @Tag(name = "bookmark-folders", description = "북마크 폴더 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class BookmarkFolderController {
 
     private final BookmarkFolderService bookmarkFolderService;
@@ -70,6 +73,7 @@ public class BookmarkFolderController {
 
     @PatchMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더의 지도 노출 여부 수정")
+    @Parameter(name = "folderId", description = "수정하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarkFolderIdResponse> updateVisible(@AuthenticationPrincipal LoginMember loginMember,
                                                                   @PathVariable Long folderId){
 
@@ -83,6 +87,7 @@ public class BookmarkFolderController {
 
     @DeleteMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 삭제")
+    @Parameter(name = "folderId", description = "삭제하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarkFolderIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                            @PathVariable Long folderId){
 
@@ -95,6 +100,7 @@ public class BookmarkFolderController {
 
     @GetMapping("/{folderId}")
     @Operation(summary = "folderId에 해당하는 북마크 폴더 조회")
+    @Parameter(name = "folderId", description = "조회하려는 폴더의 ID", example = "1")
     public ResponseEntity<BookmarksResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                     @PathVariable Long folderId) {
 

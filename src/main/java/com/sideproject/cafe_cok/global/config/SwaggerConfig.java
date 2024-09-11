@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(title = "카페콕 API 명세서",
-        description = "API 명세서",
         version = "v1",
         contact = @Contact(name = " \uD83D\uDCE7 dudghks5722@gmail.com", email = "dudghks5722@gmail.com")),
         servers = {
@@ -26,6 +26,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+    @Bean
+    public GroupedOpenApi OpenApiV1() {
+
+        String[] paths = {"/v1/**"};
+
+        return GroupedOpenApi.builder()
+                .group("카페콕 API v1")
+                .pathsToMatch(paths)
+                .build();
+    }
     @Bean
     public OpenAPI openApi() {
 
