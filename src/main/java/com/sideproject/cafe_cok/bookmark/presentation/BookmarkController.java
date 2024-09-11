@@ -24,6 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/bookmarks")
 @Tag(name = "bookmarks", description = "Bookmark API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
@@ -31,7 +32,6 @@ public class BookmarkController {
 
     @PostMapping
     @Operation(summary = "북마크 저장")
-    @ApiResponse(responseCode = "200", description = "북마크 저장 성공")
     public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
                                                                     @RequestBody BookmarkSaveRequest request) {
 
@@ -44,7 +44,6 @@ public class BookmarkController {
 
     @DeleteMapping("/{bookmarkId}")
     @Operation(summary = "북마크 삭제")
-    @ApiResponse(responseCode = "200", description = "북마크 삭제 성공")
     @Parameter(name = "bookmarkId", description = "삭제하려는 북마크의 ID", example = "123")
     public ResponseEntity<BookmarkFolderAndBookmarkIdResponse> delete(@AuthenticationPrincipal LoginMember loginMember,
                                                                       @PathVariable Long bookmarkId) {

@@ -34,6 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/auth")
 @RestController
 @Tag(name = "auth", description = "사용자 인증 관련 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class AuthController {
 
     private final AuthService authService;
@@ -43,7 +44,6 @@ public class AuthController {
     @GetMapping("/login")
     @Operation(summary = "소셜 로그인 기능")
     @Parameter(name = "code", description = "카카오 로그인 API를 통해 전달받은 code값")
-    @ApiResponse(responseCode = "200", description = "로그인 성공")
     public ResponseEntity<AccessAndRefreshTokenResponse> login(@RequestParam("code") final String code) {
 
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(code);
@@ -59,7 +59,6 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @Operation(summary = "access Token 갱신")
-    @ApiResponse(responseCode = "200", description = "액세스 토큰 갱신 성공")
     public ResponseEntity<AccessTokenResponse> refresh(@Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
 
         AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
@@ -70,7 +69,6 @@ public class AuthController {
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃")
-    @ApiResponse(responseCode = "200", description = "로그아웃 성공")
     public ResponseEntity<AuthEmptyResponse> logout(@AuthenticationPrincipal LoginMember loginMember) {
         AuthEmptyResponse response = authService.logout(loginMember);
         response.add(linkTo(methodOn(AuthController.class).logout(loginMember)).withSelfRel().withType("POST"))
@@ -86,7 +84,6 @@ public class AuthController {
     @PostMapping("/withdrawal")
     @Operation(summary = "회원탈퇴")
     @Parameter(name = "reason", description = "회원 탈퇴 사유")
-    @ApiResponse(responseCode = "200", description = "회원탈퇴 성공")
     public ResponseEntity<AuthEmptyResponse> withdrawal(@AuthenticationPrincipal LoginMember loginMember,
                                                         @RequestParam("reason") final String reason) {
 

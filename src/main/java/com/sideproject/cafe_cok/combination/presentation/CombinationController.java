@@ -27,6 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/combinations")
 @Tag(name = "combinations", description = "조합 API")
+@ApiResponse(responseCode = "200", description = "성공")
 public class CombinationController {
 
     private final CombinationService combinationService;
@@ -34,7 +35,6 @@ public class CombinationController {
 
     @GetMapping
     @Operation(summary = "조합 목록 조회")
-    @ApiResponse(responseCode = "200", description = "조합 목록 조회 성공")
     public ResponseEntity<CombinationListResponse> findList(@AuthenticationPrincipal LoginMember loginMember) {
 
         CombinationListResponse response = combinationService.combination(loginMember);
@@ -46,7 +46,6 @@ public class CombinationController {
 
     @PostMapping
     @Operation(summary = "조합 저장")
-    @ApiResponse(responseCode = "200", description = "조합 저장 성공")
     public ResponseEntity<CombinationIdResponse> save(@AuthenticationPrincipal LoginMember loginMember,
                                                       @RequestBody CombinationRequest request) {
 
@@ -59,7 +58,6 @@ public class CombinationController {
 
     @GetMapping("/{combinationId}")
     @Operation(summary = "combinationId에 해당하는 조합 조회")
-    @ApiResponse(responseCode = "200", description = "조합 조회 성공")
     @Parameter(name = "combinationId", description = "조회하려는 조합의 ID", example = "1")
     public ResponseEntity<CombinationResponse> detail(@AuthenticationPrincipal LoginMember loginMember,
                                                       @PathVariable Long combinationId) {
@@ -73,7 +71,6 @@ public class CombinationController {
 
     @PatchMapping("/{combinationId}")
     @Operation(summary = "combinationId에 해당하는 조합 수정")
-    @ApiResponse(responseCode = "200", description = "조합 수정 성공")
     @Parameter(name = "combinationId", description = "조회하려는 조합의 ID", example = "1")
     public ResponseEntity<CombinationIdResponse> update(@AuthenticationPrincipal LoginMember loginMember,
                                                         @PathVariable Long combinationId,
