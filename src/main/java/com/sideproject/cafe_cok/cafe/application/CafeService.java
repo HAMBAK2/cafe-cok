@@ -227,7 +227,7 @@ public class CafeService {
         List<CafeOperationHourDto> hours = request.getHours();
         if(checkoutInputHours(hours)) saveOperationHours(hours, savedCafe);
 
-        return new CafeSaveResponse("Update successful", "/admin/cafe/" + savedCafe.getId());
+        return new CafeSaveResponse("Save successful", "/admin/cafe/" + savedCafe.getId());
     }
 
     @Transactional
