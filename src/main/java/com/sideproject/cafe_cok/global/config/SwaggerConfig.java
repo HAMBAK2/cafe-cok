@@ -9,10 +9,12 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.hateoas.Links;
 
 
 @OpenAPIDefinition(
@@ -36,6 +38,7 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
+
     @Bean
     public OpenAPI openApi() {
 
@@ -49,6 +52,7 @@ public class SwaggerConfig {
                         .scheme("bearer")
                         .bearerFormat("JWT"));
 
+        SpringDocUtils.getConfig().addResponseTypeToIgnore(Links.class);
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components);
